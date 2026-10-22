@@ -237,3 +237,8 @@ def test_quick_run_outputs(tmp_path):
             assert entry["water_majority"]["evo_state_key"] in evo
     assert all({"T_K", "p_Pa", "composition", "gas_mass_kg"} <= set(v) for v in evo.values())
     assert summary["runtime_s"] < 120
+    # The design point handed to Modules 04/06 must be an alcohol (WME-1); CH4 is reference-only.
+    assert "CH4" not in eng.DESIGN_FUELS
+    if design["recommended"] is not None:
+        assert design["recommended"]["fuel"] in eng.DESIGN_FUELS
+        assert design["recommended_evo_state_key"].split("/")[0] in eng.DESIGN_FUELS

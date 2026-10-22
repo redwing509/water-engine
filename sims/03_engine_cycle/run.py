@@ -55,6 +55,9 @@ from sims.common import fuels, io
 MODULE = "03_engine_cycle"
 VERSION = "1.0.0"
 FUELS = ("CH3OH", "C2H5OH", "CH4")
+# WME-1 design fuels: methanol or ethanol supply all chemical energy (README/SPEC); CH4 is a reference only
+# (SPEC section 6) and is never the recommended design point handed to Modules 04 and 06.
+DESIGN_FUELS = ("CH3OH", "C2H5OH")
 QUICK_FUELS = ("CH4", "CH3OH")
 FULL_CR = tuple(range(9, 19))
 QUICK_CR = (10, 14)
@@ -1118,7 +1121,7 @@ def select_designs(rows, provenance, validation_passed=True, par=DEFAULTS):
             best_dry=point_summary(dry, par),
             comparison_vs_best_dry=next(m for m in maps if m["fuel"] == fuel
                                         and m["category"] == "best_water_majority"))
-    feasible = [v["water_majority"] for v in per_fuel.values() if v["water_majority"]]
+    feasible = [v["water_majority"] for f, v in per_fuel.items() if v["water_majority"] and f in DESIGN_FUELS]
     recommended = max(feasible, key=lambda r: r["gross_indicated_efficiency"], default=None)
     use = not synthetic and validation_passed
     design = dict(
@@ -1139,6 +1142,8 @@ def select_designs(rows, provenance, validation_passed=True, par=DEFAULTS):
         per_fuel=per_fuel, recommended=recommended,
         recommended_evo_state_key=recommended["key"] if recommended else None,
         recommendation_status=("selected" if recommended else "no_feasible_water_majority_point"),
+        recommendation_basis="highest gross indicated efficiency among feasible w > 0.5 points of the design fuels "
+                             + "/".join(DESIGN_FUELS) + " (CH4 is reference-only)",
         evo_states_file="evo_states.json")
     return maps, design
 
