@@ -101,11 +101,18 @@ def argument_parser(module: str) -> argparse.ArgumentParser:
     return parser
 
 
-def ordered_map(function, items, workers=1):
-    """Map independent tasks in input order; spawn at most eight processes."""
+def ordered_map(function, items, workers=1, *, chunksize=None):
+    """Map in input order; optional small chunks balance unequal-cost tasks.
+
+    None preserves multiprocessing's default batching for existing callers.
+    A chunk size of one lets long flame sweeps occupy separate workers.
+    """
     worker_count(str(workers))
+    if chunksize is not None and (not isinstance(chunksize, int)
+                                 or isinstance(chunksize, bool) or chunksize <= 0):
+        raise ValueError("chunksize must be a positive integer or None")
     items = list(items)
     if workers == 1 or len(items) < 2:
         return [function(item) for item in items]
     with multiprocessing.get_context("spawn").Pool(min(workers, len(items))) as pool:
-        return pool.map(function, items)
+        return pool.map(function, items, chunksize=chunksize)

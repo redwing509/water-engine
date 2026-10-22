@@ -38,3 +38,11 @@ Worker: Claude, acting for Hermes at James's request. Supervisor verification is
   - The HHO kit is a net shaft loss of about 433 W.
   - Al + water bookkeeping closes. Water alone releases no energy.
 - Gibbsite and boehmite enthalpies come from Chen & Zeng 1996 (cited in code), because NIST-JANAF does not list them.
+
+## 2026-10-22 — Phase 3.2: Module 02 `flame_chem` (Codex)
+- Codex (heavy tier) wrote `sims/02_flame_chem`, `tests/test_flame_chem.py` and `pytest.ini` (registers the `slow` mark; slow tests still run by default). It added an optional `chunksize` to `io.ordered_map`.
+- First VPS run: pytest 106 passed, 1 failed; `--quick` exit 0 in 61 s on 2 workers.
+  - The failure was `test_ignition_horizon_is_censored`. `ReactorNet.step()` can overshoot the censoring horizon (1.037e-8 s against a 1e-8 s limit).
+  - It was fixed in the code, not the test: the final segment now uses `network.advance(max_time_s)`, so the simulated time never passes the horizon.
+- Re-run of the flame/fuels/io tests: **89 passed**.
+- Added `.gitattributes` (LF for scripts and sources), so the shell scripts stay runnable on Linux.
