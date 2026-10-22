@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.log
+.env
+*.key
+*.pem
+results/**/scratch/
+# local worker brief: names private infrastructure, never commit
+HERMES_PROMPT.md
+water-engine-seed.zip
