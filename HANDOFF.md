@@ -46,3 +46,21 @@ Worker: Claude, acting for Hermes at James's request. Supervisor verification is
   - It was fixed in the code, not the test: the final segment now uses `network.advance(max_time_s)`, so the simulated time never passes the horizon.
 - Re-run of the flame/fuels/io tests: **89 passed**.
 - Added `.gitattributes` (LF for scripts and sources), so the shell scripts stay runnable on Linux.
+
+## 2026-10-22 — Module 02 full run
+- `02_flame_chem --full` (nice 19, 8 workers, commit `4daa1f6`): exit 0 in 1873 s. Load-gated: it waited for the host's 1-min load to drop to 8 or below.
+
+## 2026-10-22 — Phase 3.3: Module 03 `engine_cycle`
+- Codex hit its usage limit partway through this module (router: 6 h cooldown). Cursor was unauthenticated and the local model was down. So, under the brief's fallback rule, the module was finished by Claude. Codex's draft is kept outside the repo for reference. The draft had defects that were fixed:
+  - its intake energy balance overstated the cooling by about γ;
+  - wet points failed;
+  - its knock fallback fit never knocked;
+  - its Otto and closure checks were tautological.
+- VPS: `tests/test_engine_cycle.py` 22 passed. `--quick` exit 0 in 33 s, using synthetic fallback fits clearly labelled `mode-quick-fallback`. Maximum energy-closure error 3.1e-4; ideal-Otto error 3.8e-5.
+- **Deviations from SPEC §6, stated plainly:**
+  1. Latent heat inside the closed cylinder uses u_fg (internal energy), not h_fg; the intake uses h_fg.
+  2. `f_evap_intake = 0.5` is physically infeasible for wet charges, because it would supersaturate the intake. Intake evaporation is therefore capped at saturation (5–25 %), and the rest evaporates by −26 to −2 CAD instead of by −30 CAD.
+  3. The alcohol's own latent heat is deducted from the heat release, so it gets no charge-cooling credit. The residual gas is dry, at T_intake.
+  4. The comparison with Cantera's `ic_engine.py` is documented, not reproduced.
+  5. The knock integral extrapolates Module 02's ignition fits, which exist only at 40 bar, in pressure; the share of the integral that is extrapolated is reported.
+- Flagged as uncertain: at w ≥ 0.7 the end-gas flame temperature is 1050–1470 K, below a ~1500 K limit-flame temperature. Points are tagged `low_flame_temperature` (a diagnostic, not a constraint). Module 02's S_L comes from all-vapour flames and may overstate flammability there.
