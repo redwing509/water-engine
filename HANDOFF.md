@@ -64,3 +64,24 @@ Worker: Claude, acting for Hermes at James's request. Supervisor verification is
   4. The comparison with Cantera's `ic_engine.py` is documented, not reproduced.
   5. The knock integral extrapolates Module 02's ignition fits, which exist only at 40 bar, in pressure; the share of the integral that is extrapolated is reported.
 - Flagged as uncertain: at w ≥ 0.7 the end-gas flame temperature is 1050–1470 K, below a ~1500 K limit-flame temperature. Points are tagged `low_flame_temperature` (a diagnostic, not a constraint). Module 02's S_L comes from all-vapour flames and may overstate flammability there.
+
+## 2026-10-22 — Module 03 full run and design-fuel fix
+- `03_engine_cycle --full` at `3386961`: exit 0 in 399 s. Validation passed. Maximum energy-closure error 5.2e-4. Ideal-Otto error ≤ 2.6e-5.
+- Methanol, from `results/03_engine_cycle/summary.json`, `water_majority_map`:
+  - best dry: CR 16, w 0, 42.1 % gross indicated, CA50 14 CAD (knock-limited);
+  - best overall: CR 18, w 0.3, 44.3 % (+2.2 points);
+  - best water-majority: CR 18, w 0.6, T_intake 360 K, 41.6 % (−0.5 points vs best dry), relative NO ≈ 0 (peak burned T 1775 K), no knock.
+- The best points sit at the top of the swept CR range (18). The optimum may lie above it; this is an open item.
+- **Fix:** the "recommended" design point (passed to Modules 04/06) was being picked across all fuels, so it chose the CH4 reference fuel. It now picks only the WME-1 design fuels, CH3OH and C2H5OH (`DESIGN_FUELS`), and the selection basis is recorded in `design_point.json`. A test asserts this. tests/test_engine_cycle.py + test_six_stroke.py: 39 passed on the VPS.
+
+## 2026-10-22 — Phase 3.4: Module 04 `six_stroke`
+- Written by Claude, because Codex was still in its usage cooldown. VPS: `tests/test_six_stroke.py` 17 passed. `--quick` exit 0 in 15 s.
+- Validation passed:
+  - the ledger closes to 1.2e-4 of the trapped-exhaust sensible enthalpy;
+  - extra work stays within the exergy bound;
+  - zero water gives zero extra work;
+  - pump work is subtracted;
+  - water releases no energy.
+- **Early result, at the old CH4 reference design point (CR 18, w 0.6, EVO 1128 K):** across EVC 190–350° and 0–60 mg of water per cycle, adiabatic and Woschni, the steam strokes give **no net gain**. The best injected point is −0.13 % of the four-stroke work, so the four-stroke cycle is optimal.
+- Physical reading: the water-majority intake already leaves cool, low-pressure exhaust (about 800 K at EVC). The latent heat taken up by the injected water outweighs its extra moles, so expansion recovers less than the recompression cost.
+- This will be re-run at the methanol design point after the Module 03 re-run. It contrasts with the published gains (research doc 02, refs 23 and 29), which use hotter, drier exhaust; this is flagged for the supervisor.
