@@ -46,3 +46,18 @@ A0 is **truncated at 4.0125 ms (smoke test)**, not run to its 10 ms endTime: sto
 on 2026-10-23 01:06 PDT (job water-engine-20261023-001200) to save box time. Injection ends at 1.25 ms, so the
 penetration history needed for the check is covered. Marker: `runs/A0/truncated.txt`; also the `status` field of
 `results/summary.json` → `A0`.
+
+## Known limitations (recorded per job water-engine-20261023-103500)
+- **Wall interaction is `rebound`.** Parcels that reach a wall bounce back into the gas instead of forming a
+  film. No wall film is modelled until module 13, so any wall-wetting and film evaporation (or the liquid
+  loss to a film) is missing from these cases. Liquid that hits the far wall (penetration ≈ 100 mm) stays
+  airborne, which biases late-time evaporated % compared with a filming wall. Module 09 removes bend-impinged
+  liquid as wall film, so the two models treat walls differently.
+- **Breakup models differ by case.** A0 keeps the stock aachenBomb `ReitzDiwakar` breakup (smoke test of the
+  unmodified tutorial). A1/A2 use `ReitzKHRT` with the tutorial's commented-out default coefficients, because
+  KH-RT is the more common choice for pressure-atomised sprays across the A1 (5 bar) to A2 (100 bar) ΔP range.
+  A0 penetration is therefore not a like-for-like check of the A1/A2 breakup settings, and the KHRT
+  coefficients are not calibrated to any measurement.
+- These are model-to-model reference cases. Module 09's cross-check against them (nominal model A1 1.5–2.5×
+  the CFD evaporated %, A2 +1 to +12 pp) is a known model difference, not a validation result. Module 09's
+  `cfd_matched` variant is a sensitivity bound fitted to A1-/A2-BLEND only.
