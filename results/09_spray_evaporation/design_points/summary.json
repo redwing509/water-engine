@@ -98,13 +98,13 @@
       },
       "A2-BLEND": {
         "case": "A2-BLEND",
-        "k": 0.706980805356686,
-        "rms_pp_fitted": 0.783708750060466,
-        "rms_pp_nominal": 9.655880143076493,
+        "k": 0.7069808162377191,
+        "rms_pp_fitted": 0.7837088582843669,
+        "rms_pp_nominal": 9.655880179404202,
         "p_Pa": 2000000.0,
         "T_K": 700.0,
         "cfd_end_pct": 39.83771849643515,
-        "m09_end_pct_fitted": 37.9568936202967,
+        "m09_end_pct_fitted": 37.95689427677825,
         "t_end_ms": 3.0,
         "n_evals": 11,
         "SMD_matched_um": 22.8655,
@@ -112,8 +112,8 @@
       }
     },
     "interpolation": "k(p): ln-p interpolation between A1 (1 bar) and A2 (20 bar), clamped; k_A1 in runner/induction",
-    "cfd_dir": "/workspace/water-engine-cfd/cfd/results",
-    "cfd_ref": "wme1-cfd@04d6236"
+    "cfd_dir": "/tmp/cfd-e2481f7/cfd/results",
+    "cfd_ref": "wme1-cfd@e2481f7"
   },
   "spark": {
     "CH3OH/best_dry": {
@@ -198,8 +198,8 @@
   "n_cases": 84,
   "n_failed": 0,
   "failed": [],
-  "max_mass_error_rel": 1.1887713858608476e-11,
-  "max_energy_closure_rel": 0.0006532317522689355,
-  "runtime_s": 103.45852503399874,
-  "git_sha": "0d5a2a92fc59322da63ed7818f694c6f826ae0dc"
+  "max_mass_error_rel": 1.1887350836182915e-11,
+  "max_energy_closure_rel": 0.0006242846060950479,
+  "runtime_s": 127.55780906100017,
+  "git_sha": "e32288ebcdbf4d846f3af7c0fd05851dd3d7c6fb"
 }

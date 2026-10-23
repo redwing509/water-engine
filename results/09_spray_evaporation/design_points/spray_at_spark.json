@@ -117,13 +117,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 3.2011779947671877,
-            "evaporated_spark_pct": 3.2011783512686693,
-            "liquid_spark_pct": 3.5108523109672288e-06,
+            "evaporated_spark_pct": 3.201178351268677,
+            "liquid_spark_pct": 3.5108522994615656e-06,
             "wall_impinged_pct": 96.79881813799413,
-            "SMD_spark_um": 40.60949567633815,
+            "SMD_spark_um": 40.60949564600172,
             "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 2.621376418379663e-12,
-            "T_spark_m09_K": 814.9304234071324,
+            "liquid_alcohol_spark_kg": 2.6213764097889642e-12,
+            "T_spark_m09_K": 814.9304305919295,
             "p_spark_Pa": 3077973.853365853
           }
         },
@@ -141,13 +141,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 4.188341903566297,
-            "evaporated_spark_pct": 4.194123161549083,
-            "liquid_spark_pct": 0.010962517411687758,
+            "evaporated_spark_pct": 4.1941231844570375,
+            "liquid_spark_pct": 0.010962494503734942,
             "wall_impinged_pct": 95.79491432103924,
-            "SMD_spark_um": 23.576717495585,
+            "SMD_spark_um": 23.576702888642856,
             "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 8.185159067872561e-09,
-            "T_spark_m09_K": 811.8238960574228,
+            "liquid_alcohol_spark_kg": 8.185141963659114e-09,
+            "T_spark_m09_K": 811.8254632027536,
             "p_spark_Pa": 3077973.853365853
           }
         },
@@ -165,13 +165,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 5.043490744091572,
-            "evaporated_spark_pct": 5.171755340384318,
-            "liquid_spark_pct": 0.0585344456413088,
+            "evaporated_spark_pct": 5.171755526242568,
+            "liquid_spark_pct": 0.058534259783057915,
             "wall_impinged_pct": 94.76971021397436,
-            "SMD_spark_um": 14.078639751965415,
+            "SMD_spark_um": 14.078624548594993,
             "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 4.370471950293479e-08,
-            "T_spark_m09_K": 808.1753018839554,
+            "liquid_alcohol_spark_kg": 4.3704580731949034e-08,
+            "T_spark_m09_K": 808.1757136246508,
             "p_spark_Pa": 3077973.853365853
           }
         },
@@ -189,13 +189,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 13.600779763667212,
-            "evaporated_spark_pct": 17.68539297198646,
-            "liquid_spark_pct": 0.3576591569748766,
+            "evaporated_spark_pct": 17.685398489812293,
+            "liquid_spark_pct": 0.35765363914901144,
             "wall_impinged_pct": 81.95694787103866,
-            "SMD_spark_um": 12.956419957155275,
-            "liquid_water_spark_kg": 1.4124504500522735e-29,
-            "liquid_alcohol_spark_kg": 2.6704606086184157e-07,
-            "T_spark_m09_K": 751.039019696664,
+            "SMD_spark_um": 12.956406369648862,
+            "liquid_water_spark_kg": 2.4637415436095892e-31,
+            "liquid_alcohol_spark_kg": 2.670419409794533e-07,
+            "T_spark_m09_K": 751.043144891883,
             "p_spark_Pa": 3077973.853365853
           }
         },
@@ -213,13 +213,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 7.704803467456041,
-            "evaporated_spark_pct": 9.57675865009543,
-            "liquid_spark_pct": 0.10723517945178382,
+            "evaporated_spark_pct": 9.57675891586254,
+            "liquid_spark_pct": 0.10723491368467505,
             "wall_impinged_pct": 90.31600617045277,
-            "SMD_spark_um": 15.792489895434452,
-            "liquid_water_spark_kg": 5.652446759356575e-30,
-            "liquid_alcohol_spark_kg": 8.006710215565127e-08,
-            "T_spark_m09_K": 787.6008514659478,
+            "SMD_spark_um": 15.792478916254332,
+            "liquid_water_spark_kg": 1.2000776170991497e-30,
+            "liquid_alcohol_spark_kg": 8.006690372075001e-08,
+            "T_spark_m09_K": 787.601347138873,
             "p_spark_Pa": 3077973.853365853
           }
         },
@@ -237,13 +237,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 11.474217587770543,
-            "evaporated_spark_pct": 14.021589510569768,
-            "liquid_spark_pct": 0.18972127659730187,
+            "evaporated_spark_pct": 14.021588938894697,
+            "liquid_spark_pct": 0.1897218482724031,
             "wall_impinged_pct": 85.78868921229636,
-            "SMD_spark_um": 12.96011717736314,
-            "liquid_water_spark_kg": 2.1568484727063867e-33,
-            "liquid_alcohol_spark_kg": 1.4165531229652877e-07,
-            "T_spark_m09_K": 768.6461447611736,
+            "SMD_spark_um": 12.960122964616955,
+            "liquid_water_spark_kg": 7.956515434100498e-31,
+            "liquid_alcohol_spark_kg": 1.4165573913750544e-07,
+            "T_spark_m09_K": 768.6452876629506,
             "p_spark_Pa": 3077973.853365853
           }
         },
@@ -261,13 +261,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 23.536553008250632,
-            "evaporated_spark_pct": 35.4400730188778,
-            "liquid_spark_pct": 1.0575957941391143,
+            "evaporated_spark_pct": 35.44008712216687,
+            "liquid_spark_pct": 1.0575816908500377,
             "wall_impinged_pct": 63.50233118817184,
-            "SMD_spark_um": 11.38358054870138,
-            "liquid_water_spark_kg": 1.4850667709789408e-28,
-            "liquid_alcohol_spark_kg": 7.896534600084078e-07,
-            "T_spark_m09_K": 677.969774462963,
+            "SMD_spark_um": 11.383558265499545,
+            "liquid_water_spark_kg": 3.1676523393164214e-28,
+            "liquid_alcohol_spark_kg": 7.89642929793482e-07,
+            "T_spark_m09_K": 677.9718045563102,
             "p_spark_Pa": 3077973.853365853
           }
         }
@@ -298,12 +298,12 @@
           "cfd_matched": {
             "evaporated_IVC_pct": 1.753451678472107,
             "evaporated_spark_pct": 1.7534516784721468,
-            "liquid_spark_pct": 1.6933901740706777e-12,
+            "liquid_spark_pct": 1.693390144080056e-12,
             "wall_impinged_pct": 98.24654832182401,
-            "SMD_spark_um": 55.94773058418658,
-            "liquid_water_spark_kg": 6.0823009393049985e-19,
-            "liquid_alcohol_spark_kg": 1.2716059947762444e-18,
-            "T_spark_m09_K": 743.6362807225707,
+            "SMD_spark_um": 55.947733283469496,
+            "liquid_water_spark_kg": 6.082300905144817e-19,
+            "liquid_alcohol_spark_kg": 1.2716059648996086e-18,
+            "T_spark_m09_K": 743.6362138926423,
             "p_spark_Pa": 2149165.0948169986
           }
         },
@@ -321,13 +321,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 2.3512083674670228,
-            "evaporated_spark_pct": 2.3512098465823614,
-            "liquid_spark_pct": 2.5828411638534783e-05,
+            "evaporated_spark_pct": 2.3512098465802995,
+            "liquid_spark_pct": 2.5828413700529004e-05,
             "wall_impinged_pct": 97.648764325006,
-            "SMD_spark_um": 36.37776547739649,
-            "liquid_water_spark_kg": 9.673250991432152e-12,
-            "liquid_alcohol_spark_kg": 1.8998924538780003e-11,
-            "T_spark_m09_K": 741.6794600212163,
+            "SMD_spark_um": 36.37776434641144,
+            "liquid_water_spark_kg": 9.673251293554977e-12,
+            "liquid_alcohol_spark_kg": 1.899892652568141e-11,
+            "T_spark_m09_K": 741.6794545752233,
             "p_spark_Pa": 2149165.0948169986
           }
         },
@@ -345,13 +345,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 2.883117904117069,
-            "evaporated_spark_pct": 2.883594277932673,
-            "liquid_spark_pct": 0.0037267288494149302,
+            "evaporated_spark_pct": 2.8835942777280836,
+            "liquid_spark_pct": 0.0037267290540053907,
             "wall_impinged_pct": 97.11267899321791,
-            "SMD_spark_um": 27.50438977227585,
-            "liquid_water_spark_kg": 1.485123201078933e-09,
-            "liquid_alcohol_spark_kg": 2.6519265416357967e-09,
-            "T_spark_m09_K": 739.7385240206146,
+            "SMD_spark_um": 27.504388243855878,
+            "liquid_water_spark_kg": 1.48512315331157e-09,
+            "liquid_alcohol_spark_kg": 2.651926816519472e-09,
+            "T_spark_m09_K": 739.7383148172648,
             "p_spark_Pa": 2149165.0948169986
           }
         },
@@ -369,13 +369,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 10.430418385904705,
-            "evaporated_spark_pct": 14.194106839970692,
-            "liquid_spark_pct": 1.2130108624968727,
+            "evaporated_spark_pct": 14.194108819376055,
+            "liquid_spark_pct": 1.2130088830915144,
             "wall_impinged_pct": 84.59288229753241,
-            "SMD_spark_um": 12.3143539016367,
-            "liquid_water_spark_kg": 7.089217011559269e-07,
-            "liquid_alcohol_spark_kg": 6.376442765085589e-07,
-            "T_spark_m09_K": 669.1250446672778,
+            "SMD_spark_um": 12.314349941654777,
+            "liquid_water_spark_kg": 7.089213610192233e-07,
+            "liquid_alcohol_spark_kg": 6.376424193031002e-07,
+            "T_spark_m09_K": 669.1258342657812,
             "p_spark_Pa": 2149165.0948169986
           }
         },
@@ -393,13 +393,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 6.0686241427065735,
-            "evaporated_spark_pct": 7.779663445439483,
-            "liquid_spark_pct": 0.2609705159403312,
+            "evaporated_spark_pct": 7.779660776581417,
+            "liquid_spark_pct": 0.26097318479838494,
             "wall_impinged_pct": 91.95936603862016,
-            "SMD_spark_um": 7.8257734492639495,
-            "liquid_water_spark_kg": 1.8705988649303693e-07,
-            "liquid_alcohol_spark_kg": 1.0264404675570866e-07,
-            "T_spark_m09_K": 710.7763336550336,
+            "SMD_spark_um": 7.82575373197031,
+            "liquid_water_spark_kg": 1.870626230044577e-07,
+            "liquid_alcohol_spark_kg": 1.0264427294937615e-07,
+            "T_spark_m09_K": 710.7735368143931,
             "p_spark_Pa": 2149165.0948169986
           }
         },
@@ -417,13 +417,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 7.464633745675686,
-            "evaporated_spark_pct": 8.872205151601808,
-            "liquid_spark_pct": 0.302491311022457,
+            "evaporated_spark_pct": 8.872208890358431,
+            "liquid_spark_pct": 0.30248757226583933,
             "wall_impinged_pct": 90.82530353685384,
-            "SMD_spark_um": 7.4728262223302435,
-            "liquid_water_spark_kg": 2.591730046884197e-07,
-            "liquid_alcohol_spark_kg": 7.66232528352156e-08,
-            "T_spark_m09_K": 707.5764132962202,
+            "SMD_spark_um": 7.472816751682545,
+            "liquid_water_spark_kg": 2.5916940108685884e-07,
+            "liquid_alcohol_spark_kg": 7.662270603498221e-08,
+            "T_spark_m09_K": 707.5806958501947,
             "p_spark_Pa": 2149165.0948169986
           }
         },
@@ -441,13 +441,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 14.51597191356643,
-            "evaporated_spark_pct": 21.166598384410367,
-            "liquid_spark_pct": 2.936175380685643,
+            "evaporated_spark_pct": 21.16661671680636,
+            "liquid_spark_pct": 2.936157048289636,
             "wall_impinged_pct": 75.89722623449816,
-            "SMD_spark_um": 10.424500806516722,
-            "liquid_water_spark_kg": 1.7512481765525322e-06,
-            "liquid_alcohol_spark_kg": 1.5082064535147644e-06,
-            "T_spark_m09_K": 626.4631471745139,
+            "SMD_spark_um": 10.424494827146704,
+            "liquid_water_spark_kg": 1.7512394767476102e-06,
+            "liquid_alcohol_spark_kg": 1.5081948024872945e-06,
+            "T_spark_m09_K": 626.4641973604835,
             "p_spark_Pa": 2149165.0948169986
           }
         }
@@ -478,12 +478,12 @@
           "cfd_matched": {
             "evaporated_IVC_pct": 1.1520464391931857,
             "evaporated_spark_pct": 1.1520464391931857,
-            "liquid_spark_pct": 8.426505250097312e-16,
+            "liquid_spark_pct": 8.426505248736603e-16,
             "wall_impinged_pct": 98.8479535608338,
-            "SMD_spark_um": 63.20733282388009,
-            "liquid_water_spark_kg": 9.94604589060885e-22,
-            "liquid_alcohol_spark_kg": 5.563923733129623e-22,
-            "T_spark_m09_K": 686.9093044312337,
+            "SMD_spark_um": 63.20733282427104,
+            "liquid_water_spark_kg": 9.946045890082668e-22,
+            "liquid_alcohol_spark_kg": 5.563923731151259e-22,
+            "T_spark_m09_K": 686.9093044316204,
             "p_spark_Pa": 1077910.2498293766
           }
         },
@@ -502,12 +502,12 @@
           "cfd_matched": {
             "evaporated_IVC_pct": 1.3641834190768374,
             "evaporated_spark_pct": 1.3641834192640845,
-            "liquid_spark_pct": 4.67782822607938e-09,
+            "liquid_spark_pct": 4.6778282247918086e-09,
             "wall_impinged_pct": 98.63581657605808,
-            "SMD_spark_um": 47.31388086365818,
-            "liquid_water_spark_kg": 5.646825130599513e-15,
-            "liquid_alcohol_spark_kg": 2.9632654749596223e-15,
-            "T_spark_m09_K": 685.1686255191477,
+            "SMD_spark_um": 47.31388086273045,
+            "liquid_water_spark_kg": 5.646825130061683e-15,
+            "liquid_alcohol_spark_kg": 2.9632654731275268e-15,
+            "T_spark_m09_K": 685.1686255160238,
             "p_spark_Pa": 1077910.2498293766
           }
         },
@@ -525,13 +525,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 1.7444776971931995,
-            "evaporated_spark_pct": 1.7444790859185573,
-            "liquid_spark_pct": 2.2640608066654056e-05,
+            "evaporated_spark_pct": 1.744479085918569,
+            "liquid_spark_pct": 2.2640608054915003e-05,
             "wall_impinged_pct": 98.25549827347336,
-            "SMD_spark_um": 36.12428448047147,
-            "liquid_water_spark_kg": 2.8212625418805436e-11,
-            "liquid_alcohol_spark_kg": 1.3460064854866132e-11,
-            "T_spark_m09_K": 682.0131504143382,
+            "SMD_spark_um": 36.12428447707794,
+            "liquid_water_spark_kg": 2.8212625413348064e-11,
+            "liquid_alcohol_spark_kg": 1.3460064838716402e-11,
+            "T_spark_m09_K": 682.0131504155535,
             "p_spark_Pa": 1077910.2498293766
           }
         },
@@ -549,13 +549,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 9.759355274699848,
-            "evaporated_spark_pct": 12.948026080544576,
-            "liquid_spark_pct": 1.7910276337906113,
+            "evaporated_spark_pct": 12.948026478356564,
+            "liquid_spark_pct": 1.7910272359786321,
             "wall_impinged_pct": 85.26094628566482,
-            "SMD_spark_um": 10.265461046341242,
-            "liquid_water_spark_kg": 2.6990774089292522e-06,
-            "liquid_alcohol_spark_kg": 5.975186734202813e-07,
-            "T_spark_m09_K": 561.5307469839903,
+            "SMD_spark_um": 10.265472001062765,
+            "liquid_water_spark_kg": 2.699076616819392e-06,
+            "liquid_alcohol_spark_kg": 5.975187333106117e-07,
+            "T_spark_m09_K": 561.5319816149638,
             "p_spark_Pa": 1077910.2498293766
           }
         },
@@ -573,13 +573,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 5.84734401508324,
-            "evaporated_spark_pct": 7.013434083890285,
-            "liquid_spark_pct": 0.7134029271435174,
+            "evaporated_spark_pct": 7.013433957144851,
+            "liquid_spark_pct": 0.7134030538889531,
             "wall_impinged_pct": 92.27316298896616,
-            "SMD_spark_um": 8.146980579943946,
-            "liquid_water_spark_kg": 1.2084065280874861e-06,
-            "liquid_alcohol_spark_kg": 1.0469509602344462e-07,
-            "T_spark_m09_K": 626.1101339130203,
+            "SMD_spark_um": 8.146980895129145,
+            "liquid_water_spark_kg": 1.2084066683129638e-06,
+            "liquid_alcohol_spark_kg": 1.046951890877828e-07,
+            "T_spark_m09_K": 626.1083534938409,
             "p_spark_Pa": 1077910.2498293766
           }
         },
@@ -597,13 +597,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 6.618659205926622,
-            "evaporated_spark_pct": 7.280289394654295,
-            "liquid_spark_pct": 0.6568477426939182,
+            "evaporated_spark_pct": 7.280289527538308,
+            "liquid_spark_pct": 0.6568476098099065,
             "wall_impinged_pct": 92.0628628627175,
-            "SMD_spark_um": 9.741276842427295,
-            "liquid_water_spark_kg": 1.1263384313736115e-06,
-            "liquid_alcohol_spark_kg": 8.26667533660768e-08,
-            "T_spark_m09_K": 628.0739986179073,
+            "SMD_spark_um": 9.741276552962232,
+            "liquid_water_spark_kg": 1.1263382511748044e-06,
+            "liquid_alcohol_spark_kg": 8.266668897630049e-08,
+            "T_spark_m09_K": 628.0745401314377,
             "p_spark_Pa": 1077910.2498293766
           }
         },
@@ -621,13 +621,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 12.24922548083438,
-            "evaporated_spark_pct": 16.744440653381563,
-            "liquid_spark_pct": 3.806043949795539,
+            "evaporated_spark_pct": 16.74444400201967,
+            "liquid_spark_pct": 3.8060406011574313,
             "wall_impinged_pct": 79.44951539664649,
-            "SMD_spark_um": 10.986172481189001,
-            "liquid_water_spark_kg": 5.573634641304893e-06,
-            "liquid_alcohol_spark_kg": 1.431834921211631e-06,
-            "T_spark_m09_K": 524.2958975070343,
+            "SMD_spark_um": 10.986199650870356,
+            "liquid_water_spark_kg": 5.573630175721755e-06,
+            "liquid_alcohol_spark_kg": 1.431833223234219e-06,
+            "T_spark_m09_K": 524.2962083573782,
             "p_spark_Pa": 1077910.2498293766
           }
         }
@@ -657,13 +657,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 2.204723824971857,
-            "evaporated_spark_pct": 2.204724319685846,
-            "liquid_spark_pct": 4.556231702647052e-06,
+            "evaporated_spark_pct": 2.2047243196849715,
+            "liquid_spark_pct": 4.556232575588637e-06,
             "wall_impinged_pct": 97.79527112407324,
-            "SMD_spark_um": 40.79025762576813,
+            "SMD_spark_um": 40.79026268685115,
             "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 2.548475804681743e-12,
-            "T_spark_m09_K": 902.0305603106243,
+            "liquid_alcohol_spark_kg": 2.548476292951579e-12,
+            "T_spark_m09_K": 902.0329056021851,
             "p_spark_Pa": 4528541.129671233
           }
         },
@@ -681,13 +681,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 2.6942934697714653,
-            "evaporated_spark_pct": 2.695613448650581,
-            "liquid_spark_pct": 0.0033348013442520913,
+            "evaporated_spark_pct": 2.6956134484943686,
+            "liquid_spark_pct": 0.0033348015004653255,
             "wall_impinged_pct": 97.30105175000516,
-            "SMD_spark_um": 27.436966990703763,
+            "SMD_spark_um": 27.436967799685927,
             "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 1.865282780572618e-09,
-            "T_spark_m09_K": 900.5698912336413,
+            "liquid_alcohol_spark_kg": 1.8652828679486936e-09,
+            "T_spark_m09_K": 900.5698880321148,
             "p_spark_Pa": 4528541.129671233
           }
         },
@@ -705,13 +705,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 3.3559682103767994,
-            "evaporated_spark_pct": 3.4128914179907386,
-            "liquid_spark_pct": 0.03207483489719758,
+            "evaporated_spark_pct": 3.4128913594102084,
+            "liquid_spark_pct": 0.03207489347772699,
             "wall_impinged_pct": 96.55503374711209,
-            "SMD_spark_um": 16.82747288783934,
+            "SMD_spark_um": 16.827485363465854,
             "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 1.7940690028380185e-08,
-            "T_spark_m09_K": 898.3148454177054,
+            "liquid_alcohol_spark_kg": 1.7940722794725614e-08,
+            "T_spark_m09_K": 898.3143565162915,
             "p_spark_Pa": 4528541.129671233
           }
         },
@@ -729,13 +729,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 12.595924922010685,
-            "evaporated_spark_pct": 16.761239210225256,
-            "liquid_spark_pct": 0.18738981736746865,
+            "evaporated_spark_pct": 16.761237232298054,
+            "liquid_spark_pct": 0.18739179529469477,
             "wall_impinged_pct": 83.05137097240727,
-            "SMD_spark_um": 14.50818230857485,
-            "liquid_water_spark_kg": 8.545554986900502e-31,
-            "liquid_alcohol_spark_kg": 1.0481433929869622e-07,
-            "T_spark_m09_K": 850.9122409403024,
+            "SMD_spark_um": 14.508205700321895,
+            "liquid_water_spark_kg": 8.156947669135985e-30,
+            "liquid_alcohol_spark_kg": 1.0481544562954332e-07,
+            "T_spark_m09_K": 850.9104479216242,
             "p_spark_Pa": 4528541.129671233
           }
         },
@@ -753,13 +753,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 6.308613246684687,
-            "evaporated_spark_pct": 8.24042172943045,
-            "liquid_spark_pct": 0.07267319388374077,
+            "evaporated_spark_pct": 8.240422979498748,
+            "liquid_spark_pct": 0.07267194381542962,
             "wall_impinged_pct": 91.68690507668585,
-            "SMD_spark_um": 14.687972814633047,
-            "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 4.0648915232747884e-08,
-            "T_spark_m09_K": 880.7422526802185,
+            "SMD_spark_um": 14.687922185394426,
+            "liquid_water_spark_kg": 2.0222006428882048e-30,
+            "liquid_alcohol_spark_kg": 4.0648216021414234e-08,
+            "T_spark_m09_K": 880.7469975246174,
             "p_spark_Pa": 4528541.129671233
           }
         },
@@ -777,13 +777,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 10.347729303787464,
-            "evaporated_spark_pct": 13.007374979376543,
-            "liquid_spark_pct": 0.09630672008072684,
+            "evaporated_spark_pct": 13.007374736226604,
+            "liquid_spark_pct": 0.09630696323068141,
             "wall_impinged_pct": 86.89631830088415,
-            "SMD_spark_um": 17.05931177296238,
-            "liquid_water_spark_kg": 0.0,
-            "liquid_alcohol_spark_kg": 5.3868056317548146e-08,
-            "T_spark_m09_K": 864.6796472858347,
+            "SMD_spark_um": 17.05932063789427,
+            "liquid_water_spark_kg": 6.617320349587861e-32,
+            "liquid_alcohol_spark_kg": 5.386819232067893e-08,
+            "T_spark_m09_K": 864.6781476758799,
             "p_spark_Pa": 4528541.129671233
           }
         },
@@ -801,13 +801,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 24.80533638780928,
-            "evaporated_spark_pct": 36.865257879496156,
-            "liquid_spark_pct": 0.36468753455349,
+            "evaporated_spark_pct": 36.86525765725888,
+            "liquid_spark_pct": 0.3646877567907307,
             "wall_impinged_pct": 62.77005458639114,
-            "SMD_spark_um": 12.132167932056294,
-            "liquid_water_spark_kg": 1.4663871453545651e-28,
-            "liquid_alcohol_spark_kg": 2.039837784234394e-07,
-            "T_spark_m09_K": 786.7146532802755,
+            "SMD_spark_um": 12.132170376641742,
+            "liquid_water_spark_kg": 1.1723837187025494e-28,
+            "liquid_alcohol_spark_kg": 2.0398390272928417e-07,
+            "T_spark_m09_K": 786.7149305942261,
             "p_spark_Pa": 4528541.129671233
           }
         }
@@ -838,12 +838,12 @@
           "cfd_matched": {
             "evaporated_IVC_pct": 1.0952679550737472,
             "evaporated_spark_pct": 1.0952679550737472,
-            "liquid_spark_pct": 3.421996911250111e-15,
+            "liquid_spark_pct": 3.4219969106620757e-15,
             "wall_impinged_pct": 98.90473204486828,
-            "SMD_spark_um": 61.13376155974013,
-            "liquid_water_spark_kg": 1.4220188044777914e-21,
-            "liquid_alcohol_spark_kg": 1.978989053505562e-21,
-            "T_spark_m09_K": 708.0502638535693,
+            "SMD_spark_um": 61.1337615636601,
+            "liquid_water_spark_kg": 1.422018804367598e-21,
+            "liquid_alcohol_spark_kg": 1.9789890530313267e-21,
+            "T_spark_m09_K": 708.0502640825492,
             "p_spark_Pa": 1773590.8063802551
           }
         },
@@ -861,13 +861,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 1.4622586580166634,
-            "evaporated_spark_pct": 1.462258688109994,
-            "liquid_spark_pct": 7.799291241885773e-07,
+            "evaporated_spark_pct": 1.4622586881099928,
+            "liquid_spark_pct": 7.79929123938263e-07,
             "wall_impinged_pct": 98.53774053196086,
-            "SMD_spark_um": 40.97206027189986,
-            "liquid_water_spark_kg": 3.313771908468327e-13,
-            "liquid_alcohol_spark_kg": 4.43768184449958e-13,
-            "T_spark_m09_K": 706.9429711961963,
+            "SMD_spark_um": 40.97206027447631,
+            "liquid_water_spark_kg": 3.313771907989663e-13,
+            "liquid_alcohol_spark_kg": 4.437681842490454e-13,
+            "T_spark_m09_K": 706.9429715142023,
             "p_spark_Pa": 1773590.8063802551
           }
         },
@@ -885,13 +885,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 1.8354794547205007,
-            "evaporated_spark_pct": 1.8355140369908818,
-            "liquid_spark_pct": 0.00048450551775777994,
+            "evaporated_spark_pct": 1.8355140369912977,
+            "liquid_spark_pct": 0.00048450551734178376,
             "wall_impinged_pct": 98.16400145749135,
-            "SMD_spark_um": 31.333926309160532,
-            "liquid_water_spark_kg": 2.1203466633768864e-10,
-            "liquid_alcohol_spark_kg": 2.694991035243455e-10,
-            "T_spark_m09_K": 705.7447920864172,
+            "SMD_spark_um": 31.33392630570493,
+            "liquid_water_spark_kg": 2.120346662552507e-10,
+            "liquid_alcohol_spark_kg": 2.694991031933389e-10,
+            "T_spark_m09_K": 705.7447915106952,
             "p_spark_Pa": 1773590.8063802551
           }
         },
@@ -909,13 +909,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 9.135223999920546,
-            "evaporated_spark_pct": 12.806359668559475,
-            "liquid_spark_pct": 1.237378839335413,
+            "evaporated_spark_pct": 12.806361721095413,
+            "liquid_spark_pct": 1.2373767867994867,
             "wall_impinged_pct": 85.9562614921051,
-            "SMD_spark_um": 12.400851946587578,
-            "liquid_water_spark_kg": 7.846056473695835e-07,
-            "liquid_alcohol_spark_kg": 4.451836438032972e-07,
-            "T_spark_m09_K": 649.5151586640795,
+            "SMD_spark_um": 12.400849357347688,
+            "liquid_water_spark_kg": 7.846048171170146e-07,
+            "liquid_alcohol_spark_kg": 4.451824341093098e-07,
+            "T_spark_m09_K": 649.5186396999496,
             "p_spark_Pa": 1773590.8063802551
           }
         },
@@ -933,13 +933,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 4.845462135946867,
-            "evaporated_spark_pct": 6.427137792625256,
-            "liquid_spark_pct": 0.37563312155184053,
+            "evaporated_spark_pct": 6.427136980545674,
+            "liquid_spark_pct": 0.3756339336314248,
             "wall_impinged_pct": 93.19722908582288,
-            "SMD_spark_um": 7.50344138209222,
-            "liquid_water_spark_kg": 2.9859059628077646e-07,
-            "liquid_alcohol_spark_kg": 7.473855370081218e-08,
-            "T_spark_m09_K": 683.4540973092734,
+            "SMD_spark_um": 7.503442966540409,
+            "liquid_water_spark_kg": 2.985913446376264e-07,
+            "liquid_alcohol_spark_kg": 7.473861244260054e-08,
+            "T_spark_m09_K": 683.4536849919654,
             "p_spark_Pa": 1773590.8063802551
           }
         },
@@ -957,13 +957,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 5.778586527344621,
-            "evaporated_spark_pct": 6.803656041270109,
-            "liquid_spark_pct": 0.387063632177365,
+            "evaporated_spark_pct": 6.803656036012636,
+            "liquid_spark_pct": 0.3870636374348415,
             "wall_impinged_pct": 92.80928032670944,
-            "SMD_spark_um": 8.267206489482197,
-            "liquid_water_spark_kg": 3.4738990147194257e-07,
-            "liquid_alcohol_spark_kg": 3.7299649312570596e-08,
-            "T_spark_m09_K": 684.2620236230282,
+            "SMD_spark_um": 8.267206549663305,
+            "liquid_water_spark_kg": 3.473899086907827e-07,
+            "liquid_alcohol_spark_kg": 3.7299647318959865e-08,
+            "T_spark_m09_K": 684.2620341012174,
             "p_spark_Pa": 1773590.8063802551
           }
         },
@@ -981,13 +981,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 12.94873436167785,
-            "evaporated_spark_pct": 18.498923080340404,
-            "liquid_spark_pct": 2.528190591052539,
+            "evaporated_spark_pct": 18.498917438431157,
+            "liquid_spark_pct": 2.528196232961838,
             "wall_impinged_pct": 78.97288632908061,
-            "SMD_spark_um": 10.709804211133758,
-            "liquid_water_spark_kg": 1.6588918982345607e-06,
-            "liquid_alcohol_spark_kg": 8.537918620520989e-07,
-            "T_spark_m09_K": 621.3986238155011,
+            "SMD_spark_um": 10.709806533535046,
+            "liquid_water_spark_kg": 1.658895071528787e-06,
+            "liquid_alcohol_spark_kg": 8.537942960621337e-07,
+            "T_spark_m09_K": 621.3963935774797,
             "p_spark_Pa": 1773590.8063802551
           }
         }
@@ -1023,7 +1023,7 @@
             "SMD_spark_um": 0.0,
             "liquid_water_spark_kg": 0.0,
             "liquid_alcohol_spark_kg": 0.0,
-            "T_spark_m09_K": 689.4062013764632,
+            "T_spark_m09_K": 689.4062013910468,
             "p_spark_Pa": 1079809.8022697878
           }
         },
@@ -1042,12 +1042,12 @@
           "cfd_matched": {
             "evaporated_IVC_pct": 1.194669606676942,
             "evaporated_spark_pct": 1.194669607005625,
-            "liquid_spark_pct": 7.3720777440658135e-09,
+            "liquid_spark_pct": 7.372077741734323e-09,
             "wall_impinged_pct": 98.80533038562227,
-            "SMD_spark_um": 46.85172053309476,
-            "liquid_water_spark_kg": 6.777940881542331e-15,
-            "liquid_alcohol_spark_kg": 3.6189028418501005e-15,
-            "T_spark_m09_K": 687.9034247381013,
+            "SMD_spark_um": 46.85172053145138,
+            "liquid_water_spark_kg": 6.7779408807401516e-15,
+            "liquid_alcohol_spark_kg": 3.618902839364179e-15,
+            "T_spark_m09_K": 687.9034247382679,
             "p_spark_Pa": 1079809.8022697878
           }
         },
@@ -1065,13 +1065,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 1.5475157642519477,
-            "evaporated_spark_pct": 1.5475178698847292,
-            "liquid_spark_pct": 2.9854492488752717e-05,
+            "evaporated_spark_pct": 1.5475178698847474,
+            "liquid_spark_pct": 2.985449247057128e-05,
             "wall_impinged_pct": 98.4524522756228,
-            "SMD_spark_um": 35.68635586991652,
-            "liquid_water_spark_kg": 2.8405584540204677e-11,
-            "liquid_alcohol_spark_kg": 1.369821626366056e-11,
-            "T_spark_m09_K": 685.4901745689288,
+            "SMD_spark_um": 35.686355865346314,
+            "liquid_water_spark_kg": 2.840558453357536e-11,
+            "liquid_alcohol_spark_kg": 1.3698216244648592e-11,
+            "T_spark_m09_K": 685.4901745676608,
             "p_spark_Pa": 1079809.8022697878
           }
         },
@@ -1089,13 +1089,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 10.79778613804481,
-            "evaporated_spark_pct": 13.881008318861,
-            "liquid_spark_pct": 1.5116559976687638,
+            "evaporated_spark_pct": 13.881005507881907,
+            "liquid_spark_pct": 1.5116588086478604,
             "wall_impinged_pct": 84.60733568347021,
-            "SMD_spark_um": 12.543871669279971,
-            "liquid_water_spark_kg": 1.877049789667498e-06,
-            "liquid_alcohol_spark_kg": 2.548391725646268e-07,
-            "T_spark_m09_K": 587.8843262181499,
+            "SMD_spark_um": 12.543878428663593,
+            "liquid_water_spark_kg": 1.877052486187259e-06,
+            "liquid_alcohol_spark_kg": 2.548404403696318e-07,
+            "T_spark_m09_K": 587.8843781263923,
             "p_spark_Pa": 1079809.8022697878
           }
         },
@@ -1113,13 +1113,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 5.8820834305946565,
-            "evaporated_spark_pct": 7.117987639801498,
-            "liquid_spark_pct": 0.5611956128598509,
+            "evaporated_spark_pct": 7.117989157791484,
+            "liquid_spark_pct": 0.5611940948698708,
             "wall_impinged_pct": 92.32081674733864,
-            "SMD_spark_um": 7.646021836187949,
-            "liquid_water_spark_kg": 7.397600065290133e-07,
-            "liquid_alcohol_spark_kg": 5.1694355147238444e-08,
-            "T_spark_m09_K": 641.4911797049269,
+            "SMD_spark_um": 7.646018119420152,
+            "liquid_water_spark_kg": 7.397579818901076e-07,
+            "liquid_alcohol_spark_kg": 5.169423896436443e-08,
+            "T_spark_m09_K": 641.4943950644412,
             "p_spark_Pa": 1079809.8022697878
           }
         },
@@ -1137,13 +1137,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 6.574461284487828,
-            "evaporated_spark_pct": 7.252509506165737,
-            "liquid_spark_pct": 0.5437835613009725,
+            "evaporated_spark_pct": 7.25250936234378,
+            "liquid_spark_pct": 0.5437837051229257,
             "wall_impinged_pct": 92.20370693254566,
-            "SMD_spark_um": 9.35033258895772,
-            "liquid_water_spark_kg": 7.415125546995733e-07,
-            "liquid_alcohol_spark_kg": 2.5385584803488257e-08,
-            "T_spark_m09_K": 643.8337607791266,
+            "SMD_spark_um": 9.350333470875563,
+            "liquid_water_spark_kg": 7.41512750580287e-07,
+            "liquid_alcohol_spark_kg": 2.5385591754923655e-08,
+            "T_spark_m09_K": 643.8340256599091,
             "p_spark_Pa": 1079809.8022697878
           }
         },
@@ -1161,13 +1161,13 @@
           },
           "cfd_matched": {
             "evaporated_IVC_pct": 14.377409801199626,
-            "evaporated_spark_pct": 18.55322580209951,
-            "liquid_spark_pct": 3.0897215537000844,
+            "evaporated_spark_pct": 18.553226866964582,
+            "liquid_spark_pct": 3.089720488835037,
             "wall_impinged_pct": 78.35705264411861,
-            "SMD_spark_um": 11.154629584905669,
-            "liquid_water_spark_kg": 3.792044268844992e-06,
-            "liquid_alcohol_spark_kg": 5.653910781268804e-07,
-            "T_spark_m09_K": 555.3483159275868,
+            "SMD_spark_um": 11.15462868289081,
+            "liquid_water_spark_kg": 3.792043240491333e-06,
+            "liquid_alcohol_spark_kg": 5.653906047010051e-07,
+            "T_spark_m09_K": 555.3500269011688,
             "p_spark_Pa": 1079809.8022697878
           }
         }

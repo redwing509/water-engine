@@ -165,3 +165,24 @@ def test_cfd_matched_k_interpolation_is_clamped():
     k = dpm.KofP(1e5, 0.4, 2e6, 0.6)
     assert k(5e4) == 0.4 and k(5e6) == 0.6
     assert k(math.sqrt(1e5 * 2e6)) == pytest.approx(0.5, rel=1e-12)
+
+
+def test_evap_profiles_match_spray_at_spark():
+    """evap_profiles.json (job water-engine-20261023-124600 step 1): schema, IVC -> spark ordering, end values."""
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1] / "results" / "09_spray_evaporation"
+    pp, sp = root / "evap_profiles.json", root / "spray_at_spark.json"
+    if not (pp.exists() and sp.exists()):
+        pytest.skip("design_points results not generated")
+    prof, sas = json.loads(pp.read_text()), json.loads(sp.read_text())["cases"]
+    assert len(prof) == sum(len(a) for c in sas.values() for a in c["atomisers"].values())
+    for key, c in prof.items():
+        for k in ("fuel", "point", "atomiser", "variant", "theta_deg", "f_evap"):
+            assert k in c
+        th, f = np.array(c["theta_deg"]), np.array(c["f_evap"])
+        assert th.size == f.size and th[0] == pytest.approx(-180.0) and np.all(np.diff(th) > 0)
+        assert th[-1] == pytest.approx(c["spark_deg_aTDC"], abs=1e-3)
+        assert np.all((f >= 0) & (f <= 1))
+        ref = sas[f"{c['fuel']}/{c['point']}"]["atomisers"][c["atomiser"]][c["variant"]]
+        assert 100 * f[0] == pytest.approx(ref["evaporated_IVC_pct"], rel=1e-4, abs=1e-6)
+        assert 100 * f[-1] == pytest.approx(ref["evaporated_spark_pct"], rel=1e-4, abs=1e-6)

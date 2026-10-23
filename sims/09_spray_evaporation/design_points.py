@@ -213,6 +213,13 @@ def run_design_case(task):
     snaps = sp.run((trace["theta_spark_deg"] - th_ivc) * t_deg, mode="pt", Vfun=pfun, n_out=240); allsn += snaps
     closure.append((sp.enthalpy() - H0) - (sp.vdp - vdp0))
     spk = snaps[-1]
+    # evaporated fraction vs crank angle, IVC -> spark (evap_profiles.json, Module 03 --evap-profile input)
+    profile = dict(theta_deg=[th_ivc + (s["t_s"] - t_ivc) / t_deg for s in snaps],
+                   f_evap=[s["evaporated_frac"] for s in snaps],
+                   f_evap_water=[s["vapour_water_kg"] / m_w if m_w > 0 else 0.0 for s in snaps],
+                   f_evap_alcohol=[s["vapour_methanol_kg"] / m_f if m_f > 0 else 0.0 for s in snaps],
+                   f_liquid=[s["liquid_kg"] / m_l for s in snaps], f_wall=[s["wall_kg"] / m_l for s in snaps],
+                   T_gas_K=[s["T_gas_K"] for s in snaps])
     mw, mm, Td, ud, Tg, mv = sp.split()
     liq_w = float(np.sum(sp.N * np.maximum(mw, 0) * sp.m0)); liq_m = float(np.sum(sp.N * np.maximum(mm, 0) * sp.m0))
     V_geom = R.cyl_volume(trace["theta_spark_deg"], par)
@@ -239,7 +246,7 @@ def run_design_case(task):
                 S_water_spark=spk["S_water"], S_alcohol_spark=spk["S_methanol"],
                 max_mass_error_rel=max(s["mass_error_rel"] for s in allsn),
                 max_energy_closure_rel=max(abs(c) for c in closure) / latent,
-                boiling_cap_hits=sp.cap_hits, runtime_s=time.perf_counter() - start)
+                boiling_cap_hits=sp.cap_hits, runtime_s=time.perf_counter() - start, profile=profile)
 
 
 def _task(task):
@@ -279,6 +286,29 @@ def plot(rows, path):
     plt.close(fig)
 
 
+def _sig(x, n=6):
+    return float(f"{x:.{n}g}")
+
+
+def write_evap_profiles(path, good, profiles):
+    """evap_profiles.json, schema {case: {fuel, point, atomiser, variant, theta_deg[], f_evap[]}} (Claude's reply to the
+    103500 follow-ups). f_evap = evaporated (vapour) mass / injected liquid mass (alcohol + water), from the start of
+    compression (Module 03 IVC, -180 deg aTDC) to spark; 241 points. Extra per-case keys are informational:
+    f_evap_water / f_evap_alcohol (vapour / injected mass of that species), f_liquid (airborne liquid), f_wall
+    (bend-deposited, constant after the bend), T_gas_K (Module 09 parcel), spark_deg_aTDC, f_evap_runner_end."""
+    out = {}
+    for r in good:
+        key = f"{r['fuel']}/{r['point']}/{r['atomiser']}/{r['variant']}"
+        pr = profiles[key]
+        c = dict(fuel=r["fuel"], point=r["point"], atomiser=r["atomiser"], variant=r["variant"],
+                 theta_deg=[round(t, 4) for t in pr["theta_deg"]], f_evap=[_sig(v) for v in pr["f_evap"]])
+        c.update({k: [_sig(v) for v in pr[k]] for k in ("f_evap_water", "f_evap_alcohol", "f_liquid", "f_wall", "T_gas_K")})
+        c.update(spark_deg_aTDC=r["spark_deg_aTDC"], f_evap_runner_end=r["evaporated_runner_pct"] / 100.0)
+        out[key] = c
+    Path(path).write_text(json.dumps(out, indent=1))
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--design-point", default=str(ROOT / "results" / "03_engine_cycle" / "design_point.json"))
@@ -316,6 +346,7 @@ def main(argv=None):
                 tasks.append(dict(inp=inp, atomiser=a, variant=v, trace=tr, kfit=kfit))
     with ProcessPoolExecutor(max_workers=args.workers) as ex:
         rows = list(ex.map(_task, tasks))
+    profiles = {f"{r['fuel']}/{r['point']}/{r['atomiser']}/{r['variant']}": r.pop("profile") for r in rows if "profile" in r}
     failed = [r for r in rows if r.get("status") == "failed"]
     good = [r for r in rows if "status" not in r]
     fields = list(good[0].keys()) if good else ["fuel"]
@@ -370,6 +401,7 @@ def main(argv=None):
                spark=spark_info, cases=cases)
     (out / "spray_at_spark.json").write_text(json.dumps(sas, indent=2, default=float))
     (sub / "spray_at_spark.json").write_text(json.dumps(sas, indent=2, default=float))
+    write_evap_profiles(out / "evap_profiles.json", good, profiles)
     print(json.dumps(dict(n_cases=len(rows), n_failed=len(failed), fits={c: round(f["k"], 4) for c, f in fits.items()},
                           runtime_s=round(summary["runtime_s"], 1))))
     return 1 if failed else 0

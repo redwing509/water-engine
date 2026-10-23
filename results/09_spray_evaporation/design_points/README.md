@@ -70,3 +70,8 @@ CH3OH and C2H5OH at Module 03's best_dry, best_overall and water_majority points
 | `summary.json` | labels, assumptions, cfd_matched fit details, spark angles, Module 03 reproduction check |
 | `m03_pre_spark_p_theta.csv` | the imposed Module 03 p(θ) |
 | `design_point_liquid_wall.png` | plot of liquid at spark and wall-impinged % |
+| `../evap_profiles.json` | evaporated fraction vs crank angle, IVC (−180° aTDC) to spark, 241 points, for all 84 cases (job `water-engine-20261023-124600` step 1). Schema `{"<fuel>/<point>/<atomiser>/<variant>": {fuel, point, atomiser, variant, theta_deg[], f_evap[], ...}}`. `f_evap` = vapour mass / injected liquid (alcohol + water). Extra keys: `f_evap_water`, `f_evap_alcohol` (per species), `f_liquid` (airborne), `f_wall` (bend-deposited), `T_gas_K`, `spark_deg_aTDC`, `f_evap_runner_end`. EXECUTED; consistency with `spray_at_spark.json` VERIFIED by `test_evap_profiles_match_spray_at_spark`. |
+
+Regenerated for step 1 at wme1-cfd@e2481f7 with `OMP/OPENBLAS/MKL/NUMEXPR_NUM_THREADS=1 --workers 2`
+(the first attempt was stopped because threaded BLAS oversubscribed the box during the k fit; no code
+change). Numbers match the previous commit to ≤2e-5 relative (k_A2 0.706981, run-to-run float noise).
