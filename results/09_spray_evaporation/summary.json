@@ -1,0 +1,505 @@
+{
+  "module": "09_spray_evaporation",
+  "version": "1.0.0",
+  "git_sha": "e07d8d4d36c57bccf62d36c7850d43decff99cce",
+  "mode": "quick",
+  "assumptions": {
+    "bore_m": {
+      "value": 0.086
+    },
+    "stroke_m": {
+      "value": 0.086
+    },
+    "rod_m": {
+      "value": 0.145
+    },
+    "rpm": {
+      "value": 2000.0
+    },
+    "CR": {
+      "value": 12.0,
+      "rationale": "Module 03 design point not available on b00342f; mid-range of SPEC 6 sweep"
+    },
+    "p_plenum_Pa": {
+      "value": 100000.0
+    },
+    "eta_v": {
+      "value": 1.0
+    },
+    "phi": {
+      "value": 1.0
+    },
+    "T_liquid_K": {
+      "value": 300.0
+    },
+    "spark_CAD_bTDC": {
+      "value": 25.0,
+      "rationale": "MBT proxy: CA50 8 CAD aTDC (SPEC 6) with ~33 CAD from spark to CA50"
+    },
+    "induction_fraction": {
+      "value": 0.5,
+      "rationale": "mean in-cylinder residence before IVC of charge inducted uniformly over the intake stroke"
+    },
+    "runner_diameter_m": {
+      "value": 0.035,
+      "rationale": "typical runner for 0.5 L cylinder; sets Stokes number at the bend"
+    },
+    "venturi_throat_U_m_s": {
+      "value": 30.0,
+      "source": "SPEC 12.2 fallback, Module 06 not available"
+    },
+    "psi_injection_s": {
+      "value": 0.01,
+      "rationale": "port-injection pulse at WOT 2000 rpm; sets Lefebvre mass flow only"
+    },
+    "psi_velocity_coeff": {
+      "value": 0.6
+    },
+    "rr_q": {
+      "value": 3.0
+    },
+    "rr_classes": {
+      "value": 12
+    },
+    "activity": {
+      "value": "wilson"
+    },
+    "liquid_properties": {
+      "value": "CoolProp saturated liquid (water IAPWS-95; methanol de Reuck & Craven 1993)",
+      "coolprop": true
+    },
+    "gas_thermo_transport": {
+      "value": "Cantera GRI-Mech 3.0 NASA polynomials and mixture-averaged transport",
+      "cantera_version": "3.2.0"
+    },
+    "film_mixing_rule": {
+      "value": "Wilke (1950) viscosity, Mason & Saxena (1958) conductivity"
+    },
+    "activity_model": {
+      "value": "Wilson",
+      "parameters_cal_mol": {
+        "a12": 107.38,
+        "a21": 469.55,
+        "V1": 40.73,
+        "V2": 18.07
+      },
+      "source": "Gmehling et al., Vapor-Liquid Equilibrium Data Collection, DECHEMA Chemistry Data Series vol. I (1977-1988), via Smith, Van Ness & Abbott, Intro. Chem. Eng. Thermodynamics 7th ed., Table 13.10",
+      "cross_check": {
+        "model": "NRTL",
+        "parameters_cal_mol": {
+          "b12": -253.88,
+          "b21": 845.21,
+          "alpha": 0.2994
+        }
+      }
+    },
+    "liquid_mixture_density": {
+      "value": "ideal volume additivity",
+      "rationale": "excess volume of methanol-water about -3 %, neglected"
+    },
+    "blend_sigma_mu_for_SMD": {
+      "value": "ideal mole-fraction sigma, Arrhenius log-mole mu",
+      "caveat": "approximation; real blend sigma is lower, so blend SMD is biased high"
+    },
+    "evaporation_model": {
+      "value": "Abramzon-Sirignano (1989) film model, Ranz-Marshall Nu0/Sh0, 1/3 rule"
+    },
+    "drop_internal": {
+      "value": "rapid mixing, uniform temperature and composition (infinite conductivity)"
+    },
+    "size_distribution": {
+      "value": "Rosin-Rammler q=3.0, 12 equal-mass classes, discrete SMD exact"
+    },
+    "secondary_breakup": {
+      "value": "none",
+      "rationale": "intake We is low for SMD < 150 um at 10-40 m/s slip; CFD A2 shows breakup at 100 bar dP, so chamber cross-check matches SMD at EOI"
+    },
+    "wall_impingement": {
+      "value": "Pui, Romay-Novas & Liu (1987) turbulent 90 deg bend: eta = 1 - 10^(-0.963 St)",
+      "caveat": "fit range St < ~1.5; larger St extrapolated (eta -> 1). Wall film is not re-evaporated (conservative for % evaporated)"
+    },
+    "wall_heat_transfer": {
+      "value": "none (adiabatic gas)",
+      "rationale": "plenum temperature represents intake heating; conservative for evaporation"
+    },
+    "in_cylinder_slip": {
+      "value": "gas velocity 0 after the bend; turbulence enhancement neglected",
+      "rationale": "conservative"
+    },
+    "compression": {
+      "value": "slider-crank volume, adiabatic, real cp(T); Module 03 p(theta) not available",
+      "source": "SPEC 12.2 fallback"
+    },
+    "residual_gas": {
+      "value": "neglected",
+      "rationale": "hot residuals would raise evaporation; conservative"
+    },
+    "closed_mass_balance": {
+      "value": "vapour accumulates in the parcel; no vapour removed; saturation limit emerges from B_M -> 0"
+    },
+    "regularisation": {
+      "value": "fluxes scaled below 0.001 of initial droplet mass",
+      "rationale": "Lipschitz vanishing-droplet limit; residual liquid kept as liquid"
+    },
+    "boiling_guard": {
+      "value": "sum of surface vapour mole fractions capped at 0.99",
+      "count_reported": true
+    },
+    "cfd_crosscheck": {
+      "value": "constant-volume 20x100x20 mm chamber, 0-D well mixed, same p, T, liquid, injected mass and top-hat duration as OpenFOAM phase A; SMD = CFD SMD at EOI; RR q = 3; 10 injection packets; no breakup; droplet slip from U_bernoulli relaxing in quiescent gas"
+    },
+    "workers": {
+      "value": 1
+    },
+    "mode": {
+      "value": "quick"
+    }
+  },
+  "key_results": {
+    "cases": 28,
+    "failed": 0,
+    "recommended_atomiser_for_module06": "ultrasonic_120kHz",
+    "recommendation_basis": "highest mean % evaporated at spark at w = 0.6 over the sweep",
+    "atomiser_scores_w06": {
+      "carb_venturi": {
+        "mean_evaporated_spark_pct": 2.8791177108004886,
+        "median_evaporated_spark_pct": 2.8791177108004886,
+        "mean_wall_impinged_pct": 97.12088228913505,
+        "n": 1
+      },
+      "psi_3bar": {
+        "mean_evaporated_spark_pct": 3.327533636402165,
+        "median_evaporated_spark_pct": 3.327533636402165,
+        "mean_wall_impinged_pct": 96.6724663586056,
+        "n": 1
+      },
+      "psi_5bar": {
+        "mean_evaporated_spark_pct": 4.1298958471924125,
+        "median_evaporated_spark_pct": 4.1298958471924125,
+        "mean_wall_impinged_pct": 95.87008284862722,
+        "n": 1
+      },
+      "air_assist_20um": {
+        "mean_evaporated_spark_pct": 17.01548844301419,
+        "median_evaporated_spark_pct": 17.01548844301419,
+        "mean_wall_impinged_pct": 81.75749063635514,
+        "n": 1
+      },
+      "air_assist_30um": {
+        "mean_evaporated_spark_pct": 11.99531953651783,
+        "median_evaporated_spark_pct": 11.99531953651783,
+        "mean_wall_impinged_pct": 87.89103964845917,
+        "n": 1
+      },
+      "ultrasonic_40kHz": {
+        "mean_evaporated_spark_pct": 12.51334630720326,
+        "median_evaporated_spark_pct": 12.51334630720326,
+        "mean_wall_impinged_pct": 87.30266547077896,
+        "n": 1
+      },
+      "ultrasonic_120kHz": {
+        "mean_evaporated_spark_pct": 20.15794459550747,
+        "median_evaporated_spark_pct": 20.15794459550747,
+        "mean_wall_impinged_pct": 77.02372939111058,
+        "n": 1
+      }
+    },
+    "reference_condition": {
+      "T_plenum_K": 360.0,
+      "U_runner_m_s": 30.0,
+      "L_runner_m": 0.2
+    },
+    "reference_results": {
+      "carb_venturi": {
+        "w=0": {
+          "evaporated_IVC_pct": 7.76327290822051,
+          "evaporated_spark_pct": 7.763284175664953,
+          "wall_impinged_pct": 92.23669717173422,
+          "SMD_spark_um": 32.05792338031536,
+          "SMD_initial_um": 105.73161809506443,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 2.8791177108004886,
+          "evaporated_spark_pct": 2.8791177108004886,
+          "wall_impinged_pct": 97.12088228913505,
+          "SMD_spark_um": 60.57516296051131,
+          "SMD_initial_um": 164.15952828727367,
+          "saturation_limited_spark": false
+        }
+      },
+      "psi_3bar": {
+        "w=0": {
+          "evaporated_IVC_pct": 10.069248097134443,
+          "evaporated_spark_pct": 10.090568607126638,
+          "wall_impinged_pct": 89.90697114281392,
+          "SMD_spark_um": 10.889748140572895,
+          "SMD_initial_um": 71.2343310236751,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 3.3275336357632184,
+          "evaporated_spark_pct": 3.327533636402165,
+          "wall_impinged_pct": 96.6724663586056,
+          "SMD_spark_um": 44.60115487927022,
+          "SMD_initial_um": 124.62888028197392,
+          "saturation_limited_spark": false
+        }
+      },
+      "psi_5bar": {
+        "w=0": {
+          "evaporated_IVC_pct": 12.490647775611105,
+          "evaporated_spark_pct": 12.658456639459612,
+          "wall_impinged_pct": 87.34141707854897,
+          "SMD_spark_um": 28.631590136642025,
+          "SMD_initial_um": 55.177875546584,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 4.129891271310656,
+          "evaporated_spark_pct": 4.1298958471924125,
+          "wall_impinged_pct": 95.87008284862722,
+          "SMD_spark_um": 32.97851605021945,
+          "SMD_initial_um": 96.53711555771257,
+          "saturation_limited_spark": false
+        }
+      },
+      "air_assist_20um": {
+        "w=0": {
+          "evaporated_IVC_pct": 30.20431806877776,
+          "evaporated_spark_pct": 32.10331161462772,
+          "wall_impinged_pct": 67.81331676552433,
+          "SMD_spark_um": 12.98820225694296,
+          "SMD_initial_um": 20.0,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 13.431694892345314,
+          "evaporated_spark_pct": 17.01548844301419,
+          "wall_impinged_pct": 81.75749063635514,
+          "SMD_spark_um": 12.065087693790348,
+          "SMD_initial_um": 20.0,
+          "saturation_limited_spark": false
+        }
+      },
+      "air_assist_30um": {
+        "w=0": {
+          "evaporated_IVC_pct": 20.63650673579654,
+          "evaporated_spark_pct": 20.930023903118126,
+          "wall_impinged_pct": 79.05370253970732,
+          "SMD_spark_um": 14.078502604700038,
+          "SMD_initial_um": 29.999999999999996,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 10.479102699023217,
+          "evaporated_spark_pct": 11.99531953651783,
+          "wall_impinged_pct": 87.89103964845917,
+          "SMD_spark_um": 16.772508504186188,
+          "SMD_initial_um": 29.999999999999996,
+          "saturation_limited_spark": false
+        }
+      },
+      "ultrasonic_40kHz": {
+        "w=0": {
+          "evaporated_IVC_pct": 28.678444863415653,
+          "evaporated_spark_pct": 29.407119679120903,
+          "wall_impinged_pct": 70.5490801948761,
+          "SMD_spark_um": 12.59007961369242,
+          "SMD_initial_um": 25.867138352909326,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 11.48690883108528,
+          "evaporated_spark_pct": 12.51334630720326,
+          "wall_impinged_pct": 87.30266547077896,
+          "SMD_spark_um": 6.686848459050396,
+          "SMD_initial_um": 34.186514420140476,
+          "saturation_limited_spark": false
+        }
+      },
+      "ultrasonic_120kHz": {
+        "w=0": {
+          "evaporated_IVC_pct": 43.814135352967895,
+          "evaporated_spark_pct": 52.174611139906645,
+          "wall_impinged_pct": 47.21788516696455,
+          "SMD_spark_um": 10.600181211206932,
+          "SMD_initial_um": 12.435623058188586,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 14.4193313424024,
+          "evaporated_spark_pct": 20.15794459550747,
+          "wall_impinged_pct": 77.02372939111058,
+          "SMD_spark_um": 10.835729314551763,
+          "SMD_initial_um": 16.43516191091854,
+          "saturation_limited_spark": false
+        }
+      }
+    },
+    "fraction_saturation_limited_at_spark_by_w": {
+      "w=0": 0.0,
+      "w=0.6": 0.0
+    },
+    "sensitivity_no_bend_impingement_reference": {
+      "carb_venturi": {
+        "w=0": {
+          "evaporated_IVC_pct": 12.457871066125993,
+          "evaporated_spark_pct": 17.406338388287956,
+          "airborne_liquid_spark_pct": 82.59366161326216,
+          "T_IVC_K": 342.0674819766722,
+          "surface_saturation_ratio_spark": 0.4086630083910998,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 4.6609998262189825,
+          "evaporated_spark_pct": 5.852235558387484,
+          "airborne_liquid_spark_pct": 94.14776444154806,
+          "T_IVC_K": 341.5900787215377,
+          "surface_saturation_ratio_spark": 1.379112865754538,
+          "saturation_limited_spark": true
+        }
+      },
+      "psi_3bar": {
+        "w=0": {
+          "evaporated_IVC_pct": 17.265919154575133,
+          "evaporated_spark_pct": 25.262660756516762,
+          "airborne_liquid_spark_pct": 74.7373392434832,
+          "T_IVC_K": 333.32220823774355,
+          "surface_saturation_ratio_spark": 0.427056344946984,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 5.992084412688965,
+          "evaporated_spark_pct": 7.432028542714267,
+          "airborne_liquid_spark_pct": 92.56797145728575,
+          "T_IVC_K": 335.41860200049535,
+          "surface_saturation_ratio_spark": 1.3161842448704228,
+          "saturation_limited_spark": true
+        }
+      },
+      "psi_5bar": {
+        "w=0": {
+          "evaporated_IVC_pct": 21.25304893533764,
+          "evaporated_spark_pct": 30.90892550353107,
+          "airborne_liquid_spark_pct": 69.09107449646892,
+          "T_IVC_K": 326.07978535832507,
+          "surface_saturation_ratio_spark": 0.44285188564352745,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 7.4506063084877105,
+          "evaporated_spark_pct": 8.964073530972186,
+          "airborne_liquid_spark_pct": 91.03592646902779,
+          "T_IVC_K": 328.34299080681086,
+          "surface_saturation_ratio_spark": 1.2797758488661743,
+          "saturation_limited_spark": true
+        }
+      },
+      "air_assist_20um": {
+        "w=0": {
+          "evaporated_IVC_pct": 39.05014906297584,
+          "evaporated_spark_pct": 58.94826639434127,
+          "airborne_liquid_spark_pct": 41.05173360566187,
+          "T_IVC_K": 294.8687182904734,
+          "surface_saturation_ratio_spark": 0.4938691624877776,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 14.55147220108826,
+          "evaporated_spark_pct": 19.972418827634144,
+          "airborne_liquid_spark_pct": 80.02758117236583,
+          "T_IVC_K": 291.72092214387595,
+          "surface_saturation_ratio_spark": 1.0091570577765145,
+          "saturation_limited_spark": true
+        }
+      },
+      "air_assist_30um": {
+        "w=0": {
+          "evaporated_IVC_pct": 31.468332395268234,
+          "evaporated_spark_pct": 45.54913999008097,
+          "airborne_liquid_spark_pct": 54.450860009918,
+          "T_IVC_K": 307.9251237882977,
+          "surface_saturation_ratio_spark": 0.451370403025774,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 13.66890854007034,
+          "evaporated_spark_pct": 16.74938152314539,
+          "airborne_liquid_spark_pct": 83.25061847685461,
+          "T_IVC_K": 295.9257240182485,
+          "surface_saturation_ratio_spark": 1.0741697596854731,
+          "saturation_limited_spark": true
+        }
+      },
+      "ultrasonic_40kHz": {
+        "w=0": {
+          "evaporated_IVC_pct": 36.770596771802246,
+          "evaporated_spark_pct": 51.934151935680106,
+          "airborne_liquid_spark_pct": 48.065848065592185,
+          "T_IVC_K": 298.7626397141765,
+          "surface_saturation_ratio_spark": 0.4809811652644016,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 13.773526569627304,
+          "evaporated_spark_pct": 16.019924757793174,
+          "airborne_liquid_spark_pct": 83.98007524260592,
+          "T_IVC_K": 295.904765438189,
+          "surface_saturation_ratio_spark": 1.1153026396219827,
+          "saturation_limited_spark": true
+        }
+      },
+      "ultrasonic_120kHz": {
+        "w=0": {
+          "evaporated_IVC_pct": 46.33117607028467,
+          "evaporated_spark_pct": 74.60712922505269,
+          "airborne_liquid_spark_pct": 25.39287077492566,
+          "T_IVC_K": 282.64494800196223,
+          "surface_saturation_ratio_spark": 0.5490874003655766,
+          "saturation_limited_spark": false
+        },
+        "w=0.6": {
+          "evaporated_IVC_pct": 14.758748560146692,
+          "evaporated_spark_pct": 21.587796458107047,
+          "airborne_liquid_spark_pct": 78.41220354179296,
+          "T_IVC_K": 291.1493051778182,
+          "surface_saturation_ratio_spark": 0.9944102973148611,
+          "saturation_limited_spark": true
+        }
+      }
+    },
+    "cfd_crosscheck": {
+      "status": "not run: --cfd-dir has no summary.json"
+    },
+    "executed_verified_validated": "executed; numerics verified by tests; not validated against experiment"
+  },
+  "validation": {
+    "d2_law": {
+      "K_m2_s": 1.0289527459889777e-08,
+      "lifetime_s": 0.24296548211231273,
+      "max_rel_err_d2": 3.613023606686106e-07,
+      "passed": true,
+      "tolerance": 0.02
+    },
+    "mass_conservation": {
+      "max_rel_error": 1.550114900921631e-11,
+      "tolerance": 1e-08,
+      "passed": true
+    },
+    "saturation": {
+      "max_pure_component_saturation_ratio": 0.8504373692118848,
+      "tolerance": 1.000001,
+      "passed": true
+    },
+    "energy_closure": {
+      "max_rel_to_latent": 0.003718332262919866,
+      "note": "diagnostic, segment-wise H (const p) / U+W (volume); trapezoid p dV"
+    },
+    "failed_cases": 0,
+    "boiling_cap_hits": 0,
+    "status_labels": "executed model runs; d2/saturation/mass checks are numerical verification; nothing experimentally validated",
+    "passed": true
+  },
+  "runtime_s": 40.99924499699773
+}
