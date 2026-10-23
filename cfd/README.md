@@ -40,3 +40,9 @@ python3 scripts/postprocess.py         # results/<case>.csv, .png, summary.json
 solver log), `results/<case>.png`, `results/summary.json` (end-of-injection values + grid check; each value is a row
 of the named CSV). Evaporated % = 1 − (liquid in domain + escaped)/injected. Wall impact: rebound model, so wall
 mass is not removed; penetration ≈ 100 mm means the spray reached the far wall.
+
+## A0 status
+A0 is **truncated at 4.0125 ms (smoke test)**, not run to its 10 ms endTime: stopped cleanly with `stopAt writeNow`
+on 2026-10-23 01:06 PDT (job water-engine-20261023-001200) to save box time. Injection ends at 1.25 ms, so the
+penetration history needed for the check is covered. Marker: `runs/A0/truncated.txt`; also the `status` field of
+`results/summary.json` → `A0`.

@@ -53,12 +53,18 @@ for case in sorted(p for p in RUNS.iterdir() if (p/"log.sprayFoam").exists()):
         penetration_eoi_mm=e["penetration_mm"], evaporated_eoi_pct=e["evaporated_pct"], SMD_eoi_um=e["SMD_um"],
         wall_or_escaped_eoi_kg=e["wall_or_escaped_mass_kg"],
         end_t_ms=last["t_ms"], penetration_end_mm=last["penetration_mm"], evaporated_end_pct=last["evaporated_pct"],
-        runtime_s=int(rt) if rt else None, complete=rt is not None, meta=meta)
+        runtime_s=int(rt) if rt else None, complete=rt is not None,
+        peak_rss_mb=int((case/"peak_rss_mb.txt").read_text()) if (case/"peak_rss_mb.txt").exists() else None, meta=meta)
+    if (case/"truncated.txt").exists():
+        summary[case.name]["status"] = (case/"truncated.txt").read_text().strip()
 if "A1-BLEND" in summary and "A1-BLEND-fine" in summary:
     a, b = summary["A1-BLEND"], summary["A1-BLEND-fine"]
     summary["grid_check_A1-BLEND"] = dict(
         penetration_change_pct=100*(b["penetration_eoi_mm"]-a["penetration_eoi_mm"])/a["penetration_eoi_mm"],
         evaporated_change_pct=100*(b["evaporated_eoi_pct"]-a["evaporated_eoi_pct"])/a["evaporated_eoi_pct"],
         source="A1-BLEND.csv vs A1-BLEND-fine.csv at EOI")
+est = RUNS/"A1-BLEND-fine"/"ram_estimate.txt"
+if "grid_check_A1-BLEND" not in summary and est.exists():
+    summary["grid_check_A1-BLEND"] = dict(status="needs mail" if "SKIPPED" in est.read_text() else "pending", ram_estimate=est.read_text().strip())
 (OUT/"summary.json").write_text(json.dumps(summary, indent=1))
 print(json.dumps({k: {kk: v.get(kk) for kk in ("penetration_eoi_mm","evaporated_eoi_pct","runtime_s","penetration_change_pct","evaporated_change_pct")} for k, v in summary.items()}, indent=0))

@@ -6,3 +6,4 @@ runs/*/log.*
 runs/*/*.nohup
 runs/*.nohup
 batch.nohup
+batch2.nohup
