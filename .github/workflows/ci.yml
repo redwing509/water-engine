@@ -15,7 +15,7 @@ jobs:
           python-version: '3.12'
           cache: pip
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt -r requirements-cad.txt
       - name: Validate physics and output contracts
         run: pytest -q
       - name: Quick module runs
