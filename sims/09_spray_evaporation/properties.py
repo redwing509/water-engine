@@ -37,6 +37,8 @@ vapour's departure function, < 1 % below 1 bar).
 from dataclasses import dataclass
 from functools import lru_cache
 import math
+from pathlib import Path
+import warnings
 
 import cantera as ct
 import numpy as np
@@ -45,9 +47,13 @@ from CoolProp.CoolProp import PropsSI
 
 R_U = 8.314462618  # J/(mol K), CODATA 2018.
 R_CAL = 1.98720425864083  # cal/(mol K), R_U / 4.184.
-LIQUIDS = ("H2O", "CH3OH")  # index 0 = water, 1 = methanol
-COOLPROP = {"H2O": "Water", "CH3OH": "Methanol"}
-GAS_SPECIES = ("AIR", "H2O", "CH3OH")  # AIR is a frozen N2/O2 pseudo-species
+LIQUIDS = ("H2O", "CH3OH")  # index 0 = water, 1 = alcohol (methanol by default)
+ALCOHOLS = ("CH3OH", "C2H5OH")
+COOLPROP = {"H2O": "Water", "CH3OH": "Methanol", "C2H5OH": "Ethanol"}
+GAS_SPECIES = ("AIR", "H2O", "CH3OH")  # AIR is a frozen N2/O2 pseudo-species; index 2 = alcohol vapour
+# GRI-Mech 3.0 has no ethanol; its thermo and transport come from the San Diego
+# mechanism already used by Modules 02/03 (mechanisms/sandiego.yaml, PROVENANCE.md).
+SANDIEGO = Path(__file__).resolve().parents[2] / "mechanisms" / "sandiego.yaml"
 AIR_X = {"O2": 1.0, "N2": 3.76}  # SPEC fuels.AIR_N2_O2 dry-air approximation
 REF_T = 298.15
 
@@ -59,15 +65,29 @@ NRTL = dict(b12=-253.88, b21=845.21, alpha=0.2994)
 ACTIVITY_SOURCE = ("Gmehling et al., Vapor-Liquid Equilibrium Data Collection, DECHEMA "
                    "Chemistry Data Series vol. I (1977-1988), via Smith, Van Ness & Abbott, "
                    "Intro. Chem. Eng. Thermodynamics 7th ed., Table 13.10")
+# Ethanol(1)-water(2): DECHEMA parameters as distributed in the ChemSep interaction-
+# parameter database (Kooijman & Taylor 2008; thermo package, ChemSep/wilson.json and
+# nrtl.ipd). Wilson there: ln L12 = -1.17693 - 192.381/T, ln L21 = 1.17693 - 480.801/T,
+# i.e. a12 = 192.381 R = 382.30 cal/mol, a21 = 480.801 R = 955.45 cal/mol and
+# V2/V1 = exp(-1.17693) = 0.30819 (V1 = 58.63 cm3/mol with V2 = 18.07). NRTL (1 atm):
+# b12 = -57.9601, b21 = 1241.7396 cal/mol, alpha = 0.2937.
+WILSON_ETOH = dict(a12=192.38082765657816 * 1.98720425864083, a21=480.8011032813958 * 1.98720425864083,
+                   V1=18.07 / math.exp(-1.1769274893976625), V2=18.07)
+NRTL_ETOH = dict(b12=-57.9601, b21=1241.7396, alpha=0.2937)
+ACTIVITY_SOURCE_ETOH = ("DECHEMA (Gmehling et al.) ethanol-water parameters as distributed in the ChemSep "
+                        "interaction-parameter database (Kooijman & Taylor 2008), files wilson.json / nrtl.ipd "
+                        "of the 'thermo' Python package (C. Bell)")
+ACTIVITY = {"CH3OH": (WILSON, NRTL, ACTIVITY_SOURCE), "C2H5OH": (WILSON_ETOH, NRTL_ETOH, ACTIVITY_SOURCE_ETOH)}
 
 
-def wilson_gamma(x_m, T):
-    """Wilson activity coefficients (gamma_water, gamma_methanol)."""
+def wilson_gamma(x_m, T, fuel="CH3OH"):
+    """Wilson activity coefficients (gamma_water, gamma_alcohol)."""
+    W = ACTIVITY[fuel][0]
     x1 = np.clip(np.asarray(x_m, float), 0.0, 1.0)
     x2 = 1.0 - x1
     T = np.asarray(T, float)
-    L12 = WILSON["V2"] / WILSON["V1"] * np.exp(-WILSON["a12"] / (R_CAL * T))
-    L21 = WILSON["V1"] / WILSON["V2"] * np.exp(-WILSON["a21"] / (R_CAL * T))
+    L12 = W["V2"] / W["V1"] * np.exp(-W["a12"] / (R_CAL * T))
+    L21 = W["V1"] / W["V2"] * np.exp(-W["a21"] / (R_CAL * T))
     s1 = x1 + x2 * L12
     s2 = x2 + x1 * L21
     term = L12 / s1 - L21 / s2
@@ -76,15 +96,16 @@ def wilson_gamma(x_m, T):
     return np.exp(lng2), np.exp(lng1)
 
 
-def nrtl_gamma(x_m, T):
-    """NRTL activity coefficients (gamma_water, gamma_methanol)."""
+def nrtl_gamma(x_m, T, fuel="CH3OH"):
+    """NRTL activity coefficients (gamma_water, gamma_alcohol)."""
+    N = ACTIVITY[fuel][1]
     x1 = np.clip(np.asarray(x_m, float), 0.0, 1.0)
     x2 = 1.0 - x1
     T = np.asarray(T, float)
-    t12 = NRTL["b12"] / (R_CAL * T)
-    t21 = NRTL["b21"] / (R_CAL * T)
-    G12 = np.exp(-NRTL["alpha"] * t12)
-    G21 = np.exp(-NRTL["alpha"] * t21)
+    t12 = N["b12"] / (R_CAL * T)
+    t21 = N["b21"] / (R_CAL * T)
+    G12 = np.exp(-N["alpha"] * t12)
+    G21 = np.exp(-N["alpha"] * t21)
     lng1 = x2**2 * (t21 * (G21 / (x1 + x2 * G21))**2 + t12 * G12 / (x2 + x1 * G12)**2)
     lng2 = x1**2 * (t12 * (G12 / (x2 + x1 * G12))**2 + t21 * G21 / (x1 + x2 * G21)**2)
     return np.exp(lng2), np.exp(lng1)
@@ -109,6 +130,7 @@ class Tables:
     D_1bar: np.ndarray        # (2, n) m2/s vapour-in-air at 1e5 Pa
     M_g: np.ndarray           # (3,) kg/mol
     Tmax_l: np.ndarray        # (2,) upper end of the liquid table [K]
+    fuel: str = "CH3OH"       # alcohol in slot 1 (liquid) / 2 (gas)
 
 
 def murphy_koop_psat(T):
@@ -159,19 +181,30 @@ def _liquid_grid_cp(fl, T):
     return {k: np.array(v) for k, v in out.items()}
 
 
-@lru_cache(maxsize=1)
-def tables() -> Tables:
-    """Build (once per process) the property tables."""
-    # Liquid grid: 223.2 K .. 505 K (methanol critical point 512.6 K).
+def _gas_for(species):
+    if species == "C2H5OH":
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            return ct.Solution(str(SANDIEGO))
+    return ct.Solution("gri30.yaml")
+
+
+@lru_cache(maxsize=4)
+def tables(fuel: str = "CH3OH") -> Tables:
+    """Build (once per process and alcohol) the property tables."""
+    if fuel not in ALCOHOLS:
+        raise ValueError(f"unsupported alcohol {fuel!r}")
+    liquids = ("H2O", fuel)
+    # Liquid grid: 223.2 K .. 505 K (critical points: methanol 512.6 K, ethanol 514.7 K).
     TL = np.arange(223.2, 505.01, 0.5)
-    gas = ct.Solution("gri30.yaml")
+    gri = ct.Solution("gri30.yaml")
     TG = np.arange(200.0, 1500.01, 2.0)
-    names = {"AIR": AIR_X, "H2O": {"H2O": 1.0}, "CH3OH": {"CH3OH": 1.0}}
+    names = {"AIR": AIR_X, "H2O": {"H2O": 1.0}, fuel: {fuel: 1.0}}
     h_g = np.zeros((3, TG.size)); cp_g = np.zeros_like(h_g)
     mu_g = np.zeros_like(h_g); k_g = np.zeros_like(h_g)
     D = np.zeros((2, TG.size)); M = np.zeros(3)
-    iN2 = gas.species_index("N2")
     for j, (key, comp) in enumerate(names.items()):
+        gas = _gas_for(key)
         for i, t in enumerate(TG):
             gas.TPX = t, 1e5, comp
             h_g[j, i] = gas.enthalpy_mass
@@ -179,14 +212,16 @@ def tables() -> Tables:
             mu_g[j, i] = gas.viscosity
             k_g[j, i] = gas.thermal_conductivity
         M[j] = gas.mean_molecular_weight / 1000.0
-    for j, sp in enumerate(("H2O", "CH3OH")):
-        isp = gas.species_index(sp)
+    for j, sp in enumerate(liquids):
+        gas = _gas_for(sp)
+        isp = gas.species_index(sp); iN2 = gas.species_index("N2")
         for i, t in enumerate(TG):
             gas.TPX = t, 1e5, AIR_X
             D[j, i] = gas.binary_diff_coeffs[isp, iN2]
-    liq = [_liquid_grid(n, TL) for n in LIQUIDS]
+    liq = [_liquid_grid(n, TL) for n in liquids]
     h_l = []
-    for j, n in enumerate(LIQUIDS):
+    for j, n in enumerate(liquids):
+        gas = _gas_for(n)
         gas.TPX = REF_T, 1e5, {n: 1.0}
         hv_ref = gas.enthalpy_mass
         fl = COOLPROP[n]
@@ -196,7 +231,7 @@ def tables() -> Tables:
     st = lambda k: np.vstack([liq[0][k], liq[1][k]])
     return Tables(TL=TL, psat=st("psat"), rho_l=st("rho"), cp_l=st("cp"), h_l=np.vstack(h_l),
                   mu_l=st("mu"), sigma_l=st("sigma"), TG=TG, h_g=h_g, cp_g=cp_g, mu_g=mu_g,
-                  k_g=k_g, D_1bar=D, M_g=M, Tmax_l=np.array([TL[-1], TL[-1]]))
+                  k_g=k_g, D_1bar=D, M_g=M, Tmax_l=np.array([TL[-1], TL[-1]]), fuel=fuel)
 
 
 def interp(table_row, grid, T):
@@ -257,8 +292,17 @@ def blend_physical(tab: Tables, Y_m: float, T: float = 300.0):
     return dict(rho=float(rho), mu=float(mu), sigma=sigma, x_m=float(x[1]))
 
 
-def property_assumptions() -> dict:
-    return {
+def property_assumptions(fuels=("CH3OH",)) -> dict:
+    extra = {}
+    if "C2H5OH" in fuels:
+        extra = {
+            "ethanol_liquid": {"value": "CoolProp Ethanol EOS (Schroeder et al. 2014) saturated liquid incl. CoolProp transport/surface tension"},
+            "ethanol_vapour": {"value": "San Diego mechanism NASA7 thermo + transport (mechanisms/sandiego.yaml), GRI-Mech 3.0 has no ethanol",
+                               "caveat": "NASA7 low range starts at 300 K; 200-300 K gas values are polynomial extrapolation"},
+            "activity_model_ethanol": {"value": "Wilson", "parameters_cal_mol": WILSON_ETOH, "source": ACTIVITY_SOURCE_ETOH,
+                                       "cross_check": {"model": "NRTL", "parameters_cal_mol": NRTL_ETOH}},
+        }
+    return extra | {
         "liquid_properties": {"value": "CoolProp saturated liquid (water IAPWS-95; methanol de Reuck & Craven 1993)", "coolprop": True},
         "gas_thermo_transport": {"value": "Cantera GRI-Mech 3.0 NASA polynomials and mixture-averaged transport", "cantera_version": ct.__version__},
         "film_mixing_rule": {"value": "Wilke (1950) viscosity, Mason & Saxena (1958) conductivity"},

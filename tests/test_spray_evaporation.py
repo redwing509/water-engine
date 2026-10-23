@@ -104,3 +104,64 @@ def test_quick_smoke(tmp_path):
     spark = json.loads((tmp_path / "spray_at_spark.json").read_text())
     assert spark["recommended_atomiser_for_module06"] in run.ATOMISERS
     assert (tmp_path / "sweep.csv").is_file()
+
+
+# ---------------------------------------------------------------- design-point extensions (job 20261023-103500)
+dpm = importlib.import_module("sims.09_spray_evaporation.design_points")
+
+
+def test_ethanol_wilson_and_nrtl_agree_and_tables_sane():
+    x = np.linspace(0.05, 0.9, 12)
+    for T in (300.0, 340.0, 370.0):
+        gw, ge = props.wilson_gamma(x, T, "C2H5OH")
+        nw, ne = props.nrtl_gamma(x, T, "C2H5OH")
+        assert np.all(np.abs(np.log(gw / nw)) < np.log(1.25))
+        assert np.all(np.abs(np.log(ge / ne)) < np.log(1.25))
+    gw, ge = props.wilson_gamma(np.array([0.0, 1.0]), 330.0, "C2H5OH")
+    assert ge[1] == pytest.approx(1.0, abs=1e-12) and gw[0] == pytest.approx(1.0, abs=1e-12)
+    tab = props.tables("C2H5OH")
+    assert np.interp(351.4, tab.TL, tab.psat[1]) == pytest.approx(101325.0, rel=0.02)   # normal boiling point
+    assert tab.M_g[2] == pytest.approx(0.046069, rel=1e-4)
+
+
+def _pt_spray(fuel="C2H5OH"):
+    sp = model.Spray(m_air=5e-4, T_gas=330.0, p=1e5, m_ref=1e-4, fuel=fuel)
+    d, f = atom.rosin_rammler_classes(30e-6, n=6)
+    rho = sp.liquid_density(np.full(d.size, 300.0), np.full(d.size, 0.4))
+    sp.add_classes(d, 1e-4 * f / (rho * math.pi * d**3 / 6.0), 0.4, 300.0, 0.0)
+    return sp
+
+
+def test_pt_mode_constant_pressure_equals_p_mode():
+    a = _pt_spray(); b = _pt_spray()
+    sa = a.run(5e-3, mode="p", n_out=10)
+    sb = b.run(5e-3, mode="pt", Vfun=lambda t: (1e5, 0.0), n_out=10)
+    assert sb[-1]["evaporated_frac"] == pytest.approx(sa[-1]["evaporated_frac"], rel=1e-5)
+    assert sb[-1]["T_gas_K"] == pytest.approx(sa[-1]["T_gas_K"], abs=1e-4)
+
+
+def test_pt_mode_conserves_mass_and_enthalpy_under_compression():
+    sp = _pt_spray()
+    pf = lambda t: (1e5 * (1.0 + 400.0 * t), 400.0 * 1e5)        # 1 -> 9 bar in 20 ms
+    H0 = sp.enthalpy()
+    snaps = sp.run(0.02, mode="pt", Vfun=pf, n_out=400)
+    assert max(s["mass_error_rel"] for s in snaps) < 1e-8
+    dH = sp.enthalpy() - H0
+    assert abs(dH - sp.vdp) / abs(sp.vdp) < 1e-3
+    assert snaps[-1]["p_Pa"] == pytest.approx(9e5, rel=1e-9)
+
+
+def test_spark_angle_is_wiebe_start():
+    th_s, dth, b050 = dpm.spark_angle_deg(8.0, 37.344666748598286)
+    assert th_s == pytest.approx(-30.965, abs=2e-3)
+    m3 = importlib.import_module("sims.03_engine_cycle.run")
+    ca50, dur = math.radians(8.0), math.radians(37.344666748598286)
+    assert m3.wiebe(math.radians(th_s), ca50, dur) == pytest.approx(0.0, abs=1e-12)
+    assert m3.wiebe(math.radians(th_s + 0.5), ca50, dur) > 0.0
+    assert m3.wiebe(ca50, ca50, dur) == pytest.approx(0.5, rel=1e-9)
+
+
+def test_cfd_matched_k_interpolation_is_clamped():
+    k = dpm.KofP(1e5, 0.4, 2e6, 0.6)
+    assert k(5e4) == 0.4 and k(5e6) == 0.6
+    assert k(math.sqrt(1e5 * 2e6)) == pytest.approx(0.5, rel=1e-12)

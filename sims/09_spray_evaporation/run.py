@@ -114,17 +114,18 @@ def charge(w, T_pl, par=DEF):
     return m_air, m_f, m_w
 
 
-def atomiser_smd(name, w, T_pl, U_runner, par=DEF):
-    """Returns (SMD [m], initial droplet velocity [m/s], note)."""
-    tab = P.tables()
-    m_air, m_f, m_w = charge(w, T_pl, par)
+def atomiser_smd(name, w, T_pl, U_runner, par=DEF, fuel="CH3OH", masses=None):
+    """Returns (SMD [m], initial droplet velocity [m/s], note).
+    masses = (m_air, m_alcohol, m_water) overrides the phi = 1 methanol charge."""
+    tab = P.tables(fuel)
+    m_air, m_f, m_w = masses if masses is not None else charge(w, T_pl, par)
     Y_m = 1.0 - w
     liq = P.blend_physical(tab, Y_m, par.T_liquid_K)
     rho_a = par.p_plenum_Pa * tab.M_g[0] / (P.R_U * T_pl)
     m_l = m_f + m_w
     if name == "carb_venturi":
         q = (m_l / liq["rho"]) / (m_air / rho_a)
-        return A.nukiyama_tanasawa(par.venturi_throat_U_m_s, liq["sigma"], liq["rho"], liq["mu"], q), 0.0, "Nukiyama-Tanasawa, 30 m/s throat"
+        return A.nukiyama_tanasawa(par.venturi_throat_U_m_s, liq["sigma"], liq["rho"], liq["mu"], q), 0.0, f"Nukiyama-Tanasawa, {par.venturi_throat_U_m_s:g} m/s throat"
     if name.startswith("psi_"):
         dP = float(name[4]) * 1e5
         mdot = m_l / par.psi_injection_s
@@ -266,14 +267,15 @@ def read_cfd(cfd_dir):
     return out
 
 
-def chamber_run(meta, smd, t_end, activity="wilson", packets=10, classes=8):
-    """Constant-volume chamber reproducing an OpenFOAM phase-A case."""
+def chamber_run(meta, smd, t_end, activity="wilson", packets=10, classes=8, rate_scale=1.0):
+    """Constant-volume chamber reproducing an OpenFOAM phase-A case.
+    rate_scale != 1 only for the labelled cfd_matched sensitivity fit."""
     tab = P.tables()
     Y_m = float(meta["composition"].get("CH3OH", 0.0))
     p, T = meta["p"], meta["T"]
     m_inj = meta["massTotal_kg"]; dur = meta["dur"]; U = meta["U_bernoulli_m_s"]
     m_air = p * CFD_CHAMBER_V_m3 * tab.M_g[0] / (P.R_U * T)
-    sp = M.Spray(m_air=m_air, T_gas=T, p=p, m_ref=m_inj, activity=activity)
+    sp = M.Spray(m_air=m_air, T_gas=T, p=p, m_ref=m_inj, activity=activity, rate_scale=rate_scale)
     Vf = lambda tt: (CFD_CHAMBER_V_m3, 0.0)
     d, frac = A.rosin_rammler_classes(smd, CFD_RR_Q, classes)
     rho = sp.liquid_density(np.full(d.size, CFD_T_LIQUID_K), np.full(d.size, Y_m))

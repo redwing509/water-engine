@@ -19,8 +19,14 @@ Physics (SPEC section 12.2):
   at saturation, and the model condenses (B_M < 0) if the gas is
   supersaturated with respect to the droplet surface. Saturation is a
   thermodynamic limit of the same equations, not an extra clip.
-* Gas energy: constant pressure (plenum / runner / induction) or
-  prescribed volume V(t) (compression, constant-volume chamber).
+* Gas energy: constant pressure (plenum / runner / induction),
+  prescribed volume V(t) (compression, constant-volume chamber), or
+  prescribed pressure p(t) ("pt": an imposed cylinder pressure trace, e.g.
+  Module 03's motored p(theta); m cp dT = V dp/dt + droplet terms).
+* Optional transfer multiplier k (rate_scale / rate_scale_fun(p)) applied
+  to both the droplet mass and heat transfer (a Sh/Nu multiplier). k = 1 is
+  the nominal model; k != 1 is used ONLY for the labelled cfd_matched
+  sensitivity bound, never for nominal results.
   Vapour enters the gas at the droplet temperature; heat conducted to the
   droplets leaves the gas. Wall heat transfer is neglected (adiabatic).
 * Drag: Schiller & Naumann (1933) on the slip velocity in 1-D.
@@ -98,9 +104,13 @@ class Spray:
     t: float = 0.0
     work: float = 0.0                   # integral p dV done BY the gas [J]
     cap_hits: int = 0
+    fuel: str = "CH3OH"                 # alcohol component ("CH3OH" | "C2H5OH")
+    rate_scale: float = 1.0             # transfer multiplier (1 = nominal)
+    rate_scale_fun: object = None       # optional callable p[Pa] -> multiplier
+    vdp: float = 0.0                    # integral V dp in "pt" mode [J]
 
     def __post_init__(self):
-        self.tab = P.tables()
+        self.tab = P.tables(self.fuel)
         # y layout: mw[n], mm[n], Td[n], ud[n], Tg, mv_w, mv_m
         self.y = np.array([self.T_gas, 0.0, 0.0])
 
@@ -190,7 +200,7 @@ class Spray:
         nw = mwk / Mw; nm = mmk / Mm
         x_m = np.where(nw + nm > 0, nm / np.maximum(nw + nm, 1e-300), 0.0)
         if self.activity == "wilson":
-            g_w, g_m = P.wilson_gamma(x_m, Td)
+            g_w, g_m = P.wilson_gamma(x_m, Td, self.tab.fuel)
         else:
             g_w, g_m = np.ones(n), np.ones(n)
         ps_w = np.interp(Td, t.TL, t.psat[0]); ps_m = np.interp(Td, t.TL, t.psat[1])
@@ -248,8 +258,9 @@ class Spray:
         # a component absent from the liquid cannot leave it
         mk[:, 0] = np.where((mwk <= 0) & (mk[:, 0] > 0), 0.0, mk[:, 0])
         mk[:, 1] = np.where((mmk <= 0) & (mk[:, 1] > 0), 0.0, mk[:, 1])
-        mk *= f_reg[:, None]
-        Q = Q * f_reg
+        kscale = self.rate_scale_fun(p) if self.rate_scale_fun is not None else self.rate_scale
+        mk *= (f_reg * kscale)[:, None]
+        Q = Q * f_reg * kscale
         cp_l = (1.0 - Y_m) * np.interp(Td, t.TL, t.cp_l[0]) + Y_m * np.interp(Td, t.TL, t.cp_l[1])
         L = np.stack([P.gas_h(t, 1, Td) - np.interp(Td, t.TL, t.h_l[0]),
                       P.gas_h(t, 2, Td) - np.interp(Td, t.TL, t.h_l[1])], axis=1)
@@ -268,6 +279,9 @@ class Spray:
         R = P.R_U / t.M_g
         if mode == "p":
             p = self.p
+        elif mode == "pt":
+            p, dp = Vfun(tt)
+            V = float(np.sum(mg * R) * Tg / p)
         else:
             V, dV = Vfun(tt)
             p = float(np.sum(mg * R) * Tg / V)
@@ -288,6 +302,9 @@ class Spray:
             cps = np.array([P.gas_cp(t, j, Tg) for j in range(3)])
             if mode == "p":
                 src = np.sum(self.N * (-Q + np.sum(mk * (hv - hg[None, :]), axis=1)))
+                dy[4 * n] = src / np.sum(mg * cps)
+            elif mode == "pt":
+                src = V * dp + np.sum(self.N * (-Q + np.sum(mk * (hv - hg[None, :]), axis=1)))
                 dy[4 * n] = src / np.sum(mg * cps)
             else:
                 ug = hg - R[1:] * Tg
@@ -315,6 +332,9 @@ class Spray:
             # p dV work by trapezoid on the dense output (energy ledger only)
             ps = np.array([s["p_Pa"] for s in snaps]); Vs = np.array([Vfun(tt)[0] for tt in sol.t])
             self.work += float(np.trapezoid(ps, Vs))
+        elif mode == "pt":
+            ps = np.array([s["p_Pa"] for s in snaps]); Vs = np.array([s["V_m3"] for s in snaps])
+            self.vdp += float(np.trapezoid(Vs, ps))
         self.y = sol.y[:, -1].copy()
         self.t = t0 + duration
         return snaps
@@ -326,6 +346,8 @@ class Spray:
         R = P.R_U / self.tab.M_g
         if mode == "p":
             p = self.p; V = float(np.sum(mg * R) * Tg / p)
+        elif mode == "pt":
+            p = float(Vfun(tt)[0]); V = float(np.sum(mg * R) * Tg / p)
         else:
             V = Vfun(tt)[0]; p = float(np.sum(mg * R) * Tg / V)
         mtot = (np.maximum(mw, 0) + np.maximum(mm, 0)) * self.m0
