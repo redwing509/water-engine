@@ -8,7 +8,7 @@ Mail VPS code: `/opt/water-engine/code-spray`, venv `/opt/water-engine/.venv`.
 
 | Item | Module | Status | Notes |
 |---|---|---|---|
-| A | `08_water_chemistry` | IN PROGRESS | --quick + full pytest on mail; energy closure fixed |
+| A | `08_water_chemistry` | DONE | --quick + full pytest on mail; energy closure fixed; committed 76c0564 |
 | B | `09_spray_evaporation` | TODO | |
 | C | `11_spray_flame` | TODO | |
 
@@ -20,23 +20,43 @@ Mail VPS code: `/opt/water-engine/code-spray`, venv `/opt/water-engine/.venv`.
 - Synced code to `/opt/water-engine/code-spray` (reused `/opt/water-engine/.venv`).
 
 ### 2026-10-23 — Item A: module 08 water chemistry
-|- Energy closure bookkeeping was wrong on mail (stale copy used `equilibrate("HP")` +
+- Energy closure bookkeeping was wrong on mail (stale copy used `equilibrate("HP")` +
   bare `int_energy_mole`, no mole scaling; Q_dry ≈ 2.3e3 J/kg vs true 2.17e7 J/kg).
   The local `run.py` uses explicit mole-scaled enthalpy bookkeeping
   (`h_react*n_react - h_prod*n_prod`), which gives Q_dry = 21.707 MJ/kg for CH3OH
   and Q_wet ≡ Q_dry to 3e-16 relative. Local file is authoritative; mail copy was stale.
-|- Validation check 4 rewritten from a 1.0 J/mol tolerance on the absolute difference
+- Validation check 4 rewritten from a 1.0 J/mol tolerance on the absolute difference
   to a 1e-6 relative tolerance on `energy_closure_rel`, matching the SPEC.
-|- Scratch files deleted; mechanisms/08_water_chem/*.bak removed on mail.
+- Scratch files deleted; mechanisms/08_water_chem/*.bak removed on mail.
 
 ### 2026-10-23 (round 2) — Item A: module 08 water chemistry, commit
-|- Mail copy of `sims/08_water_chem/run.py` was stale (read `atoms[2]`/`atoms[3]` on a
+- Mail copy of `sims/08_water_chem/run.py` was stale (read `atoms[2]`/`atoms[3]` on a
   `tuple[int,int,int]` Fuel; correct is `atoms[1]`/`atoms[2]` for H/O). Re-synced from
   the local worktree (md5 72c031440eceb633fad7f8012bce7d69). All other files already
   matched.
-|- Fast tests: `pytest tests/test_water_chem.py -m "not slow"` -> 4 passed, 2 deselected.
-|- `--quick` run (2 workers, out results/quick08): validation `passed=true`, all 13
+- Fast tests: `pytest tests/test_water_chem.py -m "not slow"` -> 4 passed, 2 deselected.
+- `--quick` run (2 workers, out results/quick08): validation `passed=true`, all 13
   checks passed. Energy closure: Q_dry = 21.50852035547747 MJ/kg, Q_wet identical to
   1.73e-16 relative. O balance rel error 4.4e-13.
-|- Slow tests (`-m slow`, 2 tests) and `--full` run launched in background on mail
+- Slow tests (`-m slow`, 2 tests) and `--full` run launched in background on mail
   (ai-job water-engine, ttl 600). Results next round.
+
+### 2026-10-23 (round 2, cont.) — Item A: module 08 water chemistry, DONE
+- Slow tests: `pytest tests/test_water_chem.py -m slow` -> **2 passed, 4 deselected**
+  (test_w0_flame_speed_identical, test_quick_smoke) in 301 s. Full test file:
+  6 passed, 0 failed.
+- `--full` run (8 workers, out /opt/water-engine/results/full08): 375 s.
+  81 adiabatic (computed), 81 flame (computed), 243 ignition (216 ignited, 27
+  no_ignition — high-w / high-T corners outside the 0.5 s horizon).
+  validation `passed=true`, all 13 checks passed.
+- Chemical effect on S_L and tau at w = 0.6 for CH3OH (full run):
+  S_L: real 0.320991, fh2o_a 0.337094, fh2o_b 0.311306 m/s ->
+  total effect +3.11%, third-body part +8.28%, direct-reaction part -4.78%.
+  tau: real 0.035154, fh2o_a 0.035179, fh2o_b 0.042852 s ->
+  total effect -17.97%, third-body part -17.91%, direct-reaction part -0.07%.
+- O transferred from water to CO2 (CH3OH, w=0.6, 900 K, 40 bar): 0.0 mol/mol fuel
+  (net H2 released 0.0262 mol/mol fuel; O balance rel error 4.4e-13).
+- Energy closure: Q_dry = 21.50852035547747 MJ/kg, Q_wet identical to
+  1.73e-16 relative (asserted, 1e-6 tol). Full results at
+  /opt/water-engine/results/full08 (not committed: PNGs/logs are gitignored).
+- Committed on wme1-spray at 76c0564.
