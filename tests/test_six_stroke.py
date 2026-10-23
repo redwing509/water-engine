@@ -13,6 +13,7 @@ import math
 
 import cantera as ct
 from CoolProp.CoolProp import PropsSI
+import csv
 import pytest
 
 from sims.common import fuels, io
@@ -156,6 +157,9 @@ def module03_files(directory, ctx):
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "design_point.json").write_text(json.dumps(design), encoding="utf-8")
     (directory / "evo_states.json").write_text(json.dumps(evo), encoding="utf-8")
+    (directory / "summary.json").write_text(json.dumps(dict(module="03_engine_cycle",
+        mode="full", synthetic_fits=False, validation_passed=True, use_for_design=True,
+        warning=None, runtime_s=1.0, key_results={})), encoding="utf-8")
     return key
 
 
@@ -172,6 +176,61 @@ def test_reads_module03_schema(tmp_path):
 def test_full_requires_module03_files(tmp_path):
     with pytest.raises(FileNotFoundError):
         six.main(["--full", "--cycle-dir", tmp_path / "missing", "--out", tmp_path / "out"])
+
+
+def test_design_points_table(tmp_path, capsys):
+    """SPEC item 2: the six-stroke is evaluated at the real Module 03 design points and the
+    requested table (point | extra work % | water mg/cycle | combined w) is written."""
+    ctx = CONTEXTS["default"]
+    key = module03_files(tmp_path / "m03", ctx)
+    # The synthetic fixture is a CH4/CR=14/w=0.6 point; per_fuel must carry the three categories
+    # the item 2 table reads (best dry, best overall, water majority) for CH3OH and C2H5OH.
+    dp = tmp_path / "m03" / "design_point.json"
+    evo = json.loads((tmp_path / "m03" / "evo_states.json").read_text(encoding="utf-8"))
+    design = json.loads(dp.read_text(encoding="utf-8"))
+    for fuel in ("CH3OH", "C2H5OH"):
+        for label, rec in (("best_dry", dict(CR=14, w=0.0, T_intake_K=320.0)),
+                           ("best_overall", dict(CR=14, w=0.3, T_intake_K=320.0)),
+                           ("water_majority", dict(CR=14, w=0.6, T_intake_K=320.0))):
+            k = f"{fuel}/CR={rec['CR']}/w={rec['w']}/T_intake={rec['T_intake_K']:.0f}"
+            evo[k] = dict(key=k, fuel=fuel, CR=rec["CR"], w=rec["w"], T_intake_K=rec["T_intake_K"],
+                          crank_angle_deg=140.0, volume_m3=ctx["V_evo_m3"], T_K=ctx["T_evo_K"],
+                          p_Pa=ctx["p_evo_Pa"], gas_mass_kg=ctx["gas_mass_evo_kg"],
+                          liquid_water_kg=0.0, composition_basis="mass_fraction",
+                          mechanism="gri30.yaml", mechanism_fallback=False,
+                          composition=ctx["composition"], unburned_mass_fraction=0.0,
+                          fuel_mass_kg=ctx["fuel_mass_kg"], water_mass_kg=ctx["intake_water_kg"],
+                          fuel_energy_J=ctx["fuel_energy_J"],
+                          indicated_work_J=ctx["four_stroke_work_J"], ca50_used_deg=8.0,
+                          synthetic_fits=False)
+            design.setdefault("per_fuel", {}).setdefault(fuel, {})[label] = dict(
+                key=k, fuel=fuel, CR=rec["CR"], w=rec["w"], T_intake_K=rec["T_intake_K"],
+                gross_indicated_efficiency=0.40, peak_pressure_Pa=90e5,
+                EVO_T_K=1200.0, EVO_p_Pa=5.0e5)
+    dp.write_text(json.dumps(design), encoding="utf-8")
+    (tmp_path / "m03" / "evo_states.json").write_text(json.dumps(evo), encoding="utf-8")
+    out = tmp_path / "out"
+    assert six.main(["--full", "--workers", "1", "--out", out, "--cycle-dir", tmp_path / "m03",
+                     "--design-points"]) == 0
+    csv_path = out / "six_stroke_design_points.csv"
+    assert csv_path.is_file()
+    rows = list(csv.DictReader(csv_path.open(encoding="utf-8")))
+    labels = {r["label"] for r in rows}
+    assert {"CH3OH/best_dry", "CH3OH/best_overall", "CH3OH/water_majority",
+            "C2H5OH/best_dry", "C2H5OH/best_overall", "C2H5OH/water_majority",
+            "hot-dry validation"} <= labels
+    for r in rows:
+        assert r["status"] == "computed", r
+        assert r["extra_work_pct_of_four_stroke"] != ""
+        assert r["water_mg_per_cycle"] != ""
+        assert r["combined_w"] != ""
+    # The hot-dry validation case is a dry point: injected water is zero, so extra work is zero.
+    hd = next(r for r in rows if r["label"] == "hot-dry validation")
+    assert float(hd["water_mg_per_cycle"]) == 0.0
+    assert abs(float(hd["extra_work_pct_of_four_stroke"])) < 1e-9
+    # The table is also carried into the module 03 summary.json (SPEC item 2 report).
+    s = json.loads((tmp_path / "m03" / "summary.json").read_text(encoding="utf-8"))
+    assert s["key_results"]["six_stroke_design_points"]
 
 
 @pytest.mark.slow

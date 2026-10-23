@@ -211,6 +211,44 @@ def test_dry_efficiency_rises_with_compression_ratio():
     assert all(0.30 <= e <= 0.50 for e in effs), effs
 
 
+def test_cr_sweep_reaches_24_and_pressure_limit_is_preserved():
+    assert eng.FULL_CR == tuple(range(9, 25))
+    assert eng.DEFAULTS.peak_pressure_limit_Pa == pytest.approx(120e5)
+
+
+def test_at_sweep_bound_and_constraint_report():
+    rows = []
+    for cr in (9, 24):
+        rows.append(dict(fuel="CH3OH", CR=cr, status="computed", knock=False,
+                         knock_limited=False, retard_attempts=1,
+                         peak_pressure_Pa=100e5 if cr == 9 else 121e5,
+                         gross_indicated_efficiency=0.4 + cr / 1000,
+                         ca50_used_deg=8.0, S_L_m_s=0.2,
+                         energy_closure_error_fraction=0.0))
+    report = eng.cr_limiting_constraint("CH3OH", rows)
+    assert report["constraint"] == "P_max"
+    assert report["binding_CR"] == 24
+    assert report["sweep_bound"] == 24
+    assert report["at_sweep_bound"] is False
+
+    selected = dict(rows[0], CR=24, peak_pressure_Pa=100e5)
+    assert eng.cr_limiting_constraint("CH3OH", [selected])["at_sweep_bound"] is True
+
+
+def test_pressure_extrapolated_fraction_is_zero_inside_20_to_80_bar_fit():
+    fit = ignition_fixture()
+    fit.update(valid_p_Pa_range=[20e5, 80e5])
+    assert not eng.outside_fit(fit, 900.0, 20e5, 0.5)
+    assert not eng.outside_fit(fit, 1000.0, 40e5, 0.5)
+    assert not eng.outside_fit(fit, 1100.0, 80e5, 0.5)
+    assert eng.outside_fit(fit, 1000.0, 10e5, 0.5)
+
+
+def test_sensitivity_case_is_declared():
+    assert eng.SENSITIVITY["flame_speed_factor"] == pytest.approx(0.7)
+    assert eng.SENSITIVITY["applied_for_w_ge"] == pytest.approx(0.5)
+
+
 @pytest.mark.slow
 def test_quick_run_outputs(tmp_path):
     out = tmp_path / "quick"

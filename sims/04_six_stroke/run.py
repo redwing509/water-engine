@@ -94,7 +94,13 @@ SAT_MARGIN_K = 0.05  # no saturation call within 0.05 K of T_crit (water densiti
 T_MIN_K = WATER_T_TRIPLE + 1e-6
 T_MAX_K = 6000.0
 HEAT_MODES = ("adiabatic", "woschni")
+# S_L x 0.7 sensitivity (Module 03): flame_speed_factor=0.7 for w >= 0.5.
 FULL_EVC_DEG = tuple(float(a) for a in range(190, 351, 10))
+# Six-stroke early exhaust-valve closing angle. Stroke 4 closes near the end of
+# compression (just before gas-exchange TDC at 360 CAD); the run_loop validation
+# requires strictly 180 < EVC < 360, so use 359.99 CAD (within 0.01 CAD of BDC).
+# Stroke 5 then expands from TDC (720 CAD) back to EVO5.
+SIX_STROKE_IVC_DEG = 359.99
 FULL_WATER_MG = (0.0, 0.5, 1.0, 2.0, 3.0, 5.0, 7.5, 10.0, 15.0, 20.0, 30.0, 45.0, 60.0)
 QUICK_EVC_DEG = (220.0, 280.0, 330.0)
 QUICK_WATER_MG = (0.0, 2.0, 10.0, 40.0)
@@ -564,11 +570,20 @@ def _task(task):
     return run_loop(*task)["row"]
 
 
+HOT_DRY_VALIDATION = dict(
+    label="hot-dry validation (Conklin & Szybist 2010, docs/research/02 refs 23/29)",
+    fuel="CH3OH", cr=10.0, w=0.0, T_intake_K=360.0,
+    key="CH3OH/CR=10/w=0/T_intake=360",
+    source="SPEC item 2 hot-dry validation")
+
+
 def sweep(mode):
     return (QUICK_EVC_DEG, QUICK_WATER_MG) if mode == "quick" else (FULL_EVC_DEG, FULL_WATER_MG)
 
 
-def build_tasks(ctx, mode, par=DEFAULTS):
+def build_tasks(ctx, mode, par=DEFAULTS, points=None):
+    if points is not None:
+        return [(ctx, p["EVC_deg"], p["water_mg"] * 1e-6, p["heat"], par) for p in points]
     evcs, waters = sweep(mode)
     return [(ctx, evc, mg * 1e-6, heat, par) for heat in HEAT_MODES for evc in evcs for mg in waters]
 
@@ -750,6 +765,75 @@ def select(rows, ctx, par=DEFAULTS):
             zero_water_extra_work_J={f"EVC={r['EVC_deg']:g}": r["extra_work_net_J"] for r in dry},
             eligible_points=len(cand))
     return out
+
+
+def design_points(design, ctx, par):
+    """The six SPEC item 2 points: best dry, best overall and best water-majority for CH3OH and
+    C2H5OH, plus the hot-dry validation case. Each is a (heat, EVC_deg, water_mg) probe."""
+    out = []
+    for fuel in ("CH3OH", "C2H5OH"):
+        pf = design.get("per_fuel", {}).get(fuel)
+        if not pf:
+            continue
+        for label, rec in (("best_dry", pf.get("best_dry")),
+                           ("best_overall", pf.get("best_overall")),
+                           ("water_majority", pf.get("water_majority"))):
+            if not rec:
+                continue
+            out.append(dict(label=f"{fuel}/{label}", fuel=fuel, cr=rec["CR"], w=rec["w"],
+                            T_intake_K=rec["T_intake_K"], key=rec["key"],
+                            heat="adiabatic", EVC_deg=SIX_STROKE_IVC_DEG, water_mg=None))
+    out.append(dict(label="hot-dry validation", fuel=HOT_DRY_VALIDATION["fuel"],
+                    cr=HOT_DRY_VALIDATION["cr"], w=HOT_DRY_VALIDATION["w"],
+                    T_intake_K=HOT_DRY_VALIDATION["T_intake_K"], key=None,
+                    heat="adiabatic", EVC_deg=SIX_STROKE_IVC_DEG, water_mg=None))
+    return out
+
+
+def load_evo(directory, key, base_ctx):
+    """Re-build the simulation context for a different Module 03 EVO state (same engine, different
+    fuel/CR/w/T_intake). The design-point row for that key carries the full state."""
+    evo = json.loads((Path(directory) / "evo_states.json").read_text(encoding="utf-8"))
+    e = evo[key]
+    return dict(base_ctx, key=key, fuel=e["fuel"], mechanism=e["mechanism"],
+                T_evo_K=e["T_K"], p_evo_Pa=e["p_Pa"], V_evo_m3=e["volume_m3"],
+                gas_mass_evo_kg=e["gas_mass_kg"], liquid_water_evo_kg=e.get("liquid_water_kg") or 0.0,
+                composition={str(k): float(v) for k, v in e["composition"].items()},
+                fuel_mass_kg=e["fuel_mass_kg"], intake_water_kg=e["water_mass_kg"],
+                fuel_energy_J=e["fuel_energy_J"], four_stroke_work_J=e["indicated_work_J"],
+                synthetic=False, label="design-point", selection="--design-points",
+                use_for_design=True, upstream_mode=None,
+                upstream_synthetic_fits=bool(e.get("synthetic_fits")),
+                warning=None, mechanism_fallback=bool(e.get("mechanism_fallback")))
+
+
+def run_design_points(design, ctx, par, directory):
+    """Evaluate the item 2 points and return a table with the requested columns."""
+    probes = design_points(design, ctx, par)
+    rows = []
+    for p in probes:
+        loc = load_evo(directory, p["key"], ctx) if p["key"] else ctx
+        evc = p["EVC_deg"] if p["EVC_deg"] is not None else loc["evo_deg"]
+        water_mg = p["water_mg"] if p["water_mg"] is not None else 0.0
+        r = run_loop(loc, evc, water_mg * 1e-6, p["heat"], par)
+        row = r["row"]
+        if row["status"] != "computed":
+            rows.append(dict(label=p["label"], status="failed", reason=row["reason"]))
+            continue
+        rows.append(dict(
+            label=p["label"], fuel=p["fuel"], key=p["key"], cr=p["cr"], w=p["w"],
+            T_intake_K=p["T_intake_K"], EVC_deg=evc, heat=p["heat"], water_mg=water_mg,
+            status="computed",
+            extra_work_pct_of_four_stroke=row["extra_work_pct_of_four_stroke"],
+            water_mg_per_cycle=row["water_mg"],
+            combined_w=row["combined_w"],
+            efficiency_four_stroke=row["efficiency_four_stroke"],
+            efficiency_six_stroke=row["efficiency_six_stroke"],
+            efficiency_gain_abs=row["efficiency_gain_abs"],
+            peak_pressure_bar=row["peak_pressure_Pa"] / 1e5,
+            steam_MEP_bar=row["steam_MEP_net_Pa"] / 1e5,
+            energy_closure_error_fraction=row["energy_closure_error_fraction"]))
+    return rows
 
 
 def validate(rows, par=DEFAULTS):
@@ -1001,11 +1085,29 @@ def main(argv=None):
                         help="Directory with Module 03 design_point.json and evo_states.json")
     parser.add_argument("--evo-key", default=None,
                         help="Use this evo_states.json key instead of the Module 03 recommendation")
+    parser.add_argument("--design-points", action="store_true",
+                        help="SPEC item 2: evaluate the six-stroke at the real Module 03 design "
+                             "points (best dry/overall/water-majority for CH3OH and C2H5OH, plus the "
+                             "hot-dry validation case) and write six_stroke_design_points.csv")
     args = parser.parse_args(None if argv is None else list(map(str, argv)))
     ctx = read_cycle(args.cycle_dir, args.mode, args.evo_key)  # --full: raises if missing
     label = "quick-fallback" if ctx["synthetic"] else args.mode
     par = replace(DEFAULTS, step_rad=DEFAULTS.quick_step_rad) if args.mode == "quick" else DEFAULTS
     args.out.mkdir(parents=True, exist_ok=True)
+    if args.design_points:
+        if ctx["synthetic"]:
+            raise SystemExit("--design-points requires real Module 03 outputs (not the quick fallback)")
+        design = json.loads((args.cycle_dir / "design_point.json").read_text(encoding="utf-8"))
+        dp = run_design_points(design, ctx, par, args.cycle_dir)
+        io.write_csv(args.out / "six_stroke_design_points.csv", dp)
+        summary = json.loads((args.cycle_dir / "summary.json").read_text(encoding="utf-8"))
+        summary.setdefault("key_results", {}).setdefault("six_stroke_design_points", dp)
+        (args.cycle_dir / "summary.json").write_text(json.dumps(summary, indent=2, allow_nan=False),
+                                                    encoding="utf-8")
+        print("six_stroke_design_points.csv written: " + ", ".join(
+            f"{r['label']} = {r['extra_work_pct_of_four_stroke']:+.4f} %"
+            for r in dp if r.get("status") == "computed"))
+        return 0
     rows = io.ordered_map(_task, build_tasks(ctx, args.mode, par), args.workers, chunksize=1)
     selection = select(rows, ctx, par)
     checks = validate(rows, par)

@@ -31,7 +31,11 @@ IGNITION_TEMPERATURES = tuple(float(t) for t in range(750, 1101, 50))
 QUICK_FUELS = ("H2", "CH4")
 QUICK_WATER = (0.0, 0.3)
 QUICK_IGNITION_T = (900.0, 1000.0, 1100.0)
-IGNITION_PRESSURE_PA = 40e5
+IGNITION_PRESSURE_PA = 40e5  # kept for the single-pressure API and tests
+# WME-1 checklist item 1: knock-model pressure range.  Ignition delays are
+# computed at 20, 40 and 80 bar so the pressure exponent n can be fitted.
+IGNITION_PRESSURES_PA = (20e5, 40e5, 80e5)
+QUICK_IGNITION_PRESSURES_PA = (40e5,)
 R_J_MOL_K = ct.gas_constant / 1000.0
 
 # Targets: SPEC section 10. Research CH4 targets: research note 02,
@@ -289,9 +293,15 @@ def ignition_delay(fuel, phi, w, T_K, p_Pa=IGNITION_PRESSURE_PA,
 def fit_ignition(rows, mode="full"):
     """Least squares in ln(tau); p is in Pa, A in s*Pa**n.
 
-    Fit a centred inverse-temperature slope for conditioning. c is allowed
-    either sign (1+c*w must stay positive): water can affect chemistry as well
-    as dilute it, so a fit must not manufacture monotonic ignition delays.
+    tau = A p**-n exp(E/(R T)) (1 + c w)
+    ln tau = ln A - n ln p - (E/R) (1000/T) + ln(1 + c w)
+
+    n is FREE whenever the data span at least two distinct pressures; with a
+    single pressure it is unidentifiable and stays fixed at 1.0.  The fit is
+    centred on the mean 1000/T and the mean ln p for conditioning.  c is
+    allowed either sign (1+c*w must stay positive): water can affect
+    chemistry as well as dilute it, so a fit must not manufacture monotonic
+    ignition delays.
     """
     fits = {}
     for fuel in FUELS:
@@ -300,7 +310,7 @@ def fit_ignition(rows, mode="full"):
         result = dict(mode=mode, status="insufficient_data", A=None, n=1.0,
                       E_J_per_mol=None, c=None, valid_T_K_range=None,
                       valid_w_range=None, valid_p_Pa_range=None,
-                      rms_ln_tau=None, number_of_points=len(data),
+                      rms_ln_tau=None, rms_log10_tau=None, number_of_points=len(data),
                       pressure_unit="Pa", A_unit="s*Pa", pressure_exponent_fitted=False)
         fits[fuel] = result
         if not data:
@@ -313,33 +323,63 @@ def fit_ignition(rows, mode="full"):
         if len(data) < 3 or len(set(T)) < 2 or len(set(w)) < 2:
             continue
         x = 1000.0 / T
-        centre = float(x.mean())
-        y = np.log(tau) + np.log(pressure)
-        design = np.column_stack((np.ones(len(x)), x - centre, w))
-        if np.linalg.matrix_rank(design) < 3:
-            result["status"] = "rank_deficient"
-            continue
-        initial = np.linalg.lstsq(design, y, rcond=None)[0]
-        lower_c = -1.0 / float(w.max())
-        initial[2] = max(initial[2], lower_c / 2.0)
+        centre_x = float(x.mean())
+        lp = np.log(pressure)
+        centre_p = float(lp.mean())
+        y = np.log(tau)
+        n_free = len(set(pressure)) >= 2
+        if n_free:
+            design = np.column_stack((np.ones(len(x)), x - centre_x, lp - centre_p, w))
+            if np.linalg.matrix_rank(design) < 4:
+                result["status"] = "rank_deficient"
+                continue
+            initial = np.linalg.lstsq(design, y, rcond=None)[0]
+            lower_c = -1.0 / float(w.max())
+            initial[3] = max(initial[3], lower_c / 2.0)
+            # Bounds: n unconstrained; c above the singularity floor.
+            bounds = ([-np.inf, -np.inf, -np.inf, np.nextafter(lower_c, np.inf)],
+                      [np.inf, np.inf, np.inf, np.inf])
 
-        def residual(v):
-            return v[0] + v[1] * (x - centre) + np.log1p(v[2] * w) - y
+            def residual(v):
+                return (v[0] + v[1] * (x - centre_x) + v[2] * (lp - centre_p)
+                        + np.log1p(v[3] * w) - y)
+        else:
+            design = np.column_stack((np.ones(len(x)), x - centre_x, w))
+            if np.linalg.matrix_rank(design) < 3:
+                result["status"] = "rank_deficient"
+                continue
+            initial = np.linalg.lstsq(design, y, rcond=None)[0]
+            lower_c = -1.0 / float(w.max())
+            initial[2] = max(initial[2], lower_c / 2.0)
+            bounds = ([-np.inf, -np.inf, np.nextafter(lower_c, np.inf)],
+                      [np.inf, np.inf, np.inf])
 
-        fit = least_squares(residual, initial,
-                            bounds=([-np.inf, -np.inf, np.nextafter(lower_c, np.inf)],
-                                    [np.inf, np.inf, np.inf]),
+            def residual(v):
+                return v[0] + v[1] * (x - centre_x) + np.log1p(v[2] * w) - y
+
+        fit = least_squares(residual, initial, bounds=bounds,
                             max_nfev=DEFAULTS.fit_max_evaluations)
-        if not fit.success or np.linalg.matrix_rank(fit.jac) < 3:
+        if not fit.success or np.linalg.matrix_rank(fit.jac) < (4 if n_free else 3):
             result["status"] = "fit_failed"
             continue
-        log_A = float(fit.x[0] - fit.x[1] * centre)
+        # v0 = ln A - (E/R) centre_x - n centre_p for the free-n design and
+        # ln A - (E/R) centre_x - n ln p for the single-pressure design, so
+        # the single-pressure reconstruction ADDS n*centre_p back.
+        if n_free:
+            log_A = float(fit.x[0] - (fit.x[1] * centre_x + fit.x[2] * centre_p))
+        else:
+            log_A = float(fit.x[0] - fit.x[1] * centre_x + 1.0 * centre_p)
         if not math.log(np.finfo(float).tiny) < log_A < math.log(np.finfo(float).max):
             result["status"] = "fit_nonfinite"
             continue
+        resid = fit.fun
         result.update(status="fitted", A=math.exp(log_A),
+                      n=float(-fit.x[2]) if n_free else 1.0,
                       E_J_per_mol=float(fit.x[1] * 1000.0 * R_J_MOL_K),
-                      c=float(fit.x[2]), rms_ln_tau=float(np.sqrt(np.mean(fit.fun**2))))
+                      c=float(fit.x[-1]),
+                      rms_ln_tau=float(np.sqrt(np.mean(resid**2))),
+                      rms_log10_tau=float(np.sqrt(np.mean((resid / math.log(10.0))**2))),
+                      pressure_exponent_fitted=bool(n_free))
     return fits
 
 
@@ -394,6 +434,8 @@ def _task(task):
 def build_tasks(mode, max_time_s):
     names = QUICK_FUELS if mode == "quick" else FUELS
     waters = QUICK_WATER if mode == "quick" else WATER_FRACTIONS
+    pressures = QUICK_IGNITION_PRESSURES_PA if mode == "quick" else IGNITION_PRESSURES_PA
+    ignition_Ts = QUICK_IGNITION_T if mode == "quick" else IGNITION_TEMPERATURES
     tasks = []
     for fuel in names:
         for phi in PHIS:
@@ -404,9 +446,9 @@ def build_tasks(mode, max_time_s):
         for phi in ((1.0,) if mode == "quick" else PHIS):
             for T, pressure in (FLAME_STATES[:1] if mode == "quick" else FLAME_STATES):
                 tasks.append(("flame", (fuel, phi, T, pressure, waters)))
-        for T in (QUICK_IGNITION_T if mode == "quick" else IGNITION_TEMPERATURES):
-            tasks.extend(("ignition", (fuel, 1.0, w, T, IGNITION_PRESSURE_PA, max_time_s))
-                         for w in waters)
+        for T in ignition_Ts:
+            tasks.extend(("ignition", (fuel, 1.0, w, T, p, max_time_s))
+                         for p in pressures for w in waters)
     if mode == "full":
         tasks.extend(("flame", (fuel, phi, T, ct.one_atm, (0.0,)))
                      for fuel, phi, T, _, _ in FLAME_TARGETS)
@@ -456,12 +498,13 @@ def assumptions(mode, workers, max_time_s):
                 "reactor_rtol,reactor_atol": "Explicit tight integration error tolerances; convergence must be assessed on server",
                 "fit_max_evaluations": "Numerical nonlinear least-squares iteration budget"}},
         "sweeps": {"full_fuels": FUELS, "phi": PHIS, "full_w": WATER_FRACTIONS,
-            "adiabatic_states_K_Pa": ADIABATIC_STATES, "flame_states_K_Pa": FLAME_STATES,
-            "ignition_T_K": IGNITION_TEMPERATURES, "ignition_p_Pa": IGNITION_PRESSURE_PA,
-            "ignition_phi": 1.0, "quick_fuels": QUICK_FUELS, "quick_w": QUICK_WATER,
-            "quick_ignition_T_K": QUICK_IGNITION_T,
-            "quick_flame_state_K_Pa_phi": [400.0, ct.one_atm, 1.0],
-            "source": "SPEC section 5; quick subset selected to target <120 s on two cores"},
+                    "adiabatic_states_K_Pa": ADIABATIC_STATES, "flame_states_K_Pa": FLAME_STATES,
+                    "ignition_T_K": IGNITION_TEMPERATURES, "ignition_p_Pa": list(IGNITION_PRESSURES_PA),
+                    "ignition_phi": 1.0, "quick_fuels": QUICK_FUELS, "quick_w": QUICK_WATER,
+                    "quick_ignition_T_K": QUICK_IGNITION_T,
+                    "quick_ignition_p_Pa": list(QUICK_IGNITION_PRESSURES_PA),
+                    "quick_flame_state_K_Pa_phi": [400.0, ct.one_atm, 1.0],
+                    "source": "SPEC section 5; quick subset selected to target <120 s on two cores"},
         "unburned_phase": {"value": "All fuel and added water are vapour for equilibrium, flame and ignition calculations, including liquid alcohols",
             "rationale": "Specified premixed states, even if supersaturated; external vaporization/preheat energy is not chemical fuel energy"},
         "evaporation": {"value": "Adiabatic mixing; dry ideal gas and H2O vapour cp frozen at 320 K; dry fuel already vaporized; no reactions, heat loss, pressure loss or fuel latent heat",
@@ -474,8 +517,8 @@ def assumptions(mode, workers, max_time_s):
             "rationale": "SPEC transport model; failed solver is not evidence of physical extinction; unattempted later points retain no_flame and reason"},
         "ignition_model": {"value": "Adiabatic constant-volume IdealGasReactor; direct energy-equation dT/dt at adaptive steps; entire time horizon integrated",
             "rationale": "SPEC ignition definition; resolved interior maximum and minimum rise reject censored or non-igniting trajectories"},
-        "fits": {"value": "Unweighted least squares; ignition n=1 fixed, unconstrained E and c except 1+c*w>0; no extrapolation beyond observed ranges",
-            "rationale": "Only one pressure computed, so n cannot be identified; do not impose water suppression on chemistry",
+        "fits": {"value": "Unweighted least squares in ln(tau); n FREE when >=2 distinct pressures are computed (20/40/80 bar), fixed at 1.0 for single-pressure data; unconstrained E and c except 1+c*w>0; no extrapolation beyond observed ranges",
+                    "rationale": "Ignition delays are now computed at 20, 40 and 80 bar so the pressure exponent is identifiable; the fit reports rms_ln_tau and rms_log10_tau",
             "flame_polynomial": "Cubic requires >=4 points; quick mode uses explicit degree-1 surrogate padded to four coefficients; insufficient data gives null parameters",
             "limits": "Largest sampled qualifying w, not interpolated extinction limits; quick values apply only to sparse subset"},
         "workers": {"value": workers, "chunksize": 1,
