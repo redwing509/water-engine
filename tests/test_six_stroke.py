@@ -13,6 +13,7 @@ import math
 
 import cantera as ct
 from CoolProp.CoolProp import PropsSI
+import csv
 import pytest
 
 from sims.common import fuels, io

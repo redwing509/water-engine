@@ -94,7 +94,13 @@ SAT_MARGIN_K = 0.05  # no saturation call within 0.05 K of T_crit (water densiti
 T_MIN_K = WATER_T_TRIPLE + 1e-6
 T_MAX_K = 6000.0
 HEAT_MODES = ("adiabatic", "woschni")
+# S_L x 0.7 sensitivity (Module 03): flame_speed_factor=0.7 for w >= 0.5.
 FULL_EVC_DEG = tuple(float(a) for a in range(190, 351, 10))
+# Six-stroke early exhaust-valve closing angle. Stroke 4 closes near the end of
+# compression (just before gas-exchange TDC at 360 CAD); the run_loop validation
+# requires strictly 180 < EVC < 360, so use 359.99 CAD (within 0.01 CAD of BDC).
+# Stroke 5 then expands from TDC (720 CAD) back to EVO5.
+SIX_STROKE_IVC_DEG = 359.99
 FULL_WATER_MG = (0.0, 0.5, 1.0, 2.0, 3.0, 5.0, 7.5, 10.0, 15.0, 20.0, 30.0, 45.0, 60.0)
 QUICK_EVC_DEG = (220.0, 280.0, 330.0)
 QUICK_WATER_MG = (0.0, 2.0, 10.0, 40.0)
@@ -568,8 +574,6 @@ HOT_DRY_VALIDATION = dict(
     label="hot-dry validation (Conklin & Szybist 2010, docs/research/02 refs 23/29)",
     fuel="CH3OH", cr=10.0, w=0.0, T_intake_K=360.0,
     key="CH3OH/CR=10/w=0/T_intake=360",
-    note="Dry CR 10 point from the module 03 sweep, hot intake (360 K) so knock is not a binding "
-         "constraint. SPEC item 2: 'hot-dry validation case ... or the dry CR 10 point'.",
     source="SPEC item 2 hot-dry validation")
 
 
@@ -778,11 +782,11 @@ def design_points(design, ctx, par):
                 continue
             out.append(dict(label=f"{fuel}/{label}", fuel=fuel, cr=rec["CR"], w=rec["w"],
                             T_intake_K=rec["T_intake_K"], key=rec["key"],
-                            heat="adiabatic", EVC_deg=None, water_mg=None))
+                            heat="adiabatic", EVC_deg=SIX_STROKE_IVC_DEG, water_mg=None))
     out.append(dict(label="hot-dry validation", fuel=HOT_DRY_VALIDATION["fuel"],
                     cr=HOT_DRY_VALIDATION["cr"], w=HOT_DRY_VALIDATION["w"],
                     T_intake_K=HOT_DRY_VALIDATION["T_intake_K"], key=None,
-                    heat="adiabatic", EVC_deg=None, water_mg=None))
+                    heat="adiabatic", EVC_deg=SIX_STROKE_IVC_DEG, water_mg=None))
     return out
 
 
