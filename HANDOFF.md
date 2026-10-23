@@ -85,3 +85,36 @@ Worker: Claude, acting for Hermes at James's request. Supervisor verification is
 - **Early result, at the old CH4 reference design point (CR 18, w 0.6, EVO 1128 K):** across EVC 190–350° and 0–60 mg of water per cycle, adiabatic and Woschni, the steam strokes give **no net gain**. The best injected point is −0.13 % of the four-stroke work, so the four-stroke cycle is optimal.
 - Physical reading: the water-majority intake already leaves cool, low-pressure exhaust (about 800 K at EVC). The latent heat taken up by the injected water outweighs its extra moles, so expansion recovers less than the recompression cost.
 - This will be re-run at the methanol design point after the Module 03 re-run. It contrasts with the published gains (research doc 02, refs 23 and 29), which use hotter, drier exhaust; this is flagged for the supervisor.
+
+## 2026-10-23 — Phase 4: item 1 committed, module 03 full run
+- Mail: `pytest tests/test_flame_chem.py tests/test_engine_cycle.py` -> **65 passed**, rc=0, 383 s (ai-job water-engine, hermes).
+- Committed `3edf85f`: sims/02,03 run.py + tests, message "sims/02,03: knock fits at 20/40/80 bar (n free), CR 9-24, S_L sensitivity". sims/04 left uncommitted (item 2 WIP).
+- Step 0 data preserved: old single-pressure 40-bar module 02 output moved to `results/_archive/02_flame_chem_40bar_20261022` (identical to /tmp/m02full_backup_1792740263); the 20/40/80 bar output is in `results/02_flame_chem` (was already there; /tmp/m02full_new no longer exists).
+- Ignition n fits (20/40/80 bar, pressure_exponent_fitted=true):
+  - H2: n=0.605, rms_log10_tau=0.0162 (180 pts)
+  - CH4: n=0.933, rms_log10_tau=0.0390 (160 pts)
+  - CH3OH: n=0.747, rms_log10_tau=0.0598 (240 pts)
+  - C2H5OH: n=0.700, rms_log10_tau=0.0410 (229 pts)
+- `03_engine_cycle --full` (nice 19, 16 workers) launched in background; log /tmp/m03full.log.
+
+- `03_engine_cycle --full` (nice 19, 8 workers — io.MAX_WORKERS caps --workers at 8, 16 rejected with rc=2) launched in background via
+  `setsid nohup ai-job --owner hermes --resource water-engine --task 'module03 full 3edf85f 8w' --ttl 5400 -- bash /tmp/m03full_3edf85f.sh`,
+  wrapper pid 840918, python pid 840935, started 2026-10-23T11:10:44Z. Code mirror: /opt/water-engine/runs/3edf85f440500e115e7f9ae9cce674d08da6d5bf (git archive of the commit, results -> /opt/water-engine/results symlink). Output: /opt/water-engine/results/03_engine_cycle. Launcher: /tmp/m03full_3edf85f.sh, log /tmp/m03full_3edf85f.log.
+
+
+## 2026-10-23 — Module 03 conclusions (full run, 3edf85f, mail 11:58Z, rc 0)
+- 864/864 points computed (3 fuels x 16 CR x 9 w x 2 T_intake). 0 failed, 0 unavailable.
+  Max energy-closure error 6.0e-4 (tol 2e-2); max ideal-Otto error 4.6e-5. runtime 2879 s.
+- Per design fuel (CH3OH, C2H5OH):
+  - **CH3OH**: best dry CR 16 / w 0 / T 320 K — eff 0.4207, IMEP 1.25 MPa, peak p 7.04 MPa, CA50 14 deg, S_L 0.721, rel NO 1.0, knock integral 0.866 (knock-limited).
+    best overall CR 23 / w 0.3 / T 320 K — eff 0.4543, IMEP 1.41 MPa, peak p 11.69 MPa, CA50 8 deg, rel NO 0.088, knock 0.0145.
+    best water-majority CR 24 / w 0.6 / T 360 K — eff 0.4310, IMEP 1.27 MPa, peak p 10.63 MPa, CA50 8 deg, rel NO 1.3e-5, knock 2.9e-8.
+    vs best dry: +0.0103 eff, CR +8.
+  - **C2H5OH**: best dry CR 24 / w 0 / T 320 K — eff 0.4454, IMEP 1.34 MPa, peak p 9.64 MPa, CA50 14 deg, rel NO 1.0, knock 0.938 (knock-limited).
+    best overall CR 23 / w 0.4 / T 320 K — eff 0.4529, IMEP 1.45 MPa, peak p 11.75 MPa, CA50 8 deg, rel NO 0.037, knock 0.0011.
+    best water-majority CR 24 / w 0.6 / T 360 K — eff 0.4378, IMEP 1.33 MPa, peak p 11.20 MPa, CA50 8 deg, rel NO 2.9e-4, knock 1.2e-7.
+    vs best dry: -0.0076 eff, CR 0.
+- **at_sweep_bound = true**: both design fuels' best water-majority points sit at CR 24, the top of the swept range. The optimum may lie above it; this is an open item.
+- **CR-limiting constraint = knock** for all three fuels. Binding CR (first CR at which the default CA50 knocks): CH3OH CR 10, C2H5OH CR 14, CH4 CR 20. Best eligible CR: CH3OH 23, C2H5OH 23, CH4 23 (all < sweep bound 24, so `at_sweep_bound` per fuel is false; the global flag is true because the water-majority points sit at CR 24).
+- **S_L x 0.7 sensitivity** (applied for w >= 0.5, baseline CH4/CR=24/w=0.5/T=320): efficiency change **-0.0094** (0.94 points). Burn 10-90 stretches 29.5 -> 35.3 CAD; IMEP drops 2.1 %. rel NO not reported (null) at that point under the reduced flame speed.
+- Recommended design point (Modules 04/06/07): **C2H5OH, CR 24, w 0.6, T_intake 360 K** — highest gross indicated efficiency among feasible w > 0.5 points of the design fuels.
