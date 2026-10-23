@@ -1,0 +1,8 @@
+# raw OpenFOAM output is not committed
+runs/*/processor*/
+runs/*/[0-9]*/
+runs/*/constant/polyMesh/
+runs/*/log.*
+runs/*/*.nohup
+runs/*.nohup
+batch.nohup
