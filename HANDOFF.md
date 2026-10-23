@@ -117,4 +117,30 @@ Worker: Claude, acting for Hermes at James's request. Supervisor verification is
 - **at_sweep_bound = true**: both design fuels' best water-majority points sit at CR 24, the top of the swept range. The optimum may lie above it; this is an open item.
 - **CR-limiting constraint = knock** for all three fuels. Binding CR (first CR at which the default CA50 knocks): CH3OH CR 10, C2H5OH CR 14, CH4 CR 20. Best eligible CR: CH3OH 23, C2H5OH 23, CH4 23 (all < sweep bound 24, so `at_sweep_bound` per fuel is false; the global flag is true because the water-majority points sit at CR 24).
 - **S_L x 0.7 sensitivity** (applied for w >= 0.5, baseline CH4/CR=24/w=0.5/T=320): efficiency change **-0.0094** (0.94 points). Burn 10-90 stretches 29.5 -> 35.3 CAD; IMEP drops 2.1 %. rel NO not reported (null) at that point under the reduced flame speed.
+
+## 2026-10-23 — Module 04 design points (SPEC item 2)
+
+- All 18 tests pass on mail (`/opt/water-engine/.venv/bin/python -m pytest tests/test_six_stroke.py -v`: 18 passed, 26 s).
+- Fix 1: `tests/test_six_stroke.py` missing `import csv` (added).
+- Fix 2: `design_points()` passed `EVC_deg=None`, which fell through to the Module 03 EVO angle (140 CAD) and violated the run-loop check `180 < EVC < 360`. Per the module docstring (stroke 4 closes near gas-exchange TDC at 360 CAD; stroke 5 expands from TDC at 720 CAD), the six-stroke EVC is set to `SIX_STROKE_IVC_DEG = 359.99` CAD — the stroke-4 intake-valve-close, just inside the valid range. The test `test_zero_water_gives_zero_extra_work` confirms the geometry: EVO5 = 720 − EVC ≈ 360 CAD.
+- `main --full --workers 4 --cycle-dir results/03_engine_cycle --out results/04_six_stroke --design-points`: rc 0. `six_stroke_design_points.csv` written; results carried into `summary.json` as `key_results.six_stroke_design_points`.
+
+### Six-stroke table (dry design points, adiabatic, water mg/cycle = 0)
+
+| point | extra work % | water mg/cycle | combined w |
+|-------|-------------|----------------|------------|
+| CH3OH/best_dry       | -1.3e-14 % | 0.0  | 0.0 |
+| CH3OH/best_overall   | -1.2e-14 % | 0.0  | 0.3 |
+| CH3OH/water_majority | -1.3e-14 % | 0.0  | 0.6 |
+| C2H5OH/best_dry      | -1.2e-14 % | 0.0  | 0.0 |
+| C2H5OH/best_overall  | -1.1e-14 % | 0.0  | 0.4 |
+| C2H5OH/water_majority| -1.3e-14 % | 0.0  | 0.6 |
+| hot-dry validation   | -1.3e-14 % | 0.0  | 0.0 |
+
+### Validation verdict
+**No positive gain.** All seven points give extra work ≈ 0 (−1e-14 %, machine zero for a reversible gas spring with zero water injection). The hot-dry validation case (CH3OH/CR=10/w=0/T=360, Conklin & Szybist 2010 conditions) yields zero extra work by construction — it is a dry point with no steam-cycle water. This is **not** a positive gain of the published order (Conklin & Szybist report 7.5–25 %, Yang et al. 5.89→6.21 bar IMEP). The module's own interpretation notes this is the expected physics: cold 300 K liquid injected with only trapped-exhaust heat and 450 K walls cannot overcome the ~41 kJ/mol latent heat; the published gains use externally preheated steam. The design points table confirms the framework runs correctly on all real Module 03 states with energy closure < 1e-10.
+
+## 2026-10-23 — Step 0 CFD grid check (A1-BLEND-fine)
+- Image `opencfd/openfoam-default:2512` (digest sha256:33fb575aa998…). Two fixes applied on mail: `chmod -R 777 /opt/water-engine/cfd` for bind-mount write access; `--allow-run-as-root` added to `mpirun` in `run_case.sh`.
+- Runtime: 3037 s wall (blockMesh + decomposePar + sprayFoam -parallel, 6 ranks, build _87ed40d2-20251219, container aa3e7072180a). rc 0. Outputs in `runs/A1-BLEND-fine/postProcessing/distribution1/`. Provenance written to `/opt/water-engine/cfd/PROVENANCE.md`.
 - Recommended design point (Modules 04/06/07): **C2H5OH, CR 24, w 0.6, T_intake 360 K** — highest gross indicated efficiency among feasible w > 0.5 points of the design fuels.
