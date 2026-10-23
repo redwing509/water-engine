@@ -59,8 +59,11 @@ FUELS = ("CH3OH", "C2H5OH", "CH4")
 # (SPEC section 6) and is never the recommended design point handed to Modules 04 and 06.
 DESIGN_FUELS = ("CH3OH", "C2H5OH")
 QUICK_FUELS = ("CH4", "CH3OH")
-FULL_CR = tuple(range(9, 19))
-QUICK_CR = (10, 14)
+FULL_CR = tuple(range(9, 25))  # WME-1 item 1: sweep extended to 24 (was 9..18)
+QUICK_CR = (10, 14, 18)
+# WME-1 item 1 sensitivity: S_L x 0.7 for w >= 0.5.
+SENSITIVITY = dict(label="S_L x 0.7 for w >= 0.5", flame_speed_factor=0.7,
+                   applied_for_w_ge=0.5)
 FULL_W = tuple(i / 10 for i in range(9))
 QUICK_W = (0.0, 0.6)
 FULL_T_INTAKE = (320.0, 360.0)
@@ -952,7 +955,7 @@ def point_key(row):
 
 
 def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
-              fits_source=None, keep_trace=False):
+              fits_source=None, keep_trace=False, flame_speed_factor=1.0):
     """One sweep point; unavailable/failed points are kept with a reason."""
     row = dict(fuel=fuel, CR=cr, w=w, WFR=w / (1.0 - w), T_intake_K=T_intake, phi=par.phi,
                status="computed", reason="", mechanism=None, mechanism_fallback=False,
@@ -961,6 +964,8 @@ def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
         selection = fuels.select_mechanism(fuel)
         row.update(mechanism=selection.name, mechanism_fallback=selection.mechanism_fallback)
         sl, ref = check_fits(ignition, flame, w, mode)
+        if w >= SENSITIVITY["applied_for_w_ge"]:
+            sl *= flame_speed_factor
         duration = burn_duration(sl, ref, par)
         charge = Charge(fuel, cr, w, T_intake, par)
         result = retard_search(lambda ca50: integrate_cycle(
@@ -1061,6 +1066,51 @@ def eligible(r, par=DEFAULTS):
             and abs(r["energy_closure_error_fraction"]) <= par.closure_tolerance)
 
 
+def cr_limiting_constraint(fuel, rows, par=DEFAULTS):
+    """For each fuel: which constraint (knock or P_max) limits the CR sweep.
+
+    Walks the eligible computed rows in CR order.  A fuel is knock-limited if
+    the best eligible point still knocks at the default CA50 (retard_attempts > 1)
+    or is knock_limited at the top CR.  It is P_max-limited if the peak pressure
+    hits the 120 bar ceiling before knock does.  Returns a dict per fuel with
+    the limiting constraint, the CR at which it binds, and the best CR found.
+    """
+    computed = [r for r in rows if r["fuel"] == fuel and r["status"] == "computed"]
+    if not computed:
+        return dict(fuel=fuel, constraint="none", binding_CR=None, best_eligible_CR=None,
+                    reason="no computed points")
+    by_cr = {}
+    for r in computed:
+        by_cr.setdefault(r["CR"], []).append(r)
+    crs = sorted(by_cr)
+    best_eligible = max((r for r in computed if eligible(r, par)),
+                        key=lambda r: r["gross_indicated_efficiency"], default=None)
+    best_cr = best_eligible["CR"] if best_eligible else None
+    # Walk upward: knock binds first, or pressure ceiling binds first.
+    knock_binds_at = None
+    pmax_binds_at = None
+    for cr in crs:
+        group = by_cr[cr]
+        if any(r["knock_limited"] or r["retard_attempts"] > 1 for r in group):
+            knock_binds_at = cr
+            break
+        if any(r["peak_pressure_Pa"] >= par.peak_pressure_limit_Pa * (1 - 1e-6) for r in group):
+            pmax_binds_at = cr
+            break
+    if knock_binds_at is not None and (pmax_binds_at is None or knock_binds_at <= pmax_binds_at):
+        constraint = "knock"
+        binding = knock_binds_at
+    elif pmax_binds_at is not None:
+        constraint = "P_max"
+        binding = pmax_binds_at
+    else:
+        constraint = "neither"
+        binding = None
+    return dict(fuel=fuel, constraint=constraint, binding_CR=binding,
+                best_eligible_CR=best_cr, sweep_bound=FULL_CR[-1],
+                at_sweep_bound=bool(best_cr is not None and best_cr >= FULL_CR[-1] - 1e-9))
+
+
 def point_summary(r, par=DEFAULTS):
     if r is None:
         return None
@@ -1144,8 +1194,30 @@ def select_designs(rows, provenance, validation_passed=True, par=DEFAULTS):
         recommendation_status=("selected" if recommended else "no_feasible_water_majority_point"),
         recommendation_basis="highest gross indicated efficiency among feasible w > 0.5 points of the design fuels "
                              + "/".join(DESIGN_FUELS) + " (CH4 is reference-only)",
-        evo_states_file="evo_states.json")
+        cr_limiting_constraints=[cr_limiting_constraint(fuel, rows, par)
+                                 for fuel in dict.fromkeys(r["fuel"] for r in rows)],
+        at_sweep_bound=bool(recommended and recommended["CR"] >= FULL_CR[-1] - 1e-9),
+        sensitivity=SENSITIVITY, evo_states_file="evo_states.json")
     return maps, design
+
+
+def sensitivity_summary(rows, ignition, flame, provenance, par, mode):
+    """Re-evaluate water-majority candidates with S_L reduced by 30 percent."""
+    candidates = [r for r in rows if r["status"] == "computed" and r["w"] >= SENSITIVITY["applied_for_w_ge"]]
+    baseline = max(candidates, key=lambda r: r["gross_indicated_efficiency"], default=None)
+    changed = []
+    for r in candidates:
+        result = run_point(r["fuel"], r["CR"], r["w"], r["T_intake_K"],
+                           ignition[r["fuel"]], flame[r["fuel"]], par, mode,
+                           provenance["per_fuel"].get(r["fuel"]), False,
+                           SENSITIVITY["flame_speed_factor"])["point"]
+        if result["status"] == "computed":
+            changed.append(result)
+    sensitive = max(changed, key=lambda r: r["gross_indicated_efficiency"], default=None)
+    return dict(case=SENSITIVITY, baseline_best_water_majority=point_summary(baseline, par),
+                sensitivity_best_water_majority=point_summary(sensitive, par),
+                efficiency_change=(None if not baseline or not sensitive else
+                                   sensitive["gross_indicated_efficiency"] - baseline["gross_indicated_efficiency"]))
 
 
 # --------------------------------------------------------------- validation
@@ -1420,6 +1492,7 @@ def main(argv=None):
     checks = validate(rows, otto, par)
     maps, design = select_designs(rows, provenance, checks["passed"], par)
     design["mode"] = args.mode
+    design["sensitivity"] = sensitivity_summary(rows, ignition, flame, provenance, par, args.mode)
     io.write_csv(args.out / "cycle_points.csv", rows)
     io.write_csv(args.out / "water_majority_map.csv", maps)
     io.write_csv(args.out / "ideal_otto.csv", otto)

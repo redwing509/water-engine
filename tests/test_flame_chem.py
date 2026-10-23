@@ -175,7 +175,7 @@ def test_computed_ignition_fit_and_water_delay():
     assert paired >= 2, rows
     fit = chem.fit_ignition(rows)["CH4"]
     assert fit["status"] == "fitted", fit
-    assert fit["n"] == 1.0
+    assert fit["n"] == 1.0  # single-pressure data: n unidentifiable, kept at 1.0
     assert fit["A"] > 0
     assert all(math.isfinite(fit[key]) for key in ("A", "n", "E_J_per_mol", "c", "rms_ln_tau"))
 
@@ -207,12 +207,36 @@ def test_fit_recovers_known_parameters_and_pressure_units():
     assert fit["A"] == pytest.approx(A, rel=1e-5)
     assert fit["E_J_per_mol"] == pytest.approx(E, rel=1e-6)
     assert fit["c"] == pytest.approx(c, rel=1e-5)
-    assert fit["n"] == 1.0
+    assert fit["n"] == 1.0  # single pressure: n unidentifiable
     assert fit["rms_ln_tau"] < 1e-6
     assert fit["number_of_points"] == 9
     assert fit["valid_T_K_range"] == [900.0, 1100.0]
     assert fit["valid_w_range"] == [0.0, 0.6]
     assert fit["valid_p_Pa_range"] == [pressure, pressure]
+    assert fit["pressure_exponent_fitted"] is False
+
+
+def test_fit_recovers_free_pressure_exponent():
+    """n is genuinely free when data span >=2 distinct pressures.
+
+    Fit form is tau = A p**-n exp(E/RT)(1+cw), so a data generator with
+    tau = A p**N ... corresponds to fit n = -N.
+    """
+    A, n, E, c = 2e-3, 1.7, 120000.0, 2.5
+    rows = [dict(fuel="CH4", T_unburned_K=T, w=w, p_Pa=p,
+                 tau_s=A * p**(-n) * math.exp(E / (chem.R_J_MOL_K * T)) * (1 + c * w),
+                 status="ignited")
+            for p in (20e5, 40e5, 80e5)
+            for T in (900.0, 1000.0, 1100.0) for w in (0.0, 0.3, 0.6)]
+    fit = chem.fit_ignition(rows)["CH4"]
+    assert fit["status"] == "fitted"
+    assert fit["pressure_exponent_fitted"] is True
+    assert fit["n"] == pytest.approx(n, rel=1e-4)
+    assert fit["A"] == pytest.approx(A, rel=1e-4)
+    assert fit["E_J_per_mol"] == pytest.approx(E, rel=1e-5)
+    assert fit["c"] == pytest.approx(c, rel=1e-4)
+    assert fit["rms_log10_tau"] < 1e-6
+    assert fit["valid_p_Pa_range"] == [20e5, 80e5]
 
 
 def test_insufficient_fits_are_null_not_fabricated():
@@ -292,7 +316,8 @@ def test_full_task_grid_and_picklable_payloads():
     assert pickle.loads(pickle.dumps(tasks)) == tasks
     counts = {kind: sum(task[0] == kind for task in tasks)
               for kind in ("adiabatic", "cooling", "flame", "ignition")}
-    assert counts == {"adiabatic": 240, "cooling": 80, "flame": 20, "ignition": 320}
+    # Ignition: 4 fuels x 3 pressures x 10 w x 8 T = 960 (was 320 at 40 bar only).
+    assert counts == {"adiabatic": 240, "cooling": 80, "flame": 20, "ignition": 960}
     for kind, arguments in tasks:
         assert isinstance(arguments, tuple)
         if kind == "flame" and arguments[2] in (400.0, 450.0):
@@ -300,6 +325,7 @@ def test_full_task_grid_and_picklable_payloads():
     quick = chem.build_tasks("quick", 0.5)
     assert {args[0] for _, args in quick} == {"H2", "CH4"}
     assert {args[3] for kind, args in quick if kind == "ignition"} == set(chem.QUICK_IGNITION_T)
+    assert {args[4] for kind, args in quick if kind == "ignition"} == set(chem.QUICK_IGNITION_PRESSURES_PA)
 
 
 def test_parallel_equilibrium_matches_serial():
