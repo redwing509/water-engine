@@ -1098,7 +1098,8 @@ def main(argv=None):
         io.write_csv(args.out / "six_stroke_design_points.csv", dp)
         summary = json.loads((args.cycle_dir / "summary.json").read_text(encoding="utf-8"))
         summary.setdefault("key_results", {}).setdefault("six_stroke_design_points", dp)
-        io.write_json(args.cycle_dir / "summary.json", summary)
+        (args.cycle_dir / "summary.json").write_text(json.dumps(summary, indent=2, allow_nan=False),
+                                                    encoding="utf-8")
         print("six_stroke_design_points.csv written: " + ", ".join(
             f"{r['label']} = {r['extra_work_pct_of_four_stroke']:+.4f} %"
             for r in dp if r.get("status") == "computed"))

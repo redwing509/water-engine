@@ -156,6 +156,9 @@ def module03_files(directory, ctx):
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "design_point.json").write_text(json.dumps(design), encoding="utf-8")
     (directory / "evo_states.json").write_text(json.dumps(evo), encoding="utf-8")
+    (directory / "summary.json").write_text(json.dumps(dict(module="03_engine_cycle",
+        mode="full", synthetic_fits=False, validation_passed=True, use_for_design=True,
+        warning=None, runtime_s=1.0, key_results={})), encoding="utf-8")
     return key
 
 
