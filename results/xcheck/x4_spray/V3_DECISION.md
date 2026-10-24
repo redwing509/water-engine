@@ -9,12 +9,12 @@ Grok Bot, 2026-10-24 (PDT). Data: X4 (06abb30, this branch), Module 09 numerical
 | M09 / CFD evaporated, EOI (3 CFD spray models) | 1.30-1.66 | 1.19-1.61 |
 | M09 / CFD evaporated, end of run | 1.24-1.56 | 1.11-1.31 |
 | CFD spread across its own spray models (end, max/min) | 2.98x | 1.47x |
-| M09 reduction if vapour confined to spray cone | 1-3 % | 9-11 % |
-| M09 reduction with half initial slip (relative-velocity decay) | 15-18 % | 3-5 % |
+| M09 reduction if vapour confined to spray cone | 1-3 % | 9-12 % |
+| M09 reduction with half initial slip (relative-velocity decay) | 13-18 % | 3-5 % |
 
 ## Candidate gaps (job list), checked against the code and data
-1. **Local spray-cone saturation.** M09 is 0-D well-mixed gas; CFD has a vapour-rich cone. Bound: -1 to -11 %. Real effect, but on its own it closes at most a fifth of the gap. Not "clearly physical and sufficient".
-2. **Relative-velocity decay.** M09 already integrates Schiller-Naumann drag on the slip velocity, but in quiescent gas (no entrainment co-flow). Bound with half slip: -3 to -18 %. Cone + half-slip together still leave M09 high by about 1.15-1.3x for KHRT/RD.
+1. **Local spray-cone saturation.** M09 is 0-D well-mixed gas; CFD has a vapour-rich cone. Bound: -1 to -12 %. Real effect, but on its own it closes at most a fifth of the gap. Not "clearly physical and sufficient".
+2. **Relative-velocity decay.** M09 already integrates Schiller-Naumann drag on the slip velocity, but in quiescent gas (no entrainment co-flow). Bound with half slip: -3 to -18 %. Applied together (multiplied), cone + half-slip still leave M09 high by about 1.1-1.3x for KHRT/RD (end of run).
 3. **Droplet heating.** M09 already carries a transient droplet temperature (Abramzon-Sirignano, infinite conductivity); the OpenFOAM liquidEvaporation(Boil) models use the same uniform-temperature class. That is not a model-class gap relative to CFD. The ratio falling from EOI to end of run (e.g. A2 KHRT 1.54 -> 1.29) is consistent with a heat-up lag, but it is also consistent with spray-cone vapour build-up, so it cannot be attributed.
 
 The M09-CFD gap (1.1-1.7x) is the same size as the CFD's own model spread (1.5-3x), and the CFD is coarse-mesh and not validated. No single physical gap is identified with enough confidence to change Module 09; tuning it toward one CFD variant would be calibration, not verification.
