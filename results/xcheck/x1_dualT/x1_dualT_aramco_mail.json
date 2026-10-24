@@ -1,0 +1,419 @@
+{
+  "mechanism": "mechanisms/aramco20.yaml",
+  "mechanism_sha256_lf": "26c09c2fe6ce31610477bd2b32979650e9159e4478748dea9e4ef832f913e121",
+  "cantera": "3.2.0",
+  "p_Pa": 101325.0,
+  "phi": 1.0,
+  "regimes_T_u_K": {
+    "normal": [
+      320.0,
+      360.0
+    ],
+    "hot": [
+      400.0
+    ]
+  },
+  "regime_source": "sims/dual_temp/regimes.py (wme1-hiT): intake charge 320/360 K normal, 400 K hot",
+  "solver": {
+    "width_m": 0.03,
+    "transport": "mixture-averaged",
+    "soret": false,
+    "stage1": {
+      "ratio": 3.0,
+      "slope": 0.1,
+      "curve": 0.2,
+      "auto": true
+    },
+    "stage2": {
+      "ratio": 2.0,
+      "slope": 0.05,
+      "curve": 0.1,
+      "prune": 0.01
+    }
+  },
+  "seeded_from_sandiego": true,
+  "mem_gb_cap": 11.0,
+  "max_grid_points": 600,
+  "T_ad": [
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2225.8208320316967
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2234.9840316129844
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2253.2040452736746
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2271.30744249958
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2103.9335440343852
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2114.2942098366366
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2134.891763385797
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2155.3471710902427
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 1842.275646656486
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 1854.8395217712794
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 1879.9168628932148
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 1904.9436731610892
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2242.0487229676137
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2251.352878894108
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2269.885189034649
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2288.313689784598
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2146.7512290742497
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2156.977128459335
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2177.3332753594777
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2197.5571055939063
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 1934.4122428573578
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 1946.5651558485208
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 1970.809221764906
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 1994.9586041791756
+    }
+  ],
+  "S_L": [
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.6505282048033584,
+      "S_L_coarse_m_s": 0.71705972314558,
+      "grid_rel_change": 0.10227307263692392,
+      "grid_points": 192,
+      "T_max_K": 2256.147148620808,
+      "status": "computed",
+      "reason": "",
+      "secs": 1190.1,
+      "seed": "sandiego"
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.5201647454534996,
+      "S_L_coarse_m_s": 0.5778611588276351,
+      "grid_rel_change": 0.11091949979007827,
+      "grid_points": 202,
+      "T_max_K": 2153.6152679110864,
+      "status": "computed",
+      "reason": "",
+      "secs": 1353.4,
+      "seed": "sandiego"
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 51.9
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 54.4
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 54.3
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 53.0
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": 0.54987631762803,
+      "S_L_coarse_m_s": 0.6076375972976401,
+      "grid_rel_change": 0.10504413050333139,
+      "grid_points": 191,
+      "T_max_K": 2237.4381696815954,
+      "status": "computed",
+      "reason": "",
+      "secs": 1030.4,
+      "seed": "sandiego"
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 52.9
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 53.1
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 53.1
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 39.9
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": null,
+      "S_L_coarse_m_s": null,
+      "grid_rel_change": null,
+      "grid_points": null,
+      "T_max_K": null,
+      "status": "solver_error",
+      "reason": "RuntimeError: std::bad_alloc",
+      "secs": 37.1
+    }
+  ],
+  "runtime_s": 1439.2,
+  "host": "mail",
+  "workers": 4
+}
