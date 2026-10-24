@@ -1,0 +1,27 @@
+2026-10-23 13:36:53 PDT M13-US20-coarse start
+2026-10-23 13:45:30 PDT run_m13.sh outer loop stopped; US20 continues (maxCo 0.5->1.0 at t~0.8 ms, writeInterval 0.004); continuation run_m13b.sh will run CARB60 from the US20 precursor at 0.008 s
+2026-10-23 14:18:52 PDT M13-US20-coarse done peak RSS 974 MB ([2026-10-23 14:18:48 PDT] end reactingParcelFoam rc=136)
+{"case": "M13-US20-coarse", "complete": false, "film_pct_at_ivc": 3.7577055253287672, "evaporated_pct_at_ivc": 13.607334402545213, "evaporated_pct_phase_change_totals": 13.639904211634198, "vapour_inventory_pct": 13.231091229390378, "escaped_outlet_liquid_pct": 0.0, "airborne_drops_pct_at_ivc": 82.63496007212602}
+2026-10-23 14:18:53 PDT M13-CARB60-coarse start (restart from M13-US20-coarse t=0.008)
+2026-10-23 15:05:05 PDT M13-CARB60-coarse done rc=136 runtime_s 2772 peak RSS 0 MB
+{"case": "M13-CARB60-coarse", "complete": false, "film_pct_at_ivc": 3.858092826185777, "evaporated_pct_at_ivc": 9.657308341656593, "evaporated_pct_phase_change_totals": 9.686660401255889, "vapour_inventory_pct": 9.535933292222676, "escaped_outlet_liquid_pct": 0.0, "airborne_drops_pct_at_ivc": 86.48459883215763}
+2026-10-23 15:05:06 PDT M13 BATCH COMPLETE
+2026-10-24 10:15 PDT INCIDENT (Grok Bot): running `make_port_case.py M13-US20-coarse` to diff the generator output
+  re-created runs/M13-US20-coarse (make_case() rmtree's an existing case dir) and DELETED the untracked crashed
+  run directory: log.reactingParcelFoam{,.diag,.diag2,.diag3,.maxCo1-fpe}, log.Allrun, processor0/1 time dirs,
+  postProcessing, controlDict/reactingCloud1Properties backups. Surviving evidence: cfd/results/M13/M13-US20-coarse.{csv,json}
+  (post-processed mass accounting to t=8.99 ms), this progress.txt, the US20 gas-only precursor 0-0.008 s and mesh
+  copied into runs/M13-CARB60-coarse (processor*/0.008, log.checkMesh.fromUS20), and the diagnosis captured before
+  deletion: every attempt died with SIGFPE in Foam::DILUPreconditioner::calcReciprocalD called from
+  RASModels::kEpsilon::correct() (zero/NaN diagonal in the k or epsilon matrix), ~0.6-1.7 ms after SOI:
+    base (maxCo 1.0)                      t = 8.994 ms
+    maxCo1-fpe                            t = 9.673 ms
+    diag  (controlDict diag, maxCo 0.5)   reached 8.985 ms (log ended)
+    diag2 (cloud U source semiImplicit)   t = 9.066 ms
+    diag3 (dispersionModel none)          t = 8.574 ms
+  Last good step of diag2: T gas 307-360 K, p_rgh converged, continuity 1e-10 -> not a pressure/energy blow-up;
+  the k-epsilon matrix loses diagonal dominance first.  generator fixed below so it refuses to overwrite a case
+  that has run output.
+2026-10-24 10:15:58 PDT M13-US20C-coarse start (option a cone injector)
+2026-10-24 11:31:03 PDT M13-US20C-coarse done rc=1 runtime_s 4505 peak RSS 368 MB ([2026-10-24 11:31:00 PDT] end reactingParcelFoam rc=1)
+{"case": "M13-US20C-coarse", "complete": false, "film_pct_at_ivc": 0.0, "evaporated_pct_at_ivc": 3.1891579798962346, "evaporated_pct_phase_change_totals": 3.1891562458296603, "vapour_inventory_pct": 3.1686101362421524, "escaped_outlet_liquid_pct": 0.0, "airborne_drops_pct_at_ivc": 96.81084202010376}

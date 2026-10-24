@@ -1,0 +1,21 @@
+{
+  "T_intake_K": 360.0,
+  "rpm": 2000.0,
+  "w": 0.6,
+  "CR": 24,
+  "fuel_mass_kg": 7.362468384415644e-05,
+  "water_mass_kg": 0.00011043702576623465,
+  "air_mass_kg": 0.000473328363653127,
+  "m_liq_cycle_kg": 0.00018406170961039108,
+  "source": "wme1-spray09@e32288e:results/03_engine_cycle/design_point.json per_fuel.CH3OH.water_majority",
+  "source_sha256": "95c259480b296b6b344d7538f18bef3e877236f2e25882a08f729707b255a3ff",
+  "carb": {
+    "throttle_bore_diameter_m": 0.0351,
+    "air_mass_flow_kg_s": 0.007895798355385208,
+    "maximum_event_air_mass_flow_kg_s": 0.06316638684308166,
+    "p_manifold_Pa": 100000.0,
+    "T_intake_K": 360,
+    "source": "wme1-dev@62a151f (commit 20b1392):results/06_carburetor/carb_design.json",
+    "source_sha256": "3888dfd0acf6ef7e33654b1c4c69cf741c7a0a7050f8333e0e72a1ac24b2facf"
+  }
+}

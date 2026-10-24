@@ -1,0 +1,22 @@
+#!/bin/bash
+# module 13 case: mesh, film region, fields, run (2 MPI ranks)
+cd "${0%/*}" || exit 1
+. /usr/lib/openfoam/openfoam2512/etc/bashrc >/dev/null 2>&1
+set -o pipefail
+step() { echo "[$(date '+%F %T %Z')] $*" >> log.Allrun; }
+run() { local n=$1; shift; step "start $n"; "$@" > log.$n 2>&1; local rc=$?; step "end $n rc=$rc"; return $rc; }
+NP=${NP:-2}
+MESHONLY=${MESHONLY:-0}
+run blockMesh blockMesh || exit 1
+run snappyHexMesh snappyHexMesh -overwrite || exit 1
+run checkMesh checkMesh -constant || true
+run topoSet topoSet || exit 1
+run extrudeToRegionMesh extrudeToRegionMesh -overwrite || exit 1
+rm -rf 0 && run write_fields python3 write_fields.py || exit 1
+[ "$MESHONLY" = 1 ] && exit 0
+run decomposePar decomposePar -force || exit 1
+run decomposeParFilm decomposePar -region wallFilmRegion -force || exit 1
+run reactingParcelFoam mpirun --oversubscribe -np $NP reactingParcelFoam -parallel || exit 1
+run reconstructPar reconstructPar -latestTime || true
+run reconstructParFilm reconstructPar -region wallFilmRegion -latestTime || true
+step DONE

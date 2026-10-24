@@ -1,0 +1,99 @@
+{
+ "A1-H2O": {
+  "KHRT": {
+   "run": "A1-H2O",
+   "model": "liquidEvaporationBoil + ReitzKHRT (base)",
+   "exec_s": 210.0,
+   "SMD_eoi_um": 125.675,
+   "penetration_eoi_mm": 97.1254,
+   "penetration_end_mm": 97.15809999999999,
+   "eoi_ms": 5.0,
+   "end_ms": 6.0,
+   "cfd_eoi_pct": 0.3586804705611346,
+   "cfd_end_pct": 0.5061267980820405,
+   "m09_eoi_pct": 0.5579566719495033,
+   "m09_end_pct": 0.7582701606908865,
+   "m09_cone_end_pct": 0.750826991691631,
+   "cone_volume_over_chamber": 0.7465230272381884,
+   "m09_halfslip_end_pct": 0.6191211177721688,
+   "ratio_m09_over_cfd_eoi": 1.555581409482966,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.498182201701904,
+   "pass_15pct_end": false
+  },
+  "RD": {
+   "run": "X4-A1-H2O-RD",
+   "model": "liquidEvaporationBoil + ReitzDiwakar",
+   "exec_s": 1755.0,
+   "SMD_eoi_um": 65.2452,
+   "penetration_eoi_mm": 97.1105,
+   "penetration_end_mm": 97.9116,
+   "eoi_ms": 5.0,
+   "end_ms": 6.0,
+   "cfd_eoi_pct": 0.8511281007487215,
+   "cfd_end_pct": 1.1986564920633769,
+   "m09_eoi_pct": 1.41421791590369,
+   "m09_end_pct": 1.8722543706545247,
+   "m09_cone_end_pct": 1.8287069374945948,
+   "cone_volume_over_chamber": 0.7640268328195884,
+   "m09_halfslip_end_pct": 1.6193045200366463,
+   "ratio_m09_over_cfd_eoi": 1.66158057131427,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.5619607310778512,
+   "pass_15pct_end": false
+  },
+  "LE-RD": {
+   "run": "X4-A1-H2O-LE-RD",
+   "status": "not complete"
+  },
+  "cfd_model_spread": {
+   "min_end_pct": 0.5061267980820405,
+   "max_end_pct": 1.1986564920633769,
+   "max_over_min": 2.368292879582086,
+   "models": [
+    "KHRT",
+    "RD"
+   ]
+  },
+  "m09_end_vs_cfd_band": {
+   "m09_end_at_each_cfd_smd": {
+    "KHRT": 0.7582701606908865,
+    "RD": 1.8722543706545247
+   },
+   "inside_cfd_band_widened_15pct": [
+    "KHRT"
+   ]
+  }
+ },
+ "A2-BLEND": {
+  "KHRT": {
+   "run": "A2-BLEND",
+   "model": "liquidEvaporationBoil + ReitzKHRT (base)",
+   "exec_s": 8022.0,
+   "SMD_eoi_um": 22.8655,
+   "penetration_eoi_mm": 51.2128,
+   "penetration_end_mm": 62.8592,
+   "eoi_ms": 2.0,
+   "end_ms": 3.0,
+   "cfd_eoi_pct": 21.39659593218114,
+   "cfd_end_pct": 39.83771849643515,
+   "m09_eoi_pct": 32.89668730368962,
+   "m09_end_pct": 51.44505620496187,
+   "m09_cone_end_pct": 46.89752881663521,
+   "cone_volume_over_chamber": 0.2021681408301642,
+   "m09_halfslip_end_pct": 48.90500867335511,
+   "ratio_m09_over_cfd_eoi": 1.5374729423296716,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.2913655235945651,
+   "pass_15pct_end": false
+  },
+  "RD": {
+   "run": "X4-A2-BLEND-RD",
+   "status": "not complete"
+  },
+  "LE-RD": {
+   "run": "X4-A2-BLEND-LE-RD",
+   "status": "not complete"
+  }
+ }
+}

@@ -1,0 +1,110 @@
+diff --git a/sims/09_spray_evaporation/design_points.py b/sims/09_spray_evaporation/design_points.py
+index 1c90b13..e8d9b55 100644
+--- a/sims/09_spray_evaporation/design_points.py
++++ b/sims/09_spray_evaporation/design_points.py
+@@ -24,8 +24,10 @@ Two variants per case:
+                 fitted to the A1-BLEND (1 bar, 360 K) and A2-BLEND (20 bar, 700 K)
+                 evaporated-% histories. k_A1 is used in runner and induction; during
+                 compression k is interpolated in ln p between the two chamber
+-                pressures and held constant outside them. The same k is used for
+-                ethanol (no ethanol CFD exists; flagged).
++                pressures and held constant outside them. Ethanol uses its own k fitted
++                to the A1-EBLEND / A2-EBLEND (60/40 water/ethanol) CFD cases when they
++                exist (job water-engine-20261023-124600 step 3); otherwise it falls
++                back to the methanol-blend k (flagged in summary.json).
+ 
+ Status labels: all outputs are EXECUTED model runs; tests VERIFY numerics;
+ nothing is experimentally VALIDATED.
+@@ -59,6 +61,7 @@ FUELS = ("CH3OH", "C2H5OH")
+ POINTS = ("best_dry", "best_overall", "water_majority")
+ VARIANTS = ("nominal", "cfd_matched")
+ FIT_CASES = ("A1-BLEND", "A2-BLEND")
++ETH_FIT_CASES = ("A1-EBLEND", "A2-EBLEND")   # ethanol cfd_matched fit (job 124600 step 3)
+ OUT_SUB = "design_points"
+ 
+ 
+@@ -336,14 +339,22 @@ def main(argv=None):
+     if missing:
+         raise SystemExit(f"CFD cases missing for the cfd_matched fit: {missing}")
+     fits = {c: fit_rate_scale(cfd, c) for c in FIT_CASES}
+-    kfit = {"A1": fits["A1-BLEND"], "A2": fits["A2-BLEND"]}
++    kfit_m = {"A1": fits["A1-BLEND"], "A2": fits["A2-BLEND"]}
++    if all(c in cfd for c in ETH_FIT_CASES):
++        fits.update({c: fit_rate_scale(cfd, c) for c in ETH_FIT_CASES})
++        kfit_e = {"A1": fits["A1-EBLEND"], "A2": fits["A2-EBLEND"]}
++        eth_k_source = "own fit to A1-EBLEND / A2-EBLEND (60/40 water/ethanol CFD)"
++    else:
++        kfit_e = kfit_m
++        eth_k_source = "FALLBACK: methanol-blend k (A1-EBLEND / A2-EBLEND CFD not found)"
++    kfit_by_fuel = {"CH3OH": kfit_m, "C2H5OH": kfit_e}
+     # 3) cases
+     tasks = []
+     for kk, inp in inputs.items():
+         tr = {k: v for k, v in traces[kk].items() if k in ("theta_deg", "p_Pa", "T_K", "theta_spark_deg")}
+         for a in R.ATOMISERS:
+             for v in VARIANTS:
+-                tasks.append(dict(inp=inp, atomiser=a, variant=v, trace=tr, kfit=kfit))
++                tasks.append(dict(inp=inp, atomiser=a, variant=v, trace=tr, kfit=kfit_by_fuel[inp["fuel"]]))
+     with ProcessPoolExecutor(max_workers=args.workers) as ex:
+         rows = list(ex.map(_task, tasks))
+     profiles = {f"{r['fuel']}/{r['point']}/{r['atomiser']}/{r['variant']}": r.pop("profile") for r in rows if "profile" in r}
+@@ -373,8 +384,8 @@ def main(argv=None):
+         "nominal": "Module 09 model as derived, k = 1, NOT tuned to CFD. Known limitation: vs OpenFOAM phase A it evaporates "
+                    "1.5-2.5x the CFD value at A1 (1 bar, 360 K) and +1 to +12 pp at A2 (20 bar, 700 K).",
+         "cfd_matched": "SENSITIVITY BOUND, not a validated model: one droplet-gas transfer multiplier per CFD condition fitted "
+-                       "to A1-BLEND / A2-BLEND (model-vs-model; the CFD itself is unvalidated and has wall-bounce, no film). "
+-                       "Same multiplier applied to ethanol without ethanol CFD.",
++                       "to A1-BLEND / A2-BLEND for methanol and A1-EBLEND / A2-EBLEND for ethanol when present (model-vs-model; "
++                       "the CFD itself is unvalidated and has wall-bounce, no film).",
+     }
+     assumptions = {
+         "inputs": "Module 03 design_point.json (CR, w, T_intake, rpm, trapped air/alcohol/water masses); residual gas neglected in the Module 09 parcel",
+@@ -387,7 +398,7 @@ def main(argv=None):
+     }
+     summary = dict(module=R.MODULE, version=R.VERSION, job="water-engine-20261023-103500", labels=labels,
+                    assumptions=assumptions | {"properties": P.property_assumptions(FUELS)},
+-                   cfd_matched_fit=dict(fits=fits, interpolation="k(p): ln-p interpolation between A1 (1 bar) and A2 (20 bar), clamped; k_A1 in runner/induction",
++                   cfd_matched_fit=dict(fits=fits, ethanol_k_source=eth_k_source, interpolation="k(p): ln-p interpolation between A1 (1 bar) and A2 (20 bar), clamped; k_A1 in runner/induction",
+                                         cfd_dir=str(args.cfd_dir), cfd_ref=args.cfd_ref),
+                    spark=spark_info, n_cases=len(rows), n_failed=len(failed), failed=failed,
+                    max_mass_error_rel=max((r["max_mass_error_rel"] for r in good), default=None),
+diff --git a/sims/09_spray_evaporation/run.py b/sims/09_spray_evaporation/run.py
+index e3300e3..8a21c54 100644
+--- a/sims/09_spray_evaporation/run.py
++++ b/sims/09_spray_evaporation/run.py
+@@ -80,6 +80,8 @@ CFD_CHAMBER_V_m3 = 0.02 * 0.1 * 0.02
+ CFD_RR_Q = 3.0              # sprayCloudProperties RosinRammler n
+ CFD_T_LIQUID_K = 300.0
+ CROSSCHECK_CASES = ("A1-H2O", "A1-CH3OH", "A1-BLEND", "A2-H2O", "A2-CH3OH", "A2-BLEND")
++# ethanol phase A cases (job water-engine-20261023-124600); read for the ethanol cfd_matched fit
++ETHANOL_CASES = ("A1-C2H5OH", "A1-EBLEND", "A2-C2H5OH", "A2-EBLEND")
+ LIQUID_YM = {"H2O": 0.0, "CH3OH": 1.0, "BLEND": 0.4}
+ 
+ 
+@@ -254,7 +256,7 @@ def read_cfd(cfd_dir):
+     cfd_dir = Path(cfd_dir)
+     summ = json.loads((cfd_dir / "summary.json").read_text())
+     out = {}
+-    for c in CROSSCHECK_CASES:
++    for c in CROSSCHECK_CASES + ETHANOL_CASES:
+         if c not in summ or not summ[c].get("complete") or not (cfd_dir / summ[c]["csv"]).is_file():
+             continue
+         with open(cfd_dir / summ[c]["csv"]) as fh:
+@@ -270,12 +272,14 @@ def read_cfd(cfd_dir):
+ def chamber_run(meta, smd, t_end, activity="wilson", packets=10, classes=8, rate_scale=1.0):
+     """Constant-volume chamber reproducing an OpenFOAM phase-A case.
+     rate_scale != 1 only for the labelled cfd_matched sensitivity fit."""
+-    tab = P.tables()
+-    Y_m = float(meta["composition"].get("CH3OH", 0.0))
++    comp = meta["composition"]
++    fuel = "C2H5OH" if float(comp.get("C2H5OH", 0.0)) > 0.0 else "CH3OH"
++    tab = P.tables(fuel)
++    Y_m = float(comp.get(fuel, 0.0))
+     p, T = meta["p"], meta["T"]
+     m_inj = meta["massTotal_kg"]; dur = meta["dur"]; U = meta["U_bernoulli_m_s"]
+     m_air = p * CFD_CHAMBER_V_m3 * tab.M_g[0] / (P.R_U * T)
+-    sp = M.Spray(m_air=m_air, T_gas=T, p=p, m_ref=m_inj, activity=activity, rate_scale=rate_scale)
++    sp = M.Spray(m_air=m_air, T_gas=T, p=p, m_ref=m_inj, activity=activity, rate_scale=rate_scale, fuel=fuel)
+     Vf = lambda tt: (CFD_CHAMBER_V_m3, 0.0)
+     d, frac = A.rosin_rammler_classes(smd, CFD_RR_Q, classes)
+     rho = sp.liquid_density(np.full(d.size, CFD_T_LIQUID_K), np.full(d.size, Y_m))

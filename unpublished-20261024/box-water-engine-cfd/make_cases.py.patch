@@ -1,0 +1,60 @@
+diff --git a/cfd/scripts/make_cases.py b/cfd/scripts/make_cases.py
+index ed9534b..79ae8fe 100644
+--- a/cfd/scripts/make_cases.py
++++ b/cfd/scripts/make_cases.py
+@@ -13,8 +13,12 @@ LIQ = {  # density at ~300 K [kg/m3], mass fractions
+     "H2O":   {"rho": 997.0, "comp": {"H2O": 1.0}},
+     "CH3OH": {"rho": 787.0, "comp": {"CH3OH": 1.0}},
+     "BLEND": {"rho": None, "comp": {"H2O": 0.6, "CH3OH": 0.4}},
++    # ethanol cases added by relay job water-engine-20261023-124600 (case names A?-C2H5OH, A?-EBLEND)
++    "C2H5OH": {"rho": 785.0, "comp": {"C2H5OH": 1.0}},
++    "EBLEND": {"rho": None, "comp": {"H2O": 0.6, "C2H5OH": 0.4}},
+ }
+ LIQ["BLEND"]["rho"] = 1.0 / (0.6 / 997.0 + 0.4 / 787.0)
++LIQ["EBLEND"]["rho"] = 1.0 / (0.6 / 997.0 + 0.4 / 785.0)  # ideal mixing, same rule as BLEND
+ COND = {  # p [Pa], T [K], injection dP [Pa], orifice d [m], duration [s]
+     "A1": dict(p=1.0e5, T=360.0, dP=5.0e5, d=0.25e-3, dur=5.0e-3),
+     "A2": dict(p=20.0e5, T=700.0, dP=100.0e5, d=0.15e-3, dur=2.0e-3),
+@@ -24,6 +28,13 @@ CH3OH_THERM = """CH3OH             L 8/88C   1H   4O   1     G   200.000  3500.0
+ -2.53748747E+04 1.45023623E+01 5.71539582E+00-1.52309129E-02 6.52441155E-05    3
+ -7.10806889E-08 2.61352698E-11-2.56427656E+04-1.50409823E+00                   4
+ """
++# C2H5OH NASA-7 from the San Diego mechanism (mechanisms/sandiego.yaml, 300-1000-5000 K), CHEMKIN layout
++C2H5OH_THERM = """C2H5OH            SD    C   2H   6O   1     G   300.000  5000.000 1000.00      1
++ 4.34717120E+00 1.86288000E-02-6.77946700E-06 8.16592600E-10 0.00000000E+00    2
++-3.06615743E+04 3.24247304E+00 5.76535800E-01 2.89451200E-02-1.61002000E-05    3
++ 3.59164100E-09 0.00000000E+00-2.96359500E+04 2.27081300E+01                   4
++"""
++ALC_THERM = {"CH3OH": CH3OH_THERM, "C2H5OH": C2H5OH_THERM}
+ 
+ def sub(path, pat, rep, count=1):
+     s = path.read_text(); n = len(re.findall(pat, s, flags=re.S))
+@@ -41,15 +52,16 @@ def make(cond, liq, refine=1.0):
+     mass = mdot * C["dur"]
+     # chemistry: non-reacting gas with evaporating species
+     ck = c / "chemkin"
+-    (ck / "chem.inp").write_text("ELEMENTS\n H O C N AR\nEND\nSPECIE\nO2 N2 H2O CH3OH\nEND\n")
++    alc = "C2H5OH" if "C2H5OH" in L["comp"] else "CH3OH"   # methanol cases unchanged
++    (ck / "chem.inp").write_text(f"ELEMENTS\n H O C N AR\nEND\nSPECIE\nO2 N2 H2O {alc}\nEND\n")
+     th = (ck / "therm.dat").read_text()
+     th = re.sub(r"C7H16 .*?4\n", "", th, count=1, flags=re.S)
+-    th = th.replace("\nEND", "\n" + CH3OH_THERM.rstrip("\n") + "\nEND")
++    th = th.replace("\nEND", "\n" + ALC_THERM[alc].rstrip("\n") + "\nEND")
+     (ck / "therm.dat").write_text(th)
+     sub(c / "constant/chemistryProperties", r"chemistry\s+on;", "chemistry       off;")
+     sub(c / "constant/combustionProperties", r"combustionModel\s+PaSR;", "combustionModel none;")
+     sub(c / "constant/combustionProperties", r"active\s+yes;", "active          no;")
+-    sub(c / "constant/thermophysicalProperties", r"liquids\s*\{\s*C7H16;\s*\}", "liquids\n{\n    H2O;\n    CH3OH;\n}")
++    sub(c / "constant/thermophysicalProperties", r"liquids\s*\{\s*C7H16;\s*\}", f"liquids\n{{\n    H2O;\n    {alc};\n}}")
+     sub(c / "0.orig/p", r"internalField\s+uniform\s+[^;]+;", f"internalField   uniform {C['p']:.6g};")
+     sub(c / "0.orig/T", r"internalField\s+uniform\s+[^;]+;", f"internalField   uniform {C['T']:.6g};")
+     cp = c / "constant/sprayCloudProperties"
+@@ -81,6 +93,8 @@ def make(cond, liq, refine=1.0):
+     return name
+ 
+ if __name__ == "__main__":
++    if len(sys.argv) > 1:   # e.g. make_cases.py A1-C2H5OH A2-EBLEND  (only the named cases are (re)written)
++        print("\n".join(make(*a.split("-", 1)) for a in sys.argv[1:])); raise SystemExit
+     names = [make(cn, ln) for cn in ("A1", "A2") for ln in ("H2O", "CH3OH", "BLEND")]
+     names.append(make("A1", "BLEND", refine=1.5))
+     print("\n".join(names))
