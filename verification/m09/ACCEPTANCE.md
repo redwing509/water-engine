@@ -34,3 +34,7 @@ Compute: at most 4 processes, OMP_NUM_THREADS=1.
 
 ## Deviation (committed before the first run)
 V3 uses **A2-BLEND** (x_CH3OH 0.4) instead of A2-CH3OH, because only A1-H2O and A2-BLEND phase-A metadata exist in the repo (xcheck/x4-spray cases). The criteria are unchanged.
+
+## Deviation 2 (2026-10-24 ~14:45 PDT, committed before the re-run; no V3 results had been seen)
+The first run was aborted. The A2-BLEND 80-packet chamber case reached 4.7 GB RSS, which is over the box's 4 GB budget. In a capped probe it failed allocating the dense BDF Jacobian: state ~1987, so 80 packets x 8 classes builds a dense ~2000x2000 LU in module 09. Diagnosis: memory grows as (packets x classes)^2 because the Jacobian is dense. This is a performance limitation of module 09, not a correctness issue. It is flagged to Claude: supply a `jac_sparsity` (block-diagonal per packet plus gas coupling).
+The V3 packet ladder therefore becomes **{5, 10 (production), 20, 40}**, with GCI on 10/20/40 (r = 2). V3a's fallback is |40 - 20| <= 0.05 pp. V3b compares production (10) with the extrapolated value from that triplet. Thresholds are unchanged.
