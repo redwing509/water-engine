@@ -5,11 +5,13 @@ Acceptance criteria: ACCEPTANCE_CRITERIA.md (committed before the first run).
 Usage:  python verification/x5_m03/gci_study.py [--procs N] [--out DIR]
 Runtime: about 10-40 min on 6 cores. Needs cantera, CoolProp, scipy, numpy.
 """
-import argparse, importlib, importlib.util, json, math, os, sys, tempfile, time
+import argparse, importlib, importlib.util, json, math, os, sys, tempfile, time, traceback, warnings
 from multiprocessing import Pool
 from pathlib import Path
 
+warnings.filterwarnings("ignore", message="NasaPoly2::validate")
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))  # parent must be able to unpickle anything from sims.*
 STEPS_DEG = (2.0, 1.0, 0.5, 0.25)
 FS = 1.25
 POINTS = {
@@ -106,6 +108,15 @@ def otto(engine):
     return (engine, "otto", res)
 
 
+def safe(f, n):
+    """Run one task; never let an exception object cross the process boundary."""
+    try:
+        return f(n)
+    except Exception:
+        eng = "X5" if f is x5_point else "M03" if f is m03_point else n
+        return (eng, "otto" if f is otto else n, {"error": traceback.format_exc()})
+
+
 def gci(f1, f2, f3, r=2.0):
     """f1 finest. Celik 2008, constant r."""
     d21, d32 = f2 - f1, f3 - f2
@@ -171,12 +182,17 @@ def main():
     t0 = time.time()
     jobs = [(x5_point, n) for n in POINTS] + [(m03_point, n) for n in POINTS] + [(otto, "X5"), (otto, "M03")]
     with Pool(a.procs) as pool:
-        res = [pool.apply_async(f, (n,)) for f, n in jobs]
+        res = [pool.apply_async(safe, (f, n)) for f, n in jobs]
         got = [r.get() for r in res]
     raw = {"X5": {}, "M03": {}}
     for eng, name, d in got:
         raw[eng][name] = d
     (out / "raw.json").write_text(json.dumps(raw, indent=1))
+    errors = {f"{e}/{n}": d["error"] for e in raw for n, d in raw[e].items() if "error" in d}
+    if errors:
+        (out / "errors.json").write_text(json.dumps(errors, indent=1))
+        print("TASK ERRORS:", "\n".join(f"{k}: {v.splitlines()[-1]}" for k, v in errors.items()))
+        sys.exit(2)
     rep = evaluate(raw); rep["wall_s"] = time.time() - t0
     import cantera, CoolProp
     rep["env"] = dict(python=sys.version.split()[0], cantera=cantera.__version__, coolprop=CoolProp.__version__, procs=a.procs)
