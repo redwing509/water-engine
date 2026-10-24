@@ -1,0 +1,25 @@
+{
+  "reference_source": "results/full08/oxygen_bookkeeping.json (fuel=CH3OH, w=0.6, T=900 K, P=4 MPa; Q at T_ref=298.15 K)",
+  "module08": {
+    "Q_dry_J_kg": 21104117.910007074,
+    "Q_wet_J_kg": 21104117.91000706,
+    "energy_closure_rel": 7.060783709316691e-16
+  },
+  "independent_nist_janaf": {
+    "Q_dry_J_kg": 21099962.549154233,
+    "dHf_298K_kJ_mol": {
+      "CH3OH": -201.06,
+      "CO2": -393.509,
+      "H2O": -241.818
+    }
+  },
+  "Q_dry_comparison": {
+    "quantity": "Q_dry",
+    "module08_J_kg": 21104117.910007074,
+    "independent_J_kg": 21099962.549154233,
+    "rel_diff_pct": 0.019693688285754095,
+    "tolerance_pct": 0.2,
+    "pass": true
+  },
+  "note": "Residual is the documented 1.3-2.5 kJ/mol San Diego vs NIST-JANAF formation-enthalpy difference (CH3OH -200938.85 vs -200941.5 J/mol), NOT tuned."
+}
