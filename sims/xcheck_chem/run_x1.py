@@ -13,14 +13,21 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 import time
 from pathlib import Path
 
-import cantera as ct
-
-from sims.common import fuels, io
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
+# 2026-10-24 (Grok Bot): Hermes ran this by path over ssh from /root and died with
+# ModuleNotFoundError: No module named 'sims' (rc=1, 0 s). Bootstrap the repo root so both
+# `python sims/xcheck_chem/run_x1.py` and `python -m sims.xcheck_chem.run_x1` work from any cwd.
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+import cantera as ct  # noqa: E402
+
+from sims.common import fuels, io  # noqa: E402
+
 MECH = REPO_ROOT / "mechanisms" / "aramco20.yaml"
 OUT = REPO_ROOT / "results" / "xcheck"
 

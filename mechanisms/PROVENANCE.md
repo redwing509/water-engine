@@ -57,7 +57,9 @@ python -m cantera.ck2yaml --input=sandiego20161214_mechCK.txt \
 - Result: **493 species, 2716 reactions**. Contains `CH3OH` and `C2H5OH`
   (no separate vapour-phase species; liquid-alcohol latent heat is supplied
   by `sims/common/fuels.py`, not by the mechanism). `aramco20.yaml`
-  SHA-256: `ff445870610f4bc1129f061e1823c0939dc5d44ce15996cb4ee85cd6ff72db33`.
+  SHA-256: `ff445870610f4bc1129f061e1823c0939dc5d44ce15996cb4ee85cd6ff72db33` (CRLF working copy on the PC/mail;
+  the LF git checkout, enforced by `.gitattributes`, hashes to
+  `26c09c2fe6ce31610477bd2b32979650e9159e4478748dea9e4ef832f913e121`; content identical apart from line endings).
 - Cantera load check: `ct.Solution("mechanisms/aramco20.yaml")` loads
   successfully; `gas.species_index("CH3OH")` and `("C2H5OH")` resolve.
 - Note: this is the X1 independent mechanism for the `xcheck/chem` branch.

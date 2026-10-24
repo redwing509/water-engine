@@ -1,0 +1,503 @@
+{
+  "mechanism": "mechanisms/sandiego.yaml",
+  "mechanism_sha256_lf": "859b088d3e973c9803267fa0e6a05d7a82b5a473a994e43b3b4e158783191e20",
+  "cantera": "3.2.0",
+  "p_Pa": 101325.0,
+  "phi": 1.0,
+  "regimes_T_u_K": {
+    "normal": [
+      320.0,
+      360.0
+    ],
+    "hot": [
+      400.0
+    ]
+  },
+  "regime_source": "sims/dual_temp/regimes.py (wme1-hiT): intake charge 320/360 K normal, 400 K hot",
+  "solver": {
+    "width_m": 0.03,
+    "transport": "mixture-averaged",
+    "soret": false,
+    "stage1": {
+      "ratio": 3.0,
+      "slope": 0.1,
+      "curve": 0.2,
+      "auto": true
+    },
+    "stage2": {
+      "ratio": 2.0,
+      "slope": 0.05,
+      "curve": 0.1,
+      "prune": 0.01
+    }
+  },
+  "T_ad": [
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2225.67050867677
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2234.880263798476
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2253.2021596296386
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2271.4101044359586
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2103.6783300446996
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2114.084335055546
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2134.7821634161614
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2155.341289181013
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 1842.0232918248444
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 1854.6219259729014
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 1879.7793988258009
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 1904.8913826873313
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2241.252568160251
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2250.6077148835175
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2269.2531229079304
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2287.8004651652313
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 2145.843949512609
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 2156.1205985113406
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 2176.590138844171
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 2196.9338653544987
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 300.0,
+      "regime": "normal",
+      "T_ad_K": 1933.4251271580915
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "T_ad_K": 1945.6198638007866
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "T_ad_K": 1969.961205840709
+    },
+    {
+      "kind": "T_ad",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "T_ad_K": 1994.216656990267
+    }
+  ],
+  "S_L": [
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.7170597231460939,
+      "S_L_coarse_m_s": 0.7334726185313903,
+      "grid_rel_change": 0.02288916091017495,
+      "grid_points": 173,
+      "T_max_K": 2268.973780979875,
+      "status": "computed",
+      "reason": "",
+      "secs": 5.7
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.577861158843258,
+      "S_L_coarse_m_s": 0.5923462205418035,
+      "grid_rel_change": 0.02506668163602008,
+      "grid_points": 181,
+      "T_max_K": 2156.710728363916,
+      "status": "computed",
+      "reason": "",
+      "secs": 10.1
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.31914630569795005,
+      "S_L_coarse_m_s": 0.32610491359998883,
+      "grid_rel_change": 0.021803817803313773,
+      "grid_points": 194,
+      "T_max_K": 1903.3715299997634,
+      "status": "computed",
+      "reason": "",
+      "secs": 10.4
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.743844297717505,
+      "S_L_coarse_m_s": 0.7527772879295709,
+      "grid_rel_change": 0.012009220531066548,
+      "grid_points": 223,
+      "T_max_K": 2291.328108650078,
+      "status": "computed",
+      "reason": "",
+      "secs": 10.8
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.5931873040657584,
+      "S_L_coarse_m_s": 0.599365905830827,
+      "grid_rel_change": 0.010415937297915847,
+      "grid_points": 225,
+      "T_max_K": 2199.6807081295756,
+      "status": "computed",
+      "reason": "",
+      "secs": 10.3
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 400.0,
+      "regime": "hot",
+      "S_L_m_s": 0.331546843370263,
+      "S_L_coarse_m_s": 0.3378547096197869,
+      "grid_rel_change": 0.019025565695039458,
+      "grid_points": 232,
+      "T_max_K": 1995.7881379152557,
+      "status": "computed",
+      "reason": "",
+      "secs": 12.1
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": 0.6076375972873528,
+      "S_L_coarse_m_s": 0.6205866724514706,
+      "grid_rel_change": 0.021310523282176315,
+      "grid_points": 169,
+      "T_max_K": 2250.219073948582,
+      "status": "computed",
+      "reason": "",
+      "secs": 5.4
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": 0.4833830371277777,
+      "S_L_coarse_m_s": 0.49329521716990726,
+      "grid_rel_change": 0.020505849979815034,
+      "grid_points": 188,
+      "T_max_K": 2136.072125467305,
+      "status": "computed",
+      "reason": "",
+      "secs": 11.0
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": 0.25908824897248856,
+      "S_L_coarse_m_s": 0.2641858512218483,
+      "grid_rel_change": 0.019675158057442528,
+      "grid_points": 190,
+      "T_max_K": 1877.5894906620163,
+      "status": "computed",
+      "reason": "",
+      "secs": 11.7
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": 0.6235358950518073,
+      "S_L_coarse_m_s": 0.632245117764798,
+      "grid_rel_change": 0.013967476102185048,
+      "grid_points": 227,
+      "T_max_K": 2271.976330597884,
+      "status": "computed",
+      "reason": "",
+      "secs": 11.2
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": 0.4932110188751026,
+      "S_L_coarse_m_s": 0.498797622951981,
+      "grid_rel_change": 0.01132700581106259,
+      "grid_points": 230,
+      "T_max_K": 2179.2806292755895,
+      "status": "computed",
+      "reason": "",
+      "secs": 10.1
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 360.0,
+      "regime": "normal",
+      "S_L_m_s": 0.2689314901862375,
+      "S_L_coarse_m_s": 0.27315652098952525,
+      "grid_rel_change": 0.015710435398851433,
+      "grid_points": 213,
+      "T_max_K": 1964.515916607137,
+      "status": "computed",
+      "reason": "",
+      "secs": 7.0
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.0,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "S_L_m_s": 0.5057661969628563,
+      "S_L_coarse_m_s": 0.5180107058221542,
+      "grid_rel_change": 0.02420982053135749,
+      "grid_points": 178,
+      "T_max_K": 2236.404591551757,
+      "status": "computed",
+      "reason": "",
+      "secs": 10.6
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.3,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "S_L_m_s": 0.3993503883757495,
+      "S_L_coarse_m_s": 0.4064578547845252,
+      "grid_rel_change": 0.017797569792490746,
+      "grid_points": 188,
+      "T_max_K": 2115.038151679446,
+      "status": "computed",
+      "reason": "",
+      "secs": 11.5
+    },
+    {
+      "kind": "S_L",
+      "fuel": "CH3OH",
+      "w": 0.6,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "S_L_m_s": 0.207113344039504,
+      "S_L_coarse_m_s": 0.21125062507359516,
+      "grid_rel_change": 0.019975926965391657,
+      "grid_points": 181,
+      "T_max_K": 1844.7884541775827,
+      "status": "computed",
+      "reason": "",
+      "secs": 6.7
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.0,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "S_L_m_s": 0.517023942465954,
+      "S_L_coarse_m_s": 0.5237848274618355,
+      "grid_rel_change": 0.013076541414379028,
+      "grid_points": 228,
+      "T_max_K": 2253.70085256904,
+      "status": "computed",
+      "reason": "",
+      "secs": 10.6
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.3,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "S_L_m_s": 0.40513449041806016,
+      "S_L_coarse_m_s": 0.4098208487191908,
+      "grid_rel_change": 0.011567413814347791,
+      "grid_points": 231,
+      "T_max_K": 2158.765625369235,
+      "status": "computed",
+      "reason": "",
+      "secs": 11.5
+    },
+    {
+      "kind": "S_L",
+      "fuel": "C2H5OH",
+      "w": 0.6,
+      "T_u_K": 320.0,
+      "regime": "normal",
+      "S_L_m_s": 0.2149353077888557,
+      "S_L_coarse_m_s": 0.21857617225803025,
+      "grid_rel_change": 0.016939350293955432,
+      "grid_points": 209,
+      "T_max_K": 1939.356292821121,
+      "status": "computed",
+      "reason": "",
+      "secs": 7.1
+    }
+  ],
+  "runtime_s": 90.7,
+  "host": "grok-bot-vm-342803711",
+  "workers": 2
+}
