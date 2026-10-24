@@ -1017,7 +1017,9 @@ def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
 
 
 def _task(task):
-    return run_point(*task)
+    f, cr, w, T, ign, flame, par, mode, prov, trace, evap_profile = task
+    return run_point(f, cr, w, T, ign, flame, par, mode, fits_source=prov,
+                     keep_trace=trace, evap_profile=evap_profile)
 
 
 def sweep(mode):
