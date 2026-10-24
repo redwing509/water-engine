@@ -32,7 +32,7 @@ Source: the simulation server's `/opt/water-engine`.
 
 | File | Description |
 |---|---|
-| `code/sims/xcheck_cycle/run.py` | X5 server variant: SPEC §6 geometry and CoolProp water. It differs from the PC variant and from GitHub. |
+| `code/sims/xcheck_cycle/run.py` | X5 server copy. Correction: this file is identical (ignoring whitespace) to `scripts_run/xcheck.py` on branch `xcheck/cycle`, so it was already public under a different path. It is kept here only for path provenance. It differs from the PC variant. |
 | `code/scripts_run/x2_{compute,extract_hf,verify_thermo}.py` | X2 thermo cross-check scripts. |
 | `cfd/run_case.sh`, `cfd/run_cfd.sh` | CFD run scripts. |
 | `cfd/scripts/grokbot-20261024/*.sh` | CFD batch, case and restart-probe scripts. |
