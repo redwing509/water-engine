@@ -46,7 +46,7 @@ def _build():
     here = Path(__file__).resolve().parent
     # Prefer the committed copy in results/03_engine_cycle/inputs; fall
     # back to the source on the wme1-spray09 branch at runtime.
-    src = here.parent / "results" / "03_engine_cycle" / "inputs" / "spray_at_spark.json"
+    src = here.parent.parent / "results" / "03_engine_cycle" / "inputs" / "spray_at_spark.json"
     if not src.exists():
         import subprocess
         out = subprocess.run(
@@ -110,7 +110,7 @@ def source_label():
 def _build_point_index():
     import json
     here = Path(__file__).resolve().parent
-    src = here.parent / "results" / "03_engine_cycle" / "inputs" / "spray_at_spark.json"
+    src = here.parent.parent / "results" / "03_engine_cycle" / "inputs" / "spray_at_spark.json"
     if not src.exists():
         import subprocess
         out = subprocess.run(
