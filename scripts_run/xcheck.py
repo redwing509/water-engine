@@ -387,8 +387,9 @@ def integrate(ch, ca50, dur, ignition, evo=None, step=STEP, wall=True):
     evo = EVO if evo is None else evo
     omega = OMEGA
     th90 = burn_angle(KNOCK_XB, ca50, dur)
+    th_a = burn_angle(ANCHOR_XB, ca50, dur)  # anchor on a node (verification item 1)
     nodes = list(np.linspace(IVC, evo, max(2, math.ceil((evo - IVC) / step)) + 1))
-    nodes += [a for a in (EVAP_END, th90) if IVC < a < evo]
+    nodes += [a for a in (EVAP_END, th90, th_a) if IVC < a < evo]
     grid = np.unique(np.array(nodes, dtype=float))
     Qa, Lc = ch.Q_avail, ch.L_cyl
     xb = x_ivc = wiebe(grid[0], ca50, dur)
@@ -406,15 +407,24 @@ def integrate(ch, ca50, dur, ignition, evo=None, step=STEP, wall=True):
         Vm, Vr = volume(mid, ch.cr), volume(right, ch.cr)
         xm, xr = wiebe(mid, ca50, dur), wiebe(right, ca50, dur)
         em = ch.evaporate(e, mid, st, Vm)
+        if em > e:  # cap on the no-evaporation predictor state at mid (verification item 1)
+            s0 = ch.state(U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - 0.5 * q_left * dt, Vm, xm, e,
+                          (st["T"], st["p"]))
+            em = ch.evaporate(e, mid, s0, Vm)
         er = max(em, ch.evaporate(e, right, st, Vr))
         Um = U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - Lc * (em - e) - 0.5 * q_left * dt
         sm = ch.state(Um, Vm, xm, em, (st["T"], st["p"]))
-        if anchor is None and not ch.ideal and xr >= ANCHOR_XB:
+        if anchor is None and not ch.ideal and left >= th_a - 1e-12:
             anchor = ch.endgas_anchor(st)
         q_mid = wall_heat(sm, ch, anchor) if wall else 0.0
         work = sm["p"] * (Vr - st["V"])
         de = Lc * (er - e)
         U += -work + Qa * (xr - xb) - de - q_mid * dt
+        if er > e:  # corrector: cap on the no-evaporation right state
+            s0 = ch.state(U + de, Vr, xr, e, (sm["T"], sm["p"]))
+            er2 = max(em, ch.evaporate(e, right, s0, Vr))
+            U -= Lc * (er2 - er)
+            er, de = er2, Lc * (er2 - e)
         W += work
         Qw += q_mid * dt
         Qe += de
