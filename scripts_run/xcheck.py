@@ -160,12 +160,14 @@ class Charge:
         self.burned_ref = complete + complete * R_RESID / (1.0 - R_RESID)
         self.water = np.zeros(P.gas.n_species)
         self.water[j] = w / (1.0 - w)
-        P._set(WATER_T)
-        self.h_ref = np.array(P.gas.standard_enthalpies_RT) * ct.gas_constant * T_REF * P.inv
+        # Reference state at T_REF (verification item 2, 2026-10-24): previously h_ref was read from
+        # standard_enthalpies_RT at WATER_T but scaled by T_REF, and U was referenced to h_ref instead of u_ref.
+        self.h_ref = np.array(P.h(T_REF), dtype=float).copy()
+        self.u_ref0 = np.array(P.u(T_REF), dtype=float).copy()
         hfg = PropsSI("Hmass", "T", WATER_T, "Q", 1, "Water") - PropsSI("Hmass", "T", WATER_T, "Q", 0, "Water")
         ufg = PropsSI("Umass", "T", WATER_T, "Q", 1, "Water") - PropsSI("Umass", "T", WATER_T, "Q", 0, "Water")
         self.h_lat = hfg - float(self.ph.h(WATER_T)[j] - self.h_ref[j])
-        self.u_lat = ufg - float(self.ph.u(WATER_T)[j] - self.h_ref[j])
+        self.u_lat = ufg - float(self.ph.u(WATER_T)[j] - self.u_ref0[j])
         self.m_water_basis = float(self.burned_ref[self.j])  # H2O kg per kg fuel in burned basis
         self._intake()
         vec = self.dry + self.e_intake * self.water
@@ -177,8 +179,8 @@ class Charge:
         self.Q_fuel = self.scale * self.ph.lhv
         self.Q_avail = ETA_C * self.Q_fuel
         self.L_cyl = self.water_mass * self.u_lat
-        self.u_ref = self.u_ref_arr = self.h_ref
-        self.U_ivc = self.scale * float(vec @ (self.ph.u(self.T_ivc) - self.h_ref))
+        self.u_ref = self.u_ref_arr = self.u_ref0
+        self.U_ivc = self.scale * float(vec @ (self.ph.u(self.T_ivc) - self.u_ref))
 
     def _H(self, vec, T):
         return float(vec @ (self.ph.h(T) - self.h_ref))
@@ -226,7 +228,7 @@ class Charge:
         if xb > 0.0 and T > EQ_MIN_T:
             mb_eq = self.ph.eq_masses(mb, T, p)
         tot = mu + mb_eq
-        U = float(tot @ self.ph.u(T) - (mu + mb) @ self.h_ref)
+        U = float(tot @ self.ph.u(T) - (mu + mb) @ self.u_ref)
         return U, float(tot @ self.ph.inv), tot
 
     def state(self, U, V, xb, e, guess):
