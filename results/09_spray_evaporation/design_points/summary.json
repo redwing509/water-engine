@@ -1,0 +1,205 @@
+{
+  "module": "09_spray_evaporation",
+  "version": "1.0.0",
+  "job": "water-engine-20261023-103500",
+  "labels": {
+    "status": "EXECUTED (model runs). Numerics VERIFIED by tests/test_spray_evaporation.py. NOT experimentally VALIDATED.",
+    "nominal": "Module 09 model as derived, k = 1, NOT tuned to CFD. Known limitation: vs OpenFOAM phase A it evaporates 1.5-2.5x the CFD value at A1 (1 bar, 360 K) and +1 to +12 pp at A2 (20 bar, 700 K).",
+    "cfd_matched": "SENSITIVITY BOUND, not a validated model: one droplet-gas transfer multiplier per CFD condition fitted to A1-BLEND / A2-BLEND (model-vs-model; the CFD itself is unvalidated and has wall-bounce, no film). Same multiplier applied to ethanol without ethanol CFD."
+  },
+  "assumptions": {
+    "inputs": "Module 03 design_point.json (CR, w, T_intake, rpm, trapped air/alcohol/water masses); residual gas neglected in the Module 09 parcel",
+    "pressure_trace": "Module 03 integrate_cycle(keep_trace=True) motored p(theta) with Woschni wall heat and Module 03's own water evaporation schedule, IVC -180 -> spark; imposed in Module 09 'pt' mode (adiabatic Module 09 parcel)",
+    "spark_timing": "CA50 - 0-50 % burn angle from Module 03 Wiebe a=5, m=2 (Module 03 reports no 0-50 % angle)",
+    "venturi": "carb_design.json is NOT committed on wme1-dev (an uncommitted copy exists in Hermes's working tree, not used); Nukiyama-Tanasawa at the 30 m/s SPEC fallback throat speed (FLAGGED)",
+    "runner": "U = 30.0 m/s, L = 0.2 m, D = 0.035 m, plenum T = Module 03 T_intake, 1 bar",
+    "wall": "bend deposition only (Pui et al. 1987); deposited liquid leaves the charge (no film re-evaporation; Module 13)",
+    "ethanol": "CoolProp Ethanol liquid; San Diego mechanism vapour thermo/transport; DECHEMA/ChemSep Wilson (NRTL cross-check)",
+    "properties": {
+      "ethanol_liquid": {
+        "value": "CoolProp Ethanol EOS (Schroeder et al. 2014) saturated liquid incl. CoolProp transport/surface tension"
+      },
+      "ethanol_vapour": {
+        "value": "San Diego mechanism NASA7 thermo + transport (mechanisms/sandiego.yaml), GRI-Mech 3.0 has no ethanol",
+        "caveat": "NASA7 low range starts at 300 K; 200-300 K gas values are polynomial extrapolation"
+      },
+      "activity_model_ethanol": {
+        "value": "Wilson",
+        "parameters_cal_mol": {
+          "a12": 382.2999999999997,
+          "a21": 955.4499999999992,
+          "V1": 58.62613541516765,
+          "V2": 18.07
+        },
+        "source": "DECHEMA (Gmehling et al.) ethanol-water parameters as distributed in the ChemSep interaction-parameter database (Kooijman & Taylor 2008), files wilson.json / nrtl.ipd of the 'thermo' Python package (C. Bell)",
+        "cross_check": {
+          "model": "NRTL",
+          "parameters_cal_mol": {
+            "b12": -57.9601,
+            "b21": 1241.7396,
+            "alpha": 0.2937
+          }
+        }
+      },
+      "liquid_properties": {
+        "value": "CoolProp saturated liquid (water IAPWS-95; methanol de Reuck & Craven 1993)",
+        "coolprop": true
+      },
+      "gas_thermo_transport": {
+        "value": "Cantera GRI-Mech 3.0 NASA polynomials and mixture-averaged transport",
+        "cantera_version": "3.2.0"
+      },
+      "film_mixing_rule": {
+        "value": "Wilke (1950) viscosity, Mason & Saxena (1958) conductivity"
+      },
+      "activity_model": {
+        "value": "Wilson",
+        "parameters_cal_mol": {
+          "a12": 107.38,
+          "a21": 469.55,
+          "V1": 40.73,
+          "V2": 18.07
+        },
+        "source": "Gmehling et al., Vapor-Liquid Equilibrium Data Collection, DECHEMA Chemistry Data Series vol. I (1977-1988), via Smith, Van Ness & Abbott, Intro. Chem. Eng. Thermodynamics 7th ed., Table 13.10",
+        "cross_check": {
+          "model": "NRTL",
+          "parameters_cal_mol": {
+            "b12": -253.88,
+            "b21": 845.21,
+            "alpha": 0.2994
+          }
+        }
+      },
+      "liquid_mixture_density": {
+        "value": "ideal volume additivity",
+        "rationale": "excess volume of methanol-water about -3 %, neglected"
+      },
+      "blend_sigma_mu_for_SMD": {
+        "value": "ideal mole-fraction sigma, Arrhenius log-mole mu",
+        "caveat": "approximation; real blend sigma is lower, so blend SMD is biased high"
+      }
+    }
+  },
+  "cfd_matched_fit": {
+    "fits": {
+      "A1-BLEND": {
+        "case": "A1-BLEND",
+        "k": 0.3401352992512557,
+        "rms_pp_fitted": 0.0319520802747564,
+        "rms_pp_nominal": 0.8860012906732595,
+        "p_Pa": 100000.0,
+        "T_K": 360.0,
+        "cfd_end_pct": 1.0236442279732527,
+        "m09_end_pct_fitted": 0.9704422122187066,
+        "t_end_ms": 6.0,
+        "n_evals": 12,
+        "SMD_matched_um": 125.58099999999999,
+        "objective": "RMS of evaporated % on a 0.1 ms grid"
+      },
+      "A2-BLEND": {
+        "case": "A2-BLEND",
+        "k": 0.7069808162377191,
+        "rms_pp_fitted": 0.7837088582843669,
+        "rms_pp_nominal": 9.655880179404202,
+        "p_Pa": 2000000.0,
+        "T_K": 700.0,
+        "cfd_end_pct": 39.83771849643515,
+        "m09_end_pct_fitted": 37.95689427677825,
+        "t_end_ms": 3.0,
+        "n_evals": 11,
+        "SMD_matched_um": 22.8655,
+        "objective": "RMS of evaporated % on a 0.1 ms grid"
+      }
+    },
+    "interpolation": "k(p): ln-p interpolation between A1 (1 bar) and A2 (20 bar), clamped; k_A1 in runner/induction",
+    "cfd_dir": "/tmp/cfd-e2481f7/cfd/results",
+    "cfd_ref": "wme1-cfd@e2481f7"
+  },
+  "spark": {
+    "CH3OH/best_dry": {
+      "theta_spark_deg_aTDC": -12.084816145276156,
+      "wiebe_total_duration_deg": 50.40062953778609,
+      "burn_0_50_deg": 26.084816145276154,
+      "m03_xb_max_before_spark": 0.0,
+      "m03_reproduction": {
+        "eta_regen": 0.4206736501202768,
+        "eta_design": 0.42067365012032965,
+        "p_peak_regen": 7035167.567285814,
+        "p_peak_design": 7035167.567293196,
+        "reproduced": true
+      }
+    },
+    "CH3OH/best_overall": {
+      "theta_spark_deg_aTDC": -20.939138217580467,
+      "wiebe_total_duration_deg": 55.915701162079976,
+      "burn_0_50_deg": 28.939138217580467,
+      "m03_xb_max_before_spark": 0.0,
+      "m03_reproduction": {
+        "eta_regen": 0.4542732229223942,
+        "eta_design": 0.45427322292256445,
+        "p_peak_regen": 11689150.94290325,
+        "p_peak_design": 11689150.942901447,
+        "reproduced": true
+      }
+    },
+    "CH3OH/water_majority": {
+      "theta_spark_deg_aTDC": -30.965150645751763,
+      "wiebe_total_duration_deg": 75.28778856032723,
+      "burn_0_50_deg": 38.96515064575176,
+      "m03_xb_max_before_spark": 0.0,
+      "m03_reproduction": {
+        "eta_regen": 0.4310093295965566,
+        "eta_design": 0.43100932959499566,
+        "p_peak_regen": 10627485.569313185,
+        "p_peak_design": 10627485.569307549,
+        "reproduced": true
+      }
+    },
+    "C2H5OH/best_dry": {
+      "theta_spark_deg_aTDC": -12.084816145276156,
+      "wiebe_total_duration_deg": 50.40062953778609,
+      "burn_0_50_deg": 26.084816145276154,
+      "m03_xb_max_before_spark": 0.0,
+      "m03_reproduction": {
+        "eta_regen": 0.44544580341809387,
+        "eta_design": 0.4454458034178978,
+        "p_peak_regen": 9644837.095937919,
+        "p_peak_design": 9644837.095919432,
+        "reproduced": true
+      }
+    },
+    "C2H5OH/best_overall": {
+      "theta_spark_deg_aTDC": -23.050710688962912,
+      "wiebe_total_duration_deg": 59.99564488411411,
+      "burn_0_50_deg": 31.050710688962912,
+      "m03_xb_max_before_spark": 0.0,
+      "m03_reproduction": {
+        "eta_regen": 0.4528978221177754,
+        "eta_design": 0.4528978221179767,
+        "p_peak_regen": 11754674.126255454,
+        "p_peak_design": 11754674.12625549,
+        "reproduced": true
+      }
+    },
+    "C2H5OH/water_majority": {
+      "theta_spark_deg_aTDC": -30.905677683756217,
+      "wiebe_total_duration_deg": 75.17287593420949,
+      "burn_0_50_deg": 38.90567768375622,
+      "m03_xb_max_before_spark": 0.0,
+      "m03_reproduction": {
+        "eta_regen": 0.43784739852222343,
+        "eta_design": 0.4378473985204935,
+        "p_peak_regen": 11202916.271438368,
+        "p_peak_design": 11202916.271438774,
+        "reproduced": true
+      }
+    }
+  },
+  "n_cases": 84,
+  "n_failed": 0,
+  "failed": [],
+  "max_mass_error_rel": 1.1887350836182915e-11,
+  "max_energy_closure_rel": 0.0006242846060950479,
+  "runtime_s": 127.55780906100017,
+  "git_sha": "e32288ebcdbf4d846f3af7c0fd05851dd3d7c6fb"
+}
