@@ -1,0 +1,341 @@
+{
+ "cases": [
+  {
+   "T_plenum_K": 360.0,
+   "U_runner_m_s": 30.0,
+   "L_runner_m": 0.2,
+   "atomiser": "carb_venturi",
+   "w": 0.6
+  },
+  {
+   "T_plenum_K": 360.0,
+   "U_runner_m_s": 30.0,
+   "L_runner_m": 0.2,
+   "atomiser": "psi_3bar",
+   "w": 0.6
+  },
+  {
+   "T_plenum_K": 360.0,
+   "U_runner_m_s": 30.0,
+   "L_runner_m": 0.2,
+   "atomiser": "ultrasonic_120kHz",
+   "w": 0.0
+  }
+ ],
+ "run_case": [
+  {
+   "ci": 0,
+   "rtol": 1e-05,
+   "classes": 8,
+   "runtime": 1.5173670329968445,
+   "evaporated_IVC_pct": 2.8791349113916733,
+   "evaporated_spark_pct": 2.8791349113916733,
+   "wall_impinged_pct": 97.12086514051668,
+   "SMD_spark_um": 0.0,
+   "T_spark_K": 736.5017075500938
+  },
+  {
+   "ci": 0,
+   "rtol": 1e-06,
+   "classes": 8,
+   "runtime": 1.520506993001618,
+   "evaporated_IVC_pct": 2.8791217981570116,
+   "evaporated_spark_pct": 2.8791217981570116,
+   "wall_impinged_pct": 97.12087820428775,
+   "SMD_spark_um": 0.0,
+   "T_spark_K": 736.5629184825577
+  },
+  {
+   "ci": 0,
+   "rtol": 1e-07,
+   "classes": 8,
+   "runtime": 1.555482290998043,
+   "evaporated_IVC_pct": 2.879119547131222,
+   "evaporated_spark_pct": 2.879119547131222,
+   "wall_impinged_pct": 97.12088045286401,
+   "SMD_spark_um": 0.0,
+   "T_spark_K": 736.5752805211523
+  },
+  {
+   "ci": 0,
+   "rtol": 1e-08,
+   "classes": 8,
+   "runtime": 1.7597736440002336,
+   "evaporated_IVC_pct": 2.879118591307945,
+   "evaporated_spark_pct": 2.879118591307945,
+   "wall_impinged_pct": 97.12088140868727,
+   "SMD_spark_um": 0.0,
+   "T_spark_K": 736.5769794416256
+  },
+  {
+   "ci": 0,
+   "rtol": 1e-09,
+   "classes": 8,
+   "runtime": 0.5483628299989505,
+   "evaporated_IVC_pct": 2.879118502392244,
+   "evaporated_spark_pct": 2.879118502392244,
+   "wall_impinged_pct": 97.12088149760586,
+   "SMD_spark_um": 0.0,
+   "T_spark_K": 736.5769711439888
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-05,
+   "classes": 8,
+   "runtime": 0.1425948830001289,
+   "evaporated_IVC_pct": 3.324559640948971,
+   "evaporated_spark_pct": 3.3245596409497304,
+   "wall_impinged_pct": 96.6754403590426,
+   "SMD_spark_um": 52.27239366533326,
+   "T_spark_K": 731.741083861641
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-06,
+   "classes": 8,
+   "runtime": 0.17178966000210494,
+   "evaporated_IVC_pct": 3.3245219452168953,
+   "evaporated_spark_pct": 3.3245219452176547,
+   "wall_impinged_pct": 96.67547805477457,
+   "SMD_spark_um": 52.27285636599069,
+   "T_spark_K": 731.8266128097463
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-07,
+   "classes": 8,
+   "runtime": 0.23421582500304794,
+   "evaporated_IVC_pct": 3.324517307449322,
+   "evaporated_spark_pct": 3.324517307450082,
+   "wall_impinged_pct": 96.67548269254213,
+   "SMD_spark_um": 52.272911215225214,
+   "T_spark_K": 731.840521638482
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-08,
+   "classes": 8,
+   "runtime": 0.33760594200430205,
+   "evaporated_IVC_pct": 3.3245179126394078,
+   "evaporated_spark_pct": 3.324517912640169,
+   "wall_impinged_pct": 96.67548208735205,
+   "SMD_spark_um": 52.272929133586935,
+   "T_spark_K": 731.8420402922615
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-09,
+   "classes": 8,
+   "runtime": 0.6260353719990235,
+   "evaporated_IVC_pct": 3.324518058491414,
+   "evaporated_spark_pct": 3.324518058492174,
+   "wall_impinged_pct": 96.67548194150007,
+   "SMD_spark_um": 52.27293783219426,
+   "T_spark_K": 731.8421333593873
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-05,
+   "classes": 8,
+   "runtime": 1.7174235169950407,
+   "evaporated_IVC_pct": 43.610539471528824,
+   "evaporated_spark_pct": 51.858408241595214,
+   "wall_impinged_pct": 47.547627746242895,
+   "SMD_spark_um": 10.530137484193528,
+   "T_spark_K": 561.8232294887109
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-06,
+   "classes": 8,
+   "runtime": 2.421379102001083,
+   "evaporated_IVC_pct": 43.61068119933023,
+   "evaporated_spark_pct": 51.8585159980441,
+   "wall_impinged_pct": 47.547467269885665,
+   "SMD_spark_um": 10.530269416294232,
+   "T_spark_K": 561.8205721139888
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-07,
+   "classes": 8,
+   "runtime": 3.4615570950045367,
+   "evaporated_IVC_pct": 43.61073632364325,
+   "evaporated_spark_pct": 51.85853719404751,
+   "wall_impinged_pct": 47.54740667459674,
+   "SMD_spark_um": 10.530366917483095,
+   "T_spark_K": 561.8181151860122
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-08,
+   "classes": 8,
+   "runtime": 5.752617122998345,
+   "evaporated_IVC_pct": 43.61073632347602,
+   "evaporated_spark_pct": 51.8585358561387,
+   "wall_impinged_pct": 47.547404523709474,
+   "SMD_spark_um": 10.530376275075694,
+   "T_spark_K": 561.8178949923926
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-09,
+   "classes": 8,
+   "runtime": 8.201951046998147,
+   "evaporated_IVC_pct": 43.610737251521265,
+   "evaporated_spark_pct": 51.85853531069934,
+   "wall_impinged_pct": 47.54740401896413,
+   "SMD_spark_um": 10.530378893802807,
+   "T_spark_K": 561.817825993107
+  },
+  {
+   "ci": 0,
+   "rtol": 1e-07,
+   "classes": 16,
+   "runtime": 0.2673872579980525,
+   "evaporated_IVC_pct": 2.8793307810728934,
+   "evaporated_spark_pct": 2.8793307810729423,
+   "wall_impinged_pct": 97.12066921876976,
+   "SMD_spark_um": 54.32275921614342,
+   "T_spark_K": 736.4795289018807
+  },
+  {
+   "ci": 0,
+   "rtol": 1e-07,
+   "classes": 32,
+   "runtime": 0.3963826790059102,
+   "evaporated_IVC_pct": 2.8804094807864264,
+   "evaporated_spark_pct": 2.8804094840823353,
+   "wall_impinged_pct": 97.11959049386739,
+   "SMD_spark_um": 41.425040503331736,
+   "T_spark_K": 736.4233963772217
+  },
+  {
+   "ci": 0,
+   "rtol": 1e-07,
+   "classes": 64,
+   "runtime": 0.5938426529974095,
+   "evaporated_IVC_pct": 2.8819238417213096,
+   "evaporated_spark_pct": 2.8819268673306278,
+   "wall_impinged_pct": 97.1180617520132,
+   "SMD_spark_um": 30.847291222026445,
+   "T_spark_K": 736.3871887471137
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-07,
+   "classes": 16,
+   "runtime": 0.2751865039972472,
+   "evaporated_IVC_pct": 3.329688678131749,
+   "evaporated_spark_pct": 3.329688704240104,
+   "wall_impinged_pct": 96.6703111302559,
+   "SMD_spark_um": 39.72138197224291,
+   "T_spark_K": 731.6787020661866
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-07,
+   "classes": 32,
+   "runtime": 0.40757508800015785,
+   "evaporated_IVC_pct": 3.3348238540673947,
+   "evaporated_spark_pct": 3.3348388028687275,
+   "wall_impinged_pct": 96.66510925576415,
+   "SMD_spark_um": 29.42447010210197,
+   "T_spark_K": 731.5731125529876
+  },
+  {
+   "ci": 1,
+   "rtol": 1e-07,
+   "classes": 64,
+   "runtime": 0.827821832994232,
+   "evaporated_IVC_pct": 3.340059407858805,
+   "evaporated_spark_pct": 3.340745228924908,
+   "wall_impinged_pct": 96.65812297163387,
+   "SMD_spark_um": 20.723283768843142,
+   "T_spark_K": 731.4740591286159
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-07,
+   "classes": 16,
+   "runtime": 6.847138105003978,
+   "evaporated_IVC_pct": 44.01641447111647,
+   "evaporated_spark_pct": 52.32549796608146,
+   "wall_impinged_pct": 47.05830263756017,
+   "SMD_spark_um": 10.63933278461089,
+   "T_spark_K": 560.2082693052878
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-07,
+   "classes": 32,
+   "runtime": 15.962048030000005,
+   "evaporated_IVC_pct": 44.04757900223113,
+   "evaporated_spark_pct": 52.39422058121272,
+   "wall_impinged_pct": 46.98528978186409,
+   "SMD_spark_um": 10.56300042406946,
+   "T_spark_K": 559.9681703730096
+  },
+  {
+   "ci": 2,
+   "rtol": 1e-07,
+   "classes": 64,
+   "runtime": 38.61240444499708,
+   "evaporated_IVC_pct": 44.050813139892256,
+   "evaporated_spark_pct": 52.41676679349537,
+   "wall_impinged_pct": 46.96060185398939,
+   "SMD_spark_um": 10.586273546885865,
+   "T_spark_K": 559.8798347392968
+  }
+ ],
+ "chamber": [
+  {
+   "case": "A1-H2O",
+   "packets": 5,
+   "evap_eoi_pct": 3.841833481594223,
+   "evap_end_pct": 7.33123539016729
+  },
+  {
+   "case": "A1-H2O",
+   "packets": 10,
+   "evap_eoi_pct": 3.8361125272631535,
+   "evap_end_pct": 7.330798467207831
+  },
+  {
+   "case": "A1-H2O",
+   "packets": 20,
+   "evap_eoi_pct": 3.834641500555735,
+   "evap_end_pct": 7.330688154977947
+  },
+  {
+   "case": "A1-H2O",
+   "packets": 40,
+   "evap_eoi_pct": 3.8335331183764483,
+   "evap_end_pct": 7.330660594519571
+  },
+  {
+   "case": "A2-BLEND",
+   "packets": 5,
+   "evap_eoi_pct": 23.791399520086486,
+   "evap_end_pct": 75.58409136859913
+  },
+  {
+   "case": "A2-BLEND",
+   "packets": 10,
+   "evap_eoi_pct": 23.764728575121662,
+   "evap_end_pct": 75.58221910202617
+  },
+  {
+   "case": "A2-BLEND",
+   "packets": 20,
+   "evap_eoi_pct": 23.750757549087606,
+   "evap_end_pct": 75.58169316113151
+  },
+  {
+   "case": "A2-BLEND",
+   "packets": 40,
+   "evap_eoi_pct": 23.74903354411657,
+   "evap_end_pct": 75.58155247801449
+  }
+ ]
+}
