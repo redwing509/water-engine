@@ -109,6 +109,11 @@ def otto(engine):
     return (engine, "otto", res)
 
 
+def _np(o):
+    """numpy scalars (np.bool_, np.float64 ...) to plain Python for JSON."""
+    return o.item() if hasattr(o, "item") else str(o)
+
+
 def safe(f, n):
     """Run one task; never let an exception object cross the process boundary."""
     try:
@@ -188,7 +193,7 @@ def main():
     raw = {"X5": {}, "M03": {}}
     for eng, name, d in got:
         raw[eng][name] = d
-    (out / "raw.json").write_text(json.dumps(raw, indent=1))
+    (out / "raw.json").write_text(json.dumps(raw, indent=1, default=_np))
     errors = {f"{e}/{n}": d["error"] for e in raw for n, d in raw[e].items() if "error" in d}
     if errors:
         (out / "errors.json").write_text(json.dumps(errors, indent=1))
@@ -197,7 +202,7 @@ def main():
     rep = evaluate(raw); rep["wall_s"] = time.time() - t0
     import cantera, CoolProp
     rep["env"] = dict(python=sys.version.split()[0], cantera=cantera.__version__, coolprop=CoolProp.__version__, procs=a.procs)
-    (out / "report.json").write_text(json.dumps(rep, indent=1))
+    (out / "report.json").write_text(json.dumps(rep, indent=1, default=_np))
     print(json.dumps(rep["criteria"], indent=1))
 
 
