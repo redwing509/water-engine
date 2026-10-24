@@ -341,7 +341,6 @@ def oxygen_bookkeeping(fuel: str = BOOKKEEP_FUEL, w: float = BOOKKEEP_W,
         # exactly and the net energy change must be zero.
         fuel_name = fuels.species_name(gas, fuel)
         mw_fuel = gas.molecular_weights[gas.species_index(fuel_name)]
-        mol_per_kg = 1000.0 / mw_fuel
         dry_path = _mechanism_path(fuel, "real")
         wet_path = _mechanism_path(fuel, "real")
         # Stoichiometric O2 demand (mol/mol fuel) from the C/H/O atom balance,
@@ -353,23 +352,23 @@ def oxygen_bookkeeping(fuel: str = BOOKKEEP_FUEL, w: float = BOOKKEEP_W,
         P_ref = fuels.REFERENCE_P_PA
         c_atoms = fuels.FUELS[fuel].atoms[0]
         h_atoms = fuels.FUELS[fuel].atoms[1]
-        o_atoms = fuels.FUELS[fuel].atoms[2]
 
-        def _heat_release_298K(gas_ref, fuel_name, mw_fuel, mol_per_kg,
-                                stoich_o2, stoich_n2, c_atoms, h_atoms, o_atoms,
-                                w_water=0.0):
-            """Heat release (J per kg fuel) from formation enthalpies at 298 K.
+        def _heat_release_298K(gas_ref, fuel_name, mw_fuel,
+                               stoich_o2, stoich_n2, c_atoms, h_atoms,
+                               w_water=0.0):
+            """Heat release (J per kg fuel) at constant pressure, 298.15 K.
 
             Reactants: fuel + stoich O2 + stoich N2 [+ w H2O]
             Products:  c CO2 + h/2 H2O + stoich N2 [+ w H2O]
-            Water terms cancel exactly (same moles on both sides).
+            Water terms cancel exactly (same moles at the same T on both
+            sides).  Enthalpy basis, same convention as fuels.lhv.
             """
             # Reactant mixture
             react_X = {fuel_name: 1.0, "O2": stoich_o2, "N2": stoich_n2}
             if w_water > 0:
                 react_X["H2O"] = w_water
             gas_ref.TPX = T_ref, P_ref, react_X
-            h_react = float(gas_ref.int_energy_mole)
+            h_react = float(gas_ref.enthalpy_mole)
 
             # Product mixture (complete combustion products at 298 K)
             n_CO2 = c_atoms
@@ -379,29 +378,28 @@ def oxygen_bookkeeping(fuel: str = BOOKKEEP_FUEL, w: float = BOOKKEEP_W,
             prod_X = {"CO2": n_CO2 / n_total, "H2O": n_H2O / n_total,
                       "N2": n_N2 / n_total}
             gas_ref.TPX = T_ref, P_ref, prod_X
-            h_prod = float(gas_ref.int_energy_mole)
+            h_prod = float(gas_ref.enthalpy_mole)
 
-            # Per kg fuel: (h_react - h_prod) / mol_per_kg
-            # h values are J/kmol of mixture; need to scale to per mole of fuel
-            # Reactant mixture has 1 + stoich_o2 + stoich_n2 [+ w] moles per mole fuel
+            # Per kg fuel: enthalpy_mole is J/kmol of mixture, so
+            # (h_react*n_react_total - h_prod*n_prod_total) is J/kmol per
+            # kmol of fuel; dividing by the fuel molar mass [kg/kmol]
+            # gives J per kg fuel (dimensionally consistent).
             n_react_total = 1.0 + stoich_o2 + stoich_n2 + w_water
             n_prod_total = n_total  # moles of product per mole fuel
-            # int_energy_mole is J/kmol of mixture; multiply by moles of mixture
-            # per mole of fuel to get J/mol fuel, then /1000 for J/kg fuel
-            Q = (h_react * n_react_total - h_prod * n_prod_total) / mol_per_kg
+            Q = (h_react * n_react_total - h_prod * n_prod_total) / mw_fuel
             return Q
 
         # Dry mixture: fuel + air
         dry_gas = ct.Solution(dry_path)
-        Q_dry = _heat_release_298K(dry_gas, fuel_name, mw_fuel, mol_per_kg,
-                                  stoich_o2, stoich_n2, c_atoms, h_atoms, o_atoms,
-                                  w_water=0.0)
+        Q_dry = _heat_release_298K(dry_gas, fuel_name, mw_fuel,
+                                   stoich_o2, stoich_n2, c_atoms, h_atoms,
+                                   w_water=0.0)
 
         # Wet mixture: fuel + air + w * water (water at 298 K)
         wet_gas = ct.Solution(wet_path)
-        Q_wet = _heat_release_298K(wet_gas, fuel_name, mw_fuel, mol_per_kg,
-                                  stoich_o2, stoich_n2, c_atoms, h_atoms, o_atoms,
-                                  w_water=w)
+        Q_wet = _heat_release_298K(wet_gas, fuel_name, mw_fuel,
+                                   stoich_o2, stoich_n2, c_atoms, h_atoms,
+                                   w_water=w)
 
         rel_error = abs(Q_wet - Q_dry) / max(abs(Q_dry), 1.0)
         energy_closure = rel_error
