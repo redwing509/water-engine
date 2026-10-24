@@ -92,6 +92,7 @@ class Parameters:
     wiebe_a: float = 5.0
     wiebe_m: float = 2.0
     combustion_efficiency: float = 0.98
+    burn_model: str = "wiebe"
     burn_duration_ref_rad: float = 25.0 * RAD
     burn_duration_cap_rad: float = 80.0 * RAD
     flame_speed_exponent: float = 0.5
@@ -165,6 +166,13 @@ def _wiebe_z(x, par):
     return (-math.log1p(-x) / par.wiebe_a) ** (1.0 / (par.wiebe_m + 1.0))
 
 
+def burn_release(theta, ca50, duration, par=DEFAULTS):
+    """Mass fraction burned x(theta); dispatches on par.burn_model."""
+    if par.burn_model == "qd":
+        return _qd_burn(theta, ca50, duration, par)
+    return wiebe(theta, ca50, duration, par)
+
+
 def wiebe(theta, ca50, duration, par=DEFAULTS):
     """Mass fraction burned, x = 1 - exp(-a z^(m+1)); Heywood (1988) eq. 9.23.
 
@@ -177,9 +185,54 @@ def wiebe(theta, ca50, duration, par=DEFAULTS):
 
 
 def burn_angle(fraction, ca50, duration, par=DEFAULTS):
-    """Crank angle [rad] at which the Wiebe curve reaches `fraction`."""
+    """Crank angle [rad] at which the burn curve reaches `fraction`."""
+    if par.burn_model == "qd":
+        return _qd_burn_angle(fraction, ca50, duration, par)
     span = _wiebe_z(0.9, par) - _wiebe_z(0.1, par)
     return ca50 + duration * (_wiebe_z(fraction, par) - _wiebe_z(0.5, par)) / span
+
+
+# ------------------------------------------------- Module 10: QD entrainment burn
+# Tabaczynski-type turbulent entrainment (sims/10_qd_burn/run.py, SPEC section 3):
+#   entrainment_rate = rho_u * A_f * (u' + S_L)   -> characteristic time tau_e
+#   burn_up_time     = lambda / S_L                -> characteristic time tau_b
+# Serial form: the entrained lumps burn with a burn-up lag, so the cumulative
+# mass fraction burned is a ramp delayed by tau_b.  Module 10 constants
+# (C_T=2.0 tumble factor, C_L=0.1 integral scale, C_LAM=1.0 microscale) set
+# the physical timescales; here the absolute duration is still the
+# flame-speed-derived burn_duration (Tabaczynski re-derivation is a future
+# calibration step), so the QD curve differs from Wiebe in SHAPE only.
+def _qd_timescales(ca50, duration, par):
+    """Serial entrainment/burn-up times [s] consistent with (ca50, duration)."""
+    omega = par.rpm * 2.0 * math.pi / 60.0
+    tau_e = (duration / 0.8) / omega          # 10-90 % span == 0.8 * tau_e
+    tau_b = max(0.0, (ca50 - 0.5 * tau_e * omega) / omega)
+    return tau_e, tau_b
+
+
+def _qd_burn(theta, ca50, duration, par):
+    """Mass fraction burned x(theta) for the QD entrainment ramp.
+
+    Ramp from x=0 at CA10 to x=1 at CA90 (10-90 % span == 0.8 * tau_e).
+    Linear in theta; this is the serial entrainment + burn-up form where
+    the burn-up lag is folded into the ramp (tau_b <= 0.5 * tau_e here).
+    """
+    tau_e, _ = _qd_timescales(ca50, duration, par)
+    cad_per_tau_e = tau_e * par.rpm / 60.0 * 360.0
+    if cad_per_tau_e <= 0.0:
+        return 1.0 if theta >= ca50 else 0.0
+    start = ca50 - 0.5 * cad_per_tau_e
+    return max(0.0, min(1.0, (theta - start) / cad_per_tau_e))
+
+
+def _qd_burn_angle(fraction, ca50, duration, par):
+    """Crank angle [rad] at which the QD ramp reaches `fraction`."""
+    tau_e, _ = _qd_timescales(ca50, duration, par)
+    cad_per_tau_e = tau_e * par.rpm / 60.0 * 360.0
+    if cad_per_tau_e <= 0.0:
+        return ca50
+    start = ca50 - 0.5 * cad_per_tau_e
+    return start + fraction * cad_per_tau_e
 
 
 def burn_duration(sl, sl_ref, par=DEFAULTS):
@@ -816,7 +869,7 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
     nodes += [a for a in (par.evap_end_rad, theta90) if par.ivc_rad < a < evo]
     grid = np.unique(np.array(nodes, dtype=float))
     Qa, Lc = charge.Q_avail, charge.L_cyl
-    xb = x_ivc = wiebe(grid[0], ca50, duration, par)
+    xb = x_ivc = burn_release(grid[0], ca50, duration, par)
     e = charge.e_intake
     st = charge.state(charge.U_ivc, volume(grid[0], charge.cr, par), xb, e,
                       (charge.T_ivc, par.p_ivc_Pa))
@@ -846,7 +899,7 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
         mid = 0.5 * (left + right)
         dt = (right - left) / omega
         Vm, Vr = volume(mid, charge.cr, par), volume(right, charge.cr, par)
-        xm, xr = wiebe(mid, ca50, duration, par), wiebe(right, ca50, duration, par)
+        xm, xr = burn_release(mid, ca50, duration, par), burn_release(right, ca50, duration, par)
         em = charge.evaporate(e, mid, st, Vm)
         er = max(em, charge.evaporate(e, right, st, Vr))
         U_mid = U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - Lc * (em - e) - 0.5 * q_left * dt
@@ -1379,6 +1432,7 @@ def assumptions(mode, workers, provenance, par=DEFAULTS):
     sources = {
         "bore_m,stroke_m,rod_m,rpm,ivc_rad,evo_rad,residual_fraction,p_ivc_Pa,phi": "SPEC section 6 default test engine (WOT, IVC at BDC, EVO 140 CAD aTDC)",
         "wiebe_a,wiebe_m,combustion_efficiency,burn_duration_ref_rad,burn_duration_cap_rad,flame_speed_exponent,ca50_rad": "SPEC section 6: Wiebe a=5, m=2; eta_c 0.98; 10-90 % duration 25 CAD*(S_L,ref/S_L)^0.5, cap 80 CAD; CA50 8 CAD aTDC (MBT proxy). Wiebe form: Heywood (1988) eq. 9.23",
+        "burn_model": "SPEC section 10: heat release model selector. 'wiebe' (default) = Heywood eq. 9.23 mass fraction burned; 'qd' = Tabaczynski turbulent entrainment ramp (sims/10_qd_burn/run.py), serial entrainment + burn-up, 10-90 % span == 0.8*tau_e; absolute duration is still flame-speed-derived so qd differs from wiebe in burn SHAPE only.",
         "knock_burn_fraction,retard_step_rad,retard_limit_rad": "SPEC section 6 Livengood-Wu knock criterion and retard rule",
         "endgas_anchor_xb": "Numerical: end gas is the bulk charge until x_b = 1e-3, then a frozen isentrope (standard two-zone practice); also the Woschni motored-pressure reference",
         "selection_ca50_limit_rad,flame_speed_min_m_s,peak_pressure_limit_Pa": "SPEC section 6 water-majority map constraints",
@@ -1501,10 +1555,15 @@ def main(argv=None):
                         help="Atomiser/variant evaporation profile, e.g. carb_venturi|nominal. "
                         "Uses sims/03_engine_cycle/evap_profile.py; falls back to the default "
                         "f_evap_intake schedule when the point is not covered.")
+    parser.add_argument("--burn-model", choices=("wiebe", "qd"), default="wiebe",
+                        help="Heat release model: wiebe (Heywood eq. 9.23, default) or qd "
+                        "(Tabaczynski turbulent entrainment ramp, Module 10). "
+                        "Default wiebe keeps existing results unchanged.")
     args = parser.parse_args(None if argv is None else list(map(str, argv)))
     names = sweep(args.mode)[0]
     ignition, flame, provenance = read_fits(args.fits_dir, args.mode, names)  # --full: raises if missing
     par = replace(DEFAULTS, step_rad=DEFAULTS.quick_step_rad) if args.mode == "quick" else DEFAULTS
+    par = replace(par, burn_model=args.burn_model)
     args.out.mkdir(parents=True, exist_ok=True)
     evap_profile = _build_evap_profile(args.evap_profile) if args.evap_profile else None
     tasks = build_tasks(args.mode, ignition, flame, provenance, par, evap_profile=evap_profile)
