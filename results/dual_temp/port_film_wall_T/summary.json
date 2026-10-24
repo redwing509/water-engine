@@ -1,0 +1,132 @@
+{
+  "status": "executed estimate; not verified (no 2nd engine), not validated",
+  "ranges_over_sensitivity": {
+    "normal (T_port_wall 363 K)": {
+      "n": 504,
+      "film_evap_frac": [
+        0.020157533077749867,
+        1.0
+      ],
+      "film_deposit_mg": [
+        30.299180848176153,
+        181.94123441541637
+      ],
+      "film_capacity_mg": [
+        3.5265964598993573,
+        464.41989712712547
+      ],
+      "misfire_reachable": {
+        "SMD200": [
+          280,
+          504
+        ],
+        "SMD350": [
+          331,
+          504
+        ],
+        "SMD500": [
+          336,
+          504
+        ]
+      }
+    },
+    "hot (T_port_wall 388 K)": {
+      "n": 504,
+      "film_evap_frac": [
+        0.1197944355875291,
+        1.0
+      ],
+      "film_deposit_mg": [
+        30.299180848176153,
+        181.94123441541637
+      ],
+      "film_capacity_mg": [
+        14.928298615842994,
+        776.0145751596773
+      ],
+      "misfire_reachable": {
+        "SMD200": [
+          118,
+          504
+        ],
+        "SMD350": [
+          165,
+          504
+        ],
+        "SMD500": [
+          203,
+          504
+        ]
+      }
+    },
+    "hot+heated_port (T_port_wall 420 K)": {
+      "n": 504,
+      "film_evap_frac": [
+        0.2485704849428498,
+        1.0
+      ],
+      "film_deposit_mg": [
+        30.299180848176153,
+        181.94123441541637
+      ],
+      "film_capacity_mg": [
+        38.32508199258355,
+        776.0145751596773
+      ],
+      "misfire_reachable": {
+        "SMD200": [
+          45,
+          504
+        ],
+        "SMD350": [
+          110,
+          504
+        ],
+        "SMD500": [
+          120,
+          504
+        ]
+      }
+    }
+  },
+  "nominal_Lwet_0p05_h_3e4": {
+    "normal": {
+      "cases": 84,
+      "misfire_reachable_SMD350": 42,
+      "mean_film_evap_frac": 0.6228704044763971
+    },
+    "hot": {
+      "cases": 84,
+      "misfire_reachable_SMD350": 0,
+      "mean_film_evap_frac": 0.9811841365431386
+    },
+    "hot+heated_port": {
+      "cases": 84,
+      "misfire_reachable_SMD350": 0,
+      "mean_film_evap_frac": 1.0
+    }
+  },
+  "walls": [
+    {
+      "regime": "normal",
+      "port_wall_K": 363.15,
+      "plenum_K": 360.0
+    },
+    {
+      "regime": "hot",
+      "port_wall_K": 388.15,
+      "plenum_K": 400.0
+    },
+    {
+      "regime": "hot+heated_port",
+      "port_wall_K": 420.0,
+      "plenum_K": 400.0
+    }
+  ],
+  "rpm": 2000.0,
+  "p_port_Pa": 100000.0,
+  "D_runner_m": 0.035,
+  "U_runner_m_s": 30.0,
+  "duty": 0.3194444444444444,
+  "CHF_W_m2": 1000000.0
+}
