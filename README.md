@@ -1,3 +1,5 @@
+> **Verification status: not yet peer-review verified.** The models on this branch have unit and regression tests. None of them has a VERIFICATION.md meeting the project peer-review standard: pre-stated tolerances, step or grid convergence with GCI, an analytic or published benchmark, and an energy-closure check. No result here counts toward the 2-engine rule, and none may be merged to `main` until that standard is met. The per-model status table is `VERIFICATION_STATUS.md` on branch `publish/verification-status-20261024`.
+
 # Water Engine — an honest, simulation-backed investigation
 
 > **Status: work in progress.** Simulations are being built and run; results land in `results/` as they finish.
