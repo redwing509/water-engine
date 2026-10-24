@@ -166,3 +166,9 @@ The Module 03 peak pressures at the design points (from `design_point.json`):
 - Image `opencfd/openfoam-default:2512` (digest sha256:33fb575aa998…). Two fixes applied on mail: `chmod -R 777 /opt/water-engine/cfd` for bind-mount write access; `--allow-run-as-root` added to `mpirun` in `run_case.sh`.
 - Runtime: 3037 s wall (blockMesh + decomposePar + sprayFoam -parallel, 6 ranks, build _87ed40d2-20251219, container aa3e7072180a). rc 0. Outputs in `runs/A1-BLEND-fine/postProcessing/distribution1/`. Provenance written to `/opt/water-engine/cfd/PROVENANCE.md`.
 - Recommended design point (Modules 04/06/07): **C2H5OH, CR 24, w 0.6, T_intake 360 K** — highest gross indicated efficiency among feasible w > 0.5 points of the design fuels.
+
+## 2026-10-24: STANDING RULE, dual-temperature combustion runs (James, via Grok Bot)
+- Every combustion simulation must be run in a **normal** and a **high-performance (hot)** temperature regime. Report the two side by side and conclude whether hotter is better. If a job names only one regime, add the other as a variant. The rule also applies to existing single-regime results.
+- Normal regime: coolant 363 K, chamber wall 450 K, port wall 363 K, intake 320 to 360 K.
+- Hot regime: coolant 388 K, chamber wall 520 K, port wall 388 K (heated-port variant 420 K), intake up to 400 K.
+- Full rule and references: `docs/DUAL_TEMPERATURE_RULE.md`. Regime constants and the first variant runs are on branch `wme1-hiT`.
