@@ -504,6 +504,10 @@ class Charge:
                           - PropsSI("Umass", "T", Tw, "Q", 0, "Water"))
         self.h_latent = self.h_fg - float(ph.species_h(Tw)[j] - ph.h_ref[j])
         self.u_latent = self.u_fg - float(ph.species_u(Tw)[j] - ph.u_ref[j])
+        # Absolute internal energy of liquid water at the storage temperature
+        # [J/kg].  Retained liquid is heated from here to the burned-gas
+        # temperature (u_fg + sensible) as the flame consumes the charge.
+        self.u_liq_Tw = float(PropsSI("Umass", "T", Tw, "Q", 0, "Water"))
         self._intake()
         vec = self.dry + self.e_intake * self.water
         self.V_ivc = volume(par.ivc_rad, cr, par)
@@ -527,6 +531,36 @@ class Charge:
             x_fuel = (vec[ph.i_fuel] / MW[ph.i_fuel]) / float(vec @ ph.inv_MW)
             p_fuel = float(PropsSI("P", "T", self.T_ivc, "Q", 1, props.coolprop_name))
             self.fuel_saturation_ratio_ivc = float(x_fuel * par.p_ivc_Pa / p_fuel)
+        # Module 09 spark target: (spark_deg_aTDC, (frac_evap, frac_air,
+        # frac_wall)).  frac_evap is the fraction of the water charge that has
+        # evaporated by spark; frac_air is the airborne-droplet subset and
+        # frac_wall is the wall-impinged film subset (both = non-vapour).
+        # Water that has NOT evaporated by spark stays liquid through
+        # combustion (task 124500 part B): it is debited as a heat sink and
+        # excluded from the unburned gas.  When the profile does not cover
+        # this point the target is None and the cycle falls back to the
+        # default schedule.
+        self.spark_target = None
+        self.spark_fractions = None
+        if evap_profile is not None:
+            import importlib as _il
+            _ep = _il.import_module("sims.03_engine_cycle.evap_profile")
+            self.spark_target = _ep.spark_target(fuel, cr, w, T_intake,
+                                                evap_profile.atomiser,
+                                                evap_profile.variant)
+        # Retained liquid at spark [kg]: the water charge that has NOT evaporated
+        # by spark (task 124500 part B).  It stays liquid through combustion,
+        # is consumed by the flame at the burn rate (heat sink u_fg + sensible,
+        # taken from the burned zone) and is excluded from the unburned gas.
+        # Without a Module 09 profile there is no spark target and the charge
+        # falls back to the default schedule (m_liq = 0 -> current model).
+        if self.spark_target is not None:
+            _spark_deg, fracs = self.spark_target
+            self.spark_fractions = fracs
+            e_spark = float(fracs[0])
+        else:
+            e_spark = 1.0
+        self.m_liq = self.water_mass * max(0.0, 1.0 - e_spark)
 
     # Intake: isobaric adiabatic mixing (steady flow), so enthalpy and h_fg.
     def _H(self, vec, T):
@@ -614,10 +648,32 @@ class Charge:
             T = min(6000.0, max(150.0, T - F / slope))
         raise RuntimeError(f"State inversion did not converge (U={U:.6g} J, V={V:.4g} m3, xb={xb:.4g})")
 
+    def u_liq(self, T):
+        """Specific internal energy of saturated-liquid water at T [J/kg].
+
+        None when T is outside the liquid range (>= critical or < triple
+        point): retained liquid is only tracked while liquid water exists.
+        """
+        from CoolProp.CoolProp import PropsSI
+        if T >= 647.096:
+            return None
+        try:
+            return float(PropsSI("Umass", "T", max(T, 273.16), "Q", 0, "Water"))
+        except Exception:
+            return None
+
     # Evaporation schedule (SPEC: uniform IVC -> evap_end), saturation capped.
     def scheduled_fraction(self, theta):
         if self.water_mass <= 0.0:
             return 0.0
+        # Task 124500 part B: the Module 09 profile caps evaporation at the
+        # spark value.  Water that has not evaporated by spark stays liquid
+        # through combustion (heat sink, excluded from the unburned gas);
+        # evaporation after spark is not modelled by Module 09.
+        if self.spark_target is not None:
+            spark_deg, fracs = self.spark_target
+            if theta / RAD >= spark_deg:
+                return min(1.0, max(0.0, float(fracs[0])))
         if self.evap_profile is not None:
             import importlib as _il
             _ep = _il.import_module("sims.03_engine_cycle.evap_profile")
@@ -733,9 +789,18 @@ class Charge:
         Yu = self.dry + e * self.water
         Yc = self.burned_ref + self.water
         mass = float(Yc.sum())
+        # Retained liquid (task 124500 part B): the water charge that has not
+        # evaporated by spark stays liquid through combustion.  It is debited
+        # from the burned zone at the burn rate as a heat sink: the latent
+        # heat to take it from liquid at Tw to vapour at T_ref, plus the
+        # sensible heat to bring it from Tw to the flame temperature (the
+        # u_fg + sensible term).  Without a spark target (default schedule)
+        # m_liq = 0 and this reduces to the previous latent-heat debit.
+        h_liq = self.u_liq_Tw + float(PropsSI("P", "T", self.par.water_T_K,
+                                              "Q", 0, "Water")) * (1.0 / 18.01528e-3)
         H = (float(Yc @ ph.h_ref) + float(Yu @ (ph.species_h(T_u) - ph.h_ref))
              + self.par.combustion_efficiency * ph.lhv
-             - (1.0 - e) * self.m_water_basis * self.h_latent)
+             - self.m_liq * (h_liq - float(ph.h_ref[self.j])))
         fl = ph.flame
         fl.HPY = H / mass, p, Yc / mass
         fl.equilibrate("HP")
