@@ -7,7 +7,6 @@ Validates:
 """
 
 import math
-import importlib.util
 import pytest
 from pathlib import Path
 import sys
@@ -17,11 +16,8 @@ REPO = Path(__file__).resolve().parents[1]
 
 def _load_qd_burn():
     """Load sims/10_qd_burn/run.py (package name starts with a digit)."""
-    spec = importlib.util.spec_from_file_location(
-        "sims.10_qd_burn.run", REPO / "sims" / "10_qd_burn" / "run.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    from conftest import load_sims_module
+    return load_sims_module("sims.10_qd_burn.run")
 
 
 qd = _load_qd_burn()

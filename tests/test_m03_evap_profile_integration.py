@@ -4,8 +4,6 @@ Exercises the build_tasks -> _task -> run_point(EvapProfile=...) wiring
 without spawning the full multiprocessing pool.
 """
 
-import importlib.util
-import types
 from pathlib import Path
 
 import pytest
@@ -13,25 +11,9 @@ import pytest
 REPO = Path(__file__).resolve().parents[1]
 
 
-def _load_name(dotted_name, filepath):
-    """Load a submodule whose parent starts with a digit (e.g. 03_engine_cycle)."""
-    parts = dotted_name.split(".")
-    root = parts[0]
-    if root not in __import__("sys").modules:
-        pkg = types.ModuleType(root)
-        pkg.__path__ = []
-        __import__("sys").modules[root] = pkg
-    spec = importlib.util.spec_from_file_location(dotted_name, filepath)
-    mod = importlib.util.module_from_spec(spec)
-    __import__("sys").modules[dotted_name] = mod
-    spec.loader.exec_module(mod)
-    return mod
-
-
 def _load():
-    ep = _load_name("sims.03_engine_cycle.evap_profile",
-                    REPO / "sims" / "03_engine_cycle" / "evap_profile.py")
-    return ep
+    from conftest import load_sims_module
+    return load_sims_module("sims.03_engine_cycle.evap_profile")
 
 
 @pytest.fixture(scope="module")
@@ -42,20 +24,8 @@ def ep():
 @pytest.fixture(scope="module")
 def run_mod():
     import cantera  # noqa: F401
-    if "sims" not in __import__("sys").modules:
-        m = types.ModuleType("sims")
-        m.__path__ = [str(REPO / "sims")]
-        __import__("sys").modules["sims"] = m
-    if "sims.03_engine_cycle" not in __import__("sys").modules:
-        m = types.ModuleType("sims.03_engine_cycle")
-        m.__path__ = [str(REPO / "sims" / "03_engine_cycle")]
-        __import__("sys").modules["sims.03_engine_cycle"] = m
-    spec = importlib.util.spec_from_file_location(
-        "sims.03_engine_cycle.run_mod", REPO / "sims" / "03_engine_cycle" / "run.py")
-    mod = importlib.util.module_from_spec(spec)
-    __import__("sys").modules["sims.03_engine_cycle.run_mod"] = mod
-    spec.loader.exec_module(mod)
-    return mod
+    from conftest import load_sims_module
+    return load_sims_module("sims.03_engine_cycle.run")
 
 
 def test_source_label_documented(ep):

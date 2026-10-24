@@ -6,9 +6,6 @@ never produced.  These tests verify the interpolation, the point index,
 the fallback semantics and the documented source label.
 """
 
-import importlib.util
-import sys
-import types
 from pathlib import Path
 
 import pytest
@@ -17,18 +14,8 @@ REPO = Path(__file__).resolve().parents[1]
 
 
 def _load():
-    for n in ("sims", "sims.common"):
-        if n not in sys.modules:
-            m = types.ModuleType(n)
-            m.__path__ = []
-            sys.modules[n] = m
-    spec = importlib.util.spec_from_file_location(
-        "sims.03_engine_cycle.evap_profile",
-        REPO / "sims" / "03_engine_cycle" / "evap_profile.py")
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules["sims.03_engine_cycle.evap_profile"] = mod
-    spec.loader.exec_module(mod)
-    return mod
+    from conftest import load_sims_module
+    return load_sims_module("sims.03_engine_cycle.evap_profile")
 
 
 @pytest.fixture(scope="module")

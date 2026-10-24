@@ -9,21 +9,22 @@ Model equations (SPEC §3):
 """
 
 import math
-import importlib.util
+import importlib
 import sys
 from pathlib import Path
 from dataclasses import dataclass
 
 REPO = Path(__file__).resolve().parents[2]
 
-# Load Module 03 helpers (package name starts with digit, use importlib)
+# Load Module 03 helpers (package name starts with digit, use importlib).
+# Import through the package so there is exactly one sims.03_engine_cycle.run
+# object in sys.modules; re-executing run.py under that name replaced the
+# module and broke pickling of run._task in Module 03's spawn pool.
 def _load_m03():
-    spec = importlib.util.spec_from_file_location(
-        "sims.03_engine_cycle.run", REPO / "sims" / "03_engine_cycle" / "run.py")
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules["sims.03_engine_cycle.run"] = mod
-    spec.loader.exec_module(mod)
-    return mod
+    if str(REPO) not in sys.path:
+        sys.path.insert(0, str(REPO))
+    return importlib.import_module("sims.03_engine_cycle.run")
+
 
 M03 = _load_m03()
 DEFAULTS = M03.DEFAULTS
