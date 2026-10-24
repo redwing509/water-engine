@@ -1,0 +1,174 @@
+{
+ "A1-H2O": {
+  "KHRT": {
+   "run": "A1-H2O",
+   "model": "liquidEvaporationBoil + ReitzKHRT (base)",
+   "exec_s": 210.0,
+   "SMD_eoi_um": 125.675,
+   "penetration_eoi_mm": 97.1254,
+   "penetration_end_mm": 97.15809999999999,
+   "eoi_ms": 5.0,
+   "end_ms": 6.0,
+   "cfd_eoi_pct": 0.3586804705611346,
+   "cfd_end_pct": 0.5061267980820405,
+   "m09_eoi_pct": 0.5579566719495033,
+   "m09_end_pct": 0.7582701606908865,
+   "m09_cone_end_pct": 0.750826991691631,
+   "cone_volume_over_chamber": 0.7465230272381884,
+   "m09_halfslip_end_pct": 0.6191211177721688,
+   "ratio_m09_over_cfd_eoi": 1.555581409482966,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.498182201701904,
+   "pass_15pct_end": false
+  },
+  "RD": {
+   "run": "X4-A1-H2O-RD",
+   "model": "liquidEvaporationBoil + ReitzDiwakar",
+   "exec_s": 1755.0,
+   "SMD_eoi_um": 65.2452,
+   "penetration_eoi_mm": 97.1105,
+   "penetration_end_mm": 97.9116,
+   "eoi_ms": 5.0,
+   "end_ms": 6.0,
+   "cfd_eoi_pct": 0.8511281007487215,
+   "cfd_end_pct": 1.1986564920633769,
+   "m09_eoi_pct": 1.41421791590369,
+   "m09_end_pct": 1.8722543706545247,
+   "m09_cone_end_pct": 1.8287069374945948,
+   "cone_volume_over_chamber": 0.7640268328195884,
+   "m09_halfslip_end_pct": 1.6193045200366463,
+   "ratio_m09_over_cfd_eoi": 1.66158057131427,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.5619607310778512,
+   "pass_15pct_end": false
+  },
+  "LE-RD": {
+   "run": "X4-A1-H2O-LE-RD",
+   "model": "liquidEvaporation + ReitzDiwakar",
+   "exec_s": 333.0,
+   "SMD_eoi_um": 65.419,
+   "penetration_eoi_mm": 96.9613,
+   "penetration_end_mm": 97.8302,
+   "eoi_ms": 5.0,
+   "end_ms": 6.0,
+   "cfd_eoi_pct": 1.0846695152065156,
+   "cfd_end_pct": 1.5089303306214052,
+   "m09_eoi_pct": 1.409086406916449,
+   "m09_end_pct": 1.8657108593795695,
+   "m09_cone_end_pct": 1.8220296245100422,
+   "cone_volume_over_chamber": 0.7621228675706321,
+   "m09_halfslip_end_pct": 1.6132350724787092,
+   "ratio_m09_over_cfd_eoi": 1.2990928454812949,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.23644599191749,
+   "pass_15pct_end": false
+  },
+  "cfd_model_spread": {
+   "min_end_pct": 0.5061267980820405,
+   "max_end_pct": 1.5089303306214052,
+   "max_over_min": 2.9813286637646392,
+   "models": [
+    "KHRT",
+    "RD",
+    "LE-RD"
+   ]
+  },
+  "m09_end_vs_cfd_band": {
+   "m09_end_at_each_cfd_smd": {
+    "KHRT": 0.7582701606908865,
+    "RD": 1.8722543706545247,
+    "LE-RD": 1.8657108593795695
+   },
+   "inside_cfd_band_widened_15pct": [
+    "KHRT"
+   ]
+  }
+ },
+ "A2-BLEND": {
+  "KHRT": {
+   "run": "A2-BLEND",
+   "model": "liquidEvaporationBoil + ReitzKHRT (base)",
+   "exec_s": 8022.0,
+   "SMD_eoi_um": 22.8655,
+   "penetration_eoi_mm": 51.2128,
+   "penetration_end_mm": 62.8592,
+   "eoi_ms": 2.0,
+   "end_ms": 3.0,
+   "cfd_eoi_pct": 21.39659593218114,
+   "cfd_end_pct": 39.83771849643515,
+   "m09_eoi_pct": 32.89668730368962,
+   "m09_end_pct": 51.44505620496187,
+   "m09_cone_end_pct": 46.89752881663521,
+   "cone_volume_over_chamber": 0.2021681408301642,
+   "m09_halfslip_end_pct": 48.90500867335511,
+   "ratio_m09_over_cfd_eoi": 1.5374729423296716,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.2913655235945651,
+   "pass_15pct_end": false
+  },
+  "RD": {
+   "run": "X4-A2-BLEND-RD",
+   "model": "liquidEvaporationBoil + ReitzDiwakar",
+   "exec_s": 1128.0,
+   "SMD_eoi_um": 18.0229,
+   "penetration_eoi_mm": 48.6404,
+   "penetration_end_mm": 59.924699999999994,
+   "eoi_ms": 2.0,
+   "end_ms": 3.0,
+   "cfd_eoi_pct": 25.921324663513147,
+   "cfd_end_pct": 47.19770096621302,
+   "m09_eoi_pct": 41.771278812492525,
+   "m09_end_pct": 61.890477294279954,
+   "m09_cone_end_pct": 55.147852748484794,
+   "cone_volume_over_chamber": 0.17515549808618983,
+   "m09_halfslip_end_pct": 59.716660768128705,
+   "ratio_m09_over_cfd_eoi": 1.6114638952572424,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.311302797112616,
+   "pass_15pct_end": false
+  },
+  "LE-RD": {
+   "run": "X4-A2-BLEND-LE-RD",
+   "model": "liquidEvaporation + ReitzDiwakar",
+   "exec_s": 526.0,
+   "SMD_eoi_um": 16.9187,
+   "penetration_eoi_mm": 48.173300000000005,
+   "penetration_end_mm": 59.219899999999996,
+   "eoi_ms": 2.0,
+   "end_ms": 3.0,
+   "cfd_eoi_pct": 37.04036147684289,
+   "cfd_end_pct": 58.4271163878564,
+   "m09_eoi_pct": 44.25047905902088,
+   "m09_end_pct": 64.73720049093987,
+   "m09_cone_end_pct": 57.31836418016779,
+   "cone_volume_over_chamber": 0.16904766555997153,
+   "m09_halfslip_end_pct": 62.676548129576894,
+   "ratio_m09_over_cfd_eoi": 1.1946557024473332,
+   "pass_15pct_eoi": false,
+   "ratio_m09_over_cfd_end": 1.1079992389354845,
+   "pass_15pct_end": true
+  },
+  "cfd_model_spread": {
+   "min_end_pct": 39.83771849643515,
+   "max_end_pct": 58.4271163878564,
+   "max_over_min": 1.466628074925644,
+   "models": [
+    "KHRT",
+    "RD",
+    "LE-RD"
+   ]
+  },
+  "m09_end_vs_cfd_band": {
+   "m09_end_at_each_cfd_smd": {
+    "KHRT": 51.44505620496187,
+    "RD": 61.890477294279954,
+    "LE-RD": 64.73720049093987
+   },
+   "inside_cfd_band_widened_15pct": [
+    "KHRT",
+    "RD",
+    "LE-RD"
+   ]
+  }
+ }
+}

@@ -1,0 +1,27 @@
+--- A1-H2O/constant/sprayCloudProperties	2026-10-23 12:50:13.328812922 -0700
++++ X4-A1-H2O-LE-RD/constant/sprayCloudProperties	2026-10-24 13:14:50.822460680 -0700
+@@ -125,13 +125,13 @@
+ 
+     compositionModel singlePhaseMixture;
+ 
+-    phaseChangeModel liquidEvaporationBoil;
++    phaseChangeModel liquidEvaporation;
+ 
+     surfaceFilmModel none;
+ 
+     atomizationModel none;
+ 
+-    breakupModel    ReitzKHRT;
++    breakupModel    ReitzDiwakar;
+ 
+     stochasticCollisionModel none;
+ 
+@@ -158,7 +158,7 @@
+         );
+     }
+ 
+-    liquidEvaporationBoilCoeffs
++    liquidEvaporationCoeffs
+     {
+         enthalpyTransfer enthalpyDifference;
+ 
