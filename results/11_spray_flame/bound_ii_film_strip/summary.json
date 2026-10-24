@@ -1,0 +1,365 @@
+{
+  "module": "11_spray_flame/bound_ii_film_strip",
+  "version": "1.0.0",
+  "git_sha": "ad5095990db737397d2c30c997f0efa18b070120",
+  "mode": "full",
+  "assumptions": {
+    "liquid_at_spark": {
+      "value": "Module 09 airborne + X_strip * Module 09 wall film, per species; X_strip = 1 (bound)"
+    },
+    "film_mass": {
+      "value": "m_inj,s (1 - f_evap,s at spark) - m_airborne,s; f_evap,s from evap_profiles.json; closes with wall_impinged_pct",
+      "path": "results/09_spray_evaporation/evap_profiles.json"
+    },
+    "smd": {
+      "value": [
+        200.0,
+        350.0,
+        500.0
+      ],
+      "unit": "um",
+      "rationale": "no strip-off SMD model in repo (Module 13); swept 200-500 um, all liquid lumped at that SMD"
+    },
+    "film_evaporation": {
+      "value": "none before spark (conservative)"
+    },
+    "model": {
+      "value": "unchanged Module 11 Ballal-Lefebvre S and MIE (sims/11_spray_flame/model.py), same thresholds 50/100 mJ"
+    }
+  },
+  "key_results": {
+    "n_rows": 252,
+    "verdict_counts": {
+      "SMD 200 um": {
+        "MISFIRE (MIE > 100 mJ)": 70,
+        "MARGINAL (50 < MIE <= 100 mJ)": 10,
+        "IGNITES (MIE <= 50 mJ)": 4
+      },
+      "SMD 350 um": {
+        "MISFIRE (MIE > 100 mJ)": 84
+      },
+      "SMD 500 um": {
+        "MISFIRE (MIE > 100 mJ)": 84
+      }
+    },
+    "by_case_and_smd": {
+      "CH3OH/best_dry @ 200 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          143.36046430884187,
+          151.9996759618996
+        ],
+        "S_eff_over_SL": [
+          0.0022933033167235224,
+          0.0029175435076335145
+        ]
+      },
+      "CH3OH/best_dry @ 350 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          768.2456350985174,
+          814.5691670204594
+        ],
+        "S_eff_over_SL": [
+          0.0013104613589157079,
+          0.0016671724972810334
+        ]
+      },
+      "CH3OH/best_dry @ 500 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          2239.7277894080244,
+          2374.798223487256
+        ],
+        "S_eff_over_SL": [
+          0.000917323352949628,
+          0.0011670215752391433
+        ]
+      },
+      "CH3OH/best_overall @ 200 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          217.2695623664878,
+          295.55402372782453
+        ],
+        "S_eff_over_SL": [
+          0.0031180238132549644,
+          0.0035216606215684315
+        ]
+      },
+      "CH3OH/best_overall @ 350 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          1164.2294718728047,
+          1583.6616546674818
+        ],
+        "S_eff_over_SL": [
+          0.001781735559475183,
+          0.0020123884498460605
+        ]
+      },
+      "CH3OH/best_overall @ 500 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          3394.1111391579702,
+          4616.856389725962
+        ],
+        "S_eff_over_SL": [
+          0.0012472162185905235,
+          0.0014086738105697659
+        ]
+      },
+      "CH3OH/water_majority @ 200 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          298.9695041505126,
+          765.1041352354682
+        ],
+        "S_eff_over_SL": [
+          0.0069501621613800215,
+          0.007574812079246041
+        ]
+      },
+      "CH3OH/water_majority @ 350 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          1599.1486282874964,
+          4091.5351054629705
+        ],
+        "S_eff_over_SL": [
+          0.003971752827787401,
+          0.0043287566829945745
+        ]
+      },
+      "CH3OH/water_majority @ 500 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          4659.977397037917,
+          11922.228243461184
+        ],
+        "S_eff_over_SL": [
+          0.002780267070418027,
+          0.0030301803374309625
+        ]
+      },
+      "C2H5OH/best_dry @ 200 um": {
+        "n": 14,
+        "misfire": 0,
+        "marginal": 10,
+        "ignites": 4,
+        "MIE_mJ": [
+          37.06641680671456,
+          59.063171258094464
+        ],
+        "S_eff_over_SL": [
+          0.0022603220834077485,
+          0.003156075756707879
+        ]
+      },
+      "C2H5OH/best_dry @ 350 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          198.62784426948048,
+          316.5212632369393
+        ],
+        "S_eff_over_SL": [
+          0.0012916148411815523,
+          0.0018034779101246
+        ]
+      },
+      "C2H5OH/best_dry @ 500 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          579.0719146976139,
+          922.7877957436555
+        ],
+        "S_eff_over_SL": [
+          0.000904130773452147,
+          0.0012624355841464327
+        ]
+      },
+      "C2H5OH/best_overall @ 200 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          206.8163365058693,
+          256.28252438319845
+        ],
+        "S_eff_over_SL": [
+          0.004029743748905018,
+          0.004498912631774748
+        ]
+      },
+      "C2H5OH/best_overall @ 350 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          1108.0763767504445,
+          1373.0369478780865
+        ],
+        "S_eff_over_SL": [
+          0.002302728258857047,
+          0.0025708310457322812
+        ]
+      },
+      "C2H5OH/best_overall @ 500 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          3230.3055391306166,
+          4002.6791729280217
+        ],
+        "S_eff_over_SL": [
+          0.0016119128181573301,
+          0.0017995858564207828
+        ]
+      },
+      "C2H5OH/water_majority @ 200 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          248.31102712758832,
+          436.20345309992695
+        ],
+        "S_eff_over_SL": [
+          0.007363466617047533,
+          0.008175661609500059
+        ]
+      },
+      "C2H5OH/water_majority @ 350 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          1328.6292163920475,
+          2333.4079218216416
+        ],
+        "S_eff_over_SL": [
+          0.0042078714240622655,
+          0.004672053414651981
+        ]
+      },
+      "C2H5OH/water_majority @ 500 um": {
+        "n": 14,
+        "misfire": 14,
+        "marginal": 0,
+        "ignites": 0,
+        "MIE_mJ": [
+          3871.995982007091,
+          6799.78941788639
+        ],
+        "S_eff_over_SL": [
+          0.002945540500330466,
+          0.0032704801099654205
+        ]
+      }
+    },
+    "liquid_at_spark_pct": [
+      54.22430000000001,
+      99.02482520000001
+    ],
+    "film_pct": [
+      54.16966803886783,
+      99.02482520000001
+    ],
+    "airborne_spark_pct": [
+      0.0,
+      3.8060406011574313
+    ],
+    "S_BL_over_SL": [
+      0.000904130773452147,
+      0.008175661609500059
+    ],
+    "S_eff_over_SL": [
+      0.000904130773452147,
+      0.008175661609500059
+    ],
+    "MIE_mJ": [
+      37.06641680671456,
+      11922.228243461184
+    ],
+    "x_strip_for_MIE_100mJ_range": [
+      0.014658094382137552,
+      0.7829504624255029
+    ],
+    "worst": {
+      "case": "CH3OH/water_majority",
+      "atomiser": "ultrasonic_120kHz",
+      "variant": "nominal",
+      "SMD_um": 500.0,
+      "liquid_at_spark_pct": 80.22038,
+      "f_liquid_alcohol": 0.667961,
+      "Y_liquid_water": 0.14979931922283657,
+      "MIE_J": 11.922228243461184,
+      "S_BL_over_SL": 0.002780267070418027,
+      "S_eff_over_SL": 0.002780267070418027,
+      "dT_heat_sink_K": 285.3035736699311,
+      "verdict": "MISFIRE (MIE > 100 mJ)"
+    },
+    "least_severe": {
+      "case": "C2H5OH/best_dry",
+      "atomiser": "ultrasonic_120kHz",
+      "variant": "nominal",
+      "SMD_um": 200.0,
+      "liquid_at_spark_pct": 54.22430000000001,
+      "f_liquid_alcohol": 0.542243,
+      "Y_liquid_water": 8.211629533652565e-26,
+      "MIE_J": 0.037066416806714554,
+      "S_BL_over_SL": 0.003156075756707879,
+      "S_eff_over_SL": 0.003156075756707879,
+      "dT_heat_sink_K": 1.6007695440828251e-22,
+      "verdict": "IGNITES (MIE <= 50 mJ)"
+    },
+    "labels": {
+      "status": "SENSITIVITY bound (ii). EXECUTED model runs; numerics VERIFIED by tests/test_spray_flame_film_strip.py; NOT experimentally VALIDATED.",
+      "validity": "Ballal-Lefebvre fitted at 0.1-1 atm, ~300 K, SMD ~20-200 um; applied at 25-35 bar, 650-820 K, 200-500 um (EXTRAPOLATED). Upper bound: all film airborne at spark, no film evaporation."
+    }
+  },
+  "validation": {
+    "tests": "tests/test_spray_flame_film_strip.py",
+    "status": "SENSITIVITY bound (ii). EXECUTED model runs; numerics VERIFIED by tests/test_spray_flame_film_strip.py; NOT experimentally VALIDATED."
+  },
+  "runtime_s": 6.6319932760015945
+}
