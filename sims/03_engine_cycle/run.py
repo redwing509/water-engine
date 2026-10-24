@@ -405,13 +405,14 @@ class Charge:
 
     ideal = False
 
-    def __init__(self, fuel, cr, w, T_intake, par=DEFAULTS):
+    def __init__(self, fuel, cr, w, T_intake, par=DEFAULTS, evap_profile=None):
         if not 0.0 <= w < 1.0:
             raise PointUnavailable("w must satisfy 0 <= w < 1")
         if not 0.0 < par.phi <= 1.0:
             raise PointUnavailable("Complete-product reference is defined for 0 < phi <= 1 only")
         self.fuel, self.cr, self.w = fuel, float(cr), float(w)
         self.T_intake, self.par = float(T_intake), par
+        self.evap_profile = evap_profile
         ph = self.ph = phases(fuel)
         i, MW = ph.i, ph.MW
         self.j = j = i["H2O"]
@@ -564,6 +565,13 @@ class Charge:
     def scheduled_fraction(self, theta):
         if self.water_mass <= 0.0:
             return 0.0
+        if self.evap_profile is not None:
+            import importlib as _il
+            _ep = _il.import_module("sims.03_engine_cycle.evap_profile")
+            t = self.evap_profile.target(self.fuel, self.cr, self.w,
+                                          self.T_intake, theta / RAD)
+            if t is not None:
+                return min(1.0, max(0.0, t))
         p = self.par
         frac = min(1.0, max(0.0, (theta - p.ivc_rad) / (p.evap_end_rad - p.ivc_rad)))
         return self.e_intake + (1.0 - self.e_intake) * frac
@@ -955,7 +963,8 @@ def point_key(row):
 
 
 def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
-              fits_source=None, keep_trace=False, flame_speed_factor=1.0):
+              fits_source=None, keep_trace=False, flame_speed_factor=1.0,
+              evap_profile=None):
     """One sweep point; unavailable/failed points are kept with a reason."""
     row = dict(fuel=fuel, CR=cr, w=w, WFR=w / (1.0 - w), T_intake_K=T_intake, phi=par.phi,
                status="computed", reason="", mechanism=None, mechanism_fallback=False,
@@ -967,7 +976,7 @@ def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
         if w >= SENSITIVITY["applied_for_w_ge"]:
             sl *= flame_speed_factor
         duration = burn_duration(sl, ref, par)
-        charge = Charge(fuel, cr, w, T_intake, par)
+        charge = Charge(fuel, cr, w, T_intake, par, evap_profile=evap_profile)
         result = retard_search(lambda ca50: integrate_cycle(
             charge, ca50, duration, ignition, keep_trace=keep_trace), par)
         state, trace = result.pop("_state"), result.pop("_trace")
@@ -1017,7 +1026,7 @@ def sweep(mode):
     return FUELS, FULL_CR, FULL_W, FULL_T_INTAKE
 
 
-def build_tasks(mode, ignition, flame, provenance, par=DEFAULTS):
+def build_tasks(mode, ignition, flame, provenance, par=DEFAULTS, evap_profile=None):
     names, crs, waters, temperatures = sweep(mode)
     tasks = []
     for f in names:
@@ -1026,7 +1035,7 @@ def build_tasks(mode, ignition, flame, provenance, par=DEFAULTS):
                 for T in temperatures:
                     trace = cr == EXAMPLE_CR and T == temperatures[0] and w in (0.0, 0.6)
                     tasks.append((f, cr, w, T, ignition.get(f), flame.get(f), par, mode,
-                                  provenance["per_fuel"].get(f), trace))
+                                  provenance["per_fuel"].get(f), trace, evap_profile))
     # Wet/high-CR points are slower (knock retard, saturation); schedule first.
     return sorted(tasks, key=lambda t: -(t[1] + 10 * t[2]))
 
@@ -1471,17 +1480,32 @@ def efficiency_table(rows):
     return table
 
 
+def _build_evap_profile(spec):
+    """Parse "atomiser|variant" into an evap_profile.Profile, or raise on bad input."""
+    import importlib as _il
+    _ep = _il.import_module("sims.03_engine_cycle.evap_profile")
+    if not spec or "|" not in spec:
+        raise SystemExit("--evap-profile must be atomiser|variant, e.g. carb_venturi|nominal")
+    atomiser, variant = spec.split("|", 1)
+    return _ep.profile_for(atomiser.strip(), variant.strip())
+
+
 def main(argv=None):
     start = time.perf_counter()
     parser = io.argument_parser(MODULE)
     parser.add_argument("--fits-dir", type=Path, default=Path("results") / "02_flame_chem",
                         help="Directory with Module 02 ignition_fits.json and flame_speed_fits.json")
+    parser.add_argument("--evap-profile", type=str, default=None,
+                        help="Atomiser/variant evaporation profile, e.g. carb_venturi|nominal. "
+                        "Uses sims/03_engine_cycle/evap_profile.py; falls back to the default "
+                        "f_evap_intake schedule when the point is not covered.")
     args = parser.parse_args(None if argv is None else list(map(str, argv)))
     names = sweep(args.mode)[0]
     ignition, flame, provenance = read_fits(args.fits_dir, args.mode, names)  # --full: raises if missing
     par = replace(DEFAULTS, step_rad=DEFAULTS.quick_step_rad) if args.mode == "quick" else DEFAULTS
     args.out.mkdir(parents=True, exist_ok=True)
-    tasks = build_tasks(args.mode, ignition, flame, provenance, par)
+    evap_profile = _build_evap_profile(args.evap_profile) if args.evap_profile else None
+    tasks = build_tasks(args.mode, ignition, flame, provenance, par, evap_profile=evap_profile)
     results = io.ordered_map(_task, tasks, args.workers, chunksize=1)
     order = {f: i for i, f in enumerate(FUELS)}
     results.sort(key=lambda r: (order[r["point"]["fuel"]], r["point"]["CR"], r["point"]["w"],
