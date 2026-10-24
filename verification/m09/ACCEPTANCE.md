@@ -31,3 +31,6 @@ rr_classes in {8 (production), 16, 32, 64}, r = 2, GCI on 16/32/64.
 
 Overall PASS = V1a, V1b, V1c, V2, V3a and V4a all pass. Production-error estimates (V3b, V4b) are reported and flagged if exceeded, but they do not fail verification. They would feed a caveat or a production-setting change request to Claude.
 Compute: at most 4 processes, OMP_NUM_THREADS=1.
+
+## Deviation (committed before the first run)
+V3 uses **A2-BLEND** (x_CH3OH 0.4) instead of A2-CH3OH, because only A1-H2O and A2-BLEND phase-A metadata exist in the repo (xcheck/x4-spray cases). The criteria are unchanged.
