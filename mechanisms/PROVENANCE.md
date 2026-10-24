@@ -70,3 +70,32 @@ python -m cantera.ck2yaml --input=sandiego20161214_mechCK.txt \
 ## GRI-Mech 3.0 (`gri30.yaml`)
 
 Ships with Cantera. Its embedded metadata identifies GRI-Mech 3.0 (Smith et al., 1999). Used for H2 and CH4, and as the fallback for CH3OH if `sandiego.yaml` is unavailable (SPEC §2). Each `summary.json` records the mechanism used for each fuel.
+
+## CRECK C1-C3 HT (`creck_c1c3_ht.yaml`): J2 S_L engine (box-queue 20261024-1230)
+
+- Source: CRECK Modeling Lab, Politecnico di Milano, GitHub `CRECKMODELING/Kinetic-Mechanisms`, path `Gas-Phase/CoreMechanism_C0-C4/C1_C3_HT_114_1999/`. The repo head at download was 640d5b4 (2026-06-17), and the files are part of the v2003 core mechanism.
+- Downloaded 2026-10-24, about 20:05Z (13:05 PDT).
+- Variant: high-temperature only (114 species / 1999 reactions). CRECK v2003 publishes no C1-C3 HT+LT variant of this size. The HT scheme is appropriate for laminar flame speed and T_ad, but not for low-temperature ignition. Ignition delays from it are reported as information only.
+- Contains `CH3OH` and `C2H5OH`.
+- Citations (from the folder README):
+  - Kéromnès et al., Combust. Flame 160 (2013) 995
+  - Metcalfe et al., IJCK 45 (2013) 638
+  - Bagheri et al., Combust. Flame 212 (2020) 142
+  - Ranzi et al., IJCK 46 (2014) 512
+  - Ranzi et al., PECS 38 (2012) 468
+
+| file | SHA-256 |
+|---|---|
+| `kinetics.CHEMKIN.CKI` | `ff072615efdc383739ed371ec8da08078c93fbffbf9c505e40fdd927566b6f3f` |
+| `thermo.CHEMKIN.CKT` | `98a9de4bd637079b1982213fc5dec5304c555f960297230696303842db0501d6` |
+| `TOT2003.TRAN` (CRECK v2003 transport database) | `270e97cbb505606496004757a747b373ea6e7c3bd3b2679bbe1fde0f5e577941` |
+| `README.md` | `06d0e80c03758e94bc0b6202d306004e49b1a95ea6d42c5605ab4630c0054925` |
+
+Conversion (Cantera 3.2.0):
+```
+python -m cantera.ck2yaml --input=kinetics.CHEMKIN.CKI --thermo=thermo.CHEMKIN.CKT \
+  --transport=TOT2003.TRAN --output=creck_c1c3_ht.yaml --permissive
+```
+- `--permissive` was needed because the CRECK transport database lists some species twice (e.g. AR and N2, "Duplicate transport data"). With the flag, ck2yaml keeps the first entry and ignores the later duplicate. The species set is unchanged. No rate or thermo data was edited.
+- `creck_c1c3_ht.yaml` SHA-256: `5d67f2d9c7f44323567880f5876cef7a33a6f2a74fd6481ca137a78626d3215c`.
+- The converted `creck_c1c3_ht.yaml` is **not committed**: the upstream CRECKMODELING/Kinetic-Mechanisms repository declares no licence (GitHub API, 2026-10-24), so redistribution is not clearly permitted. Regenerate it from the upstream files above with the ck2yaml command and check the SHA-256.
