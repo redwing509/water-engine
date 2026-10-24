@@ -72,7 +72,8 @@ def x5_point(name):
 def m03_point(name):
     m = load_m03()
     fuel, cr, w, T = POINTS[name]
-    ign, fla, _ = m.read_fits(ROOT / "results" / "02_flame_chem", "full")
+    ign_all, fla_all, _ = m.read_fits(ROOT / "results" / "02_flame_chem", "full")
+    ign, fla = ign_all[fuel], fla_all[fuel]  # per-fuel entries, as run_point receives them
     sl, ref = m.check_fits(ign, fla, w, "full")
     dur = m.burn_duration(sl, ref)
     ch = m.Charge(fuel, cr, w, T)
