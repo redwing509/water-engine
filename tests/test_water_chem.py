@@ -110,13 +110,23 @@ def test_stoichiometric_oxygen_demand(fuel, expected_o2):
 @pytest.mark.parametrize("fuel", ["CH3OH", "C2H5OH", "CH4"])
 @pytest.mark.parametrize("w", [0.0, 0.6])
 def test_phi_one_mixture_matches_module_02(fuel, w):
-    """Module 08's phi=1 charge (fuels.mixture with the fuel's own
-    mechanism) must equal module 02's (default mechanism) within 1e-12."""
-    mod08 = importlib.import_module("sims.02_flame_chem.run")
-    comp08 = fuels.mixture(fuel, wc.PHI, w)          # module 08 charge basis
-    comp02 = mod02._gas(fuel, wc.PHI, w, 400.0, ct.one_atm).X
-    for name in comp08:
-        assert comp02[name] == pytest.approx(comp08[name], rel=1e-12)
+    """Module 08's phi=1 charge must equal module 02's for the same fuel.
+
+    Both modules build the unburned charge as
+    `gas.TPX = T, P, fuels.mixture(fuel, PHI, w)` and, for module 08's
+    'real' variant, select the same mechanism as module 02
+    (sandiego for CH3OH/C2H5OH, gri30 for CH4).  So the fully-constructed
+    unburned gas (normalized mole fractions) must agree to machine
+    precision for the four charge species.
+    """
+    m02 = importlib.import_module("sims.02_flame_chem.run")
+    gas08 = wc._gas(fuel, "real", wc.PHI, w, 400.0, ct.one_atm)   # module 08
+    gas02 = m02._gas(fuel, wc.PHI, w, 400.0, ct.one_atm)          # module 02
+    x8 = {n: float(gas08.X[i]) for i, n in enumerate(gas08.species_names)}
+    x2 = {n: float(gas02.X[i]) for i, n in enumerate(gas02.species_names)}
+    for name in ("CH3OH", "C2H5OH", "CH4", "O2", "N2", "H2O"):
+        if name in x8 and name in x2:
+            assert x8[name] == pytest.approx(x2[name], rel=1e-12)
 
 
 @pytest.mark.slow
