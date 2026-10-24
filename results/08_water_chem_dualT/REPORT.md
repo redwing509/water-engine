@@ -46,8 +46,8 @@ At w = 0 there is no water and all effects are 0.
 
 ## Reading (single engine, not verified)
 - **Hot vs normal.** The chemical effect of water hardly depends on regime: the change is ≤ 1.3 pp in S_L and ≤ 1.4 pp in tau.
-  - Hot gives an S_L 19–23 % higher (absolute).
-  - Hot also gives an ignition delay 4–5.5× shorter, which means earlier knock.
+  - Hot gives an S_L 18–23 % higher (absolute).
+  - Hot also gives an ignition delay 3.8–5.6× shorter, which means earlier knock.
   - Hotter is therefore **not** better for knock margin. It is better only for burn rate.
 - **Ignition.** Water chemistry shortens tau_ig by 7–20 %, almost entirely through the third-body effect; the direct-reaction part is ≤ 0.4 %. This works against the knock benefit of water's dilution and cooling.
 - **Open question (needs scrutiny before anyone relies on it).** At w = 0.3 the sign of the S_L chemical effect is opposite for the two fuels:
