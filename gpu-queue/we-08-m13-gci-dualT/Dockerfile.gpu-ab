@@ -1,0 +1,22 @@
+# OPTIONAL, EXPERIMENTAL, UNTESTED: GPU linear-solver A/B image (petsc4Foam + PETSc CUDA/AmgX).
+# NOT for the GCI itself: swapping the pressure solver mid-study changes the numerics. Use only to MEASURE
+# whether GPU offload helps one M13 case; expected overall gain 1.0-1.3x (Lagrangian parcels, wall film,
+# k-epsilon, thermo stay on CPU; only p_rgh solves move to the GPU, and the mesh is small).
+FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends wget ca-certificates git python3 python3-numpy \
+      build-essential cmake flex bison libopenmpi-dev openmpi-bin \
+ && wget -q -O - https://dl.openfoam.com/add-debian-repo.sh | bash \
+ && apt-get install -y --no-install-recommends openfoam2412-dev \
+ && rm -rf /var/lib/apt/lists/*
+# NOTE: opencfd publishes v2412 debs for 22.04; the CPU runs use v2512. A real A/B must run BOTH arms in this
+# image (CPU GAMG vs petsc4Foam GPU) so only the linear solver differs.
+ENV PETSC_DIR=/opt/petsc PETSC_ARCH=arch-cuda
+RUN git clone --depth 1 -b v3.21.6 https://gitlab.com/petsc/petsc.git $PETSC_DIR && cd $PETSC_DIR \
+ && ./configure --with-debugging=0 --with-cuda=1 --download-amgx --download-hypre --with-mpi=1 COPTFLAGS=-O3 CXXOPTFLAGS=-O3 \
+ && make all
+RUN bash -lc '. /usr/lib/openfoam/openfoam2412/etc/bashrc && git clone --depth 1 https://develop.openfoam.com/modules/external-solver.git /opt/external-solver \
+ && cd /opt/external-solver && ./Allwmake -j'
+COPY . /bundle
+WORKDIR /bundle
+CMD ["bash", "-lc", "echo 'A/B harness not wired yet: see README section GPU A/B'; nvidia-smi"]
