@@ -1,0 +1,223 @@
+{
+  "module": "11_spray_flame",
+  "version": "1.0.0",
+  "git_sha": "a44664a2523dce04145188e5c28cafa918870fa5",
+  "mode": "full",
+  "assumptions": {
+    "flame_speed_source": {
+      "value": "Module 02 flame_speed_fits.json S_L(w) at 400 K, 1 atm, phi 1",
+      "path": "results/02_flame_chem/flame_speed_fits.json"
+    },
+    "SL_state_scaling": {
+      "value": "Metghalchi & Keck (1982) S ~ T^2.18 p^-0.16 at phi = 1",
+      "source": "Combust. Flame 48:191"
+    },
+    "spray_flame_speed": {
+      "value": "Ballal & Lefebvre (1981) additive evaporation + reaction time",
+      "source": "18th Symp. Combust. 321-328"
+    },
+    "vapour_flame_floor": {
+      "value": "S_eff = max(S_BL, S_L(Omega*phi)), M-K methanol phi-parabola ratio",
+      "rationale": "pre-vaporised mixture propagates independently when flammable"
+    },
+    "MIE": {
+      "value": "cp rho dT_ad pi/6 d_q^3, d_q^2 = (1-Omega) rho_F D32^2/(rho_g phi ln(1+B)) + (10 alpha/S_L)^2",
+      "source": "Ballal & Lefebvre (1979) Proc. R. Soc. A 364:277; (1975) Proc. R. Soc. A 344:217; Lefebvre (1989) Atomization and Sprays ch. 9"
+    },
+    "gas_properties": {
+      "value": "Cantera rho, cp, HP-equilibrium T_ad of the fully vaporised charge; k of air (CoolProp) for alpha"
+    },
+    "liquid": {
+      "value": "alcohol rho at 298 K (CoolProp); B = cp (T - T_sat(p)) / h_fg(p) (CoolProp saturation at spark p)"
+    },
+    "liquid_water": {
+      "value": "heat sink Y_wl h_fg/cp evaporated in the preheat zone (upper bound), Zeldovich S ~ exp(-Ea/2RT_ad)",
+      "E_a_J_mol": 125000.0
+    },
+    "sweep_liquid_composition": {
+      "value": "liquid at spark has the intake water/alcohol ratio (conservative; Module 09 finds water evaporates first)"
+    },
+    "sweep_state": {
+      "value": "T at spark = mean of Module 09 nominal atomiser values per design point; p from Module 09"
+    },
+    "spark_energy": {
+      "value": "50-100 mJ compared directly with MIE (spark-to-gas transfer efficiency not applied)"
+    },
+    "turbulence": {
+      "value": "not modelled (quiescent correlations)"
+    }
+  },
+  "key_results": {
+    "n_cases": 6,
+    "n_design_rows": 84,
+    "n_misfire_rows": 0,
+    "recommended_max_smd_um": {
+      "CH3OH/best_dry": {
+        "w": 0.0,
+        "f_liquid_alcohol_worst": 0.0033549351809727054,
+        "worst_atomiser": "ultrasonic_120kHz",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_MIE_100mJ_um": 1000.0,
+        "D_max_SBL_10pct_um": 3.735022150899618,
+        "D_max_Seff_10pct_um": 1000.0
+      },
+      "CH3OH/best_overall": {
+        "w": 0.3,
+        "f_liquid_alcohol_worst": 0.01000549685872203,
+        "worst_atomiser": "ultrasonic_120kHz",
+        "D_max_MIE_50mJ_um": 904.1820007153959,
+        "D_max_MIE_100mJ_um": 1000.0,
+        "D_max_SBL_10pct_um": 2.773106077432544,
+        "D_max_Seff_10pct_um": 1000.0
+      },
+      "CH3OH/water_majority": {
+        "w": 0.6,
+        "f_liquid_alcohol_worst": 0.014469757406609818,
+        "worst_atomiser": "ultrasonic_120kHz",
+        "D_max_MIE_50mJ_um": 510.7350721962956,
+        "D_max_MIE_100mJ_um": 644.0227729512062,
+        "D_max_SBL_10pct_um": 3.9987516494300337,
+        "D_max_Seff_10pct_um": 1000.0
+      },
+      "C2H5OH/best_dry": {
+        "w": 0.0,
+        "f_liquid_alcohol_worst": 0.0005463196113217073,
+        "worst_atomiser": "ultrasonic_120kHz",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_MIE_100mJ_um": 1000.0,
+        "D_max_SBL_10pct_um": 9.631356329528002,
+        "D_max_Seff_10pct_um": 1000.0
+      },
+      "C2H5OH/best_overall": {
+        "w": 0.4,
+        "f_liquid_alcohol_worst": 0.005979565286196562,
+        "worst_atomiser": "ultrasonic_120kHz",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_MIE_100mJ_um": 1000.0,
+        "D_max_SBL_10pct_um": 4.6131579083509235,
+        "D_max_Seff_10pct_um": 1000.0
+      },
+      "C2H5OH/water_majority": {
+        "w": 0.6,
+        "f_liquid_alcohol_worst": 0.0058387195252741905,
+        "worst_atomiser": "ultrasonic_120kHz",
+        "D_max_MIE_50mJ_um": 942.5366894673308,
+        "D_max_MIE_100mJ_um": 1000.0,
+        "D_max_SBL_10pct_um": 7.2961842384142575,
+        "D_max_Seff_10pct_um": 1000.0
+      }
+    },
+    "ch3oh_water_majority": {
+      "carb_venturi": {
+        "liquid_spark_pct": 7.380740045029821e-16,
+        "f_liquid_alcohol": 5.48659707263934e-18,
+        "SMD_spark_um": 60.444199275776725,
+        "S_L_gas_m_s": 0.6871940263883072,
+        "S_BL_m_s": 0.6871940263883035,
+        "S_eff_m_s": 0.6871940263883072,
+        "S_BL_over_SL": 0.9999999999999947,
+        "S_eff_over_SL": 1.0,
+        "MIE_J": 5.984968758805541e-06,
+        "verdict": "IGNITES (MIE <= 50 mJ)",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_SBL_ratio_um": 1000.0,
+        "D_max_Seff_ratio_um": 1000.0
+      },
+      "psi_3bar": {
+        "liquid_spark_pct": 6.056704444472831e-09,
+        "f_liquid_alcohol": 3.904650703296238e-11,
+        "SMD_spark_um": 44.376107717107395,
+        "S_L_gas_m_s": 0.6775820577697611,
+        "S_BL_m_s": 0.6775820439876623,
+        "S_eff_m_s": 0.6775820577205414,
+        "S_BL_over_SL": 0.9999999796598823,
+        "S_eff_over_SL": 0.9999999999273598,
+        "MIE_J": 6.099049423530591e-06,
+        "verdict": "IGNITES (MIE <= 50 mJ)",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_SBL_ratio_um": 1000.0,
+        "D_max_Seff_ratio_um": 1000.0
+      },
+      "psi_5bar": {
+        "liquid_spark_pct": 2.4359388552289866e-05,
+        "f_liquid_alcohol": 1.2472767841735304e-07,
+        "SMD_spark_um": 32.966066236004124,
+        "S_L_gas_m_s": 0.6610418353667886,
+        "S_BL_m_s": 0.6610180357017389,
+        "S_eff_m_s": 0.6610416528640456,
+        "S_BL_over_SL": 0.999963996733979,
+        "S_eff_over_SL": 0.9999997239165008,
+        "MIE_J": 6.30417427975975e-06,
+        "verdict": "IGNITES (MIE <= 50 mJ)",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_SBL_ratio_um": 1000.0,
+        "D_max_Seff_ratio_um": 1000.0
+      },
+      "air_assist_20um": {
+        "liquid_spark_pct": 1.4069021443100413,
+        "f_liquid_alcohol": 0.005438610307151457,
+        "SMD_spark_um": 12.48404067950125,
+        "S_L_gas_m_s": 0.4010411635836574,
+        "S_BL_m_s": 0.31833814372851293,
+        "S_eff_m_s": 0.3943854567720314,
+        "S_BL_over_SL": 0.7937792242668562,
+        "S_eff_over_SL": 0.98340393102755,
+        "MIE_J": 1.330489088214236e-05,
+        "verdict": "IGNITES (MIE <= 50 mJ)",
+        "D_max_MIE_50mJ_um": 943.5784298330246,
+        "D_max_SBL_ratio_um": 7.634873518264918,
+        "D_max_Seff_ratio_um": 1000.0
+      },
+      "air_assist_30um": {
+        "liquid_spark_pct": 0.193478965748954,
+        "f_liquid_alcohol": 0.0005586792482924072,
+        "SMD_spark_um": 7.049063853711315,
+        "S_L_gas_m_s": 0.49179563940422494,
+        "S_BL_m_s": 0.48717293913315246,
+        "S_eff_m_s": 0.4907646044249774,
+        "S_BL_over_SL": 0.9906003634422774,
+        "S_eff_over_SL": 0.997903529643946,
+        "MIE_J": 9.364712089166165e-06,
+        "verdict": "IGNITES (MIE <= 50 mJ)",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_SBL_ratio_um": 26.931668359668357,
+        "D_max_Seff_ratio_um": 1000.0
+      },
+      "ultrasonic_40kHz": {
+        "liquid_spark_pct": 0.35204126082234405,
+        "f_liquid_alcohol": 0.0007413096992621144,
+        "SMD_spark_um": 7.864350845179015,
+        "S_L_gas_m_s": 0.4930603913478682,
+        "S_BL_m_s": 0.4853057771513601,
+        "S_eff_m_s": 0.49124966643028417,
+        "S_BL_over_SL": 0.9842724860228389,
+        "S_eff_over_SL": 0.9963275798475029,
+        "MIE_J": 9.379793994048518e-06,
+        "verdict": "IGNITES (MIE <= 50 mJ)",
+        "D_max_MIE_50mJ_um": 1000.0,
+        "D_max_SBL_ratio_um": 23.25018042203149,
+        "D_max_Seff_ratio_um": 1000.0
+      },
+      "ultrasonic_120kHz": {
+        "liquid_spark_pct": 3.1966758672434654,
+        "f_liquid_alcohol": 0.014469757406609818,
+        "SMD_spark_um": 11.137740979301707,
+        "S_L_gas_m_s": 0.3565687526173069,
+        "S_BL_m_s": 0.22799637249356206,
+        "S_eff_m_s": 0.34239553438310394,
+        "S_BL_over_SL": 0.6394177022523978,
+        "S_eff_over_SL": 0.9602510928673141,
+        "MIE_J": 1.749058984340402e-05,
+        "verdict": "IGNITES (MIE <= 50 mJ)",
+        "D_max_MIE_50mJ_um": 510.7350721962956,
+        "D_max_SBL_ratio_um": 3.9987516494300337,
+        "D_max_Seff_ratio_um": 1000.0
+      }
+    }
+  },
+  "validation": {
+    "tests": "tests/test_spray_flame.py",
+    "status": "EXECUTED model runs; numerics VERIFIED by tests/test_spray_flame.py (zero-liquid limit, monotonic trends); NOT experimentally VALIDATED."
+  },
+  "runtime_s": 7.8125373989969376
+}
