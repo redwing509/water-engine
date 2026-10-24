@@ -1,0 +1,10 @@
+{
+  "name": "normal",
+  "coolant_K": 363.15,
+  "chamber_wall_K": 450.0,
+  "T_intake_K": [
+    320.0,
+    360.0
+  ],
+  "port_wall_K": 363.15
+}

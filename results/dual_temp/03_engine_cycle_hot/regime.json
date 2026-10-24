@@ -1,0 +1,12 @@
+{
+  "name": "hot",
+  "coolant_K": 388.15,
+  "chamber_wall_K": 520.0,
+  "T_intake_K": [
+    320.0,
+    360.0,
+    400.0
+  ],
+  "port_wall_K": 388.15,
+  "heated_port_wall_K": 420.0
+}

@@ -1,0 +1,775 @@
+{
+  "module": "04_six_stroke",
+  "version": "1.0.0",
+  "git_sha": "b9387fa74665168ebec804936b480527b1e6e898",
+  "mode": "full",
+  "assumptions": {
+    "reference_temperature_K": {
+      "value": 298.15,
+      "source": "SPEC \u00a7\u00a74,8"
+    },
+    "reference_pressure_Pa": {
+      "value": 101325.0,
+      "rationale": "Standard atmosphere; ideal-gas enthalpy is pressure independent"
+    },
+    "air_N2_per_O2_mol": {
+      "value": 3.76,
+      "source": "SPEC/user contract"
+    },
+    "water_heating_value_J_kg": {
+      "value": 0.0,
+      "rationale": "Fully oxidised; identity reaction, not vaporization or condensation"
+    },
+    "lhv_basis": {
+      "value": "Registered reactant phase, CO2(g) and H2O(g) products",
+      "source": "SPEC \u00a710 liquid-alcohol targets; Cantera heating-value method"
+    },
+    "thermo_data": {
+      "value": "Cantera species enthalpies and element weights",
+      "source": "Smith et al. (1999), GRI-Mech 3.0 / UCSD YAML thermodynamic data; mechanisms/PROVENANCE.md",
+      "cantera_version": "3.2.0",
+      "coolprop_version": "8.0.0"
+    },
+    "temperature_evaluation_policy": {
+      "value": "Evaluate species thermo at 298.15 K even if a polynomial lower bound is 300 K",
+      "rationale": "SPEC standard-state LHV reference; short polynomial extrapolation is explicit, without changing the reference temperature"
+    },
+    "fuel_registry": {
+      "H2": {
+        "formula": "H2",
+        "state": "gas",
+        "molar_mass_kg_mol": 0.002016,
+        "liquid_density_kg_m3": null,
+        "density_source": "No liquid phase at 298.15 K",
+        "h_fg_J_kg": null,
+        "h_fg_source": "Not defined at 298.15 K: above critical temperature"
+      },
+      "CH4": {
+        "formula": "CH4",
+        "state": "gas",
+        "molar_mass_kg_mol": 0.016042999999999998,
+        "liquid_density_kg_m3": null,
+        "density_source": "No liquid phase at 298.15 K",
+        "h_fg_J_kg": null,
+        "h_fg_source": "Not defined at 298.15 K: above critical temperature"
+      },
+      "CH3OH": {
+        "formula": "CH3OH",
+        "state": "liquid",
+        "molar_mass_kg_mol": 0.032042,
+        "liquid_density_kg_m3": 786.3266764548082,
+        "density_source": "CoolProp Methanol EOS: de Reuck and Craven (1993)",
+        "h_fg_J_kg": 1173459.8339679171,
+        "h_fg_source": "NIST SRD 69 methanol standard vaporization enthalpy table"
+      },
+      "C2H5OH": {
+        "formula": "C2H5OH",
+        "state": "liquid",
+        "molar_mass_kg_mol": 0.046069000000000006,
+        "liquid_density_kg_m3": 785.1332673410258,
+        "density_source": "CoolProp Ethanol EOS: Schroeder et al. (2014)",
+        "h_fg_J_kg": 918187.9354880721,
+        "h_fg_source": "NIST SRD 69 ethanol standard vaporization enthalpy table"
+      },
+      "H2O": {
+        "formula": "H2O",
+        "state": "liquid",
+        "molar_mass_kg_mol": 0.018015,
+        "liquid_density_kg_m3": 997.047636760347,
+        "density_source": "CoolProp Water EOS: Wagner and Pruss (2002), IAPWS-95",
+        "h_fg_J_kg": 2442631.14071607,
+        "h_fg_source": "Chase (1998), JANAF H2O(g) minus H2O(l)"
+      }
+    },
+    "parameters": {
+      "defaults": {
+        "p_exhaust_Pa": 100000.0,
+        "dead_state_T_K": 298.15,
+        "water_T_K": 300.0,
+        "injection_p_Pa": 10000000.0,
+        "tank_p_Pa": 101325.0,
+        "pump_efficiency": 0.6,
+        "wall_T_K": 450.0,
+        "woschni_C": 3.26,
+        "woschni_C1_closed": 2.28,
+        "woschni_C1_exchange": 6.18,
+        "step_rad": 0.008726646259971648,
+        "quick_step_rad": 0.017453292519943295,
+        "state_xtol_K": 1e-07,
+        "closure_tolerance": 0.01,
+        "zero_water_tolerance": 0.002,
+        "peak_pressure_limit_Pa": 12000000.0
+      },
+      "sources": {
+        "p_exhaust_Pa": "Exhaust back pressure = Module 03 p_IVC (1 bar, WOT), so four-stroke pumping work is zero; also the Conklin & Szybist end-of-expansion limit (1 bar)",
+        "dead_state_T_K": "Exergy dead state and sensible-energy zero: 298.15 K, the fuels.py LHV reference; dead-state pressure = p_exhaust_Pa",
+        "water_T_K,injection_p_Pa": "Task brief / SPEC section 7: liquid water at 300 K and 100 bar injected at TDC",
+        "tank_p_Pa": "Water tank at 1 atm; the pump raises it to injection_p_Pa",
+        "pump_efficiency": "ASSUMPTION (no source): small high-pressure plunger pump incl. drive; shaft work = isentropic work / 0.6, losses rejected to ambient. Pump work is ~0.017 J per mg of water, so the choice barely moves W_extra",
+        "wall_T_K": "Task brief / SPEC section 6: 450 K",
+        "woschni_C,woschni_C1_closed,woschni_C1_exchange": "Woschni (1967), SAE 670931; Heywood (1988) eq. 12.19: C = 3.26, C1 = 2.28 compression/expansion, 6.18 gas exchange; no combustion (C2) term in the steam loop",
+        "step_rad,quick_step_rad": "Fixed crank step: 0.5 CAD full, 1 CAD quick; the trapezoid-vs-midpoint closure error reports the discretisation error",
+        "state_xtol_K": "Numerical: Brent temperature tolerance of the U(T, V) inversion",
+        "closure_tolerance": "Task brief: ledger must close within 1 % of the trapped-exhaust enthalpy",
+        "zero_water_tolerance": "Numerical: |W_extra| at zero water <= 0.2 % of the trapped-exhaust enthalpy (exact zero for a reversible gas spring; discretisation only)",
+        "peak_pressure_limit_Pa": "SPEC section 6 design constraint (120 bar), applied to the steam loop"
+      },
+      "used_step_deg": 0.5,
+      "angles": "radians internally; outputs in CAD after firing TDC (gas-exchange TDC 360, stroke-5 BDC 540)"
+    },
+    "mode": {
+      "value": "full",
+      "sweep": {
+        "EVC_deg": [
+          190.0,
+          200.0,
+          210.0,
+          220.0,
+          230.0,
+          240.0,
+          250.0,
+          260.0,
+          270.0,
+          280.0,
+          290.0,
+          300.0,
+          310.0,
+          320.0,
+          330.0,
+          340.0,
+          350.0
+        ],
+        "water_mg": [
+          0.0,
+          0.5,
+          1.0,
+          2.0,
+          3.0,
+          5.0,
+          7.5,
+          10.0,
+          15.0,
+          20.0,
+          30.0,
+          45.0,
+          60.0
+        ]
+      },
+      "heat_transfer": [
+        "adiabatic",
+        "woschni"
+      ]
+    },
+    "workers": {
+      "value": 3,
+      "rationale": "Spawned point tasks (io.ordered_map, chunksize 1); Cantera/CoolProp objects built inside each worker"
+    },
+    "upstream": {
+      "key": "C2H5OH/CR=24/w=0.6/T_intake=360",
+      "selection": "recommended",
+      "source": "Module 03 results/dual_temp/03_engine_cycle_normal",
+      "fuel": "C2H5OH",
+      "mechanism": "mechanisms/sandiego.yaml",
+      "CR": 24.0,
+      "files": [
+        {
+          "path": "results/dual_temp/03_engine_cycle_normal/design_point.json",
+          "sha256": "aa0124608e8e8ebde645e4de470e5a7f64b5c03efd81b2f1b5933b601b437685"
+        },
+        {
+          "path": "results/dual_temp/03_engine_cycle_normal/evo_states.json",
+          "sha256": "520ed277014de3b8928565281c34554b23bfdb473b4869df294f28b3d4397a91"
+        }
+      ],
+      "missing": [],
+      "upstream_mode": "full",
+      "use_for_design": true,
+      "warning": null,
+      "upstream_synthetic_fits": false,
+      "mechanism_fallback": false,
+      "synthetic": false
+    },
+    "four_stroke_reference": {
+      "value": "Module 03 gross indicated work IVC -> EVO and fuel energy m_f LHV of the same cycle; the six-stroke adds strokes 5-6 with the same fuel charge",
+      "four_stroke_work_J": 662.0286844133906,
+      "fuel_energy_J": 1512.0078060251135,
+      "intake_water_kg": 8.461802019189027e-05,
+      "fuel_mass_kg": 5.641201346126019e-05
+    },
+    "extra_work_definition": {
+      "value": "W_extra,net = integral_EVC^EVO5 (p - p_exh) dV - W_pump; relative to the four-stroke with the same fuel; gas-exchange work cancels elsewhere",
+      "efficiency_gain": "W_extra,net / (m_f LHV): fuel energy unchanged",
+      "steam_MEP": "W_extra,net / V_d (per six-stroke cycle)"
+    },
+    "evo5_policy": {
+      "value": "Stroke-5 exhaust valve opens at the expansion node that maximises W_extra (where p falls to p_exh, else at BDC)",
+      "rationale": "dW_extra/dV_EVO5 = p - p_exh; a fixed cam would be timed for the design point"
+    },
+    "blowdown_model": {
+      "value": "Instantaneous, adiabatic, isentropic blowdown at EVO of the gas that stays (Cantera SP, frozen composition); displacement exhaust at p_exh",
+      "source": "Standard ideal-cycle exhaust model, Heywood (1988) section 5.4",
+      "limitation": "Valve flow, pressure waves and blowdown heat transfer not modelled; liquid water present at EVO (Module 03 liquid_water_kg) is assumed to leave in blowdown"
+    },
+    "thermodynamics": {
+      "value": "Dalton mixture in the full volume: dry exhaust (EVO species except H2O) frozen ideal gas from Cantera; all H2O (exhaust + injected) real fluid from CoolProp IAPWS-95 in phase equilibrium (lever rule below T_crit when m_w/V > rho_v,sat(T))",
+      "source": "Cantera species thermo (mechanism of the Module 03 point); CoolProp IAPWS-95, Wagner & Pruss (2002)",
+      "condensation": "Checked at every node; two-phase water sits at p_sat(T) with its liquid mass and latent heat in u; liquid volume counted for water only (dry gas sees the whole volume); the vapour-liquid split is equilibrium (no droplet kinetics)",
+      "extrapolation": "IAPWS-95 is used above 2000 K (CoolProp Tmax) where trapped exhaust is hottest at TDC; the IAPWS release states reasonable extrapolation to 5000 K",
+      "injection": "Instantaneous adiabatic constant-volume mixing at TDC to equilibrium (optimistic: no evaporation delay)"
+    },
+    "heat_transfer": {
+      "value": "adiabatic, or Woschni (motored form) to walls at 450 K during stroke-4 displacement and the closed steam loop",
+      "limitation": "No spray/wall-film impingement; Woschni was correlated for combusting/motored dry gas"
+    },
+    "pump_model": {
+      "value": "CoolProp isentropic compression 1 atm -> 100 bar of 300 K liquid; shaft work w_s/eta; injected at the isentropic outlet state"
+    },
+    "energy_ledger": {
+      "value": "m_w h_inj = W_loop + Q_wall + [U(EVO5) - U(EVC)] (EVC -> EVO5), re-integrated by the trapezoid rule over node states with U re-evaluated from (T, V)",
+      "normalisation": "closure error / trapped-exhaust sensible enthalpy (Cantera, frozen composition, vs 298.15 K)",
+      "sources_of_work": "trapped exhaust energy (paid by fuel LHV in strokes 1-3), pump work, heat from 450 K walls when the charge is colder; water has zero heating value"
+    },
+    "exergy_bound": {
+      "value": "W_extra,net <= X_trap + X_water,tank + (1 - T0/T_wall) Q_wall,gained",
+      "X_trap": "Cantera thermo-mechanical exergy of the trapped exhaust at EVC, frozen composition, dead state (298.15 K, p_exh); chemical, mixing and exhaust-water condensation exergy excluded (makes the bound stricter)"
+    },
+    "not_modelled": [
+      "water preheating by external exhaust/coolant heat exchangers (Conklin & Szybist patent: ~100 C water)",
+      "evaporation and condensation kinetics, wall films",
+      "valve flow losses and residual-gas change for the next intake",
+      "friction of the extra two strokes",
+      "power density: one power cycle per 3 revolutions"
+    ],
+    "literature": {
+      "conklin_szybist_2010": {
+        "steam_MEP_bar": [
+          0.75,
+          2.5
+        ],
+        "combustion_MEP_bar_up_to": 10.0,
+        "implied_extra_work_pct_of_combustion_work": [
+          7.5,
+          25.0
+        ],
+        "basis": "Ideal thermodynamic model, conventional SI geometry; EVC limited by 1 bar or by the dew point at the end of the steam expansion. Abstract also credits engine-coolant heat.",
+        "source": "Conklin & Szybist, Energy 35(4):1658-1664 (2010); OSTI 1035139 (docs/research/02 refs 23, 24)"
+      },
+      "yang_2023": {
+        "IMEP_bar": [
+          5.89,
+          6.21
+        ],
+        "relative_gain": 0.05432937181663844,
+        "injected_mg": 97.81,
+        "injection": "steam at 20 bar (externally generated)",
+        "source": "Yang et al. (2023) via review (docs/research/02 ref 29, secondary)"
+      },
+      "crower_2006": {
+        "claim": "~40 % better fuel efficiency",
+        "status": "unverified press claim (docs/research/02 refs 26, 27)"
+      },
+      "use": "Context only, not hard tests (task brief)"
+    }
+  },
+  "key_results": {
+    "run_label": "full",
+    "synthetic_exhaust_state": false,
+    "warning": null,
+    "design_point_key": "C2H5OH/CR=24/w=0.6/T_intake=360",
+    "design_point_selection": "recommended",
+    "four_stroke": {
+      "work_J": 662.0286844133906,
+      "fuel_energy_J": 1512.0078060251135,
+      "efficiency": 0.43784739852222343,
+      "IMEP_Pa": 1325230.9556770541,
+      "EVO_T_K": 958.7594010947158,
+      "EVO_p_Pa": 428031.46655484475,
+      "intake_water_kg": 8.461802019189027e-05,
+      "fuel_mass_kg": 5.641201346126019e-05
+    },
+    "injection_beneficial": {
+      "adiabatic": false,
+      "woschni": false
+    },
+    "optimum": {
+      "adiabatic": {
+        "description": "no injection: the four-stroke cycle is optimal (W_extra = 0)",
+        "extra_work_net_J": 0.0,
+        "extra_work_pct_of_four_stroke": 0.0,
+        "efficiency_gain_abs": 0.0,
+        "water_mg": 0.0,
+        "EVC_deg": null,
+        "combined_w": 0.6,
+        "combined_WFR": 1.4999999999999998
+      },
+      "woschni": {
+        "description": "no injection: the four-stroke cycle is optimal (W_extra = 0)",
+        "extra_work_net_J": 0.0,
+        "extra_work_pct_of_four_stroke": 0.0,
+        "efficiency_gain_abs": 0.0,
+        "water_mg": 0.0,
+        "EVC_deg": null,
+        "combined_w": 0.6,
+        "combined_WFR": 1.4999999999999998
+      }
+    },
+    "best_injected": {
+      "adiabatic": {
+        "heat_transfer": "adiabatic",
+        "EVC_deg": 350.0,
+        "water_mg": 0.5,
+        "trapped_mass_kg": 1.2288860776288438e-05,
+        "trapped_fraction_of_EVO_mass": 0.018204643274069475,
+        "T_EVC_K": 685.2250084594336,
+        "T_TDC_before_injection_K": 730.3015060056475,
+        "T_TDC_after_injection_K": 618.1185974414168,
+        "p_TDC_after_injection_Pa": 117156.12778690444,
+        "peak_pressure_Pa": 130681.96257523519,
+        "EVO5_deg": 367.5,
+        "p_EVO5_Pa": 99969.29739916808,
+        "T_EVO5_K": 594.6589508021607,
+        "extra_work_gross_J": -0.0469183227662095,
+        "pump_work_J": 0.00825935196638921,
+        "extra_work_net_J": -0.05517767473259871,
+        "extra_work_pct_of_four_stroke": -0.008334635044022369,
+        "efficiency_four_stroke": 0.43784739852222343,
+        "efficiency_six_stroke": 0.43781090553950686,
+        "efficiency_gain_abs": -3.649298271657352e-05,
+        "steam_MEP_net_Pa": -110.4531636460923,
+        "trapped_enthalpy_J": 5.9664723312430565,
+        "trapped_exergy_J": 2.1683407491898965,
+        "exergy_bound_J": 2.168352697906669,
+        "extra_work_over_exergy_bound": -0.025446817201771336,
+        "energy_closure_error_fraction": -1.9071218994638893e-06,
+        "condensed_kg": 0.0,
+        "max_liquid_kg": 0.0,
+        "two_phase_nodes": 0,
+        "combined_w": 0.6014131276227217,
+        "combined_WFR": 1.5088633602901507
+      },
+      "woschni": {
+        "heat_transfer": "woschni",
+        "EVC_deg": 350.0,
+        "water_mg": 0.5,
+        "trapped_mass_kg": 1.3436908446723913e-05,
+        "trapped_fraction_of_EVO_mass": 0.019905354078949843,
+        "T_EVC_K": 626.7137555387626,
+        "T_TDC_before_injection_K": 660.1692195759003,
+        "T_TDC_after_injection_K": 558.6507279693197,
+        "p_TDC_after_injection_Pa": 115208.19315736971,
+        "peak_pressure_Pa": 129160.33882129195,
+        "EVO5_deg": 367.0,
+        "p_EVO5_Pa": 99605.59926411929,
+        "T_EVO5_K": 536.6331318898589,
+        "extra_work_gross_J": -0.05069196334123094,
+        "pump_work_J": 0.00825935196638921,
+        "extra_work_net_J": -0.05895131530762015,
+        "extra_work_pct_of_four_stroke": -0.008904646686095731,
+        "efficiency_four_stroke": 0.43784739852222343,
+        "efficiency_six_stroke": 0.4378084097583608,
+        "efficiency_gain_abs": -3.898876386266554e-05,
+        "steam_MEP_net_Pa": -118.0071343778116,
+        "trapped_enthalpy_J": 5.494040083783109,
+        "trapped_exergy_J": 1.8094107449803871,
+        "exergy_bound_J": 1.8094226936971594,
+        "extra_work_over_exergy_bound": -0.03258017903332805,
+        "energy_closure_error_fraction": 1.9552709360301313e-06,
+        "condensed_kg": 0.0,
+        "max_liquid_kg": 0.0,
+        "two_phase_nodes": 0,
+        "combined_w": 0.6014131276227217,
+        "combined_WFR": 1.5088633602901507
+      }
+    },
+    "ledger_best_injected": {
+      "adiabatic": {
+        "trapped_mass_kg": 1.2288860776288438e-05,
+        "T_EVC_K": 685.2250084594336,
+        "trapped_enthalpy_J": 5.9664723312430565,
+        "trapped_exergy_J": 2.1683407491898965,
+        "water_enthalpy_in_J": 0.061283061007156046,
+        "water_enthalpy_above_tank_J": 0.004955611179833526,
+        "pump_work_J": 0.00825935196638921,
+        "recompression_work_J": -0.5607931922421117,
+        "expansion_work_J": 0.29946478765316165,
+        "loop_work_J": -0.26132840458895,
+        "exhaust_displacement_correction_J": 0.21441008182274052,
+        "extra_work_gross_J": -0.0469183227662095,
+        "extra_work_net_J": -0.05517767473259871,
+        "wall_heat_loss_J": 0.0,
+        "wall_heat_gained_J": 0.0,
+        "charge_energy_change_J": 0.32261146566927756,
+        "energy_closure_error_J": -1.1378790045458997e-05,
+        "energy_closure_error_fraction": -1.9071218994638893e-06,
+        "integrator_identity_error_fraction": -1.2263835744647199e-11,
+        "condensed_kg": 0.0,
+        "condensed_latent_heat_J": 0.0,
+        "exergy_bound_J": 2.168352697906669,
+        "four_stroke_work_J": 662.0286844133906,
+        "fuel_energy_J": 1512.0078060251135,
+        "balance": "m_w h_inj = W_loop + Q_wall + dU (EVC -> EVO5); W_extra,gross = W_loop - p_exh (V_EVO5 - V_EVC); W_extra,net = W_extra,gross - W_pump; sources: trapped exhaust energy (from fuel LHV in strokes 1-3), pump work, wall heat gained; water adds none"
+      },
+      "woschni": {
+        "trapped_mass_kg": 1.3436908446723913e-05,
+        "T_EVC_K": 626.7137555387626,
+        "trapped_enthalpy_J": 5.494040083783109,
+        "trapped_exergy_J": 1.8094107449803871,
+        "water_enthalpy_in_J": 0.061283061007156046,
+        "water_enthalpy_above_tank_J": 0.004955611179833526,
+        "pump_work_J": 0.00825935196638921,
+        "recompression_work_J": -0.5587808500896848,
+        "expansion_work_J": 0.258073039512815,
+        "loop_work_J": -0.3007078105768698,
+        "exhaust_displacement_correction_J": 0.25001584723563886,
+        "extra_work_gross_J": -0.05069196334123094,
+        "extra_work_net_J": -0.05895131530762015,
+        "wall_heat_loss_J": 0.15564662789309752,
+        "wall_heat_gained_J": 0.0,
+        "charge_energy_change_J": 0.20634424395232998,
+        "energy_closure_error_J": 1.0742336897205662e-05,
+        "energy_closure_error_fraction": 1.9552709360301313e-06,
+        "integrator_identity_error_fraction": -4.7579141904541426e-11,
+        "condensed_kg": 0.0,
+        "condensed_latent_heat_J": 0.0,
+        "exergy_bound_J": 1.8094226936971594,
+        "four_stroke_work_J": 662.0286844133906,
+        "fuel_energy_J": 1512.0078060251135,
+        "balance": "m_w h_inj = W_loop + Q_wall + dU (EVC -> EVO5); W_extra,gross = W_loop - p_exh (V_EVO5 - V_EVC); W_extra,net = W_extra,gross - W_pump; sources: trapped exhaust energy (from fuel LHV in strokes 1-3), pump work, wall heat gained; water adds none"
+      }
+    },
+    "best_injected_per_EVC": {
+      "adiabatic": {
+        "EVC=190": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.5266022304035944,
+          "extra_work_pct_of_four_stroke": -0.0795437180898295
+        },
+        "EVC=200": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.525289533282997,
+          "extra_work_pct_of_four_stroke": -0.0793454340650579
+        },
+        "EVC=210": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.5230387881648166,
+          "extra_work_pct_of_four_stroke": -0.07900545708654151
+        },
+        "EVC=220": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.5197332527360161,
+          "extra_work_pct_of_four_stroke": -0.07850615312787249
+        },
+        "EVC=230": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.5152411786974261,
+          "extra_work_pct_of_four_stroke": -0.0778276214955807
+        },
+        "EVC=240": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.5093426427449496,
+          "extra_work_pct_of_four_stroke": -0.07693664258615428
+        },
+        "EVC=250": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.5017314228472607,
+          "extra_work_pct_of_four_stroke": -0.07578696129939357
+        },
+        "EVC=260": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.4919944888660747,
+          "extra_work_pct_of_four_stroke": -0.07431618907903069
+        },
+        "EVC=270": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.4795573391534245,
+          "extra_work_pct_of_four_stroke": -0.07243754695891311
+        },
+        "EVC=280": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.4636149033096711,
+          "extra_work_pct_of_four_stroke": -0.07002942836539935
+        },
+        "EVC=290": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.44301091972903944,
+          "extra_work_pct_of_four_stroke": -0.06691717899226406
+        },
+        "EVC=300": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.41603178695778703,
+          "extra_work_pct_of_four_stroke": -0.06284195787172332
+        },
+        "EVC=310": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.38007260945720883,
+          "extra_work_pct_of_four_stroke": -0.0574102933008081
+        },
+        "EVC=320": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.3311223029438218,
+          "extra_work_pct_of_four_stroke": -0.0500163075618426
+        },
+        "EVC=330": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.2633116139751015,
+          "extra_work_pct_of_four_stroke": -0.03977344489361761
+        },
+        "EVC=340": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.1690019794169725,
+          "extra_work_pct_of_four_stroke": -0.0255278937900888
+        },
+        "EVC=350": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.05517767473259871,
+          "extra_work_pct_of_four_stroke": -0.008334635044022369
+        }
+      },
+      "woschni": {
+        "EVC=190": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -21.60540805166361,
+          "extra_work_pct_of_four_stroke": -3.2635153974948525
+        },
+        "EVC=200": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -21.11720745298127,
+          "extra_work_pct_of_four_stroke": -3.1897722787786416
+        },
+        "EVC=210": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -20.286223257784208,
+          "extra_work_pct_of_four_stroke": -3.064251404115427
+        },
+        "EVC=220": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -19.124892595197718,
+          "extra_work_pct_of_four_stroke": -2.8888314125155885
+        },
+        "EVC=230": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -17.655149675145335,
+          "extra_work_pct_of_four_stroke": -2.6668254851810818
+        },
+        "EVC=240": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -15.911524187001612,
+          "extra_work_pct_of_four_stroke": -2.403449361276615
+        },
+        "EVC=250": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -13.94531061644353,
+          "extra_work_pct_of_four_stroke": -2.106451116812283
+        },
+        "EVC=260": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -11.826299912807974,
+          "extra_work_pct_of_four_stroke": -1.786372734481589
+        },
+        "EVC=270": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -9.64283934789765,
+          "extra_work_pct_of_four_stroke": -1.4565591453853641
+        },
+        "EVC=280": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -7.4982692013957335,
+          "extra_work_pct_of_four_stroke": -1.1326199873106388
+        },
+        "EVC=290": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -5.501215389893258,
+          "extra_work_pct_of_four_stroke": -0.8309632980280556
+        },
+        "EVC=300": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -3.7554367199702785,
+          "extra_work_pct_of_four_stroke": -0.5672619341710081
+        },
+        "EVC=310": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -2.3414574852264884,
+          "extra_work_pct_of_four_stroke": -0.3536791592801154
+        },
+        "EVC=320": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -1.3030298151583661,
+          "extra_work_pct_of_four_stroke": -0.19682377000219453
+        },
+        "EVC=330": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.6294437857748569,
+          "extra_work_pct_of_four_stroke": -0.09507802314224399
+        },
+        "EVC=340": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.25179372127697175,
+          "extra_work_pct_of_four_stroke": -0.03803365733315329
+        },
+        "EVC=350": {
+          "water_mg": 0.5,
+          "extra_work_net_J": -0.05895131530762015,
+          "extra_work_pct_of_four_stroke": -0.008904646686095731
+        }
+      }
+    },
+    "zero_water_extra_work_J": {
+      "adiabatic": {
+        "EVC=190": -1.994752361931737e-05,
+        "EVC=200": -1.968774240951321e-05,
+        "EVC=210": -1.924940156532509e-05,
+        "EVC=220": -1.862796467494432e-05,
+        "EVC=230": -1.781701965422773e-05,
+        "EVC=240": -1.767632938427452e-05,
+        "EVC=250": -1.5599236168757982e-05,
+        "EVC=260": -1.4182519710970176e-05,
+        "EVC=270": -1.2562624055439953e-05,
+        "EVC=280": -1.0419205854874172e-05,
+        "EVC=290": -8.74087820795788e-06,
+        "EVC=300": -6.575490952983112e-06,
+        "EVC=310": -4.297430862807566e-06,
+        "EVC=320": 2.7435000619618205e-06,
+        "EVC=330": 6.6143087193992756e-06,
+        "EVC=340": 1.0591502237900906e-06,
+        "EVC=350": 5.160265985695855e-07
+      },
+      "woschni": {
+        "EVC=190": -21.138376309679924,
+        "EVC=200": -20.650962889812952,
+        "EVC=210": -19.821265784589947,
+        "EVC=220": -18.66222539145282,
+        "EVC=230": -17.19577676617016,
+        "EVC=240": -15.456891611036639,
+        "EVC=250": -13.496785197219339,
+        "EVC=260": -11.385533870929487,
+        "EVC=270": -9.212297191115386,
+        "EVC=280": -7.0809704494010965,
+        "EVC=290": -5.101882124987833,
+        "EVC=300": -3.379311943761393,
+        "EVC=310": -1.9969171327573207,
+        "EVC=320": -1.0014649206191866,
+        "EVC=330": -0.3892039835116271,
+        "EVC=340": -0.0968951384927639,
+        "EVC=350": -0.009107329483713199
+      }
+    },
+    "marginal_extra_work_J_per_mg": {
+      "adiabatic": {
+        "EVC=190": -1.0531645657599502,
+        "EVC=200": -1.050539691081175,
+        "EVC=210": -1.0460390775265027,
+        "EVC=220": -1.0394292495426822,
+        "EVC=230": -1.0304467233555439,
+        "EVC=240": -1.0186499328311305,
+        "EVC=250": -1.0034316472221838,
+        "EVC=260": -0.9839606126927275,
+        "EVC=270": -0.9590895530587382,
+        "EVC=280": -0.9272089682076324,
+        "EVC=290": -0.886004357701663,
+        "EVC=300": -0.832050422933668,
+        "EVC=310": -0.760136624052692,
+        "EVC=320": -0.6622500928877675,
+        "EVC=330": -0.5266364565676418,
+        "EVC=340": -0.3380060771343926,
+        "EVC=350": -0.11035638151839455
+      },
+      "woschni": {
+        "EVC=190": -0.9340634839673712,
+        "EVC=200": -0.9324891263366339,
+        "EVC=210": -0.9299149463885215,
+        "EVC=220": -0.9253344074897925,
+        "EVC=230": -0.9187458179503523,
+        "EVC=240": -0.9092651519299473,
+        "EVC=250": -0.8970508384483828,
+        "EVC=260": -0.8815320837569729,
+        "EVC=270": -0.861084313564529,
+        "EVC=280": -0.8345975039892739,
+        "EVC=290": -0.7986665298108502,
+        "EVC=300": -0.752249552417771,
+        "EVC=310": -0.6890807049383354,
+        "EVC=320": -0.6031297890783591,
+        "EVC=330": -0.48047960452645966,
+        "EVC=340": -0.3097971655684157,
+        "EVC=350": -0.0996879716478139
+      }
+    },
+    "literature_comparison": {
+      "conklin_szybist_2010": {
+        "steam_MEP_bar": [
+          0.75,
+          2.5
+        ],
+        "combustion_MEP_bar_up_to": 10.0,
+        "implied_extra_work_pct_of_combustion_work": [
+          7.5,
+          25.0
+        ],
+        "basis": "Ideal thermodynamic model, conventional SI geometry; EVC limited by 1 bar or by the dew point at the end of the steam expansion. Abstract also credits engine-coolant heat.",
+        "source": "Conklin & Szybist, Energy 35(4):1658-1664 (2010); OSTI 1035139 (docs/research/02 refs 23, 24)"
+      },
+      "yang_2023": {
+        "IMEP_bar": [
+          5.89,
+          6.21
+        ],
+        "relative_gain": 0.05432937181663844,
+        "injected_mg": 97.81,
+        "injection": "steam at 20 bar (externally generated)",
+        "source": "Yang et al. (2023) via review (docs/research/02 ref 29, secondary)"
+      },
+      "crower_2006": {
+        "claim": "~40 % better fuel efficiency",
+        "status": "unverified press claim (docs/research/02 refs 26, 27)"
+      },
+      "use": "Context only, not hard tests (task brief)",
+      "model_adiabatic": {
+        "best_injected_steam_MEP_bar": -0.001104531636460923,
+        "optimum_steam_MEP_bar": 0.0,
+        "within_conklin_szybist_range": false,
+        "best_injected_extra_work_pct_of_four_stroke": -0.008334635044022369,
+        "four_stroke_IMEP_bar": 13.252309556770541,
+        "six_stroke_cycle_IMEP_bar_at_optimum": 13.252309556770541,
+        "relative_IMEP_gain_at_optimum": 0.0,
+        "yang_relative_IMEP_gain": 0.05432937181663844
+      },
+      "model_woschni": {
+        "best_injected_steam_MEP_bar": -0.001180071343778116,
+        "optimum_steam_MEP_bar": 0.0,
+        "within_conklin_szybist_range": false,
+        "best_injected_extra_work_pct_of_four_stroke": -0.008904646686095731,
+        "four_stroke_IMEP_bar": 13.252309556770541,
+        "six_stroke_cycle_IMEP_bar_at_optimum": 13.252309556770541,
+        "relative_IMEP_gain_at_optimum": 0.0,
+        "yang_relative_IMEP_gain": 0.05432937181663844
+      },
+      "interpretation": "Cold liquid injected at TDC must take q ~ 41 kJ/mol (latent heat from 300 K) plus c_v,w (T - 300 K) from the trapped gas, which lowers the gas p V by R q / c_v,gas per mole of water, more than the R T per mole the new vapour adds (q > c_v,gas T); the expansion line then lies below the recompression line (see marginal_extra_work_J_per_mg) unless heat from outside the trapped charge (external exhaust or coolant preheat, or hotter walls) feeds the water. The Conklin & Szybist MEP range and the Yang et al. gain (externally generated steam) include such heat; the SPEC configuration here (300 K liquid, trapped-exhaust heat only, walls at 450 K) does not, so a lower or non-positive steam MEP is the expected outcome, not a discrepancy."
+    },
+    "max_abs_energy_closure_error_fraction": 7.613548101286309e-05,
+    "computed_points": 442,
+    "failed_points": 0,
+    "energy_source": "Trapped exhaust energy (already paid for by fuel LHV in strokes 1-3) plus pump work; water has zero heating value"
+  },
+  "validation": {
+    "passed": true,
+    "failed_points": [],
+    "energy_closure_passed": true,
+    "max_abs_energy_closure_error_fraction": 7.613548101286309e-05,
+    "energy_closure_basis": "fraction of trapped-exhaust sensible enthalpy (Cantera, vs 298.15 K)",
+    "energy_closure_tolerance_fraction": 0.01,
+    "max_abs_integrator_identity_error_fraction": 2.163234811408482e-08,
+    "exergy_bound_passed": true,
+    "points_over_exergy_bound": [],
+    "max_extra_work_over_exergy_bound": 1.2596228114000389e-06,
+    "zero_water_zero_work_passed": true,
+    "max_abs_zero_water_extra_work_fraction_adiabatic": 4.577732567811651e-07,
+    "zero_water_tolerance_fraction": 0.002,
+    "woschni_zero_water_not_positive": true,
+    "pump_work_subtracted": true,
+    "energy_from_water": "none: every W_extra,net <= trapped-exhaust exergy + water tank exergy + wall-heat exergy",
+    "points_with_condensation": 77,
+    "points_two_phase": 110,
+    "points_truncated_by_freezing": 0,
+    "scope": "In-run checks; tests/test_six_stroke.py on the server is the unit validation"
+  },
+  "runtime_s": 13.754124305996811
+}

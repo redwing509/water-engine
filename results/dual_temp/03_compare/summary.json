@@ -1,0 +1,230 @@
+{
+  "status": "executed (Module 03 code unchanged; only wall_T_K and T_intake sweep patched). Normal regime reproduces the committed Module 03 baseline to 8e-12. Hot regime NOT yet verified by a second engine.",
+  "n_pairs": 1296,
+  "best": {
+    "CH3OH": {
+      "normal": {
+        "dry": {
+          "CR": 20.0,
+          "w": 0.0,
+          "T_intake_K": 320.0,
+          "eta": 0.425938331217435,
+          "ca50": 18.0,
+          "knock_limited": "False",
+          "peak_p_bar": 69.3946560039003,
+          "rel_NO": 1.0
+        },
+        "overall": {
+          "CR": 24.0,
+          "w": 0.3,
+          "T_intake_K": 320.0,
+          "eta": 0.45577216729930403,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 121.27010027966418,
+          "rel_NO": 0.09089224056462472
+        },
+        "water_majority": {
+          "CR": 24.0,
+          "w": 0.5,
+          "T_intake_K": 360.0,
+          "eta": 0.4460975722973044,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 110.93660231943535,
+          "rel_NO": 0.0011111141710139587
+        }
+      },
+      "hot": {
+        "dry": {
+          "CR": 17.0,
+          "w": 0.0,
+          "T_intake_K": 320.0,
+          "eta": 0.42295483569656855,
+          "ca50": 16.0,
+          "knock_limited": "False",
+          "peak_p_bar": 68.26605969337147,
+          "rel_NO": 1.0
+        },
+        "overall": {
+          "CR": 24.0,
+          "w": 0.3,
+          "T_intake_K": 320.0,
+          "eta": 0.45970640779147165,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 122.27718423911071,
+          "rel_NO": 0.1225033464466806
+        },
+        "water_majority": {
+          "CR": 24.0,
+          "w": 0.5,
+          "T_intake_K": 400.0,
+          "eta": 0.4520961735122638,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 109.88811440424607,
+          "rel_NO": 0.0018019765926648634
+        }
+      }
+    },
+    "C2H5OH": {
+      "normal": {
+        "dry": {
+          "CR": 24.0,
+          "w": 0.0,
+          "T_intake_K": 320.0,
+          "eta": 0.44544580341809387,
+          "ca50": 13.999999999999998,
+          "knock_limited": "False",
+          "peak_p_bar": 96.44837095937919,
+          "rel_NO": 1.0
+        },
+        "overall": {
+          "CR": 24.0,
+          "w": 0.4,
+          "T_intake_K": 320.0,
+          "eta": 0.45437983947294447,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 121.9698717631441,
+          "rel_NO": 0.0378390790144232
+        },
+        "water_majority": {
+          "CR": 24.0,
+          "w": 0.5,
+          "T_intake_K": 360.0,
+          "eta": 0.4489308704110149,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 115.518937280954,
+          "rel_NO": 0.008625288538430928
+        }
+      },
+      "hot": {
+        "dry": {
+          "CR": 24.0,
+          "w": 0.0,
+          "T_intake_K": 320.0,
+          "eta": 0.44498609030288494,
+          "ca50": 16.0,
+          "knock_limited": "False",
+          "peak_p_bar": 88.45699711410965,
+          "rel_NO": 1.0
+        },
+        "overall": {
+          "CR": 24.0,
+          "w": 0.4,
+          "T_intake_K": 320.0,
+          "eta": 0.45855445845216786,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 122.9862582511927,
+          "rel_NO": 0.04397801279199493
+        },
+        "water_majority": {
+          "CR": 24.0,
+          "w": 0.5,
+          "T_intake_K": 360.0,
+          "eta": 0.4535472999699521,
+          "ca50": 8.0,
+          "knock_limited": "False",
+          "peak_p_bar": 116.50760336893751,
+          "rel_NO": 0.010953179554439278
+        }
+      }
+    }
+  },
+  "same_point_delta": {
+    "C2H5OH T_intake_hot=320": {
+      "n": 144,
+      "d_eta_pts_mean": 0.2980833762193597,
+      "d_eta_pts_min": -0.06509744391544614,
+      "d_eta_pts_max": 0.6107171720650839,
+      "knock_limited_normal": 0,
+      "knock_limited_hot": 0,
+      "wall_heat_ratio_mean": 0.9116122569794375,
+      "peak_T_dK_mean": 5.679439749338787
+    },
+    "C2H5OH T_intake_hot=360": {
+      "n": 144,
+      "d_eta_pts_mean": 0.24477414773992479,
+      "d_eta_pts_min": -1.5360866579602062,
+      "d_eta_pts_max": 0.586194931810019,
+      "knock_limited_normal": 0,
+      "knock_limited_hot": 0,
+      "wall_heat_ratio_mean": 0.9093092605624477,
+      "peak_T_dK_mean": 4.800521143075819
+    },
+    "C2H5OH T_intake_hot=400": {
+      "n": 144,
+      "d_eta_pts_mean": -0.3997223033921584,
+      "d_eta_pts_min": -5.907876912585685,
+      "d_eta_pts_max": 0.8952203854344032,
+      "knock_limited_normal": 0,
+      "knock_limited_hot": 6,
+      "wall_heat_ratio_mean": 0.8469801760564509,
+      "peak_T_dK_mean": 33.42899058774289
+    },
+    "CH3OH T_intake_hot=320": {
+      "n": 144,
+      "d_eta_pts_mean": 0.25305283935099004,
+      "d_eta_pts_min": -1.5715690381786607,
+      "d_eta_pts_max": 0.5051691843264872,
+      "knock_limited_normal": 0,
+      "knock_limited_hot": 0,
+      "wall_heat_ratio_mean": 0.8772231560950667,
+      "peak_T_dK_mean": 5.4829035637260795
+    },
+    "CH3OH T_intake_hot=360": {
+      "n": 144,
+      "d_eta_pts_mean": 0.21995213693547763,
+      "d_eta_pts_min": -0.8093219240060068,
+      "d_eta_pts_max": 0.5126595141053403,
+      "knock_limited_normal": 4,
+      "knock_limited_hot": 5,
+      "wall_heat_ratio_mean": 0.8800106481878974,
+      "peak_T_dK_mean": 5.351303243418958
+    },
+    "CH3OH T_intake_hot=400": {
+      "n": 144,
+      "d_eta_pts_mean": -0.41132101130265086,
+      "d_eta_pts_min": -5.2487123837732295,
+      "d_eta_pts_max": 1.0785296522135945,
+      "knock_limited_normal": 4,
+      "knock_limited_hot": 16,
+      "wall_heat_ratio_mean": 0.8311127021804503,
+      "peak_T_dK_mean": 33.3903006997354
+    },
+    "CH4 T_intake_hot=320": {
+      "n": 144,
+      "d_eta_pts_mean": 0.27753116927498994,
+      "d_eta_pts_min": 0.12228897572693631,
+      "d_eta_pts_max": 0.6614749597773306,
+      "knock_limited_normal": 0,
+      "knock_limited_hot": 0,
+      "wall_heat_ratio_mean": 0.9362450506516061,
+      "peak_T_dK_mean": 6.423513223960346
+    },
+    "CH4 T_intake_hot=360": {
+      "n": 144,
+      "d_eta_pts_mean": 0.2720327819432854,
+      "d_eta_pts_min": 0.007383149349371454,
+      "d_eta_pts_max": 0.6811441090997572,
+      "knock_limited_normal": 0,
+      "knock_limited_hot": 0,
+      "wall_heat_ratio_mean": 0.9341650454982651,
+      "peak_T_dK_mean": 5.6348451225547915
+    },
+    "CH4 T_intake_hot=400": {
+      "n": 144,
+      "d_eta_pts_mean": -0.28791697175779474,
+      "d_eta_pts_min": -3.1240025220719394,
+      "d_eta_pts_max": 0.6382117850638802,
+      "knock_limited_normal": 0,
+      "knock_limited_hot": 0,
+      "wall_heat_ratio_mean": 0.8767657934768628,
+      "peak_T_dK_mean": 40.70851891033247
+    }
+  }
+}

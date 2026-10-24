@@ -12,13 +12,14 @@ def main():
     ap.add_argument("--cycle-dir", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--workers", default="4")
+    ap.add_argument("--design-points", action="store_true", help="design-point mode (adiabatic, zero water: wall T has no effect)")
     a = ap.parse_args()
     reg = REGIMES[a.regime]
     m = importlib.import_module("sims.04_six_stroke.run")
     object.__setattr__(m.DEFAULTS, "wall_T_K", float(reg["chamber_wall_K"]))
     a.out.mkdir(parents=True, exist_ok=True)
     (a.out / "regime.json").write_text(json.dumps(reg, indent=2))
-    return m.main(["--full", "--workers", a.workers, "--cycle-dir", a.cycle_dir, "--out", a.out, "--design-points"])
+    return m.main(["--full", "--workers", a.workers, "--cycle-dir", a.cycle_dir, "--out", a.out] + (["--design-points"] if a.design_points else []))
 
 if __name__ == "__main__":
     sys.exit(main())
