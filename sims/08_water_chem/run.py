@@ -344,8 +344,11 @@ def oxygen_bookkeeping(fuel: str = BOOKKEEP_FUEL, w: float = BOOKKEEP_W,
         mol_per_kg = 1000.0 / mw_fuel
         dry_path = _mechanism_path(fuel, "real")
         wet_path = _mechanism_path(fuel, "real")
-        stoich_o2 = fuels.FUELS[fuel].atoms[1]
-        stoich_n2 = stoich_o2 * 3.76
+        # Stoichiometric O2 demand (mol/mol fuel) from the C/H/O atom balance,
+        # C + H/4 - O/2; the shared fuels.oxygen_demand helper is the single
+        # source of truth (also used by fuels.mixture for the charge itself).
+        stoich_o2 = fuels.oxygen_demand(fuel)
+        stoich_n2 = stoich_o2 * fuels.AIR_N2_O2
         T_ref = fuels.REFERENCE_T_K
         P_ref = fuels.REFERENCE_P_PA
         c_atoms = fuels.FUELS[fuel].atoms[0]

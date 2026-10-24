@@ -94,7 +94,29 @@ def test_oxygen_bookkeeping_closure():
     assert res["O_balance_rel_error"] <= 1e-6
     # Energy closure: heat release at 298 K, per kg fuel, must be unchanged
     # by water (water enters and leaves at 298 K).
+    assert res["energy_closure_rel"] is not None
     assert abs(res["energy_closure_rel"]) < 1e-6
+
+
+@pytest.mark.parametrize("fuel,expected_o2", [("CH3OH", 1.5), ("C2H5OH", 3.0),
+                                              ("CH4", 2.0)])
+def test_stoichiometric_oxygen_demand(fuel, expected_o2):
+    """O2 demand = C + H/4 - O/2; the H-atom-count bug is pinned here."""
+    assert fuels.oxygen_demand(fuel) == pytest.approx(expected_o2, abs=1e-12)
+    # The buggy value (H atom count, atoms[1]) must differ from the demand.
+    assert fuels.FUELS[fuel].atoms[1] != expected_o2
+
+
+@pytest.mark.parametrize("fuel", ["CH3OH", "C2H5OH", "CH4"])
+@pytest.mark.parametrize("w", [0.0, 0.6])
+def test_phi_one_mixture_matches_module_02(fuel, w):
+    """Module 08's phi=1 charge (fuels.mixture with the fuel's own
+    mechanism) must equal module 02's (default mechanism) within 1e-12."""
+    mod08 = importlib.import_module("sims.02_flame_chem.run")
+    comp08 = fuels.mixture(fuel, wc.PHI, w)          # module 08 charge basis
+    comp02 = mod02._gas(fuel, wc.PHI, w, 400.0, ct.one_atm).X
+    for name in comp08:
+        assert comp02[name] == pytest.approx(comp08[name], rel=1e-12)
 
 
 @pytest.mark.slow
