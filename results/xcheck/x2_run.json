@@ -1,0 +1,46 @@
+{
+  "tolerance_pct": 0.2,
+  "reference_source": "results/full08/oxygen_bookkeeping.json (fuel=CH3OH, w=0.6, T=900 K, P=4 MPa; Q evaluated at T_ref=298.15 K)",
+  "water_latent_heat": {
+    "nist_j_mol": 44003.600000000006,
+    "nist_j_kg": 2442608.9369969475,
+    "coolprop_j_kg": 2441676.1749126473,
+    "coolprop_j_mol": 43986.79629105134,
+    "rel_diff": 0.0003818712320961797,
+    "pass": true
+  },
+  "Q_dry": {
+    "module08_stoich_o2_bug_value": 4,
+    "correct_stoich_o2": 1.5,
+    "buggy_stoich_n2": 15.04,
+    "correct_stoich_n2": 5.64,
+    "independent_nist_bug_stoich": 21104603.33312527,
+    "independent_nist_correct_stoich": 21104603.33312527,
+    "q_molar_J_mol": 676233.7,
+    "comparison_vs_reference_bug_stoich": {
+      "quantity": "Q_dry",
+      "independent_J_kg": 21104603.333,
+      "reference_J_kg": 21508520.355,
+      "rel_diff_pct": 1.8779,
+      "tolerance_pct": 0.2,
+      "pass": false
+    },
+    "comparison_vs_reference_correct_stoich": {
+      "quantity": "Q_dry (correct stoich)",
+      "independent_J_kg": 21104603.333,
+      "reference_J_kg": 21508520.355,
+      "rel_diff_pct": 1.8779,
+      "tolerance_pct": 0.2,
+      "pass": false
+    },
+    "Q_wet_note": "Q_wet == Q_dry exactly: water enters and leaves at 298.15 K reference temperature (identity reaction)",
+    "comparison_Q_wet_vs_reference": {
+      "quantity": "Q_wet",
+      "independent_J_kg": 21104603.333,
+      "reference_J_kg": 21508520.355,
+      "rel_diff_pct": 1.8779,
+      "tolerance_pct": 0.2,
+      "pass": false
+    }
+  }
+}
