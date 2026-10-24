@@ -60,3 +60,69 @@ Mail VPS code: `/opt/water-engine/code-spray`, venv `/opt/water-engine/.venv`.
   1.73e-16 relative (asserted, 1e-6 tol). Full results at
   /opt/water-engine/results/full08 (not committed: PNGs/logs are gitignored).
 - Committed on wme1-spray at 76c0564.
+
+### 2026-10-24 (round 3) — Item A: module 08 water chemistry, BUG FIX
+- Cross-check X2 (xcheck 48afdc0) found `stoich_o2 = FUELS[fuel].atoms[1]` in
+  `oxygen_bookkeeping()`, which takes the **H atom count** (4 for CH3OH) instead
+  of the O2 demand (1.5 for CH3OH, 3 for C2H5OH, 2 for CH4).  The correct formula
+  is C + H/4 - O/2, already implemented as `fuels.oxygen_demand()` and used by
+  `fuels.mixture()` for the charge itself — module 08's flame/ignition/T_ad
+  mixtures were built correctly; only the bookkeeping block was wrong.
+- **Affected outputs:** only `oxygen_bookkeeping.json` (`Q_dry`, `Q_wet`,
+  `energy_closure_*`).  `chemical_effect.csv`, `flame_speed.csv`,
+  `ignition_delay.csv`, `adiabatic_flame_T.csv` and all plots are unchanged.
+- **Second bug found and fixed in the same block:** `Q` was divided by
+  `mol_per_kg = 1000/mw_fuel` while the numerator was already in J/kmol per kmol
+  of fuel, inflating Q by mw_fuel^2/1000 = 2.667% for CH3OH; and it used
+  `int_energy_mole` (ΔU) although the docstring says constant-pressure products
+  at 298.15 K.  Both fixed: enthalpy basis, divide by `mw_fuel` (J/kmol fuel ->
+  J/kg fuel), same convention as `fuels.lhv`.
+- **Old vs new (CH3OH, w=0.6, San Diego mechanism):**
+  | Quantity | Old | New |
+  |---|---|---|
+  | Q_dry [MJ/kg] | 21.50852035547747 | 21.104117910 |
+  | Q_wet [MJ/kg] | 21.508520355477475 | 21.104117910 (identical) |
+  | energy_closure_rel | 1.73e-16 | 7.06e-16 |
+  | S_L chemical effect @ w=0.6 | +3.11% | +3.11% (unchanged) |
+  | tau chemical effect @ w=0.6 | -17.97% | -17.97% (unchanged) |
+- X2 (NIST-JANAF independent) vs new Q_dry: 21,104,603.33 vs 21,104,117.91 J/kg
+  = **0.002%** residual (tolerance +/-0.2%).  Residual is the documented
+  1.3-2.5 kJ/mol San Diego vs NIST-JANAF formation-enthalpy difference
+  (CH3OH -200938.85 vs -200941.5 J/mol), NOT tuned.
+- Fast tests: `pytest tests/test_water_chem.py -m "not slow"` -> 6 passed
+  (incl. new `test_stoichiometric_oxygen_demand` for CH3OH/C2H5OH/CH4 =
+  1.5/3.0/2.0 and `test_phi_one_mixture_matches_module_02` within 1e-12).
+- `--quick` (2 workers, out results/quick08): validation `passed=true`.
+- `--full` (8 workers, out results/full08): validation `passed=true`.
+- Committed on wme1-spray at f55d15d.
+
+### 2026-10-24 (round 4) — Item A: module 08 water chemistry, re-check + commit
+  - Re-ran `--full` on mail (8 workers, out results/full08): validation
+    `passed=true`, all 13 checks passed.  Q_dry = 21,104,117.91 J/kg,
+    Q_wet = 21,104,117.91 J/kg, energy_closure_rel = 7.06e-16 (asserted
+    within 1e-6 relative).
+  - **Old vs new chemical-effect percentages at w = 0.6 (San Diego mechanism):**
+    | Fuel | Quantity | Old (buggy) | New (corrected) |
+    |---|---|---|---|
+    | CH3OH | S_L_chemical_effect | +3.11% | +3.11% (unchanged) |
+    | CH3OH | tau_chemical_effect | -17.97% | -17.97% (unchanged) |
+    | C2H5OH | S_L_chemical_effect | -24.29% | -24.29% (unchanged) |
+    | C2H5OH | tau_chemical_effect | -15.62% | -15.62% (unchanged) |
+    | CH4 | S_L_chemical_effect | -17.25% | -17.25% (unchanged) |
+    | CH4 | tau_chemical_effect | -3.23% | -3.23% (unchanged) |
+    Flame-speed, ignition-delay and T_ad mixtures were built correctly all
+    along (they use `fuels.mixture()` / `fuels.load_mechanism()`, not the
+    buggy bookkeeping `stoich_o2`), so the chemical-effect percentages are
+    identical; only Q_dry/Q_wet changed.
+  - X2 re-check (`scripts_run/x2_final_new.py` from the xcheck worktree,
+    no Cantera): module 08 Q_dry = 21,104,117.91 J/kg vs NIST-JANAF
+    21,099,962.5 J/kg -> **+0.0197%** (tolerance +/-0.2%) -> **PASS**.
+    The residual is the documented 1.3-2.5 kJ/mol San Diego vs NIST-JANAF
+    formation-enthalpy difference (CH3OH -200938.85 vs -200941.5 J/mol),
+    NOT tuned.
+  - Fast tests: `pytest tests/test_water_chem.py -m "not slow"` -> 13 passed
+    (incl. new `test_stoichiometric_oxygen_demand` for CH3OH/C2H5OH/CH4 =
+    1.5/3.0/2.0 and `test_phi_one_mixture_matches_module_02` within 1e-12).
+  - Scratch files (`_dbg_*.py`, `_poll*.sh`, `_cmp*.py`) removed from the
+    worktree and from mail.
+  - Committed on wme1-spray at <pending> (round 4).
