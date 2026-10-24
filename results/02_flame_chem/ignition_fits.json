@@ -1,0 +1,106 @@
+{
+  "H2": {
+    "mode": "full",
+    "status": "fitted",
+    "A": 1.3847360819239294e-08,
+    "n": 0.6050911558804164,
+    "E_J_per_mol": 180466.39267523226,
+    "c": 0.12991970403407765,
+    "valid_T_K_range": [
+      850.0,
+      1100.0
+    ],
+    "valid_w_range": [
+      0.0,
+      0.9
+    ],
+    "valid_p_Pa_range": [
+      2000000.0,
+      8000000.0
+    ],
+    "rms_ln_tau": 0.03729785456601066,
+    "rms_log10_tau": 0.016198252424848434,
+    "number_of_points": 180,
+    "pressure_unit": "Pa",
+    "A_unit": "s*Pa",
+    "pressure_exponent_fitted": true
+  },
+  "CH4": {
+    "mode": "full",
+    "status": "fitted",
+    "A": 0.00017910159086437488,
+    "n": 0.9326742396970503,
+    "E_J_per_mol": 156647.54102730827,
+    "c": 0.430876274899357,
+    "valid_T_K_range": [
+      850.0,
+      1100.0
+    ],
+    "valid_w_range": [
+      0.0,
+      0.9
+    ],
+    "valid_p_Pa_range": [
+      2000000.0,
+      8000000.0
+    ],
+    "rms_ln_tau": 0.08983359068856518,
+    "rms_log10_tau": 0.03901423272559921,
+    "number_of_points": 160,
+    "pressure_unit": "Pa",
+    "A_unit": "s*Pa",
+    "pressure_exponent_fitted": true
+  },
+  "CH3OH": {
+    "mode": "full",
+    "status": "fitted",
+    "A": 2.337184625591402e-07,
+    "n": 0.7466927717567721,
+    "E_J_per_mol": 154107.05358529292,
+    "c": 0.388347347343456,
+    "valid_T_K_range": [
+      750.0,
+      1100.0
+    ],
+    "valid_w_range": [
+      0.0,
+      0.9
+    ],
+    "valid_p_Pa_range": [
+      2000000.0,
+      8000000.0
+    ],
+    "rms_ln_tau": 0.13773683790573535,
+    "rms_log10_tau": 0.05981834865726351,
+    "number_of_points": 240,
+    "pressure_unit": "Pa",
+    "A_unit": "s*Pa",
+    "pressure_exponent_fitted": true
+  },
+  "C2H5OH": {
+    "mode": "full",
+    "status": "fitted",
+    "A": 1.0619643079543478e-06,
+    "n": 0.6997350467782417,
+    "E_J_per_mol": 146449.12309735673,
+    "c": 0.2222601144823456,
+    "valid_T_K_range": [
+      750.0,
+      1100.0
+    ],
+    "valid_w_range": [
+      0.0,
+      0.9
+    ],
+    "valid_p_Pa_range": [
+      2000000.0,
+      8000000.0
+    ],
+    "rms_ln_tau": 0.09436285055303902,
+    "rms_log10_tau": 0.04098126529184605,
+    "number_of_points": 229,
+    "pressure_unit": "Pa",
+    "A_unit": "s*Pa",
+    "pressure_exponent_fitted": true
+  }
+}

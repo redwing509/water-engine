@@ -769,7 +769,9 @@ def select(rows, ctx, par=DEFAULTS):
 
 def design_points(design, ctx, par):
     """The six SPEC item 2 points: best dry, best overall and best water-majority for CH3OH and
-    C2H5OH, plus the hot-dry validation case. Each is a (heat, EVC_deg, water_mg) probe."""
+    C2H5OH, plus the hot-dry validation case. Each design point is probed across the full EVC
+    sweep (190-350 CAD in 10-CAD steps) so the six-stroke gain is evaluated at every feasible
+    exhaust-valve-closing angle, not just the six-stroke IVC boundary."""
     out = []
     for fuel in ("CH3OH", "C2H5OH"):
         pf = design.get("per_fuel", {}).get(fuel)
@@ -780,13 +782,15 @@ def design_points(design, ctx, par):
                            ("water_majority", pf.get("water_majority"))):
             if not rec:
                 continue
-            out.append(dict(label=f"{fuel}/{label}", fuel=fuel, cr=rec["CR"], w=rec["w"],
-                            T_intake_K=rec["T_intake_K"], key=rec["key"],
-                            heat="adiabatic", EVC_deg=SIX_STROKE_IVC_DEG, water_mg=None))
-    out.append(dict(label="hot-dry validation", fuel=HOT_DRY_VALIDATION["fuel"],
-                    cr=HOT_DRY_VALIDATION["cr"], w=HOT_DRY_VALIDATION["w"],
-                    T_intake_K=HOT_DRY_VALIDATION["T_intake_K"], key=None,
-                    heat="adiabatic", EVC_deg=SIX_STROKE_IVC_DEG, water_mg=None))
+            for evc_deg in FULL_EVC_DEG:
+                out.append(dict(label=f"{fuel}/{label}", fuel=fuel, cr=rec["CR"], w=rec["w"],
+                                T_intake_K=rec["T_intake_K"], key=rec["key"],
+                                heat="adiabatic", EVC_deg=evc_deg, water_mg=None))
+    for evc_deg in FULL_EVC_DEG:
+        out.append(dict(label="hot-dry validation", fuel=HOT_DRY_VALIDATION["fuel"],
+                        cr=HOT_DRY_VALIDATION["cr"], w=HOT_DRY_VALIDATION["w"],
+                        T_intake_K=HOT_DRY_VALIDATION["T_intake_K"], key=None,
+                        heat="adiabatic", EVC_deg=evc_deg, water_mg=None))
     return out
 
 
@@ -813,7 +817,7 @@ def run_design_points(design, ctx, par, directory):
     rows = []
     for p in probes:
         loc = load_evo(directory, p["key"], ctx) if p["key"] else ctx
-        evc = p["EVC_deg"] if p["EVC_deg"] is not None else loc["evo_deg"]
+        evc = p["EVC_deg"]  # every probe now carries its own EVC from the 190-350 CAD sweep
         water_mg = p["water_mg"] if p["water_mg"] is not None else 0.0
         r = run_loop(loc, evc, water_mg * 1e-6, p["heat"], par)
         row = r["row"]
