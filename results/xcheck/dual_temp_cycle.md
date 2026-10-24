@@ -93,7 +93,7 @@ Module 03 and X5 numbers. Wall heat and NO come from Module 03 only, because X5 
 
 ## Does hotter do better?
 - **Same intake temperature, hotter coolant and walls (450 → 520 K):** yes, slightly. Mean Δη is +0.22 to +0.30 pp in both engines.
-  - Wall heat drops by 6-12 %.
+  - Wall heat drops by 6-17 % (Module 03 hot/normal ratio 0.83-0.94).
   - Peak T rises by 10-15 K.
   - Relative NO rises a little (CH3OH overall: 0.09 → 0.12).
   - A few more points need knock retard.
