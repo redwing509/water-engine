@@ -1,0 +1,762 @@
+{
+ "date": "2026-10-24",
+ "status": "code VERIFICATION only; not validation",
+ "summary": {
+  "01": {
+   "n": 11,
+   "passed": 11,
+   "failed": []
+  },
+  "05": {
+   "n": 12,
+   "passed": 12,
+   "failed": []
+  },
+  "06": {
+   "n": 10,
+   "passed": 10,
+   "failed": []
+  },
+  "10": {
+   "n": 8,
+   "passed": 7,
+   "failed": [
+    "Q7"
+   ]
+  },
+  "11": {
+   "n": 8,
+   "passed": 8,
+   "failed": []
+  },
+  "dual_temp": {
+   "n": 11,
+   "passed": 11,
+   "failed": []
+  },
+  "04": {
+   "n": 7,
+   "passed": 7,
+   "failed": []
+  }
+ },
+ "checks": {
+  "01": [
+   {
+    "id": "F1",
+    "check": "H2 mass flow 20 A, Faraday law, IUPAC M_H2",
+    "actual": 2.089436762774134e-07,
+    "reference": 2.0893123915382547e-07,
+    "tol": 0.0001,
+    "kind": "rel",
+    "err": 5.952735281855581e-05,
+    "passed": true
+   },
+   {
+    "id": "L-H2",
+    "check": "LHV H2 vs NIST-derived value",
+    "actual": 119952689.30893768,
+    "reference": 119960000.0,
+    "tol": 0.01,
+    "kind": "rel",
+    "err": 6.094273976586795e-05,
+    "passed": true
+   },
+   {
+    "id": "L-CH4",
+    "check": "LHV CH4 vs NIST-derived value",
+    "actual": 50025395.9034379,
+    "reference": 50030000.0,
+    "tol": 0.01,
+    "kind": "rel",
+    "err": 9.202671521291172e-05,
+    "passed": true
+   },
+   {
+    "id": "L-CH3OH",
+    "check": "LHV CH3OH vs NIST-derived value",
+    "actual": 19930658.076039147,
+    "reference": 19930000.0,
+    "tol": 0.01,
+    "kind": "rel",
+    "err": 3.301936975153019e-05,
+    "passed": true
+   },
+   {
+    "id": "L-C2H5OH",
+    "check": "LHV C2H5OH vs NIST-derived value",
+    "actual": 26802939.8926428,
+    "reference": 26810000.0,
+    "tol": 0.01,
+    "kind": "rel",
+    "err": 0.00026333858102201013,
+    "passed": true
+   },
+   {
+    "id": "L-H2O",
+    "check": "water LHV is exactly 0 (limit)",
+    "actual": 0.0,
+    "reference": 0.0,
+    "tol": 1.0,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "MC1",
+    "check": "loop gain MC mean vs analytic product of means (tol = 4 standard errors)",
+    "actual": 0.12182585957658496,
+    "reference": 0.12187500000000001,
+    "tol": 0.0003493065219778986,
+    "kind": "abs",
+    "err": 4.914042341505609e-05,
+    "passed": true
+   },
+   {
+    "id": "MC2",
+    "check": "loop gain sample max <= analytic max 0.45*0.75*0.80 = 0.27",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "K1",
+    "check": "ideal-efficiency kit: net shaft = H2 LHV power - electric (closed form)",
+    "actual": -250.93664411642817,
+    "reference": -250.93664411642817,
+    "tol": 1e-09,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "K2",
+    "check": "ideal-efficiency kit is still a net loss (no free energy)",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "K3",
+    "check": "LHV voltage of H2 = 1.25 V (textbook 1.253 V)",
+    "actual": 1.253093200857509,
+    "reference": 1.253,
+    "tol": 0.005,
+    "kind": "rel",
+    "err": 7.438216880228943e-05,
+    "passed": true
+   }
+  ],
+  "05": [
+   {
+    "id": "H-gibbsite",
+    "check": "heat released gibbsite, hand Hess sum [J/kg Al]",
+    "actual": 16147707.811398525,
+    "reference": 16147707.811398527,
+    "tol": 1e-06,
+    "kind": "rel",
+    "err": 1.1102230246251565e-16,
+    "passed": true
+   },
+   {
+    "id": "H-boehmite",
+    "check": "heat released boehmite, hand Hess sum [J/kg Al]",
+    "actual": 15730756.050104408,
+    "reference": 15730756.05010441,
+    "tol": 1e-06,
+    "kind": "rel",
+    "err": 1.1102230246251565e-16,
+    "passed": true
+   },
+   {
+    "id": "H-corundum",
+    "check": "heat released corundum, hand Hess sum [J/kg Al]",
+    "actual": 15162219.159593143,
+    "reference": 15162219.159593143,
+    "tol": 1e-06,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Y1",
+    "check": "H2 yield 1.5 mol/mol Al = 0.11207 kg/kg Al",
+    "actual": 0.11207663343585837,
+    "reference": 0.11206996220767768,
+    "tol": 0.0001,
+    "kind": "rel",
+    "err": 5.952735281855581e-05,
+    "passed": true
+   },
+   {
+    "id": "Lit-gibbsite",
+    "check": "gibbsite heat inside literature band 15.0-16.5 MJ/kg Al",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Lit-boehmite",
+    "check": "boehmite heat inside literature band 15.0-16.5 MJ/kg Al",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Lit-corundum",
+    "check": "corundum heat inside literature band 15.0-16.5 MJ/kg Al",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Z1",
+    "check": "zero aluminium -> zero energy (limit)",
+    "actual": 0.0,
+    "reference": 0.0,
+    "tol": 0.0,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Z2",
+    "check": "excess water: energy = 1 kg Al x total ledger (Al-limited)",
+    "actual": 29591601.400721744,
+    "reference": 29591601.400721744,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "C-gibbsite",
+    "check": "Hess closure gibbsite (module identity)",
+    "actual": 0.0,
+    "reference": 0.0,
+    "tol": 1e-06,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "C-boehmite",
+    "check": "Hess closure boehmite (module identity)",
+    "actual": 0.0,
+    "reference": 0.0,
+    "tol": 1e-06,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "C-corundum",
+    "check": "Hess closure corundum (module identity)",
+    "actual": 1.3022707178566348e-16,
+    "reference": 0.0,
+    "tol": 1e-06,
+    "kind": "abs",
+    "err": 1.3022707178566348e-16,
+    "passed": true
+   }
+  ],
+  "06": [
+   {
+    "id": "N1",
+    "check": "choked flux = Cd rho* a* (independent isentropic-relation form)",
+    "actual": 224.6058659769093,
+    "reference": 224.60586597690934,
+    "tol": 1e-10,
+    "kind": "rel",
+    "err": 1.1102230246251565e-16,
+    "passed": true
+   },
+   {
+    "id": "N2",
+    "check": "venturi mass conservation: Cd A rho V = mdot",
+    "actual": 0.035281006925311595,
+    "reference": 0.0352810069253116,
+    "tol": 1e-06,
+    "kind": "rel",
+    "err": 2.220446049250313e-16,
+    "passed": true
+   },
+   {
+    "id": "N3",
+    "check": "venturi stagnation enthalpy: T + V^2/(2cp) = T0",
+    "actual": 300.00000000000006,
+    "reference": 300.0,
+    "tol": 1e-09,
+    "kind": "rel",
+    "err": 2.220446049250313e-16,
+    "passed": true
+   },
+   {
+    "id": "J1",
+    "check": "jet mu->0 limit = Bernoulli Cd A sqrt(2 rho dp)",
+    "actual": 0.0010437968185135341,
+    "reference": 0.001043796818513548,
+    "tol": 1e-06,
+    "kind": "rel",
+    "err": 1.3322676295501878e-14,
+    "passed": true
+   },
+   {
+    "id": "J2",
+    "check": "jet viscous limit = Hagen-Poiseuille pi rho d^4 dp/(128 mu L)",
+    "actual": 7.70671527710955e-07,
+    "reference": 7.706719478337464e-07,
+    "tol": 0.001,
+    "kind": "rel",
+    "err": 5.451382946164429e-07,
+    "passed": true
+   },
+   {
+    "id": "J3",
+    "check": "jet residual: a mdot^2 + b mdot = dp",
+    "actual": 1999.9999999999995,
+    "reference": 2000.0,
+    "tol": 1e-10,
+    "kind": "rel",
+    "err": 2.220446049250313e-16,
+    "passed": true
+   },
+   {
+    "id": "J4",
+    "check": "float head >= signal -> zero flow (limit)",
+    "actual": 0.0,
+    "reference": 0.0,
+    "tol": 0.0,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "J5",
+    "check": "sized jet (0.01 mm drill rounding) delivers requested flow within rounding",
+    "actual": 9.939179538670227e-05,
+    "reference": 0.0001,
+    "tol": 0.03,
+    "kind": "rel",
+    "err": 0.006082046132977359,
+    "passed": true
+   },
+   {
+    "id": "E1",
+    "check": "d2-law lifetime = D0^2/K, K = 8k ln(1+B)/(rho_l cp)",
+    "actual": 0.2864880303730715,
+    "reference": 0.286488030373072,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 1.7763568394002505e-15,
+    "passed": true
+   },
+   {
+    "id": "V1",
+    "check": "WFR valve: fully open at 15 kPa, closed at 25 kPa, linear midpoint 0.5",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   }
+  ],
+  "10": [
+   {
+    "id": "Q1",
+    "check": "calibration point: CH3OH CR10 w0 S_L 0.72099 -> 25.0 CAD (Module 03 CA10-90)",
+    "actual": 24.999999999999993,
+    "reference": 25.0,
+    "tol": 1e-06,
+    "kind": "rel",
+    "err": 3.3306690738754696e-16,
+    "passed": true
+   },
+   {
+    "id": "Q2",
+    "check": "hand evaluation of the Tabaczynski chain at CR 16, S_L 0.5",
+    "actual": 34.86378552808709,
+    "reference": 34.86378552808709,
+    "tol": 1e-09,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Q3",
+    "check": "scaling: duration proportional to 1/S_L (m_fuel = 0)",
+    "actual": 2.0,
+    "reference": 2.0,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Q4",
+    "check": "scaling: duration_CAD proportional to rpm^0.5 (u' ~ rpm, lambda ~ rpm^-0.5)",
+    "actual": 1.4142135623730951,
+    "reference": 1.4142135623730951,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Q5",
+    "check": "flame area pi B^2 xb^(2/3) (docstring) == code 4 A_bore xb^(2/3)",
+    "actual": 0.014637270926046721,
+    "reference": 0.014637270926046721,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Q6",
+    "check": "S_L -> 0 limit: burn-up time infinite",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "Q7",
+    "check": "Module 03 QD ramp: CA90 - CA10 = duration",
+    "actual": 25.0,
+    "reference": 0.4363323129985824,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 56.29577951308232,
+    "passed": false
+   },
+   {
+    "id": "Q8",
+    "check": "Module 03 QD ramp: x(CA50) = 0.5",
+    "actual": 0.5,
+    "reference": 0.5,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   }
+  ],
+  "11": [
+   {
+    "id": "S1",
+    "check": "no liquid: S_BL = S_L exactly (tau_e = 0)",
+    "actual": 1.2,
+    "reference": 1.2,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "S2",
+    "check": "no liquid: MIE = cp rho dT_ad pi/6 (C_Q alpha/S_L)^3",
+    "actual": 2.336559536107409e-07,
+    "reference": 2.336559536107409e-07,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "S3",
+    "check": "heat-sink factor = 1 at zero sink",
+    "actual": 1.0,
+    "reference": 1.0,
+    "tol": 0.0,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "S4",
+    "check": "Zeldovich factor exp(-E/2R (1/T2 - 1/Tad)) at 100 K sink",
+    "actual": 0.8726873342325797,
+    "reference": 0.8726873342325797,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "S5",
+    "check": "Metghalchi-Keck ratio = 1 at phi = 1 and floored at 0 when non-flammable",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "S6",
+    "check": "S_L(T0,p0) = S_L0 (power-law identity)",
+    "actual": 0.5,
+    "reference": 0.5,
+    "tol": 1e-15,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "S7",
+    "check": "max SMD for MIE = 50 mJ: bisection vs closed-form inverse",
+    "actual": 0.00032525320566734666,
+    "reference": 0.0003252532056673467,
+    "tol": 1e-09,
+    "kind": "rel",
+    "err": 2.220446049250313e-16,
+    "passed": true
+   },
+   {
+    "id": "S8",
+    "check": "MIE monotone increasing in SMD",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   }
+  ],
+  "dual_temp": [
+   {
+    "id": "R1",
+    "check": "normal coolant 90 C = 363.15 K (MAHLE/VW SSP 222 85-95 C band)",
+    "actual": 363.15,
+    "reference": 363.15,
+    "tol": 0,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "R2",
+    "check": "hot coolant 115 C = 388.15 K (inside 95-110 C mapped + pressurised margin; SAE 960271)",
+    "actual": 388.15,
+    "reference": 388.15,
+    "tol": 0,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "R3",
+    "check": "port wall = coolant in both regimes (stated assumption)",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "R4",
+    "check": "hot >= normal for coolant, chamber wall, port wall, max intake",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "R5",
+    "check": "chamber wall in Heywood ch.12 gas-side band 400-600 K",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "P0",
+    "check": "normal regime chamber wall equals unpatched Module 03 default (normal = baseline)",
+    "actual": 450.0,
+    "reference": 450.0,
+    "tol": 0,
+    "kind": "abs",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "P1",
+    "check": "run_m03 wall_T patch seen by all 19 Module 03 functions defaulting to DEFAULTS",
+    "actual": true,
+    "reference": true,
+    "tol": 0,
+    "kind": "bool",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "B-CH3OH",
+    "check": "pure CH3OH bubble point at 1.0 bar vs NIST Tb(1 atm) shifted by Clausius-Clapeyron",
+    "actual": 337.29822568348186,
+    "reference": 337.336196289818,
+    "tol": 0.2,
+    "kind": "abs",
+    "err": 0.03797060633615956,
+    "passed": true
+   },
+   {
+    "id": "B-C2H5OH",
+    "check": "pure C2H5OH bubble point at 1.0 bar vs NIST Tb(1 atm) shifted by Clausius-Clapeyron",
+    "actual": 351.2371426243792,
+    "reference": 351.09474296238096,
+    "tol": 0.2,
+    "kind": "abs",
+    "err": 0.1423996619982404,
+    "passed": true
+   },
+   {
+    "id": "B-H2O",
+    "check": "pure water bubble point at 1.0 bar = 372.76 K (IAPWS)",
+    "actual": 372.75592889710515,
+    "reference": 372.76,
+    "tol": 0.1,
+    "kind": "abs",
+    "err": 0.004071102894840806,
+    "passed": true
+   },
+   {
+    "id": "H-H2O",
+    "check": "water h_fg at 373.124 K = 2256.4 kJ/kg (IAPWS-95)",
+    "actual": 2256472.373555982,
+    "reference": 2256400.0,
+    "tol": 0.001,
+    "kind": "rel",
+    "err": 3.207478992295343e-05,
+    "passed": true
+   }
+  ],
+  "04": [
+   {
+    "id": "P1",
+    "check": "isentropic pump work ~ v dp (incompressible estimate, 0.5 %)",
+    "actual": 9911.222359667052,
+    "reference": 9932.874530009796,
+    "tol": 0.005,
+    "kind": "rel",
+    "err": 0.002179849375659293,
+    "passed": true
+   },
+   {
+    "id": "P2",
+    "check": "shaft work = w_s/eta_pump",
+    "actual": 16518.703932778422,
+    "reference": 16518.703932778422,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 0.0,
+    "passed": true
+   },
+   {
+    "id": "G1",
+    "check": "geometry V(BDC)/V(TDC) = CR",
+    "actual": 14.000000000000002,
+    "reference": 14.0,
+    "tol": 1e-12,
+    "kind": "rel",
+    "err": 2.220446049250313e-16,
+    "passed": true
+   },
+   {
+    "id": "GCI-EVC220_10mg_adiabatic",
+    "check": "RK2 crank-step GCI (fine 0.5 deg) on net extra work, EVC220_10mg_adiabatic: GCI_fine <= 1 %",
+    "actual": 8.240582223981847e-06,
+    "reference": 0.0,
+    "tol": 0.01,
+    "kind": "abs",
+    "err": 8.240582223981847e-06,
+    "passed": true
+   },
+   {
+    "id": "GCI-EVC260_10mg_woschni",
+    "check": "RK2 crank-step GCI (fine 0.5 deg) on net extra work, EVC260_10mg_woschni: GCI_fine <= 1 %",
+    "actual": 3.299994041674836e-07,
+    "reference": 0.0,
+    "tol": 0.01,
+    "kind": "abs",
+    "err": 3.299994041674836e-07,
+    "passed": true
+   },
+   {
+    "id": "Z1",
+    "check": "zero water, adiabatic: |net extra work| <= 0.2 % of trapped enthalpy (reversible gas spring)",
+    "actual": 4.471227037272087e-07,
+    "reference": 0.0,
+    "tol": 0.002,
+    "kind": "abs",
+    "err": 4.471227037272087e-07,
+    "passed": true
+   },
+   {
+    "id": "Z2",
+    "check": "zero water: EVO5 at mirror angle 720 - EVC (+-8 deg)",
+    "actual": 500.00000000000006,
+    "reference": 500.0,
+    "tol": 8.0,
+    "kind": "abs",
+    "err": 5.684341886080802e-14,
+    "passed": true
+   }
+  ]
+ },
+ "m04_step_study": {
+  "EVC220_10mg_adiabatic": {
+   "steps_deg": [
+    2.0,
+    1.0,
+    0.5
+   ],
+   "extra_work_net_J": [
+    -9.265805819387989,
+    -9.265042837454756,
+    -9.264855353106851
+   ],
+   "p": 2.0248787381552558,
+   "gci_fine": 8.240582223981847e-06,
+   "f_extrap": -9.264794274864986
+  },
+  "EVC260_10mg_woschni": {
+   "steps_deg": [
+    2.0,
+    1.0,
+    0.5
+   ],
+   "extra_work_net_J": [
+    -15.887281648510845,
+    -15.885952979110812,
+    -15.885880399025195
+   ],
+   "p": 4.194264608538586,
+   "gci_fine": 3.299994041674836e-07,
+   "f_extrap": -15.885876205160342
+  }
+ },
+ "runtime_s": 6.015095949172974
+}
