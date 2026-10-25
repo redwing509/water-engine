@@ -58,7 +58,8 @@ def chain_summary(rows, thr=GAIN_THRESHOLD):
             best = prev = s
         else:
             stop = ("not eligible/failed" if not ok else f"M03 gain {g:.2e} <= threshold {thr:.1e}"
-                    if g <= thr else f"M03-CRN gain {gc:.2e} not positive")
+                    if g <= thr else ("M03-CRN (second engine) failed at the next step (Cantera integrator), chain stopped" if gc is None
+                                     else f"M03-CRN gain {gc:.2e} not positive"))
             break
     return base, steps, probes, best, stop
 
@@ -167,6 +168,8 @@ def main():
         n = max([s["step"] for s in steps] or [0])
         if stop:
             status = stop
+        elif n > NOISE_CAP_EXT:
+            status = f"still gaining past cap {NOISE_CAP_EXT} (at step {n}); extension to 400 (sims.track_b.h1_hot) running"
         elif n >= NOISE_CAP_EXT:
             status = f"cap raised 100 -> {NOISE_CAP_EXT}; reached while still gaining"
         elif n >= NOISE_CAP:
