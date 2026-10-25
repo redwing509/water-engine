@@ -865,8 +865,11 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
     step = par.step_rad if step_rad is None else step_rad
     omega = par.rpm * 2.0 * math.pi / 60.0
     theta90 = burn_angle(par.knock_burn_fraction, ca50, duration, par)
+    # Start-of-burn anchor on a grid node at x_b = endgas_anchor_xb (verification item 1, 2026-10-24):
+    # a step-dependent anchor position made the Woschni combustion term O(h).
+    theta_a = burn_angle(par.endgas_anchor_xb, ca50, duration, par)
     nodes = list(np.linspace(par.ivc_rad, evo, max(2, math.ceil((evo - par.ivc_rad) / step)) + 1))
-    nodes += [a for a in (par.evap_end_rad, theta90) if par.ivc_rad < a < evo]
+    nodes += [a for a in (par.evap_end_rad, theta90, theta_a) if par.ivc_rad < a < evo]
     grid = np.unique(np.array(nodes, dtype=float))
     Qa, Lc = charge.Q_avail, charge.L_cyl
     xb = x_ivc = burn_release(grid[0], ca50, duration, par)
@@ -901,15 +904,24 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
         Vm, Vr = volume(mid, charge.cr, par), volume(right, charge.cr, par)
         xm, xr = burn_release(mid, ca50, duration, par), burn_release(right, ca50, duration, par)
         em = charge.evaporate(e, mid, st, Vm)
+        if em > e:  # saturation cap on the no-evaporation predictor state at mid, not the lagged left state
+            s0 = charge.state(U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - 0.5 * q_left * dt, Vm, xm, e,
+                              (st["T"], st["p"]))
+            em = charge.evaporate(e, mid, s0, Vm)
         er = max(em, charge.evaporate(e, right, st, Vr))
         U_mid = U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - Lc * (em - e) - 0.5 * q_left * dt
         sm = charge.state(U_mid, Vm, xm, em, (st["T"], st["p"]))
-        if anchor is None and not charge.ideal and xr >= par.endgas_anchor_xb:
+        if anchor is None and not charge.ideal and left >= theta_a - 1e-12:
             anchor = charge.endgas_anchor(st)
         q_mid = wall_heat_rate(sm, charge, anchor) if wall else 0.0
         work = sm["p"] * (Vr - st["V"])
         d_evap = Lc * (er - e)
         U += -work + Qa * (xr - xb) - d_evap - q_mid * dt
+        if er > e:  # corrector: saturation cap on the no-evaporation right state
+            s0 = charge.state(U + d_evap, Vr, xr, e, (sm["T"], sm["p"]))
+            er2 = max(em, charge.evaporate(e, right, s0, Vr))
+            U -= Lc * (er2 - er)
+            er, d_evap = er2, Lc * (er2 - e)
         W += work
         Q_wall += q_mid * dt
         Q_evap += d_evap
