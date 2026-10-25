@@ -1,16 +1,26 @@
 ## Findings so far (hand-written; numbers from the tables above)
 
-1. **Pre-stated 0.1-pp rule stops gasoline / E-blends / CH4 / ethanol-normal at step 1.** Each first step
-   gains 2-8e-5 absolute (both engines agree to < 0.001 pp on the gain), below the 1e-4 threshold, so the
-   Track B best stays w = 0 for those chains. The threshold was NOT changed after seeing data.
-2. **But the gain is real and steady:** the labelled probes (not Track B steps) at the same hardware show a
-   near-linear rise in both engines up to w = 10 %: PRF87 +0.53 pp, PRF91 +0.38, PRF97 +0.40, E10 +0.44,
-   E85 +0.72 (normal) / +0.42 (hot), C2H5OH-normal +0.45, CH4 +0.22 (normal, MBT-limited) / +0.42 (hot).
-   Mechanism (Module 03): knock relief lets CA50 advance towards MBT (e.g. E85 14.8 -> 11.7 deg); NO proxy
-   falls 10-25 %; p_max rises 1-13 %. **Decision for James:** keep the per-step 0.01-pp rule (strict), or
-   judge gains per 1-pp block (10 steps) / at the 3e-5 step-error level, which would let these chains walk on.
-3. **Methanol (normal) and ethanol (hot) pass the rule** (~1.5e-4 and ~1.2e-4 per step, CRN gain positive
-   each step) and are still stepping; MAX_STEPS = 100 caps them at w = 0.10.
+0. **Continuation rule changed by James after seeing the first data (2026-10-24 19:01 PDT).** Old rule (pre-stated):
+   step gain > 1e-4 absolute in Module 03 plus positive M03-CRN gain. New rule: gain > numerical noise,
+   **3.3e-5 absolute** (largest measured shift of the 0.5-CAD production-step efficiency, verification/x5_m03/RESULTS_FIX.md,
+   X5 C2H5OH/best_overall +0.0073 % of 0.45618; the pure 0.5 vs 0.25 CAD refinement difference is only <= 6.1e-6 and
+   the spark-bisection tolerance is ~2e-5, so 3.3e-5 is a conservative noise floor). Both engines must still gain on
+   every step, the step is still 0.1 pp, the cap is 100 steps, raised to 200 only for chains still gaining at 100 (recorded per
+   chain). Old-rule results are kept as the variant `rule_1e-4` (files without `__noise`).
+1. **Under the old rule** gasoline / E-blends / CH4 / ethanol-normal stopped at step 1 (first-step gains 2-8e-5,
+   both engines within 0.001 pp of each other); methanol-normal stopped at w = 0.041 (liquid) / 0.049 (humid_evap), and
+   ethanol-hot stopped at w = 0.040 / 0.045, when per-step gains fell just under 1e-4.
+2. **Under the noise rule** every gasoline, E10, E85 (normal and hot), CH4-hot and ethanol-normal chain passes
+   step 1 in liquid and humid_evap mode, and the chains are walking on (see the current-rule table for live best w and
+   d_eta). CH4-normal stops at step 0 in both modes (first-step gain 1.9e-5 liquid / 2.4e-5 humid_evap: CA50 is already MBT-limited,
+   so there is little knock relief to collect). **humid_ambient stops at step 0 for every fuel** (gain -3.4e-6 to +9.3e-6:
+   vapour at intake temperature dilutes and lowers O2 partial pressure without the cooling that relieves knock).
+   The labelled probes (not steps) suggest near-linear gains up to w = 10 %: PRF87 +0.53 pp, PRF91 +0.38,
+   PRF97 +0.40, E10 +0.44, E85 +0.72 / +0.42 (hot), C2H5OH-normal +0.45, CH4-hot +0.42. So many chains are expected
+   to reach cap 100 still gaining and be extended to 200.
+3. **Mechanism (Module 03, both engines agree on efficiency):** knock relief lets the knock-limited CA50 advance
+   (e.g. CH3OH 14.6 -> ~11 deg, C2H5OH-hot 14.9 -> ~12.3 deg), the NO proxy falls (-4 to -9 % at the alcohol chains so far,
+   10-25 % at the 10 % probes), and p_max rises (+9 to +18 % on the alcohol chains so far). That p_max rise is the cost to watch against hardware limits.
 4. **Humid intake (Track B):** per 0.1-pp step, fully-evaporated intake water (humid_evap) gives ~85-110 %
    of the liquid-mode gain (evaporative cooling -> denser, cooler charge, knock relief); water vapour already
    at intake temperature (humid_ambient, no cooling) gives only ~10 % (dilution + lower O2 partial pressure

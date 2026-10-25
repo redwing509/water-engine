@@ -46,7 +46,16 @@ MAX_STEPS = 100          # hard cap (10 %); the gain rule stops far earlier
 # Module 03 efficiency GCI_fine <= 1.4e-5 relative, 0.5-CAD production step error <= 0.007 % relative
 # (~3e-5 absolute at eta ~ 0.45). Threshold = 1e-4 absolute (0.01 percentage point) ~ 3x the step
 # error, ~15x the GCI, ~5x the knock-limited bisection tolerance (0.005 CAD x ~4e-3/CAD).
-GAIN_THRESHOLD = 1.0e-4
+GAIN_THRESHOLD = 1.0e-4   # ORIGINAL rule (kept as the recorded "rule_1e-4" variant)
+# REVISED rule - decided by James on 2026-10-24 19:01 PDT AFTER seeing the first Track B data:
+# "Continue stepping while each step's gain beats the numerical noise level (about 3e-5)".
+# Value = largest measured shift of a 0.5-CAD production-step efficiency in the convergence study
+# (verification/x5_m03/RESULTS_FIX.md: X5 C2H5OH/best_overall +0.0073 % of 0.45618 = 3.33e-5; M03 max
+# 3.26e-5). For reference the pure 0.5 vs 0.25 CAD step-refinement difference is <= 6.1e-6 and the
+# knock-limited spark bisection tolerance is ~2e-5 (0.005 CAD x ~4e-3/CAD), both below 3.3e-5.
+NOISE_THRESHOLD = 3.3e-5
+NOISE_CAP = 100           # same 100-step cap; raised to NOISE_CAP_EXT only for chains still gaining at 100
+NOISE_CAP_EXT = 200
 PROBES = (0.01, 0.02, 0.05, 0.10)
 RAD = math.pi / 180.0
 MBT_LO, MBT_HI, MBT_TOL = 0.0, 16.0, 0.1     # CAD aTDC
@@ -269,18 +278,124 @@ def chain(args):
                 steps_taken=best_row["step"], stop_reason=stop, probes=probes)
 
 
+def noise_file(fuel, regime, mode):
+    return OUT / f"steps_{fuel}_{regime}{'' if mode == 'liquid' else '_' + mode}__noise.jsonl"
+
+
+def chain_noise(args):
+    """Revised-rule chain. Reuses the original-rule rows (identical computations: same hardware, same w, the
+    original rule is stricter) and only computes the steps beyond them. Resumable (phase 2 cap extension)."""
+    fuel, regime, mode, cap = args
+    old = OUT / (f"steps_{fuel}_{regime}.jsonl" if mode == "liquid" else f"steps_{fuel}_{regime}_{mode}.jsonl")
+    new = noise_file(fuel, regime, mode)
+    src = new if new.exists() else old
+    rows = [json.loads(line) for line in src.open()]
+    base = next(r for r in rows if r["kind"] == "dry_baseline")
+    steps = sorted((r for r in rows if r["kind"] == "step"), key=lambda r: r["step"])
+    probes = [r for r in rows if r["kind"].startswith("exploratory")]
+    out = [base]
+    prev, stop, k = base, None, 0
+
+    def judge(r, prev):
+        ok = r["status"] == "computed" and r["eligible"]
+        g = (r["gross_indicated_efficiency"] - prev["gross_indicated_efficiency"]) if ok else None
+        gc = (r["crn_efficiency"] - prev["crn_efficiency"]) \
+            if ok and r.get("crn_status") == "ok" and prev.get("crn_status") == "ok" else None
+        r.update(gain_m03=g, gain_crn=gc, rule="noise_3.3e-5")
+        if not ok:
+            return "not eligible / not computed"
+        if g <= NOISE_THRESHOLD:
+            return f"M03 gain {g:.2e} <= noise threshold {NOISE_THRESHOLD:.1e}"
+        if gc is None or gc <= 0:
+            return f"M03-CRN gain {gc} not positive"
+        return None
+
+    for r in steps:                       # re-judge existing rows under the revised rule
+        k = r["step"]
+        stop = judge(r, prev)
+        r["decision"] = "stop" if stop else "continue"
+        out.append(r)
+        if stop:
+            break
+        prev = r
+    if not stop:
+        with new.open("w") as fh:
+            for r in out + probes:
+                fh.write(json.dumps(r, default=float) + "\n")
+        while k < cap:
+            k += 1
+            w = round(k * STEP, 6)
+            r = point(fuel, regime, base["CR"], base["T_intake_K"], w, mode)
+            r.update(kind="step", step=k, **crn(r))
+            stop = judge(r, prev)
+            r["decision"] = "stop" if stop else "continue"
+            with new.open("a") as fh:
+                fh.write(json.dumps(r, default=float) + "\n")
+            if stop:
+                break
+            prev = r
+        if not stop:
+            stop = f"cap {cap} steps reached while still gaining"
+    else:
+        with new.open("w") as fh:
+            for r in out + probes:
+                fh.write(json.dumps(r, default=float) + "\n")
+    return dict(fuel=fuel, regime=regime, water_mode=mode, best_w=prev["w"], steps_taken=prev["step"],
+                stop_reason=stop, best_eta=prev["gross_indicated_efficiency"], best_crn=prev.get("crn_efficiency"),
+                dry_eta=base["gross_indicated_efficiency"], dry_crn=base.get("crn_efficiency"))
+
+
+def chain_noise_full(job):
+    """Cap 100; if the chain is still gaining at 100, raise the cap to NOISE_CAP_EXT (recorded)."""
+    r = chain_noise(job + (NOISE_CAP,))
+    if r["stop_reason"].startswith("cap"):
+        r = dict(chain_noise(job + (NOISE_CAP_EXT,)), cap_raised_to=NOISE_CAP_EXT)
+    return r
+
+
+def noise_main(workers):
+    t0 = time.time()
+    jobs = []
+    for p in sorted(OUT.glob("steps_*.jsonl")):
+        if p.stem.endswith("__noise"):
+            continue
+        name = p.stem[6:]
+        mode = "liquid"
+        for m in ("humid_evap", "humid_ambient"):
+            if name.endswith("_" + m):
+                mode, name = m, name[: -len(m) - 1]
+        fuel, regime = name.rsplit("_", 1)
+        jobs.append((fuel, regime, mode))
+    # Priority: chains with no new-rule data yet (gasolines, E-blends, CH4) first; the alcohol chains already
+    # have 40-55 steps. humid_ambient re-judging is cheap.
+    alc = ("CH3OH", "C2H5OH")
+    jobs.sort(key=lambda j: (j[0] in alc, j[2] != "humid_ambient", j))
+    ctx = get_context("spawn")
+    res = []
+    with ctx.Pool(workers) as pool:
+        for r in pool.imap_unordered(chain_noise_full, jobs):
+            res.append(r)
+            print(f"[noise] {r['fuel']}/{r['regime']}/{r['water_mode']} best_w={r['best_w']} "
+                  f"steps={r['steps_taken']} d_eta={r['best_eta'] - r['dry_eta']:+.5f} stop={r['stop_reason']} "
+                  f"cap_raised_to={r.get('cap_raised_to')} {time.time() - t0:.0f}s", flush=True)
+            (OUT / "summary_noise_rule.json").write_text(json.dumps(res, indent=1, default=float))
+    print("noise done", time.time() - t0, flush=True)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--fuels", default=",".join(FUELS))
     ap.add_argument("--from-dry", action="store_true", help="reuse results/track_b/dry_sweep.json")
     ap.add_argument("--smoke", action="store_true", help="one CR/T per fuel-regime (pipeline test only)")
-    ap.add_argument("--stage", choices=("main", "humid"), default="main")
+    ap.add_argument("--stage", choices=("main", "humid", "noise"), default="main")
     a = ap.parse_args(argv)
     fuels = a.fuels.split(",")
     if a.stage == "humid":
         OUT.mkdir(parents=True, exist_ok=True)
         return humid_main(a.workers)
+    if a.stage == "noise":
+        return noise_main(a.workers)
     OUT.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
     crs = (12,) if a.smoke else CRS

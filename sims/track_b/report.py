@@ -13,7 +13,10 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / "results" / "track_b"
-GAIN_THRESHOLD = 1.0e-4
+GAIN_THRESHOLD = 1.0e-4   # original rule (recorded variant rule_1e-4)
+NOISE_THRESHOLD = 3.3e-5  # James 2026-10-24 19:01 PDT
+NOISE_CAP, NOISE_CAP_EXT = 100, 200
+RUNNING = False
 
 # Track A references (existing water-majority work); copied from committed results, see 'source'.
 TRACK_A = {
@@ -41,7 +44,7 @@ def f(x, fmt="%.4f"):
     return "-" if x is None else fmt % x
 
 
-def chain_summary(rows):
+def chain_summary(rows, thr=GAIN_THRESHOLD):
     base = next((r for k, r in rows.items() if k[0] == "dry_baseline"), None)
     steps = sorted((r for k, r in rows.items() if k[0] == "step"), key=lambda r: r["w"])
     probes = sorted((r for k, r in rows.items() if k[0].startswith("exploratory")), key=lambda r: r["w"])
@@ -51,11 +54,11 @@ def chain_summary(rows):
         g = (s["gross_indicated_efficiency"] - prev["gross_indicated_efficiency"]) if ok else None
         gc = (s["crn_efficiency"] - prev["crn_efficiency"]) if ok and s.get("crn_efficiency") else None
         s["_gain"], s["_crn_gain"] = g, gc
-        if ok and g > GAIN_THRESHOLD and (gc or 0) > 0:
+        if ok and g > thr and (gc or 0) > 0:
             best = prev = s
         else:
-            stop = ("not eligible/failed" if not ok else f"gain {g:.2e} <= threshold {GAIN_THRESHOLD:.0e}"
-                    if g <= GAIN_THRESHOLD else f"CRN gain {gc}")
+            stop = ("not eligible/failed" if not ok else f"M03 gain {g:.2e} <= threshold {thr:.1e}"
+                    if g <= thr else f"M03-CRN gain {gc:.2e} not positive")
             break
     return base, steps, probes, best, stop
 
@@ -125,38 +128,70 @@ def main():
     groups = defaultdict(dict)
     for p in sorted(glob.glob(str(OUT / "steps_*.jsonl"))):
         name = Path(p).stem[6:]
+        rule = "old"
+        if name.endswith("__noise"):
+            rule, name = "noise", name[: -len("__noise")]
         mode = "liquid"
         for m in ("humid_evap", "humid_ambient"):
             if name.endswith("_" + m):
                 mode, name = m, name[: -len(m) - 1]
-        groups[name][mode] = load_chain(p)
+        groups[(name, mode)][rule] = load_chain(p)
     P("\n## Track B 0.1-pp water chains\n")
+    P("**Continuation rule history (kept honest):** the original rule, stated before any step ran, was a Module 03 "
+      f"gain > {GAIN_THRESHOLD:.0e} per step plus a positive M03-CRN gain. After seeing the first data (most chains "
+      "stopped at step 1 with steady sub-threshold gains), **James decided on 2026-10-24 at 19:01 PDT** to continue "
+      "while each step's gain beats the numerical noise level (about 3e-5). The value used is "
+      f"**{NOISE_THRESHOLD:.1e} absolute**: the largest measured shift of a 0.5-CAD production-step efficiency in "
+      "verification/x5_m03/RESULTS_FIX.md (X5 C2H5OH/best_overall, +0.0073 % of 0.45618). The pure 0.5 vs 0.25 CAD "
+      "step-refinement difference is <= 6.1e-6, and the knock-limited spark bisection tolerance is ~2e-5. Both "
+      "engines must still gain at every step. The maximum step is still 0.1 pp. The cap is still 100 steps (w = 0.10), "
+      f"raised to {NOISE_CAP_EXT} only for chains still gaining at 100 (noted per chain). The original-rule results "
+      "are kept as the recorded variant `rule_1e-4` (files without the `__noise` suffix).\n")
     P("Water modes: **liquid** = water in fuel / port liquid (legacy Module 03: half evaporates in the intake, rest "
       "in-cylinder); **humid_evap** = all water atomised and evaporated in the intake with latent cooling (wet-bulb "
       "limited; humid air, cooled charge); **humid_ambient** = water vapour already in the intake air at T_intake "
-      "(no evaporative cooling; pure humidity/dilution effect). p_IVC fixed, so evaporative cooling raises trapped "
-      "mass (charge density) and vapour displaces O2 (lower O2 partial pressure) automatically; there is no "
+      "(no evaporative cooling; pure humidity/dilution effect). p_IVC is fixed, so evaporative cooling raises trapped "
+      "mass (charge density) and vapour displaces O2 (lower O2 partial pressure) automatically. There is no "
       "gas-exchange model, so volumetric-efficiency effects beyond charge density are NOT modelled.\n")
-    P("| fuel/regime | mode | dry eta M03 / CRN | best w (Track B rule) | steps | stop | best eta M03 / CRN | status |\n|---|---|---|---|---|---|---|---|")
+    P("### Current rule (noise threshold 3.3e-5, James 19:01 PDT)\n")
+    P("| fuel/regime | mode | dry eta M03 / CRN | best w | steps | d_eta M03 / CRN (pp) | CA50 dry -> best (limit) | knock margin at best | NO proxy change | p_max change | stop / status | rule_1e-4 variant best w (d_eta pp) |\n|---|---|---|---|---|---|---|---|---|---|---|---|")
     summ = {}
-    for name, modes in groups.items():
-        for mode, rows in modes.items():
-            base, steps, probes, best, stop = chain_summary(rows)
-            summ[(name, mode)] = (base, steps, probes, best, stop)
-            n = len(steps)
-            status = "done" if stop or n >= 100 or probes else f"in progress (step {n})"
-            P(f"| {name} | {mode} | {base['gross_indicated_efficiency']:.5f} / {base['crn_efficiency']:.5f} | "
-              f"{best['w']:.3f} | {best.get('step', 0)} | {stop or ('cap' if n >= 100 else '-')} | "
-              f"{best['gross_indicated_efficiency']:.5f} / {best['crn_efficiency']:.5f} | {status} |")
-    P("\n*probe = exploratory point at w = 1/2/5/10 %, same hardware, spark re-optimised; NOT a Track B step "
-      "(the 0.1-pp rule stopped earlier). Shown because every gasoline/E-blend chain shows a steady positive "
-      "slope just under the per-step threshold.\n")
+    for (name, mode), rules in sorted(groups.items()):
+        o = chain_summary(rules["old"], GAIN_THRESHOLD) if "old" in rules else None
+        nrows = rules.get("noise")
+        if nrows is None:
+            P(f"| {name} | {mode} | | | | | | | | | queued under the new rule | {o[3]['w']:.3f} |")
+            continue
+        base, steps, probes, best, stop = chain_summary(nrows, NOISE_THRESHOLD)
+        summ[(name, mode)] = (base, steps, probes, best, stop)
+        n = max([s["step"] for s in steps] or [0])
+        if stop:
+            status = stop
+        elif n >= NOISE_CAP_EXT:
+            status = f"cap raised 100 -> {NOISE_CAP_EXT}; reached while still gaining"
+        elif n >= NOISE_CAP:
+            status = (f"still gaining past cap 100 -> cap raised to {NOISE_CAP_EXT} (at step {n})" if n > NOISE_CAP
+                      else f"reached cap 100 while still gaining -> cap raised to {NOISE_CAP_EXT}")
+        else:
+            status = f"in progress (step {n}; resumes from file)"
+        dm = 100 * (best["gross_indicated_efficiency"] - base["gross_indicated_efficiency"])
+        dc = 100 * (best["crn_efficiency"] - base["crn_efficiency"])
+        no = best["NO_mol_per_J_fuel"] / base["NO_mol_per_J_fuel"] - 1
+        pm = best["peak_pressure_Pa"] / base["peak_pressure_Pa"] - 1
+        ob = o[3] if o else None
+        P(f"| {name} | {mode} | {base['gross_indicated_efficiency']:.5f} / {base['crn_efficiency']:.5f} | {best['w']:.3f} | "
+          f"{best.get('step', 0)} | {dm:+.3f} / {dc:+.3f} | {base['ca50_used_deg']:.2f} -> {best['ca50_used_deg']:.2f} "
+          f"({best['spark_limited_by']}) | {best['knock_margin']:.4f} | {no * 100:+.1f} % | {pm * 100:+.1f} % | {status} | "
+          + (f"{ob['w']:.3f} ({100 * (ob['gross_indicated_efficiency'] - o[0]['gross_indicated_efficiency']):+.3f})" if ob else "-") + " |")
+    P("\nKnock margin (1 - knock integral), CA50 limit and NO proxy are Module 03 only. Efficiency and p_max are both engines.\n")
+    P("\n*probe = exploratory point at w = 1/2/5/10 %, same hardware, spark re-optimised; NOT a Track B step.\n")
     for (name, mode), (base, steps, probes, best, stop) in summ.items():
-        P(f"\n### {name} - {mode}\n")
+        P(f"\n#### {name} - {mode} (current rule; steps 1-5, every 10th, and the last 3)\n")
         P(HDR)
         P(row(base, base))
+        last = max([s["step"] for s in steps] or [0])
         for s in steps:
-            if s["status"] == "computed":
+            if s["status"] == "computed" and (s["step"] <= 5 or s["step"] % 10 == 0 or s["step"] > last - 3):
                 P(row(s, base))
         for s in probes:
             if s["status"] == "computed":

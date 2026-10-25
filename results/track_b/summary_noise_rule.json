@@ -1,0 +1,122 @@
+[
+ {
+  "fuel": "CH4",
+  "regime": "hot",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 3.46e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.4117830035223586,
+  "best_crn": 0.41248846650070276,
+  "dry_eta": 0.4117830035223586,
+  "dry_crn": 0.41248846650070276
+ },
+ {
+  "fuel": "CH4",
+  "regime": "normal",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain -3.44e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.43966971994451837,
+  "best_crn": 0.44017253782369287,
+  "dry_eta": 0.43966971994451837,
+  "dry_crn": 0.44017253782369287
+ },
+ {
+  "fuel": "E10",
+  "regime": "normal",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 4.56e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.38472101357236954,
+  "best_crn": 0.3849551659363062,
+  "dry_eta": 0.38472101357236954,
+  "dry_crn": 0.3849551659363062
+ },
+ {
+  "fuel": "E85",
+  "regime": "hot",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 3.65e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.37776948094573976,
+  "best_crn": 0.37792538367641065,
+  "dry_eta": 0.37776948094573976,
+  "dry_crn": 0.37792538367641065
+ },
+ {
+  "fuel": "E85",
+  "regime": "normal",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 5.97e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.40535740793278074,
+  "best_crn": 0.4057063292611525,
+  "dry_eta": 0.40535740793278074,
+  "dry_crn": 0.4057063292611525
+ },
+ {
+  "fuel": "PRF87",
+  "regime": "normal",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 5.68e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.3710098498390703,
+  "best_crn": 0.3713670145043326,
+  "dry_eta": 0.3710098498390703,
+  "dry_crn": 0.3713670145043326
+ },
+ {
+  "fuel": "PRF91",
+  "regime": "normal",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 4.05e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.37503045785498496,
+  "best_crn": 0.37519037754423706,
+  "dry_eta": 0.37503045785498496,
+  "dry_crn": 0.37519037754423706
+ },
+ {
+  "fuel": "PRF97",
+  "regime": "normal",
+  "water_mode": "humid_ambient",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 4.19e-06 <= noise threshold 3.3e-05",
+  "best_eta": 0.38539745968846206,
+  "best_crn": 0.38556808682428345,
+  "dry_eta": 0.38539745968846206,
+  "dry_crn": 0.38556808682428345
+ },
+ {
+  "fuel": "CH4",
+  "regime": "normal",
+  "water_mode": "humid_evap",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 2.41e-05 <= noise threshold 3.3e-05",
+  "best_eta": 0.43966971994451837,
+  "best_crn": 0.44017253782369287,
+  "dry_eta": 0.43966971994451837,
+  "dry_crn": 0.44017253782369287
+ },
+ {
+  "fuel": "CH4",
+  "regime": "normal",
+  "water_mode": "liquid",
+  "best_w": 0.0,
+  "steps_taken": 0,
+  "stop_reason": "M03 gain 1.92e-05 <= noise threshold 3.3e-05",
+  "best_eta": 0.43966971994451837,
+  "best_crn": 0.44017253782369287,
+  "dry_eta": 0.43966971994451837,
+  "dry_crn": 0.44017253782369287
+ }
+]
