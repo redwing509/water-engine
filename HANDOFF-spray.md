@@ -125,4 +125,33 @@ Mail VPS code: `/opt/water-engine/code-spray`, venv `/opt/water-engine/.venv`.
     1.5/3.0/2.0 and `test_phi_one_mixture_matches_module_02` within 1e-12).
   - Scratch files (`_dbg_*.py`, `_poll*.sh`, `_cmp*.py`) removed from the
     worktree and from mail.
-  - Committed on wme1-spray at <pending> (round 4).
+  - Committed on wme1-spray at 61025d1 (HANDOFF) + 0edf22a (X2 script/evidence) (round 4; filled in by the Grok Bot takeover, 2026-10-24).
+### 2026-10-24 (round 5, takeover by Grok Bot, Track A) — module 08 normal vs hot regime variant
+Takeover note: Hermes's round 5 failed with a context-compression timeout, so Grok Bot took over this work
+(job grokbot-selfqueue-20261024-1805). Hermes's local commits 0edf22a and 62a88ab were brought over from James's PC by
+git bundle. All work stayed on wme1-spray, and the push is a fast-forward from 35166ff.
+  - **New:** `sims/08_water_chem/regime_variant.py` and `results/08_water_chem_regimes/{regimes.json,REPORT.md}`.
+    The San Diego real / FH2O-a / FH2O-b variants are run at frozen-isentropic TDC states for T_u 320/360 K (normal) and
+    400 K (hot), plus a 420 K hot heated-port bound, at CR 16/24. The regimes come from sims/dual_temp/regimes.py,
+    citing MAHLE/VW SSP 222, SAE 960271, SAE 2010-01-0802, Heywood ch. 12 and SPEC section 6.
+  - Built-in checks: C1 T_ad reproduces module 08 (24 states, max dT 0); C2 S_L/tau reproduce module 08
+    (36 values, max rel 1.05e-7); C3 S_L chemical effect is insensitive to the flame grid (default to tight:
+    CH3OH 12.20 to 12.47 %, C2H5OH -11.36 to -11.23 %). All pass.
+  - **Verdict: trade-off.** Going from 360 to 400 K, S_L rises x1.18-1.23 but tau drops to x0.18-0.19 (CR16) and
+    x0.24-0.26 (CR24), so knock margin is much worse. Water's chemical effect shifts by at most 1.3 pp (at most
+    3.45 pp across 320-420 K) and never changes sign, so water chemistry does not depend on the regime.
+    Not press-release worthy.
+  - Open: one case (CH3OH w=0.6, 420 K, CR24, FH2O-b) failed in the Cantera reactor solver ("ignition not
+    established"). It was not retried blindly. A tolerance change is needed before any rerun.
+  - **Tests on code be39765:** `pytest tests/test_water_chem.py` gave 15 passed in 497 s. `--quick` passed (81 s) and
+    `--full` passed (380 s, 3 workers); validation.passed=true with 11/11 listed checks. (Round 4 text says "13
+    checks"; summary.json lists 11. The 13 probably counted pytest items, so read it as 11 validation checks.)
+    The w=0.6 chemical effects from `--full` are identical to round 4 (CH3OH +3.11 / -17.97 %, C2H5OH -24.29 /
+    -15.62 %, CH4 -17.25 / -3.23 %). X2 on the new full output gives Q_dry 21,104,117.9 vs NIST-JANAF 21,099,962.5
+    J/kg, +0.0197 %, PASS. Note: the round-3 figure 21,104,603.33 (0.002 %) is inconsistent with round 4 and is
+    superseded.
+  - **Deviation:** these runs used the box (nice 15, 3 workers), not mail `ai-job --resource water-engine`, because
+    Grok Bot's own M13 CFD job holds the water-engine lock and the cpu-heavy lock is held by job#8 GCI.
+    Outputs: /workspace/qw/m08_{quick,full} on the box (not committed; same code SHA).
+  - Status: **executed** (single engine, San Diego). Cross-checked: X2 for Q_dry only. **Not validated** against
+    experiment.
