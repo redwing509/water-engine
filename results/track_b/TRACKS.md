@@ -1,12 +1,13 @@
 # Water Engine - Track A / Track B status
 
-Generated 2026-10-25 06:33 PDT by `python -m sims.track_b.report` (branch `track-b/incremental-water-20261024`). **NOT YET PEER-REVIEW VERIFIED** - Module 03 and M03-CRN are two in-repo engines from the same toolchain; independent engine review (2+ engine rule) still pending.
+Generated 2026-10-25 07:02 PDT by `python -m sims.track_b.report` (branch `track-b/incremental-water-20261024`). **NOT YET PEER-REVIEW VERIFIED** - Module 03 and M03-CRN are two in-repo engines from the same toolchain; independent engine review (2+ engine rule) still pending.
 
 ## Rules (James, 2026-10-24)
 
 * **Two tracks, ~50/50 compute.** Track A = existing water-majority work. Track B = start from normal fuels (regular/premium gasoline surrogates, E10, E85, methanol, ethanol, methane) dry, then add water in steps of at most 0.1 percentage point (w = m_water/(m_water+m_fuel) += 0.001), adding more only while efficiency gains; use data from both tracks to help each other.
 * **Humid intake (6:22 PM rule)**, both tracks: water atomised into the intake air and fully evaporated before the cylinder (charge = humid air, specific humidity q). Track B: same 0.1-pp steps as humid water. Track A: humid variant of water-majority cases, capped by intake saturation (excess would condense).
 * Gain threshold stated before any step ran: **1e-04 absolute (0.01 pp)** per step in Module 03 (~3x the 0.5-CAD step error ~3e-5, ~15x GCI 1.4e-5 relative; verification/x5_m03/RESULTS_FIX.md) AND a positive M03-CRN gain. Spark re-optimised at every step (golden-section MBT on CA50 0-16 deg, else knock/p_max-limited bisection to 0.005 deg).
+* **Cost metric (James, 2026-10-25 06).** gains are judged on cost too - if adding water keeps power (horsepower) the same or better, the fuel it saves per unit work is a cost-per-mile (MPG) gain; tracked as a progress metric. Shared module `sims/cost` (dated, cited prices in `sims/cost/prices_20261025.json`); see the cost section below, `results/track_b/COST.md` and `results/track_a_cost/COST_TRACK_A.md`.
 * **Knock margin, CA50 limit and NO proxy come from Module 03 only** (M03-CRN has no knock or NOx model); M03-CRN gives an independent efficiency and peak pressure at the same CA50 (Woschni, like-for-like; C1 pass = |d_eta| <= 1.5 pp and |p_max ratio - 1| <= 5 %).
 
 ## Track B dry baselines (Module 03, spark at MBT or knock limit; best eligible CR x T_intake)
@@ -38,41 +39,41 @@ Water modes: **liquid** = water in fuel / port liquid (legacy Module 03: half ev
 
 ### Current rule (noise threshold 3.3e-5, James 19:01 PDT)
 
-| fuel/regime | mode | dry eta M03 / CRN | best w | steps | d_eta M03 / CRN (pp) | CA50 dry -> best (limit) | knock margin at best | NO proxy change | p_max change | stop / status | rule_1e-4 variant best w (d_eta pp) |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| C2H5OH_hot | humid_ambient | 0.38970 / 0.38962 | 0.000 | 0 | +0.000 / +0.000 | 14.93 -> 14.93 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 8.60e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| C2H5OH_hot | humid_evap | 0.38970 / 0.38962 | 0.277 | 277 | +1.729 / +1.725 | 14.93 -> 7.89 (MBT) | 0.8513 | -65.2 % | +41.8 % | still gaining past cap 200 (at step 277); extension to 400 (sims.track_b.h1_hot) running | 0.045 (+0.508) |
-| C2H5OH_hot | liquid | 0.38970 / 0.38962 | 0.096 | 96 | +0.857 / +0.837 | 14.93 -> 8.46 (knock) | 0.0000 | -7.5 % | +23.1 % | M03 gain 3.18e-05 <= threshold 3.3e-05 | 0.040 (+0.456) |
-| C2H5OH_normal | humid_ambient | 0.44576 / 0.44556 | 0.000 | 0 | +0.000 / +0.000 | 13.70 -> 13.70 (knock) | 0.0002 | +0.0 % | +0.0 % | M03 gain -1.82e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| C2H5OH_normal | humid_evap | 0.44576 / 0.44556 | 0.101 | 101 | +0.556 / +0.548 | 13.70 -> 11.67 (MBT) | 0.4289 | -23.7 % | +15.3 % | M03 gain 2.84e-05 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| C2H5OH_normal | liquid | 0.44576 / 0.44556 | 0.173 | 173 | +0.765 / +0.754 | 13.70 -> 11.62 (MBT) | 0.7981 | -51.4 % | +13.5 % | M03-CRN (second engine) failed at the next step (Cantera integrator), chain stopped | 0.000 (+0.000) |
-| CH3OH_normal | humid_ambient | 0.42379 / 0.42380 | 0.000 | 0 | +0.000 / +0.000 | 14.57 -> 14.57 (knock) | 0.0006 | +0.0 % | +0.0 % | M03 gain 9.28e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| CH3OH_normal | humid_evap | 0.42379 / 0.42380 | 0.080 | 80 | +0.873 / +0.860 | 14.57 -> 9.68 (MBT) | 0.1703 | -18.9 % | +26.3 % | M03-CRN (second engine) failed at the next step (Cantera integrator), chain stopped | 0.049 (+0.656) |
-| CH3OH_normal | liquid | 0.42379 / 0.42380 | 0.132 | 132 | +1.065 / +1.050 | 14.57 -> 9.63 (MBT) | 0.6970 | -50.8 % | +24.6 % | M03-CRN (second engine) failed at the next step (Cantera integrator), chain stopped | 0.041 (+0.545) |
-| CH4_hot | humid_ambient | 0.41178 / 0.41249 | 0.000 | 0 | +0.000 / +0.000 | 14.59 -> 14.59 (knock) | 0.0002 | +0.0 % | +0.0 % | M03 gain 3.46e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| CH4_hot | humid_evap | 0.41178 / 0.41249 | 0.110 | 110 | +0.489 / +0.474 | 14.59 -> 11.58 (knock) | 0.0000 | -4.2 % | +14.7 % | M03 gain 3.27e-05 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| CH4_hot | liquid | 0.41178 / 0.41249 | 0.085 | 85 | +0.369 / +0.356 | 14.59 -> 12.09 (knock) | 0.0003 | -3.0 % | +10.6 % | M03 gain 3.29e-05 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| CH4_normal | humid_ambient | 0.43967 / 0.44017 | 0.000 | 0 | +0.000 / +0.000 | 12.40 -> 12.40 (MBT) | 0.6020 | +0.0 % | +0.0 % | M03 gain -3.44e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| CH4_normal | humid_evap | 0.43967 / 0.44017 | 0.000 | 0 | +0.000 / +0.000 | 12.40 -> 12.40 (MBT) | 0.6020 | +0.0 % | +0.0 % | M03 gain 2.41e-05 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| CH4_normal | liquid | 0.43967 / 0.44017 | 0.000 | 0 | +0.000 / +0.000 | 12.40 -> 12.40 (MBT) | 0.6020 | +0.0 % | +0.0 % | M03 gain 1.92e-05 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| E10_normal | humid_ambient | 0.38472 / 0.38496 | 0.000 | 0 | +0.000 / +0.000 | 12.79 -> 12.79 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 4.56e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| E10_normal | humid_evap | 0.38472 / 0.38496 | 0.100 | 100 | +0.416 / +0.413 | 12.79 -> 11.05 (knock) | 0.0001 | -14.1 % | +8.5 % | not eligible/failed | 0.000 (+0.000) |
-| E10_normal | liquid | 0.38472 / 0.38496 | 0.100 | 100 | +0.441 / +0.433 | 12.79 -> 10.18 (knock) | 0.0001 | -12.9 % | +8.8 % | not eligible/failed | 0.000 (+0.000) |
-| E85_hot | humid_ambient | 0.37777 / 0.37793 | 0.000 | 0 | +0.000 / +0.000 | 11.20 -> 11.20 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 3.65e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| E85_hot | humid_evap | 0.37777 / 0.37793 | 0.100 | 100 | +0.454 / +0.453 | 11.20 -> 9.00 (knock) | 0.0001 | -17.1 % | +9.9 % | not eligible/failed | 0.000 (+0.000) |
-| E85_hot | liquid | 0.37777 / 0.37793 | 0.096 | 96 | +0.410 / +0.400 | 11.20 -> 7.93 (knock) | 0.0000 | -14.5 % | +10.3 % | M03 gain 3.25e-05 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| E85_normal | humid_ambient | 0.40536 / 0.40571 | 0.000 | 0 | +0.000 / +0.000 | 14.83 -> 14.83 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 5.97e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| E85_normal | humid_evap | 0.40536 / 0.40571 | 0.100 | 100 | +0.676 / +0.666 | 14.83 -> 12.73 (knock) | 0.0002 | -25.7 % | +12.6 % | not eligible/failed | 0.000 (+0.000) |
-| E85_normal | liquid | 0.40536 / 0.40571 | 0.100 | 100 | +0.723 / +0.710 | 14.83 -> 11.68 (knock) | 0.0000 | -23.9 % | +13.1 % | not eligible/failed | 0.000 (+0.000) |
-| PRF87_normal | humid_ambient | 0.37101 / 0.37137 | 0.000 | 0 | +0.000 / +0.000 | 14.66 -> 14.66 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 5.68e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| PRF87_normal | humid_evap | 0.37101 / 0.37137 | 0.100 | 100 | +0.468 / +0.466 | 14.66 -> 12.88 (knock) | 0.0000 | -14.2 % | +8.3 % | not eligible/failed | 0.000 (+0.000) |
-| PRF87_normal | liquid | 0.37101 / 0.37137 | 0.100 | 100 | +0.533 / +0.526 | 14.66 -> 12.03 (knock) | 0.0001 | -13.2 % | +8.5 % | not eligible/failed | 0.000 (+0.000) |
-| PRF91_normal | humid_ambient | 0.37503 / 0.37519 | 0.000 | 0 | +0.000 / +0.000 | 11.81 -> 11.81 (knock) | 0.0000 | +0.0 % | +0.0 % | M03 gain 4.05e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| PRF91_normal | humid_evap | 0.37503 / 0.37519 | 0.100 | 100 | +0.371 / +0.369 | 11.81 -> 9.97 (knock) | 0.0001 | -13.0 % | +8.2 % | not eligible/failed | 0.000 (+0.000) |
-| PRF91_normal | liquid | 0.37503 / 0.37519 | 0.100 | 100 | +0.384 / +0.376 | 11.81 -> 9.04 (knock) | 0.0001 | -11.8 % | +8.5 % | not eligible/failed | 0.000 (+0.000) |
-| PRF97_normal | humid_ambient | 0.38540 / 0.38557 | 0.000 | 0 | +0.000 / +0.000 | 12.28 -> 12.28 (knock) | 0.0000 | +0.0 % | +0.0 % | M03 gain 4.19e-06 <= threshold 3.3e-05 | 0.000 (+0.000) |
-| PRF97_normal | humid_evap | 0.38540 / 0.38557 | 0.100 | 100 | +0.380 / +0.378 | 12.28 -> 10.60 (knock) | 0.0001 | -12.9 % | +8.1 % | not eligible/failed | 0.000 (+0.000) |
-| PRF97_normal | liquid | 0.38540 / 0.38557 | 0.100 | 100 | +0.396 / +0.388 | 12.28 -> 9.75 (knock) | 0.0001 | -11.7 % | +8.4 % | not eligible/failed | 0.000 (+0.000) |
+| fuel/regime | mode | dry eta M03 / CRN | best w | steps | d_eta M03 / CRN (pp) | CA50 dry -> best (limit) | knock margin at best | NO proxy change | p_max change | stop / status | rule_1e-4 variant best w (d_eta pp) | cost per mile % at best w (M03 / CRN) | cost-opt w (cost per mile % M03 / CRN; power % M03) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| C2H5OH_hot | humid_ambient | 0.38970 / 0.38962 | 0.000 | 0 | +0.000 / +0.000 | 14.93 -> 14.93 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 8.60e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| C2H5OH_hot | humid_evap | 0.38970 / 0.38962 | 0.288 | 288 | +1.789 / +1.785 | 14.93 -> 7.89 (MBT) | 0.8752 | -68.5 % | +43.0 % | M03 gain 2.80e-05 <= threshold 3.3e-05 | 0.045 (+0.508) | +19.76 / +19.77 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| C2H5OH_hot | liquid | 0.38970 / 0.38962 | 0.096 | 96 | +0.857 / +0.837 | 14.93 -> 8.46 (knock) | 0.0000 | -7.5 % | +23.1 % | M03 gain 3.18e-05 <= threshold 3.3e-05 | 0.040 (+0.456) | +4.34 / +4.39 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| C2H5OH_normal | humid_ambient | 0.44576 / 0.44556 | 0.000 | 0 | +0.000 / +0.000 | 13.70 -> 13.70 (knock) | 0.0002 | +0.0 % | +0.0 % | M03 gain -1.82e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| C2H5OH_normal | humid_evap | 0.44576 / 0.44556 | 0.101 | 101 | +0.556 / +0.548 | 13.70 -> 11.67 (MBT) | 0.4289 | -23.7 % | +15.3 % | M03 gain 2.84e-05 <= threshold 3.3e-05 | 0.000 (+0.000) | +5.70 / +5.71 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| C2H5OH_normal | liquid | 0.44576 / 0.44556 | 0.173 | 173 | +0.765 / +0.754 | 13.70 -> 11.62 (MBT) | 0.7981 | -51.4 % | +13.5 % | M03-CRN (second engine) failed at the next step (Cantera integrator), chain stopped | 0.000 (+0.000) | +11.15 / +11.18 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| CH3OH_normal | humid_ambient | 0.42379 / 0.42380 | 0.000 | 0 | +0.000 / +0.000 | 14.57 -> 14.57 (knock) | 0.0006 | +0.0 % | +0.0 % | M03 gain 9.28e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| CH3OH_normal | humid_evap | 0.42379 / 0.42380 | 0.080 | 80 | +0.873 / +0.860 | 14.57 -> 9.68 (MBT) | 0.1703 | -18.9 % | +26.3 % | M03-CRN (second engine) failed at the next step (Cantera integrator), chain stopped | 0.049 (+0.656) | +0.38 / +0.41 | 0.032 (-0.16 / -0.15; +3.55) COST GAIN |
+| CH3OH_normal | liquid | 0.42379 / 0.42380 | 0.132 | 132 | +1.065 / +1.050 | 14.57 -> 9.63 (MBT) | 0.6970 | -50.8 % | +24.6 % | M03-CRN (second engine) failed at the next step (Cantera integrator), chain stopped | 0.041 (+0.545) | +1.72 / +1.75 | 0.025 (-0.14 / -0.13; +1.80) COST GAIN |
+| CH4_hot | humid_ambient | 0.41178 / 0.41249 | 0.000 | 0 | +0.000 / +0.000 | 14.59 -> 14.59 (knock) | 0.0002 | +0.0 % | +0.0 % | M03 gain 3.46e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| CH4_hot | humid_evap | 0.41178 / 0.41249 | 0.110 | 110 | +0.489 / +0.474 | 14.59 -> 11.58 (knock) | 0.0000 | -4.2 % | +14.7 % | M03 gain 3.27e-05 <= threshold 3.3e-05 | 0.000 (+0.000) | +2.95 / +2.99 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| CH4_hot | liquid | 0.41178 / 0.41249 | 0.085 | 85 | +0.369 / +0.356 | 14.59 -> 12.09 (knock) | 0.0003 | -3.0 % | +10.6 % | M03 gain 3.29e-05 <= threshold 3.3e-05 | 0.000 (+0.000) | +2.22 / +2.25 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| CH4_normal | humid_ambient | 0.43967 / 0.44017 | 0.000 | 0 | +0.000 / +0.000 | 12.40 -> 12.40 (MBT) | 0.6020 | +0.0 % | +0.0 % | M03 gain -3.44e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| CH4_normal | humid_evap | 0.43967 / 0.44017 | 0.000 | 0 | +0.000 / +0.000 | 12.40 -> 12.40 (MBT) | 0.6020 | +0.0 % | +0.0 % | M03 gain 2.41e-05 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| CH4_normal | liquid | 0.43967 / 0.44017 | 0.000 | 0 | +0.000 / +0.000 | 12.40 -> 12.40 (MBT) | 0.6020 | +0.0 % | +0.0 % | M03 gain 1.92e-05 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E10_normal | humid_ambient | 0.38472 / 0.38496 | 0.000 | 0 | +0.000 / +0.000 | 12.79 -> 12.79 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 4.56e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E10_normal | humid_evap | 0.38472 / 0.38496 | 0.100 | 100 | +0.416 / +0.413 | 12.79 -> 11.05 (knock) | 0.0001 | -14.1 % | +8.5 % | not eligible/failed | 0.000 (+0.000) | +1.70 / +1.71 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E10_normal | liquid | 0.38472 / 0.38496 | 0.100 | 100 | +0.441 / +0.433 | 12.79 -> 10.18 (knock) | 0.0001 | -12.9 % | +8.8 % | not eligible/failed | 0.000 (+0.000) | +1.64 / +1.66 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E85_hot | humid_ambient | 0.37777 / 0.37793 | 0.000 | 0 | +0.000 / +0.000 | 11.20 -> 11.20 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 3.65e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E85_hot | humid_evap | 0.37777 / 0.37793 | 0.100 | 100 | +0.454 / +0.453 | 11.20 -> 9.00 (knock) | 0.0001 | -17.1 % | +9.9 % | not eligible/failed | 0.000 (+0.000) | +2.72 / +2.72 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E85_hot | liquid | 0.37777 / 0.37793 | 0.096 | 96 | +0.410 / +0.400 | 11.20 -> 7.93 (knock) | 0.0000 | -14.5 % | +10.3 % | M03 gain 3.25e-05 <= threshold 3.3e-05 | 0.000 (+0.000) | +2.66 / +2.69 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E85_normal | humid_ambient | 0.40536 / 0.40571 | 0.000 | 0 | +0.000 / +0.000 | 14.83 -> 14.83 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 5.97e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E85_normal | humid_evap | 0.40536 / 0.40571 | 0.100 | 100 | +0.676 / +0.666 | 14.83 -> 12.73 (knock) | 0.0002 | -25.7 % | +12.6 % | not eligible/failed | 0.000 (+0.000) | +2.25 / +2.28 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| E85_normal | liquid | 0.40536 / 0.40571 | 0.100 | 100 | +0.723 / +0.710 | 14.83 -> 11.68 (knock) | 0.0000 | -23.9 % | +13.1 % | not eligible/failed | 0.000 (+0.000) | +2.13 / +2.17 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF87_normal | humid_ambient | 0.37101 / 0.37137 | 0.000 | 0 | +0.000 / +0.000 | 14.66 -> 14.66 (knock) | 0.0001 | +0.0 % | +0.0 % | M03 gain 5.68e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF87_normal | humid_evap | 0.37101 / 0.37137 | 0.100 | 100 | +0.468 / +0.466 | 14.66 -> 12.88 (knock) | 0.0000 | -14.2 % | +8.3 % | not eligible/failed | 0.000 (+0.000) | +1.48 / +1.49 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF87_normal | liquid | 0.37101 / 0.37137 | 0.100 | 100 | +0.533 / +0.526 | 14.66 -> 12.03 (knock) | 0.0001 | -13.2 % | +8.5 % | not eligible/failed | 0.000 (+0.000) | +1.30 / +1.32 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF91_normal | humid_ambient | 0.37503 / 0.37519 | 0.000 | 0 | +0.000 / +0.000 | 11.81 -> 11.81 (knock) | 0.0000 | +0.0 % | +0.0 % | M03 gain 4.05e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF91_normal | humid_evap | 0.37503 / 0.37519 | 0.100 | 100 | +0.371 / +0.369 | 11.81 -> 9.97 (knock) | 0.0001 | -13.0 % | +8.2 % | not eligible/failed | 0.000 (+0.000) | +1.76 / +1.76 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF91_normal | liquid | 0.37503 / 0.37519 | 0.100 | 100 | +0.384 / +0.376 | 11.81 -> 9.04 (knock) | 0.0001 | -11.8 % | +8.5 % | not eligible/failed | 0.000 (+0.000) | +1.72 / +1.74 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF97_normal | humid_ambient | 0.38540 / 0.38557 | 0.000 | 0 | +0.000 / +0.000 | 12.28 -> 12.28 (knock) | 0.0000 | +0.0 % | +0.0 % | M03 gain 4.19e-06 <= threshold 3.3e-05 | 0.000 (+0.000) | +0.00 / +0.00 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF97_normal | humid_evap | 0.38540 / 0.38557 | 0.100 | 100 | +0.380 / +0.378 | 12.28 -> 10.60 (knock) | 0.0001 | -12.9 % | +8.1 % | not eligible/failed | 0.000 (+0.000) | +1.28 / +1.29 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
+| PRF97_normal | liquid | 0.38540 / 0.38557 | 0.100 | 100 | +0.396 / +0.388 | 12.28 -> 9.75 (knock) | 0.0001 | -11.7 % | +8.4 % | not eligible/failed | 0.000 (+0.000) | +1.24 / +1.26 | 0.000 (+0.00 / +0.00; +0.00) no cost gain |
 
 Knock margin (1 - knock integral), CA50 limit and NO proxy are Module 03 only. Efficiency and p_max are both engines.
 
@@ -128,9 +129,10 @@ Knock margin (1 - knock integral), CA50 limit and NO proxy are Module 03 only. E
 | step | 0.250 | 0.40558 | 0.40545 | +1.587 | +1.583 | -0.013 | 0.7801 | 7.94 (MBT) | 66.1 / 66.1 | 1.75e-08 | 37.27 | True |
 | step | 0.260 | 0.40609 | 0.40596 | +1.639 | +1.634 | -0.012 | 0.8088 | 7.93 (MBT) | 66.6 / 66.6 | 1.62e-08 | 39.29 | True |
 | step | 0.270 | 0.40661 | 0.40649 | +1.691 | +1.687 | -0.012 | 0.8350 | 7.93 (MBT) | 67.1 / 67.1 | 1.49e-08 | 41.36 | True |
-| step | 0.275 | 0.40688 | 0.40676 | +1.718 | +1.714 | -0.012 | 0.8466 | 7.89 (MBT) | 67.4 / 67.4 | 1.43e-08 | 42.41 | True |
-| step | 0.276 | 0.40694 | 0.40681 | +1.723 | +1.719 | -0.012 | 0.8489 | 7.89 (MBT) | 67.5 / 67.5 | 1.42e-08 | 42.63 | True |
-| step | 0.277 | 0.40699 | 0.40687 | +1.729 | +1.725 | -0.012 | 0.8513 | 7.89 (MBT) | 67.5 / 67.5 | 1.40e-08 | 42.84 | True |
+| step | 0.280 | 0.40715 | 0.40703 | +1.745 | +1.741 | -0.012 | 0.8581 | 7.89 (MBT) | 67.7 / 67.7 | 1.37e-08 | 43.49 | True |
+| step | 0.287 | 0.40754 | 0.40742 | +1.784 | +1.780 | -0.012 | 0.8731 | 7.89 (MBT) | 68.0 / 68.0 | 1.28e-08 | 45.01 | True |
+| step | 0.288 | 0.40759 | 0.40747 | +1.789 | +1.785 | -0.012 | 0.8752 | 7.89 (MBT) | 68.1 / 68.1 | 1.27e-08 | 45.20 | True |
+| step | 0.289 | 0.40762 | 0.40750 | +1.792 | +1.788 | -0.012 | 0.8776 | 7.89 (MBT) | 68.1 / 68.1 | 1.26e-08 | 45.20 | True |
 | probe* | 0.010 | 0.39091 | 0.39081 | +0.120 | +0.119 | -0.009 | 0.0003 | 14.40 (knock) | 48.6 / 48.6 | 3.99e-08 | 1.13 | True |
 | probe* | 0.020 | 0.39207 | 0.39197 | +0.237 | +0.234 | -0.011 | 0.0002 | 13.86 (knock) | 49.6 / 49.6 | 3.95e-08 | 2.28 | True |
 | probe* | 0.050 | 0.39528 | 0.39513 | +0.558 | +0.551 | -0.015 | 0.0001 | 12.12 (knock) | 52.9 / 53.0 | 3.85e-08 | 5.89 | True |
@@ -818,6 +820,31 @@ Source: results/03_engine_cycle/design_point.json (legacy) and results/03_engine
 | CH4 | CR 23, w 0.50: 0.4484 | CR 23, w 0.60: 0.4463 | CR 22: 0.4327 | not in coupled set | not in coupled set |
 
 Note: Track A legacy points used the 2-CAD retard search; Track B dry baselines use the continuous spark optimiser, so Track B dry values differ slightly from Track A dry values (e.g. CH3OH dry 0.4238 vs 0.4207).
+
+## Cost metric - fuel cost per mile at equal-or-better power
+
+Rule (James, 2026-10-25 06:53 PDT: gains are judged on cost too - if adding water keeps power (horsepower) the same or better, the fuel it saves per unit work is a cost-per-mile (MPG) gain; tracked as a progress metric.) Shared module `sims/cost/cost.py`; full tables (every fuel x regime x mode, both engines side by side, eff-opt and cost-opt points) in `results/track_b/COST.md`; Track A in `results/track_a_cost/COST_TRACK_A.md`. Existing results only - no new combustion runs.
+
+* Fuel per unit work = 1/(eta x LHV): water has no heating value, eta = W_ind/(m_fuel LHV), so fuel volume per work changes by eta_dry/eta - 1. Power = IMEP (M03-CRN IMEP derived at the same fuel mass); brake power not modelled. Cost per kWh = (p_fuel + p_water w/(1-w))/(eta LHV); per mile = x 0.40 kWh indicated work/mile (reference 30 mpg car); the % numbers do not depend on that.
+* Prices (fetched 2026-10-25): gasoline_regular 4.2892 USD/US gal (AAA Gas Prices, national average, 2026-10-25); gasoline_premium 5.1972 USD/US gal (AAA Gas Prices, national average, 2026-10-25); e85 3.3585 USD/US gal (AAA Gas Prices, national average, 2026-10-25); methanol 1450.0 USD/metric ton (Methanex posted prices, 2026-10-01); ethanol 1.94 USD/US gal (USDA AMS Livestock, Poultry & Grain Market News report 3616, 2026-10-23); cng 3.1 USD/GGE (US DOE Alternative Fuels Data Center, 2026-07-31); water_distilled 1.54 USD/US gal (Walmart.com product listing, 2026-10-25).
+* **COST GAIN** = IMEP equal or better (within 1e-4 relative noise) AND lower cost per mile, in both engines.
+Water priced at retail distilled (1.54 USD/gal). 'w = 0' = no water amount lowers cost at that price. Break-even = the highest water price at which some equal-or-better-power step still lowers cost per mile (M03 / CRN at that step).
+
+| fuel | best cost per mile: where, w | **cost per mile %** (M03 / CRN) | power % (M03 / CRN) | verdict | biggest fuel saving (eff-opt): where, w | fuel per unit work % (M03 / CRN) | cost per mile % there (M03 / CRN) | same, water free % (M03 / CRN) | power % there (M03 / CRN) | break-even water price USD/gal (M03 / CRN), where, w |
+|---|---|---|---|---|---|---|---|---|---|---|
+| PRF87 | normal / liquid, 0.000 | +0.000 / +0.000 | +0.000 / +0.000 | no cost gain | normal / liquid, 0.100 | -1.416 / -1.397 | +1.304 / +1.323 | -1.416 / -1.397 | +3.352 / +3.332 | 0.91 / 0.90, normal / liquid, 0.002 |
+| PRF91 | normal / liquid, 0.000 | +0.000 / +0.000 | +0.000 / +0.000 | no cost gain | normal / liquid, 0.100 | -1.014 / -0.992 | +1.719 / +1.741 | -1.014 / -0.992 | +2.933 / +2.910 | 0.84 / 0.84, hot/H1 / liquid, 0.003 |
+| PRF97 | normal / liquid, 0.000 | +0.000 / +0.000 | +0.000 / +0.000 | no cost gain | normal / liquid, 0.100 | -1.016 / -0.997 | +1.242 / +1.261 | -1.016 / -0.997 | +2.935 / +2.915 | 0.81 / 0.79, normal / liquid, 0.001 |
+| E10 | normal / liquid, 0.000 | +0.000 / +0.000 | +0.000 / +0.000 | no cost gain | normal / liquid, 0.100 | -1.133 / -1.113 | +1.635 / +1.656 | -1.133 / -1.113 | +3.144 / +3.123 | 0.73 / 0.72, normal / liquid, 0.003 |
+| E85 | normal / liquid, 0.000 | +0.000 / +0.000 | +0.000 / +0.000 | no cost gain | normal / liquid, 0.100 | -1.753 / -1.719 | +2.130 / +2.166 | -1.753 / -1.719 | +4.678 / +4.642 | 0.80 / 0.79, normal / liquid, 0.003 |
+| CH3OH | hot/H1 / humid_evap, 0.043 | -0.420 / -0.388 | +4.293 / +4.259 | COST GAIN | normal / liquid, 0.132 | -2.452 / -2.417 | +1.718 / +1.754 | -2.452 / -2.417 | +8.445 / +8.407 | 2.59 / 2.56, hot/H1 / liquid, 0.001 |
+| C2H5OH | normal / liquid, 0.000 | +0.000 / +0.000 | +0.000 / +0.000 | no cost gain | hot / humid_evap, 0.288 | -4.389 / -4.380 | +19.758 / +19.769 | -4.389 / -4.380 | +26.023 / +26.011 | 0.79 / 0.78, hot / liquid, 0.003 |
+| CH4 | normal / liquid, 0.000 | +0.000 / +0.000 | +0.000 / +0.000 | no cost gain | hot / humid_evap, 0.110 | -1.174 / -1.135 | +2.949 / +2.989 | -1.174 / -1.135 | +4.159 / +4.119 | 0.58 / 0.56, hot / liquid, 0.001 |
+
+Track B cost gains (both engines): CH3OH normal liquid (w 0.025, -0.14 / -0.13 %); CH3OH normal humid_evap (w 0.032, -0.16 / -0.15 %); CH3OH hot/H1 liquid (w 0.039, -0.41 / -0.37 %); CH3OH hot/H1 humid_evap (w 0.043, -0.42 / -0.39 %).
+Track A grid cost gains (Module 03 only): CH3OH hot humid_evap; CH3OH hot liquid.
+
+Caveats unchanged: fixed burn duration (efficiency and so cost gains are upper bounds); knock only in Module 03; gasoline-blend chains end at w = 0.10 (flame-speed fit limit), so those are lower bounds.
 
 ## Findings so far (hand-written; numbers from the tables above)
 

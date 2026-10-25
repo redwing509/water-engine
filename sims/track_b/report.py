@@ -17,6 +17,8 @@ GAIN_THRESHOLD = 1.0e-4   # original rule (recorded variant rule_1e-4)
 NOISE_THRESHOLD = 3.3e-5  # James 2026-10-24 19:01 PDT
 NOISE_CAP, NOISE_CAP_EXT = 100, 200
 RUNNING = False
+COST_RULE = ("James, 2026-10-25 06:53 PDT: gains are judged on cost too - if adding water keeps power (horsepower) the "
+             "same or better, the fuel it saves per unit work is a cost-per-mile (MPG) gain; tracked as a progress metric.")
 
 # Track A references (existing water-majority work); copied from committed results, see 'source'.
 TRACK_A = {
@@ -81,6 +83,47 @@ HDR = ("| kind | w | eta M03 | eta CRN | d_eta M03 (pp vs dry) | d_eta CRN (pp) 
        "|---|---|---|---|---|---|---|---|---|---|---|---|---|")
 
 
+def cost_cells(base, steps, best):
+    """Cost column (sims.cost): cost per mile % vs dry at the best w, and the cost-optimal w at equal-or-better power."""
+    from sims.cost import cost as C
+    el = [s for s in steps if s.get("status") == "computed" and s.get("eligible")]
+    cb = C.compare(best, base)
+    w, cc = C.best_cost(el, base)
+    two = lambda c, k: " / ".join("-" if c[e] is None else f"{c[e][k]:+.2f}" for e in ("m03", "crn"))
+    return (f"{two(cb, 'cost_per_mile_pct')} | {w['w']:.3f} ({two(cc, 'cost_per_mile_pct')}; "
+            f"{cc['m03']['power_change_pct']:+.2f}) {C.verdict(cc)}")
+
+
+def cost_section(P):
+    """Write COST.md / COST_TRACK_A.md (sims.cost.report) and add the headline to TRACKS.md."""
+    from sims.cost import cost as C
+    from sims.cost import report as CR
+    pr = C.load_prices()
+    res, H = CR.write_track_b(pr)
+    ta = CR.write_track_a(pr)
+    P("\n## Cost metric - fuel cost per mile at equal-or-better power\n")
+    P(f"Rule ({COST_RULE}) Shared module `sims/cost/cost.py`; full tables (every fuel x regime x mode, both engines "
+      "side by side, eff-opt and cost-opt points) in `results/track_b/COST.md`; Track A in "
+      "`results/track_a_cost/COST_TRACK_A.md`. Existing results only - no new combustion runs.\n")
+    P("* Fuel per unit work = 1/(eta x LHV): water has no heating value, eta = W_ind/(m_fuel LHV), so fuel volume per "
+      "work changes by eta_dry/eta - 1. Power = IMEP (M03-CRN IMEP derived at the same fuel mass); brake power not "
+      "modelled. Cost per kWh = (p_fuel + p_water w/(1-w))/(eta LHV); per mile = x 0.40 kWh indicated work/mile "
+      "(reference 30 mpg car); the % numbers do not depend on that.")
+    P("* Prices (fetched 2026-10-25): " + "; ".join(
+        f"{k} {v['usd']} {v['unit']} ({v['source']}, {v['date']})" for k, v in pr["prices"].items() if k != "diesel") + ".")
+    P("* **COST GAIN** = IMEP equal or better (within 1e-4 relative noise) AND lower cost per mile, in both engines.")
+    for x in CR.headline_md(pr, H)[1:]:
+        P(x)
+    gains = [f"{k[0]} {k[1]}{'/H1' if k[3] != 'track_b' else ''} {k[2]} (w {c['cost_row'].get('w', 0):.3f}, "
+             f"{c['cost']['m03']['cost_per_mile_pct']:+.2f} / {c['cost']['crn']['cost_per_mile_pct']:+.2f} %)"
+             for k, c in res.items() if c["cost"]["cost_gain_all_engines"]]
+    P("\nTrack B cost gains (both engines): " + ("; ".join(gains) if gains else "none") + ".")
+    ga = sorted({k.rsplit("|", 1)[0] for k, v in ta.items() if v["cost"]["cost_gain_all_engines"]})
+    P("Track A grid cost gains (Module 03 only): " + ("; ".join(g.replace("|", " ") for g in ga) if ga else "none") + ".")
+    P("\nCaveats unchanged: fixed burn duration (efficiency and so cost gains are upper bounds); knock only in "
+      "Module 03; gasoline-blend chains end at w = 0.10 (flame-speed fit limit), so those are lower bounds.")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(REPO / "results" / "track_b" / "TRACKS.md"))
@@ -103,6 +146,9 @@ def main():
       "Module 03 (~3x the 0.5-CAD step error ~3e-5, ~15x GCI 1.4e-5 relative; verification/x5_m03/RESULTS_FIX.md) "
       "AND a positive M03-CRN gain. Spark re-optimised at every step (golden-section MBT on CA50 0-16 deg, else "
       "knock/p_max-limited bisection to 0.005 deg).")
+    P(f"* **Cost metric ({COST_RULE.split(':')[0]}).** {COST_RULE.split(': ', 1)[1]} Shared module `sims/cost` "
+      "(dated, cited prices in `sims/cost/prices_20261025.json`); see the cost section below, "
+      "`results/track_b/COST.md` and `results/track_a_cost/COST_TRACK_A.md`.")
     P("* **Knock margin, CA50 limit and NO proxy come from Module 03 only** (M03-CRN has no knock or NOx model); "
       "M03-CRN gives an independent efficiency and peak pressure at the same CA50 (Woschni, like-for-like; "
       "C1 pass = |d_eta| <= 1.5 pp and |p_max ratio - 1| <= 5 %).")
@@ -155,13 +201,13 @@ def main():
       "mass (charge density) and vapour displaces O2 (lower O2 partial pressure) automatically. There is no "
       "gas-exchange model, so volumetric-efficiency effects beyond charge density are NOT modelled.\n")
     P("### Current rule (noise threshold 3.3e-5, James 19:01 PDT)\n")
-    P("| fuel/regime | mode | dry eta M03 / CRN | best w | steps | d_eta M03 / CRN (pp) | CA50 dry -> best (limit) | knock margin at best | NO proxy change | p_max change | stop / status | rule_1e-4 variant best w (d_eta pp) |\n|---|---|---|---|---|---|---|---|---|---|---|---|")
+    P("| fuel/regime | mode | dry eta M03 / CRN | best w | steps | d_eta M03 / CRN (pp) | CA50 dry -> best (limit) | knock margin at best | NO proxy change | p_max change | stop / status | rule_1e-4 variant best w (d_eta pp) | cost per mile % at best w (M03 / CRN) | cost-opt w (cost per mile % M03 / CRN; power % M03) |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
     summ = {}
     for (name, mode), rules in sorted(groups.items()):
         o = chain_summary(rules["old"], GAIN_THRESHOLD) if "old" in rules else None
         nrows = rules.get("noise")
         if nrows is None:
-            P(f"| {name} | {mode} | | | | | | | | | queued under the new rule | {o[3]['w']:.3f} |")
+            P(f"| {name} | {mode} | | | | | | | | | queued under the new rule | {o[3]['w']:.3f} | | |")
             continue
         base, steps, probes, best, stop = chain_summary(nrows, NOISE_THRESHOLD)
         summ[(name, mode)] = (base, steps, probes, best, stop)
@@ -185,7 +231,8 @@ def main():
         P(f"| {name} | {mode} | {base['gross_indicated_efficiency']:.5f} / {base['crn_efficiency']:.5f} | {best['w']:.3f} | "
           f"{best.get('step', 0)} | {dm:+.3f} / {dc:+.3f} | {base['ca50_used_deg']:.2f} -> {best['ca50_used_deg']:.2f} "
           f"({best['spark_limited_by']}) | {best['knock_margin']:.4f} | {no * 100:+.1f} % | {pm * 100:+.1f} % | {status} | "
-          + (f"{ob['w']:.3f} ({100 * (ob['gross_indicated_efficiency'] - o[0]['gross_indicated_efficiency']):+.3f})" if ob else "-") + " |")
+          + (f"{ob['w']:.3f} ({100 * (ob['gross_indicated_efficiency'] - o[0]['gross_indicated_efficiency']):+.3f})" if ob else "-")
+          + " | " + cost_cells(base, steps, best) + " |")
     P("\nKnock margin (1 - knock integral), CA50 limit and NO proxy are Module 03 only. Efficiency and p_max are both engines.\n")
     P("\n*probe = exploratory point at w = 1/2/5/10 %, same hardware, spark re-optimised; NOT a Track B step.\n")
     for (name, mode), (base, steps, probes, best, stop) in summ.items():
@@ -235,6 +282,8 @@ def main():
         P(f"| {k} | {v['legacy_best']} | {v['legacy_wmaj']} | {v['legacy_dry']} | {v['coupled_normal']} | {v['coupled_hot']} |")
     P("\nNote: Track A legacy points used the 2-CAD retard search; Track B dry baselines use the continuous spark "
       "optimiser, so Track B dry values differ slightly from Track A dry values (e.g. CH3OH dry 0.4238 vs 0.4207).")
+
+    cost_section(P)
 
     extra = REPO / "results" / "track_b" / "TRACKS_notes.md"
     if extra.exists():
