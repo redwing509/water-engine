@@ -211,6 +211,13 @@ def crn_engine():
     return _E
 
 
+# M03-CRN saturation-switch smoothing band (fraction of the in-cylinder liquid mass). Fix for the CVODES
+# "maximum number of timesteps" failures that stopped CH3OH/C2H5OH chains (sat-limit/schedule chattering,
+# diagnosed 2026-10-25, see results/track_b/crnfix/REPORT.md). Identical equations outside the band;
+# re-running earlier OK rows with it reproduces their efficiency to <= 1e-10.
+CRN_SAT_BLEND = 1.0e-3
+
+
 def crn(r, heat_transfer="woschni"):
     if r.get("status") != "computed":
         return dict(crn_status="skipped")
@@ -221,11 +228,12 @@ def crn(r, heat_transfer="woschni"):
                                 m_air=r["air_mass_kg"], m_residual=r["residual_mass_kg"],
                                 m_water=r["water_mass_kg"], e_intake=r["f_evap_intake_effective"],
                                 ca50_deg=r["ca50_used_deg"], d1090_deg=r["burn_10_90_deg"],
-                                wall_T=r["chamber_wall_K"], heat_transfer=heat_transfer))
+                                wall_T=r["chamber_wall_K"], heat_transfer=heat_transfer,
+                                sat_blend_frac=CRN_SAT_BLEND))
     except Exception as exc:  # recorded, never retried blindly
         return dict(crn_status=f"failed: {type(exc).__name__}: {exc}")
     eta, pmax = res["efficiency"], res["p_max_Pa"]
-    return dict(crn_status="ok", crn_efficiency=eta, crn_p_max_Pa=pmax, crn_T_max_K=res.get("T_max_K"),
+    return dict(crn_status="ok", crn_sat_blend_frac=CRN_SAT_BLEND, crn_efficiency=eta, crn_p_max_Pa=pmax, crn_T_max_K=res.get("T_max_K"),
                 crn_seconds=time.time() - t, d_eta_pp=100 * (eta - r["gross_indicated_efficiency"]),
                 pmax_ratio=pmax / r["peak_pressure_Pa"],
                 c1_pass=bool(abs(100 * (eta - r["gross_indicated_efficiency"])) <= 1.5

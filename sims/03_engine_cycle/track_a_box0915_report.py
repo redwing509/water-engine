@@ -16,6 +16,10 @@ from sims.cost import cost as COST
 A = importlib.import_module("sims.03_engine_cycle.track_a_box0915")
 OUT = A.OUT
 C1_ETA_PP, C1_P = 1.5, 0.05
+# M03-CRN numerical fix (selfdir 2026-10-25 14:10, see results/track_b/crnfix/REPORT.md): smooth the saturation-limit
+# switch of the evaporation source over a 1e-3 * m_liq0 band and drop output times within 1e-9 rad of a break point.
+# The 24 earlier CRN failures (max steps / CVODES -27) were integrator problems, not physics. 0.0 = legacy engine.
+CRN_SAT_BLEND = 1.0e-3
 
 
 def load():
@@ -37,8 +41,8 @@ def crn(r):
         c = E.run_case(E.Case(fuel=r["fuel"], cr=f("CR"), T_ivc=f("T_IVC_K"), m_fuel=f("fuel_mass_kg"), m_air=f("air_mass_kg"),
                               m_residual=f("residual_mass_kg"), m_water=f("water_mass_kg"), e_intake=f("f_evap_intake_effective"),
                               ca50_deg=f("ca50_used_deg"), d1090_deg=f("burn_10_90_deg"), wall_T=f("chamber_wall_K"),
-                              heat_transfer="woschni", label="box0915", **kw))
-        out = dict(crn_status="ok", crn_efficiency=c["efficiency"], crn_p_max_Pa=c["p_max_Pa"])
+                              heat_transfer="woschni", label="box0915", sat_blend_frac=CRN_SAT_BLEND, **kw))
+        out = dict(crn_status="ok", crn_efficiency=c["efficiency"], crn_p_max_Pa=c["p_max_Pa"], crn_sat_blend_frac=CRN_SAT_BLEND)
     except Exception as exc:
         out = dict(crn_status=f"failed: {type(exc).__name__}: {exc}")
     out["crn_seconds"] = time.time() - t
@@ -86,7 +90,9 @@ def main(workers=4):
             sel.append(dict(r0, group="|".join(map(str, g)), knock_limited_CR=None, n_eligible=0, n_rows=len(rs), not_eligible=True))
     # M03-CRN cache (added 2026-10-25 PM): a CRN case is keyed by its exact input row, so a re-report reuses earlier
     # results (including recorded failures - never re-run blindly) and only computes new best rows.
-    cache_path = OUT / "crn_cache.json"
+    # The legacy cache (crn_cache.json, 24 recorded failures) is kept unchanged as the archive; the fixed engine
+    # writes its own cache so legacy and fixed results never mix.
+    cache_path = OUT / ("crn_cache.json" if CRN_SAT_BLEND == 0.0 else f"crn_cache_satblend{CRN_SAT_BLEND:g}.json")
     cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
     ck = lambda s: "|".join(str(s.get(k)) for k in ("group", "CR", "w", "T_intake_K", "gross_indicated_efficiency"))
     todo = [s for s in sel if ck(s) not in cache]
@@ -179,10 +185,10 @@ def main(workers=4):
                        f"{f(b['cost_per_mile_pct'],2)} % ($0.10) / {f(b['cost_per_mile_free_pct'],2)} % ($0), power {f(b['power_change_pct'],1)} %, "
                        f"{b['cost_verdict']}" if b else "no 2-engine row with equal-or-better power (no cost-optimal water fraction; stay dry)"))
     md += ["", "Cost-minimising w at equal-or-better power (step 4, both engines agree; vs best dry same fuel+regime):", ""] + opt
-    md += ["", "**How to read this:** wet rows are at their OWN knock-limited CR (grid 9-24); dry = best eligible dry (grid 6-24). "
+    md += ["", "**How to read this:** wet rows are at their OWN knock-limited CR (grid 9-30 since the 2026-10-25 14:20 extension; '30 (30)' = still grid-capped); dry = best eligible dry (grid 6-30). "
            "Gains above ~+1 pp come mostly from the higher CR the water allows (knock relief), e.g. C2H5OH hot dry is knock-limited "
            "at CR 11. power % = IMEP change and, for humid_evap, includes evaporative charge cooling (more trapped mass); indicated "
-           "upper bounds, not brake power. 'CRN failed' = M03-CRN Cantera integrator failure, recorded, not re-run: such rows are "
+           "upper bounds, not brake power. M03-CRN runs with the 2026-10-25 integrator fix (saturation-switch smoothing 1e-3 + break-point grid fix; legacy failures archived in crn_cache.json). 'CRN failed' = M03-CRN Cantera integrator failure, recorded, not re-run: such rows are "
            "1-engine only and do NOT meet the 2-engine rule. Status: EXECUTED (Module 03) + cross-checked (M03-CRN); NOT validated."]
     md += ["", "Misfire flip (Module 11 flag vs port-wall T, 1 K scan, best w 0.5 bound-(i) row masses):", ""]
     md += [f"- {x['fuel']} {x['regime']} SMD {x['SMD']}: reachable up to {f(x['misfire_reachable_up_to_K'],0)} K, free from {f(x['misfire_free_from_K'],0)} K" for x in flips]

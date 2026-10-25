@@ -48,6 +48,14 @@ CRS = tuple(range(9, 25))
 # CR 9-24 (Track B found its dry knock limit at CR 8), so every CH3OH-hot wet row had no baseline. New points only;
 # no existing point is re-run (run() skips specs already in points.jsonl).
 DRY_LOW_CRS = (6, 7, 8)
+# Extension (added 2026-10-25 14:20 PDT, Grok Bot selfdir-1410 job, Track A): with the M03-CRN integrator fixed,
+# the best wet rows (CH3OH hot/normal humid_evap w 0.5) and the C2H5OH normal dry baseline sit at CR 24 = TOP of the
+# grid, i.e. grid-capped, not knock-limited.  New points only (run() skips specs already in points.jsonl):
+#   CR 25..30 for dry (both T), humid_evap w 0.4-0.7 and dryair w 0.5-0.7 (dryair reuses the CR-24 Module 09 point,
+#   so CR > 24 dryair is an extrapolation of the Module 09 fractions - caveat);
+#   w refinement 0.4 / 0.45 / 0.55 for humid_evap on CR 9..24.
+EXT_CRS = tuple(range(25, 31))
+WS_REFINE = (0.4, 0.45, 0.55)
 ATOM, VAR, POINT = "ultrasonic_120kHz", "nominal", "water_majority"
 PORT_WALLS = (363.15, 375.0, 388.15)
 T_INTAKE = {"normal": 360.0, "hot": 400.0}
@@ -195,6 +203,20 @@ def specs():
                     if abs(T_pw - pw) > 1e-6:
                         out.append(dict(step=5, kind="coupled", intake="dryair", fuel=fuel, regime=regime, CR=cr,
                                         w=0.5, T_intake_K=T_INTAKE[regime], port_wall_K=T_pw, bound_i_only=True))
+        for fuel in FUELS:
+            for cr in EXT_CRS:
+                for T in DRY_T[regime]:
+                    out.append(dict(step=4, kind="dry", fuel=fuel, regime=regime, CR=cr, w=0.0, T_intake_K=T))
+                for w in sorted(set(WS) | set(WS_REFINE)):
+                    for intake in ("dryair", "humid_evap"):
+                        if intake == "dryair" and w not in WS:
+                            continue
+                        out.append(dict(step=4, kind="coupled", intake=intake, fuel=fuel, regime=regime, CR=cr, w=w,
+                                        T_intake_K=T_INTAKE[regime], port_wall_K=pw))
+            for cr in CRS:
+                for w in WS_REFINE:
+                    out.append(dict(step=4, kind="coupled", intake="humid_evap", fuel=fuel, regime=regime, CR=cr, w=w,
+                                    T_intake_K=T_INTAKE[regime], port_wall_K=pw))
         for fuel in FUELS:
             for cr in DRY_LOW_CRS:
                 for T in DRY_T[regime]:

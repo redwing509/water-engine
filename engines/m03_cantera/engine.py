@@ -192,6 +192,15 @@ class Case:
     spark_deg: float = None
     f_ivc: float = None
     f_spark: float = None
+    # Saturation-switch smoothing (2026-10-25, self-directed job grokbot-selfdirected-20261025-1410).
+    # 0.0 = legacy hard switch: the scheduled feed-forward rate is added only while the charge is NOT
+    # saturation-limited (target_sat >= target_sched). When the saturation ceiling and the schedule
+    # cross with nearly equal slopes (cool, near-saturated charge early in compression), this makes
+    # the RHS discontinuous and CVODES chatters on the switch until max_steps (Track B CH3OH/C2H5OH
+    # normal chain failures). > 0: the feed-forward term is ramped linearly to zero over a band of
+    # width sat_blend_frac * m_liq0 around the switch, so the RHS is continuous. Outside the band the
+    # equations are identical to the legacy ones.
+    sat_blend_frac: float = 0.0
 
 
 def lhv_liquid(fuel, gas):
@@ -324,11 +333,19 @@ class Engine:
                 sat_limited = target_sat < target_sched
                 target = min(target_sched, target_sat)
             rate = (target - m_ev) / tau
+            if c.sat_blend_frac > 0.0:
+                if math.isinf(ps):
+                    sigma = 1.0
+                else:
+                    band = c.sat_blend_frac * m_liq0
+                    sigma = min(1.0, max(0.0, 0.5 + (target_sat - target_sched) / band))
+            else:
+                sigma = 0.0 if sat_limited else 1.0
             if coupled:
-                if not sat_limited and theta < theta_sp and target_sched > 0.0:
-                    rate += slope
-            elif not sat_limited and theta < EVAP_END:
-                rate += evap_rate_sched
+                if theta < theta_sp and target_sched > 0.0:
+                    rate += sigma * slope
+            elif theta < EVAP_END:
+                rate += sigma * evap_rate_sched
             return max(0.0, rate)
 
         def q_wall(t, r):
@@ -412,7 +429,14 @@ class Engine:
         bset = (EVAP_END, wb.start) if not coupled else (theta_freeze, wb.start, theta_sp)
         breaks = sorted(x for x in set(bset) if THETA_IVC < x < THETA_EVO)
         n = int(round((THETA_EVO - THETA_IVC) / (c.sample_deg * RAD)))
-        grid = list(np.linspace(THETA_IVC, THETA_EVO, n + 1)[1:]) + breaks
+        base_grid = np.linspace(THETA_IVC, THETA_EVO, n + 1)[1:]
+        if c.sat_blend_frac > 0.0:
+            # (2026-10-25 fix, same switch as the saturation smoothing) a break point that lands within
+            # floating-point distance of a sample point (e.g. spark at -41.0 CAD on the 0.05-CAD grid gives
+            # -40.99999999999999) produced an output time ~1e-17 s after the previous one -> CVODES error -27
+            # "tout too close to t0". Drop sample points closer than 1e-9 rad to a break (the break is kept).
+            base_grid = [x for x in base_grid if all(abs(x - b) > 1e-9 for b in breaks)]
+        grid = list(base_grid) + breaks
         grid = np.unique(np.array(grid))
         rec = []
         for theta in grid:
