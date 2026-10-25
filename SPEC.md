@@ -114,3 +114,89 @@ Further targets from `docs/research/02-legitimate-water-combustion.md` are added
 | Code writing | Codex (via Hermes/composer route) on the laptop workspace |
 | Simulations | Mail VPS, `nice -n 19`, ≤ 8 workers |
 | Final verification | Supervisor (Claude) |
+
+## 12. Spray track
+
+Modules 08, 09 and 11 close the chain from water chemistry to the flame front.
+
+### 12.1 Module 08 — `water_chemistry`
+
+Separate water's chemical effect from its dilution and thermal effect by
+comparing the real mechanism against a **fictitious water** species that has
+H2O's thermo and transport but takes part in no reactions.
+
+- Add a species `FH2O` to copies of `sandiego.yaml` and `gri30.yaml`. It has
+  H2O's thermo and transport but takes part in no reactions. Make two
+  variants:
+  - (a) FH2O keeps H2O's third-body efficiencies;
+  - (b) FH2O uses third-body efficiency 1.0.
+- Cases: fuels CH3OH, C2H5OH and CH4 (reference), at φ = 1 and w = 0 to 0.8
+  in steps of 0.1. Compute:
+  - S_L at 400 K, 1 atm;
+  - ignition delay at 40 bar, 800–1000 K;
+  - T_ad.
+  Run each with real H2O, FH2O-a and FH2O-b.
+- Report: the chemical effect is (real − FH2O)/FH2O, for S_L and for τ. Split
+  it into a third-body part (a vs b) and a direct-reaction part.
+- Oxygen bookkeeping: at w = 0.6 for CH3OH, do a reaction-path or
+  element-flux analysis of the O atoms that start in H2O. Show the net O
+  transferred to CO2 and the net H2 released. The net energy from water must
+  be 0 within tolerance.
+- Tests:
+  - At w = 0, real and FH2O are identical.
+  - FH2O has an LHV of 0.
+  - O-atom balance closes to 1e-6 or better.
+
+### 12.2 Module 09 — `spray_evaporation`
+
+Intake atomisation and evaporation, modelled as a Lagrangian droplet
+ensemble in a closed-mass-balance intake charge. Vapour accumulates, so
+evaporation stops at saturation. This is essential: at w ≥ 0.5 the charge
+saturates early, so the evaporation limit is thermodynamic as well as
+kinetic.
+
+- Model: Abramzon–Sirignano evaporation with Ranz–Marshall correlations, and
+  a Rosin–Rammler size distribution.
+- Liquids: water, methanol, and premixed wet-methanol blends. Treat the
+  methanol–water mixture as non-ideal, using Wilson or NRTL with cited
+  parameters.
+- Atomisers:
+  1. carburetor venturi (Nukiyama–Tanasawa at the module 06 design
+     airflow, or 30 m/s throat speed if module 06 is not yet available);
+  2. port-injection pressure-swirl injector at 3 bar and 5 bar (Lefebvre
+     SMD correlation);
+  3. air-assisted nozzle, 20–30 µm;
+  4. ultrasonic atomiser (Lang correlation, 40–120 kHz).
+- Sweeps: plenum temperature 320–420 K; runner velocity 10–40 m/s; runner
+  length 0.1–0.4 m. Then follow the charge in-cylinder to spark at 2000 rpm,
+  with compression heating from module 03's p(θ) if available, otherwise
+  isentropic.
+- Wall impingement: use a Stokes-number criterion at a 90° bend.
+- Outputs per case:
+  - % evaporated at IVC and at spark;
+  - % wall-impinged;
+  - remaining liquid SMD at spark.
+  Save `spray_at_spark.json` for module 11. Name the atomiser to recommend
+  for module 06.
+- Tests:
+  - A single water droplet with constant properties matches the d²-law
+    analytic solution within 2%.
+  - Evaporation never exceeds saturation.
+  - Mass is conserved to 1e-8.
+
+### 12.3 Module 11 — `spray_flame`
+
+How much liquid water the flame front tolerates.
+
+- Model: Ballal–Lefebvre spray-flame correlations for flame speed and minimum
+  ignition energy in droplet-laden mixtures, with gas-phase S_L from module
+  02. Inputs: liquid fraction and SMD at spark from module 09. This is an
+  empirical model; cite it and state its validity range.
+- Outputs:
+  - effective flame speed versus liquid-water fraction and SMD;
+  - the misfire boundary, defined as minimum ignition energy above a typical
+    50–100 mJ spark;
+  - the recommended maximum SMD at spark for each water fraction w.
+- Tests:
+  - with zero liquid it reduces to gas-phase S_L;
+  - the trends are monotonic.
