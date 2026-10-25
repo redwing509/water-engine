@@ -211,7 +211,7 @@ def crn_engine():
     return _E
 
 
-def crn(r):
+def crn(r, heat_transfer="woschni"):
     if r.get("status") != "computed":
         return dict(crn_status="skipped")
     E = crn_engine()
@@ -221,7 +221,7 @@ def crn(r):
                                 m_air=r["air_mass_kg"], m_residual=r["residual_mass_kg"],
                                 m_water=r["water_mass_kg"], e_intake=r["f_evap_intake_effective"],
                                 ca50_deg=r["ca50_used_deg"], d1090_deg=r["burn_10_90_deg"],
-                                wall_T=r["chamber_wall_K"], heat_transfer="woschni"))
+                                wall_T=r["chamber_wall_K"], heat_transfer=heat_transfer))
     except Exception as exc:  # recorded, never retried blindly
         return dict(crn_status=f"failed: {type(exc).__name__}: {exc}")
     eta, pmax = res["efficiency"], res["p_max_Pa"]
