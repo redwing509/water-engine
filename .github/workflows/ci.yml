@@ -1,0 +1,30 @@
+name: Validation
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-cad.txt
+      - name: Validate physics and output contracts
+        run: pytest -q
+      - name: Quick module runs
+        shell: bash
+        # Quick outputs go to a scratch dir: writing them to results/<module> overwrote the committed
+        # validated module-03 design that module 06 reads, so 06 failed on the synthetic quick design.
+        run: |
+          quick_root="${RUNNER_TEMP}/quick-results"
+          while IFS= read -r -d '' module_path; do
+            module_name=${module_path##*/}
+            python -m "sims.${module_name}.run" --quick --out "${quick_root}/${module_name}"
+          done < <(find sims -mindepth 1 -maxdepth 1 -type d -name '[0-9][0-9]_*' -print0 | sort -zV)
