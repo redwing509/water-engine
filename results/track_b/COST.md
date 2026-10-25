@@ -216,6 +216,12 @@ Fuel -> price: PRF87 = gasoline_regular, PRF91 = gasoline_regular, E10 = gasolin
 
 ## Caveats carried over (still apply to every cost number)
 
+* **Running cost only.** Not included: the water system's hardware (pump, tank, injector, controls), freeze
+  protection (antifreeze, or methanol in the water), the extra weight of the water carried, and the energy to heat
+  or pressurise the water. These would reduce (and could erase) the cost gains shown here.
+* **Water quality.** Tap water carries minerals that leave deposits in injectors and combustion chambers; real
+  water-injection systems use distilled or deionised water. Treat the $0.10/gal headline and the $0/gal tap-water
+  comparison as optimistic; the retail-distilled sensitivity is the conservative case.
 * **Fixed burn duration model gap.** Module 03 holds the 10-90 % burn duration essentially fixed as water is
   added (flame-speed fits only reduce S_L; the burn-duration penalty of water dilution measured in engines is not
   reproduced). The B1 sign test (spark held at the dry setting) still gains, while published engine tests lose
@@ -225,7 +231,8 @@ Fuel -> price: PRF87 = gasoline_regular, PRF91 = gasoline_regular, E10 = gasolin
   part of a gain that comes from knock relief therefore rests on one engine.
 * **Lower bounds at w = 0.10 for the gasoline blends** (PRF87/91/97, E10, E85): those chains stop at the end of the
   flame-speed fit validity (w <= 0.10), not because the gain ran out, so their cost gains could be larger.
-* No gas-exchange / friction model: power is IMEP (indicated). Brake power is not modelled; at equal speed and
+* No gas-exchange / friction model: power and efficiency are indicated (IMEP), not brake, so read the gains
+  as indicated upper bounds. Brake power is not modelled; at equal speed and
   friction the brake-power change has the same sign and a larger % magnitude.
 * Absolute $/mile is NOT comparable across fuels (road fuels at retail, alcohols at wholesale, CNG quarterly
   retail). Compare each fuel only with its own dry baseline (the % columns).
