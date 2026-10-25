@@ -21,7 +21,12 @@ def positives(min_pp=0.05):
         if not dry:
             continue
         dry = dry[0]
-        best = max(recs, key=lambda r: r["gross_indicated_efficiency"])
+        # best = the accepted stopping point: highest-M03 row that also has a valid M03-CRN result
+        # (rows past the stop where M03-CRN failed have no crn_efficiency; fix for KeyError 2026-10-25)
+        ok = [r for r in recs if r.get("crn_status") == "ok"]
+        if not ok:
+            continue
+        best = max(ok, key=lambda r: r["gross_indicated_efficiency"])
         gain = 100 * (best["gross_indicated_efficiency"] - dry["gross_indicated_efficiency"])
         if best["w"] > 0 and gain >= min_pp:
             rows.append((f, dry, best, gain))
