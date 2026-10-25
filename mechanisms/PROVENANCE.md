@@ -29,3 +29,11 @@ python -m cantera.ck2yaml --input=sandiego20161214_mechCK.txt \
 ## GRI-Mech 3.0 (`gri30.yaml`)
 
 Ships with Cantera. Its embedded metadata identifies GRI-Mech 3.0 (Smith et al., 1999). Used for H2 and CH4, and as the fallback for CH3OH if `sandiego.yaml` is unavailable (SPEC §2). Each `summary.json` records the mechanism used for each fuel.
+
+## Track B surrogate thermo (`trackb_fuels.yaml`, 2026-10-24)
+
+Generated (not downloaded) by `python -c "from sims.track_b import fuels_b; fuels_b.build_mechanism()"` with Cantera 3.2.0. Thermo only, no reactions (Module 03 uses TP equilibrium; M03-CRN adds its own product kinetics).
+- All GRI-Mech 3.0 species (`gri30.yaml`, Smith et al. 1999), plus five lumped pseudo-species `PRF87`, `PRF91`, `PRF97`, `E10`, `E85`.
+- Each lumped species' NASA-7 coefficients are the mole-fraction-weighted coefficients of `C8H18,isooctane`, `C7H16,n-heptane` and `C2H5OH` from Cantera's `nasa_gas.yaml` (NASA Glenn, McBride, Zehe & Gordon 2002, NASA/TP-2002-211556). All three have Tmid = 1000 K, so the mixing is exact for cp and h. The entropy of mixing is omitted.
+- Volume-to-mole conversion uses the 20 °C densities 0.6919 / 0.6795 / 0.7893 g/cm³ (CRC Handbook). See `sims/track_b/fuels_b.py` for the blend definitions and citations.
+- SHA-256 of the generated file: `2139dc15080e4c20b0c1f680ea40447121f4d3af47dc7bc0c384da1eabac4b45`.
