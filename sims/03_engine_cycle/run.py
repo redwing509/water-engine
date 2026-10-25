@@ -458,7 +458,8 @@ class Charge:
 
     ideal = False
 
-    def __init__(self, fuel, cr, w, T_intake, par=DEFAULTS, evap_profile=None):
+    def __init__(self, fuel, cr, w, T_intake, par=DEFAULTS, evap_profile=None,
+                 coupling=None):
         if not 0.0 <= w < 1.0:
             raise PointUnavailable("w must satisfy 0 <= w < 1")
         if not 0.0 < par.phi <= 1.0:
@@ -466,6 +467,23 @@ class Charge:
         self.fuel, self.cr, self.w = fuel, float(cr), float(w)
         self.T_intake, self.par = float(T_intake), par
         self.evap_profile = evap_profile
+        # Retained-liquid / wall-film coupling (item B, 2026-10-24). None keeps
+        # the legacy model bit-for-bit. Otherwise a dict:
+        #   liquid_sink      True: water not evaporated by spark stays liquid,
+        #                    is excluded from the unburned gas and is vaporised
+        #                    into the burned zone at the burn rate (u_fg +
+        #                    sensible, on the cycle's sensible-U basis).
+        #   port_evap_frac   bound (i): fraction of the water charge evaporated
+        #                    from the port film by wall heat before IVC (enters
+        #                    as vapour at T_intake; heat from the wall, not the
+        #                    charge). 0 for bound (ii).
+        #   intake_cap_frac  optional cap on intake droplet evaporation (the
+        #                    Module 09 evaporated fraction at IVC).
+        self.coupling = dict(coupling) if coupling else None
+        self.liquid_sink = bool(self.coupling and self.coupling.get("liquid_sink"))
+        self.port_evap_request = float(self.coupling.get("port_evap_frac", 0.0)) if self.coupling else 0.0
+        self.port_evap = 0.0
+        self._e_pre = None
         ph = self.ph = phases(fuel)
         i, MW = ph.i, ph.MW
         self.j = j = i["H2O"]
@@ -504,6 +522,12 @@ class Charge:
                           - PropsSI("Umass", "T", Tw, "Q", 0, "Water"))
         self.h_latent = self.h_fg - float(ph.species_h(Tw)[j] - ph.h_ref[j])
         self.u_latent = self.u_fg - float(ph.species_u(Tw)[j] - ph.u_ref[j])
+        # Absolute internal energy of liquid water at the storage temperature
+        # [J/kg].  Retained liquid is heated from here to the burned-gas
+        # temperature (u_fg + sensible) as the flame consumes the charge.
+        self.u_liq_Tw = float(PropsSI("Umass", "T", Tw, "Q", 0, "Water"))
+        # Liquid at Tw -> ideal-gas vapour at T_intake (port film evaporated by wall heat).
+        self.h_port = self.h_latent + float(ph.species_h(self.T_intake)[j] - ph.h_ref[j])
         self._intake()
         vec = self.dry + self.e_intake * self.water
         self.V_ivc = volume(par.ivc_rad, cr, par)
@@ -517,8 +541,9 @@ class Charge:
         self.Q_fuel = self.fuel_mass * ph.lhv
         self.Q_avail = par.combustion_efficiency * self.Q_fuel
         self.L_cyl = self.water_mass * self.u_latent  # J per unit evaporated fraction
-        self.Q_evap_intake = self.water_mass * self.e_intake * self.h_latent
-        self.intake_closure_J = (self.scale * (self._H(self.dry, self.T_intake)
+        self.Q_evap_intake = self.water_mass * (self.e_intake - self.port_evap) * self.h_latent
+        self.Q_port_wall_J = self.water_mass * self.port_evap * self.h_port
+        self.intake_closure_J = (self.scale * (self._H(self.dry + self.port_evap * self.water, self.T_intake)
                                  - self._H(vec, self.T_ivc)) - self.Q_evap_intake)
         self.U_ivc = self.scale * float(vec @ (ph.species_u(self.T_ivc) - ph.u_ref))
         self.fuel_saturation_ratio_ivc = None
@@ -527,6 +552,42 @@ class Charge:
             x_fuel = (vec[ph.i_fuel] / MW[ph.i_fuel]) / float(vec @ ph.inv_MW)
             p_fuel = float(PropsSI("P", "T", self.T_ivc, "Q", 1, props.coolprop_name))
             self.fuel_saturation_ratio_ivc = float(x_fuel * par.p_ivc_Pa / p_fuel)
+        # Module 09 spark target: (spark_deg_aTDC, (frac_evap, frac_air,
+        # frac_wall)).  frac_evap is the fraction of the water charge that has
+        # evaporated by spark; frac_air is the airborne-droplet subset and
+        # frac_wall is the wall-impinged film subset (both = non-vapour).
+        # Water that has NOT evaporated by spark stays liquid through
+        # combustion (task 124500 part B): it is debited as a heat sink and
+        # excluded from the unburned gas.  When the profile does not cover
+        # this point the target is None and the cycle falls back to the
+        # default schedule.
+        self.spark_target = None
+        self.spark_fractions = None
+        if evap_profile is not None:
+            import importlib as _il
+            _ep = _il.import_module("sims.03_engine_cycle.evap_profile")
+            if hasattr(evap_profile, "spark_target"):
+                self.spark_target = evap_profile.spark_target(fuel, cr, w, T_intake)
+            else:
+                self.spark_target = _ep.spark_target(fuel, cr, w, T_intake,
+                                                    evap_profile.atomiser,
+                                                    evap_profile.variant)
+        # Retained liquid at spark [kg]: the water charge that has NOT evaporated
+        # by spark (task 124500 part B).  It stays liquid through combustion,
+        # is consumed by the flame at the burn rate (heat sink u_fg + sensible,
+        # taken from the burned zone) and is excluded from the unburned gas.
+        # Without a Module 09 profile there is no spark target and the charge
+        # falls back to the default schedule (m_liq = 0 -> current model).
+        if self.spark_target is not None:
+            _spark_deg, fracs = self.spark_target
+            self.spark_fractions = fracs
+            e_spark = float(fracs[0])
+        else:
+            e_spark = 1.0
+        # Diagnostic only (kg per cycle): Module 09 non-vapour water at spark.
+        # The energy treatment lives in integrate_cycle (liquid_sink) and in
+        # flame_T (per kg of fuel); m_liq is not used in either.
+        self.m_liq = self.water_mass * max(0.0, 1.0 - e_spark)
 
     # Intake: isobaric adiabatic mixing (steady flow), so enthalpy and h_fg.
     def _H(self, vec, T):
@@ -538,9 +599,11 @@ class Charge:
 
     def _intake_T(self, e):
         """Mixed-charge temperature [K]; None if the latent demand needs T < 150 K."""
-        if e <= 0.0:
+        base = self.port_evap
+        if e <= base:
             return self.T_intake
-        target = self._H(self.dry, self.T_intake) - e * self.m_water_basis * self.h_latent
+        target = (self._H(self.dry + base * self.water, self.T_intake)
+                  - (e - base) * self.m_water_basis * self.h_latent)
         vec = self.dry + e * self.water
 
         def balance(T):
@@ -561,13 +624,32 @@ class Charge:
 
         if excess(0.0) > 0.0:
             raise PointUnavailable("Residual water vapour alone is supersaturated at T_intake")
-        if self.w == 0.0 or f <= 0.0:
-            e = 0.0
+        req = min(1.0, max(0.0, self.port_evap_request)) if self.w > 0.0 else 0.0
+        self.port_evap_saturation_limited = False
+        if req > 0.0:
+            # Bound (i) port vapour enters at T_intake, capped at saturation there.
+            def port_excess(b):
+                return self._x_water(self.dry + b * self.water) * p - water_p_sat(self.T_intake)
+            if port_excess(req) > 0.0:
+                req = brentq(port_excess, 0.0, req, xtol=1e-12)
+                self.port_evap_saturation_limited = True
+            self.port_evap = float(req)
+        base = self.port_evap
+        if self.coupling and self.coupling.get("intake_cap_frac") is not None:
+            f = min(f, float(self.coupling["intake_cap_frac"]))
+        if self.evap_profile is not None:
+            # Module 09 fractions are of the whole water charge and the port
+            # film is part of Module 09's (disjoint) wall-film fraction: add.
+            f = min(1.0, base + f)
+        else:
+            f = base + f * (1.0 - base)
+        if self.w == 0.0 or f <= base:
+            e = base
         elif excess(f) <= 0.0:
             e = f
         else:
             # f_evap_intake is infeasible: evaporate only up to saturation (wet bulb).
-            e = brentq(excess, 0.0, f, xtol=1e-12)
+            e = brentq(excess, base, f, xtol=1e-12)
         self.e_intake = float(e)
         self.T_ivc = float(self._intake_T(e))
         self.intake_saturation_limited = bool(self.w > 0.0 and e < f - 1e-9)
@@ -576,9 +658,24 @@ class Charge:
 
     # Closed cylinder: mixture properties by mass fraction burned.
     def masses(self, xb, e):
+        e_pre = self._e_pre
+        if e_pre is not None and e > e_pre:
+            # Liquid sink: water vaporised by the flame after spark belongs to
+            # the burned zone only; the unburned gas keeps the spark vapour.
+            unburned = self.scale * (1.0 - xb) * (self.dry + e_pre * self.water)
+            burned = self.scale * (xb * (self.burned_ref + e_pre * self.water)
+                                   + (e - e_pre) * self.water)
+            return unburned, burned
         unburned = self.scale * (1.0 - xb) * (self.dry + e * self.water)
         burned = self.scale * xb * (self.burned_ref + e * self.water)
         return unburned, burned
+
+    def burned_zone_water(self, xb, e):
+        """Evaporated-water fraction carried per kg of burned fuel (NO zone)."""
+        e_pre = self._e_pre
+        if e_pre is not None and e > e_pre and xb > 0.0:
+            return min(1.0, e_pre + (e - e_pre) / xb)
+        return e
 
     def evaluate(self, T, p, xb, e):
         """Sensible U [J], total kmol and species masses [kg] at (T, p)."""
@@ -614,17 +711,41 @@ class Charge:
             T = min(6000.0, max(150.0, T - F / slope))
         raise RuntimeError(f"State inversion did not converge (U={U:.6g} J, V={V:.4g} m3, xb={xb:.4g})")
 
+    def u_liq(self, T):
+        """Specific internal energy of saturated-liquid water at T [J/kg].
+
+        None when T is outside the liquid range (>= critical or < triple
+        point): retained liquid is only tracked while liquid water exists.
+        """
+        from CoolProp.CoolProp import PropsSI
+        if T >= 647.096:
+            return None
+        try:
+            return float(PropsSI("Umass", "T", max(T, 273.16), "Q", 0, "Water"))
+        except Exception:
+            return None
+
     # Evaporation schedule (SPEC: uniform IVC -> evap_end), saturation capped.
     def scheduled_fraction(self, theta):
         if self.water_mass <= 0.0:
             return 0.0
+        # Task 124500 part B: the Module 09 profile caps evaporation at the
+        # spark value.  Water that has not evaporated by spark stays liquid
+        # through combustion (heat sink, excluded from the unburned gas);
+        # evaporation after spark is not modelled by Module 09.
+        if self.spark_target is not None:
+            spark_deg, fracs = self.spark_target
+            if theta / RAD >= spark_deg:
+                return min(1.0, max(0.0, self.port_evap + float(fracs[0])))
         if self.evap_profile is not None:
             import importlib as _il
             _ep = _il.import_module("sims.03_engine_cycle.evap_profile")
             t = self.evap_profile.target(self.fuel, self.cr, self.w,
                                           self.T_intake, theta / RAD)
             if t is not None:
-                return min(1.0, max(0.0, t))
+                # Bound (i) port vapour is additional to the Module 09 spray
+                # vapour (the port film is part of Module 09's wall fraction).
+                return min(1.0, max(0.0, self.port_evap + t))
         p = self.par
         frac = min(1.0, max(0.0, (theta - p.ivc_rad) / (p.evap_end_rad - p.ivc_rad)))
         return self.e_intake + (1.0 - self.e_intake) * frac
@@ -674,10 +795,11 @@ class Charge:
     def endgas_anchor(self, st):
         """Freeze the unburned composition at a node just before x_b reaches the anchor."""
         eg = self.ph.endgas
-        Y = self.dry + st["e"] * self.water
+        e = st["e"] if self._e_pre is None else min(st["e"], self._e_pre)
+        Y = self.dry + e * self.water
         eg.TPY = st["T"], st["p"], Y / Y.sum()
         return dict(s=float(eg.entropy_mass), gamma=float(eg.cp_mass / eg.cv_mass),
-                    p=st["p"], V=st["V"], T=st["T"], e=st["e"])
+                    p=st["p"], V=st["V"], T=st["T"], e=e)
 
     def endgas_T(self, anchor, p):
         """Frozen-composition, variable-cp isentrope from the anchor state."""
@@ -733,6 +855,14 @@ class Charge:
         Yu = self.dry + e * self.water
         Yc = self.burned_ref + self.water
         mass = float(Yc.sum())
+        # Constant-p flame, one consistent basis (per kg of fuel, enthalpy,
+        # Cantera reference h_ref at T_REF): end-gas vapour at T_u, liquid
+        # still in the end gas ((1 - e) of the water, at Tw) and the prescribed
+        # release eta_c LHV give products with ALL water as vapour. The liquid
+        # debit is h_latent (liquid at Tw -> ideal-gas vapour at T_REF); its
+        # sensible heating to T_ad is carried by Yc. Coupling fix 2026-10-24:
+        # the 32b6350 version subtracted m_liq [kg/cycle, wrong basis] times
+        # (CoolProp liquid h - Cantera gas formation h) [mixed references].
         H = (float(Yc @ ph.h_ref) + float(Yu @ (ph.species_h(T_u) - ph.h_ref))
              + self.par.combustion_efficiency * ph.lhv
              - (1.0 - e) * self.m_water_basis * self.h_latent)
@@ -819,7 +949,7 @@ def no_step(n_NO, dt, st, T_u, anchor, charge):
         T_ad = None
         T_b = T
     ph = charge.ph
-    Y = charge.burned_ref + st["e"] * charge.water
+    Y = charge.burned_ref + charge.burned_zone_water(xb, st["e"]) * charge.water
     fl = ph.flame
     fl.TPY = T_b, p, Y / Y.sum()
     fl.equilibrate("TP")
@@ -870,6 +1000,19 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
     theta_a = burn_angle(par.endgas_anchor_xb, ca50, duration, par)
     nodes = list(np.linspace(par.ivc_rad, evo, max(2, math.ceil((evo - par.ivc_rad) / step)) + 1))
     nodes += [a for a in (par.evap_end_rad, theta90, theta_a) if par.ivc_rad < a < evo]
+    # Retained-liquid sink (coupling item B): freeze pre-spark evaporation at
+    # the Module 09 spark angle (or at first heat release, whichever is first)
+    # and vaporise the remaining liquid into the burned zone at the burn rate.
+    sink = bool(getattr(charge, "liquid_sink", False)) and charge.water_mass > 0.0
+    spark_rad = None
+    if sink:
+        charge._e_pre = None
+        if charge.spark_target is not None:
+            spark_rad = float(charge.spark_target[0]) * RAD
+            if par.ivc_rad < spark_rad < evo:
+                nodes.append(spark_rad)
+    frozen = None  # (e_pre, xb_spark, liquid_fraction_at_spark, theta)
+    Q_sink = 0.0
     grid = np.unique(np.array(nodes, dtype=float))
     Qa, Lc = charge.Q_avail, charge.L_cyl
     xb = x_ivc = burn_release(grid[0], ca50, duration, par)
@@ -903,12 +1046,22 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
         dt = (right - left) / omega
         Vm, Vr = volume(mid, charge.cr, par), volume(right, charge.cr, par)
         xm, xr = burn_release(mid, ca50, duration, par), burn_release(right, ca50, duration, par)
-        em = charge.evaporate(e, mid, st, Vm)
-        if em > e:  # saturation cap on the no-evaporation predictor state at mid, not the lagged left state
-            s0 = charge.state(U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - 0.5 * q_left * dt, Vm, xm, e,
-                              (st["T"], st["p"]))
-            em = charge.evaporate(e, mid, s0, Vm)
-        er = max(em, charge.evaporate(e, right, st, Vr))
+        if sink and frozen is None and ((spark_rad is not None and left >= spark_rad - 1e-12)
+                                        or xr > xb):
+            frozen = (e, xb, max(0.0, 1.0 - e), left)
+            charge._e_pre = e
+        if frozen is not None:
+            e0, xs, liq, _ = frozen
+            def flame_vap(x):
+                return e0 + liq * min(1.0, max(0.0, (x - xs) / (1.0 - xs)))
+            em, er = flame_vap(xm), flame_vap(xr)
+        else:
+            em = charge.evaporate(e, mid, st, Vm)
+            if em > e:  # saturation cap on the no-evaporation predictor state at mid, not the lagged left state
+                s0 = charge.state(U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - 0.5 * q_left * dt, Vm, xm, e,
+                                  (st["T"], st["p"]))
+                em = charge.evaporate(e, mid, s0, Vm)
+            er = max(em, charge.evaporate(e, right, st, Vr))
         U_mid = U - st["p"] * (Vm - st["V"]) + Qa * (xm - xb) - Lc * (em - e) - 0.5 * q_left * dt
         sm = charge.state(U_mid, Vm, xm, em, (st["T"], st["p"]))
         if anchor is None and not charge.ideal and left >= theta_a - 1e-12:
@@ -917,7 +1070,9 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
         work = sm["p"] * (Vr - st["V"])
         d_evap = Lc * (er - e)
         U += -work + Qa * (xr - xb) - d_evap - q_mid * dt
-        if er > e:  # corrector: saturation cap on the no-evaporation right state
+        if frozen is not None:
+            Q_sink += d_evap
+        elif er > e:  # corrector: saturation cap on the no-evaporation right state
             s0 = charge.state(U + d_evap, Vr, xr, e, (sm["T"], sm["p"]))
             er2 = max(em, charge.evaporate(e, right, s0, Vr))
             U -= Lc * (er2 - er)
@@ -939,7 +1094,7 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
             if T_ad is not None:
                 peak_Tad = T_ad if peak_Tad is None else max(peak_Tad, T_ad)
         sr = charge.state(U, Vr, xr, er, (sm["T"], sm["p"]))
-        if anchor is not None and xr < 0.999 and er > anchor["e"]:
+        if anchor is not None and xr < 0.999 and er > anchor["e"] and frozen is None:
             anchor = charge.reanchor(anchor, sr["p"], er, sr["mass"])
         q_right = wall_heat_rate(sr, charge, anchor) if wall else 0.0
         W_trap += 0.5 * (st["p"] + sr["p"]) * (Vr - st["V"])
@@ -982,6 +1137,14 @@ def integrate_cycle(charge, ca50, duration, ignition=None, *, evo_rad=None,
         evaporation_complete_deg=None if evap_done is None else evap_done / RAD,
         liquid_water_at_EVO_kg=charge.water_mass * (1.0 - e),
         max_vapour_saturation_ratio=max_sat)
+    if sink:
+        result.update(
+            liquid_sink_J=Q_sink,
+            evaporated_fraction_spark=None if frozen is None else frozen[0],
+            liquid_fraction_spark=None if frozen is None else frozen[2],
+            liquid_freeze_deg=None if frozen is None else frozen[3] / RAD,
+            port_evap_fraction=charge.port_evap,
+            port_wall_heat_J=charge.Q_port_wall_J)
     result["_state"] = st
     result["_trace"] = trace if keep_trace else None
     return result
@@ -1029,7 +1192,7 @@ def point_key(row):
 
 def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
               fits_source=None, keep_trace=False, flame_speed_factor=1.0,
-              evap_profile=None):
+              evap_profile=None, coupling=None):
     """One sweep point; unavailable/failed points are kept with a reason."""
     row = dict(fuel=fuel, CR=cr, w=w, WFR=w / (1.0 - w), T_intake_K=T_intake, phi=par.phi,
                status="computed", reason="", mechanism=None, mechanism_fallback=False,
@@ -1041,11 +1204,23 @@ def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
         if w >= SENSITIVITY["applied_for_w_ge"]:
             sl *= flame_speed_factor
         duration = burn_duration(sl, ref, par)
-        charge = Charge(fuel, cr, w, T_intake, par, evap_profile=evap_profile)
+        if evap_profile is not None and coupling is None:
+            # A Module 09 profile implies the retained-liquid sink (bound ii
+            # semantics, no port evaporation); without it unevaporated water
+            # would never be vaporised (the pre-coupling defect).
+            coupling = dict(liquid_sink=True)
+        charge = Charge(fuel, cr, w, T_intake, par, evap_profile=evap_profile,
+                        coupling=coupling)
         result = retard_search(lambda ca50: integrate_cycle(
             charge, ca50, duration, ignition, keep_trace=keep_trace), par)
         state, trace = result.pop("_state"), result.pop("_trace")
         row.update({k: v for k, v in result.items() if k in row})
+        for k in ("liquid_sink_J", "evaporated_fraction_spark", "liquid_fraction_spark",
+                  "liquid_freeze_deg", "port_evap_fraction", "port_wall_heat_J"):
+            if k in result:
+                row[k] = result[k]
+        if charge.coupling:
+            row["port_evap_saturation_limited"] = charge.port_evap_saturation_limited
         row.update(S_L_m_s=sl, S_L_ref_m_s=ref, T_IVC_K=charge.T_ivc,
                    f_evap_intake_effective=charge.e_intake,
                    intake_saturation_limited=charge.intake_saturation_limited,

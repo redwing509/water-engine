@@ -179,6 +179,19 @@ class Case:
     sample_deg: float = 0.05
     label: str = ""
     meta: dict = field(default_factory=dict)
+    # Retained-liquid coupling extension (2026-10-24, M03-CRN's own formulation).
+    # "legacy": uniform schedule IVC -> -30 CAD (V1 engine, unchanged).
+    # "coupled": Module 09 problem definition - evaporated fraction of the total
+    # water rises linearly from f_ivc (IVC) to f_spark (spark_deg), capped at
+    # saturation; from min(spark, Wiebe start) on, nothing evaporates from the
+    # charge and the liquid then left enters the gas in proportion to the
+    # burned mass, dm/dtheta = m_liq_spark * (dx_b/dtheta) / (1 - x_b,spark),
+    # as H2O(g) inflow with the h_fg(T_water) sink (no saturation cap: it is
+    # vaporised by the flame).
+    evap_mode: str = "legacy"
+    spark_deg: float = None
+    f_ivc: float = None
+    f_spark: float = None
 
 
 def lhv_liquid(fuel, gas):
@@ -263,6 +276,19 @@ class Engine:
         evap_rate_sched = m_liq0 / (EVAP_END - THETA_IVC) * omega  # kg/s while active
         self.anchor = None
         eng = self
+        coupled = c.evap_mode == "coupled"
+        if c.evap_mode not in ("legacy", "coupled"):
+            raise ValueError(c.evap_mode)
+        flame = dict(on=False, L=0.0, xs=0.0, m_ev=0.0)
+        if coupled:
+            theta_sp = c.spark_deg * RAD
+            theta_freeze = min(theta_sp, wb.start)
+            span = theta_sp - THETA_IVC
+            # in-cylinder evaporation target [kg] beyond the intake vapour
+            def target_cyl(theta):
+                fr = c.f_spark if theta >= theta_sp else c.f_ivc + (c.f_spark - c.f_ivc) * (theta - THETA_IVC) / span
+                return max(0.0, fr - c.e_intake) * c.m_water
+            slope = max(0.0, (c.f_spark - c.f_ivc)) * c.m_water / span * omega
 
         def psat(T):
             if T >= T_crit:
@@ -274,12 +300,17 @@ class Engine:
             if m_liq0 <= 0.0:
                 return 0.0
             theta = th(t)
+            if coupled and flame["on"]:
+                return flame["L"] * wb.dx(theta) * omega / (1.0 - flame["xs"])
             m_ev = r.mass - m0  # evaporated so far (only inflow changes mass)
             left = m_liq0 - m_ev
             if left <= 0.0:
                 return 0.0
-            frac = min(1.0, max(0.0, (theta - THETA_IVC) / (EVAP_END - THETA_IVC)))
-            target_sched = frac * m_liq0
+            if coupled:
+                target_sched = min(m_liq0, target_cyl(theta))
+            else:
+                frac = min(1.0, max(0.0, (theta - THETA_IVC) / (EVAP_END - THETA_IVC)))
+                target_sched = frac * m_liq0
             ph = r.phase
             T, V = ph.T, r.volume
             ps = psat(T)
@@ -293,7 +324,10 @@ class Engine:
                 sat_limited = target_sat < target_sched
                 target = min(target_sched, target_sat)
             rate = (target - m_ev) / tau
-            if not sat_limited and theta < EVAP_END:
+            if coupled:
+                if not sat_limited and theta < theta_sp and target_sched > 0.0:
+                    rate += slope
+            elif not sat_limited and theta < EVAP_END:
                 rate += evap_rate_sched
             return max(0.0, rate)
 
@@ -324,7 +358,9 @@ class Engine:
                 self.n_vars += 6  # W, Qw, Qc, Qlat, Hin, Econv
 
             def after_get_state(self, y):
-                y[self.i0:self.i0 + 6] = 0.0
+                # keep the running integrals across net.reinitialize() (coupled mode)
+                prev = getattr(self, "aux", None)
+                y[self.i0:self.i0 + 6] = 0.0 if prev is None else prev
 
             def after_update_state(self, y):
                 self.aux = np.array(y[self.i0:self.i0 + 6])
@@ -373,13 +409,20 @@ class Engine:
         U0 = r.phase.int_energy_mass * r.mass
 
         # Output grid with break points at kinks (end of evaporation schedule, Wiebe start).
-        breaks = sorted({EVAP_END, wb.start} & {x for x in (EVAP_END, wb.start) if THETA_IVC < x < THETA_EVO})
+        bset = (EVAP_END, wb.start) if not coupled else (theta_freeze, wb.start, theta_sp)
+        breaks = sorted(x for x in set(bset) if THETA_IVC < x < THETA_EVO)
         n = int(round((THETA_EVO - THETA_IVC) / (c.sample_deg * RAD)))
         grid = list(np.linspace(THETA_IVC, THETA_EVO, n + 1)[1:]) + breaks
         grid = np.unique(np.array(grid))
         rec = []
         for theta in grid:
             net.advance(tt(theta))
+            if coupled and not flame["on"] and theta >= theta_freeze - 1e-12:
+                m_ev_s = r.mass - m0
+                flame.update(on=True, L=max(0.0, m_liq0 - m_ev_s), xs=wb.x(theta), m_ev=m_ev_s,
+                             theta=theta)
+                if m_liq0 > 0.0:
+                    net.reinitialize()  # RHS switches from spray schedule to flame vaporisation
             ph = r.phase
             if abs(theta - wb.start) < 1e-12 and self.anchor is None:
                 self.anchor = dict(p=ph.P, V=r.volume, gamma=ph.cp_mass / ph.cv_mass, T=ph.T,
@@ -424,7 +467,11 @@ class Engine:
             T_endgas_at_pmax_K=T_endgas, NO_mol_per_J_fuel_bulk=n_no * 1000.0 / self.Q_fuel,
             ca50_deg=c.ca50_deg, burn_10_90_deg=c.d1090_deg, wiebe_start_deg=wb.start / RAD,
             peak_burn_rate_J_per_deg=float(Qa * max(wb.dx(x) for x in grid) * RAD),
-            energy_closure=closure, wiebe_integral_error=wiebe_err, meta=c.meta)
+            energy_closure=closure, wiebe_integral_error=wiebe_err, meta=c.meta,
+            evap_mode=c.evap_mode,
+            liquid_at_spark_kg=flame["L"] if coupled else None,
+            evaporated_fraction_spark=((c.e_intake * c.m_water + flame["m_ev"]) / c.m_water
+                                       if coupled and c.m_water > 0 else None))
 
 
 def run_case(case):
