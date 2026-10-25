@@ -18,7 +18,9 @@ NOISE_THRESHOLD = 3.3e-5  # James 2026-10-24 19:01 PDT
 NOISE_CAP, NOISE_CAP_EXT = 100, 200
 RUNNING = False
 COST_RULE = ("James, 2026-10-25 06:53 PDT: gains are judged on cost too - if adding water keeps power (horsepower) the "
-             "same or better, the fuel it saves per unit work is a cost-per-mile (MPG) gain; tracked as a progress metric.")
+             "same or better, the fuel it saves per unit work is a cost-per-mile (MPG) gain; tracked as a progress metric. "
+             "Water price: headline 0.10 USD/gal = James's chosen test-case water cost (07:32 PDT); 0 USD/gal free tap "
+             "water (07:31 PDT, utility-billed) shown for comparison; retail distilled only a footnote sensitivity.")
 
 # Track A references (existing water-majority work); copied from committed results, see 'source'.
 TRACK_A = {
@@ -90,7 +92,7 @@ def cost_cells(base, steps, best):
     cb = C.compare(best, base)
     w, cc = C.best_cost(el, base)
     two = lambda c, k: " / ".join("-" if c[e] is None else f"{c[e][k]:+.2f}" for e in ("m03", "crn"))
-    return (f"{two(cb, 'cost_per_mile_pct')} | {w['w']:.3f} ({two(cc, 'cost_per_mile_pct')}; "
+    return (f"{two(cb, 'cost_per_mile_pct')} / $0: {two(cb, 'cost_per_mile_water_free_pct')} | {w['w']:.3f} ({two(cc, 'cost_per_mile_pct')}; "
             f"{cc['m03']['power_change_pct']:+.2f}) {C.verdict(cc)}")
 
 
@@ -109,17 +111,34 @@ def cost_section(P):
       "work changes by eta_dry/eta - 1. Power = IMEP (M03-CRN IMEP derived at the same fuel mass); brake power not "
       "modelled. Cost per kWh = (p_fuel + p_water w/(1-w))/(eta LHV); per mile = x 0.40 kWh indicated work/mile "
       "(reference 30 mpg car); the % numbers do not depend on that.")
-    P("* Prices (fetched 2026-10-25): " + "; ".join(
-        f"{k} {v['usd']} {v['unit']} ({v['source']}, {v['date']})" for k, v in pr["prices"].items() if k != "diesel") + ".")
-    P("* **COST GAIN** = IMEP equal or better (within 1e-4 relative noise) AND lower cost per mile, in both engines.")
+    P("* **Water: headline 0.10 USD/gal (James's chosen test-case water cost, 2026-10-25 07:32 PDT)**; comparison 0 USD/gal "
+      "(free tap water - James 07:31 PDT: most people pay for water through the utility bill, no extra cost to fill a "
+      "tank); retail distilled (1.54 USD/gal, Walmart 2026-10-25) is a footnote sensitivity only.")
+    P("* Fuel prices (fetched 2026-10-25): " + "; ".join(
+        f"{k} {v['usd']} {v['unit']} ({v['source']}, {v['date']})" for k, v in pr["prices"].items()
+        if k != "diesel" and not k.startswith("water")) + ".")
+    P("* **COST GAIN** = IMEP equal or better (within 1e-4 relative noise) AND lower cost per mile at 0.10 USD/gal "
+      "water, in both engines. At 0 USD/gal the cost change equals the fuel-per-work change, so the cost optimum is "
+      "the efficiency optimum wherever power holds.")
     for x in CR.headline_md(pr, H)[1:]:
         P(x)
     gains = [f"{k[0]} {k[1]}{'/H1' if k[3] != 'track_b' else ''} {k[2]} (w {c['cost_row'].get('w', 0):.3f}, "
              f"{c['cost']['m03']['cost_per_mile_pct']:+.2f} / {c['cost']['crn']['cost_per_mile_pct']:+.2f} %)"
              for k, c in res.items() if c["cost"]["cost_gain_all_engines"]]
-    P("\nTrack B cost gains (both engines): " + ("; ".join(gains) if gains else "none") + ".")
-    ga = sorted({k.rsplit("|", 1)[0] for k, v in ta.items() if v["cost"]["cost_gain_all_engines"]})
+    P("\nTrack B cost gains at 0.10 USD/gal (both engines; cost-opt w): " + ("; ".join(gains) if gains else "none") + ".")
+    same = [k for k, c in res.items() if c["cost"]["cost_gain_all_engines"]]
+    diff = [f"{k[0]} {k[1]}{'/H1' if k[3] != 'track_b' else ''} {k[2]} cost-opt w {c['cost_row'].get('w', 0):.3f} vs "
+            f"eff-opt w {c['eff_row'].get('w', 0):.3f}" for k, c in res.items()
+            if abs(c["cost_row"].get("w", 0) - c["eff_row"].get("w", 0)) > 1.5e-3]
+    P(f"Cost-opt vs eff-opt at 0.10 USD/gal: {len(same)} chains are gains; cost-opt w within one 0.001 step of "
+      "eff-opt w everywhere except: " + ("; ".join(diff) if diff else "none") + ". (One step past eff-opt = the first "
+      "step rejected by the 3.3e-5 noise threshold, still a tiny gain - equal within noise.)")
+    ga = sorted({k.rsplit("|", 1)[0] for k, v in ta.items() if v["cost"]["cost_gain_all_engines"] and not k.endswith("retail-sensitivity-opt")})
     P("Track A grid cost gains (Module 03 only): " + ("; ".join(g.replace("|", " ") for g in ga) if ga else "none") + ".")
+    pdl = CR.power_drops(res)
+    P("Power drops (Track B): " + ("; ".join(f"{f} {r} {m} w {w:.3f} ({a:+.3f} / {b:+.3f} %)" for f, r, m, w, a, b in pdl)
+                                   if pdl else "none") + ". Track A: humid_ambient eff-opt points lose 5-14 % IMEP "
+      "(power loss), and the hot C2H5OH wet re-opt eff-opt loses ~20 % (see COST_TRACK_A.md).")
     P("\nCaveats unchanged: fixed burn duration (efficiency and so cost gains are upper bounds); knock only in "
       "Module 03; gasoline-blend chains end at w = 0.10 (flame-speed fit limit), so those are lower bounds.")
 
@@ -201,7 +220,7 @@ def main():
       "mass (charge density) and vapour displaces O2 (lower O2 partial pressure) automatically. There is no "
       "gas-exchange model, so volumetric-efficiency effects beyond charge density are NOT modelled.\n")
     P("### Current rule (noise threshold 3.3e-5, James 19:01 PDT)\n")
-    P("| fuel/regime | mode | dry eta M03 / CRN | best w | steps | d_eta M03 / CRN (pp) | CA50 dry -> best (limit) | knock margin at best | NO proxy change | p_max change | stop / status | rule_1e-4 variant best w (d_eta pp) | cost per mile % at best w (M03 / CRN) | cost-opt w (cost per mile % M03 / CRN; power % M03) |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
+    P("| fuel/regime | mode | dry eta M03 / CRN | best w | steps | d_eta M03 / CRN (pp) | CA50 dry -> best (limit) | knock margin at best | NO proxy change | p_max change | stop / status | rule_1e-4 variant best w (d_eta pp) | cost per mile % at best w, $0.10/gal water (M03 / CRN) / $0 water | cost-opt w at $0.10/gal (cost per mile % M03 / CRN; power % M03) |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
     summ = {}
     for (name, mode), rules in sorted(groups.items()):
         o = chain_summary(rules["old"], GAIN_THRESHOLD) if "old" in rules else None

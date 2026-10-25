@@ -20,6 +20,8 @@ Definitions (checked against sims/03_engine_cycle/run.py, Charge.__init__ and th
   % vs dry = (1 + r * p_water/p_fuel) * eta_dry/eta - 1; independent of the vehicle assumption.
 * Break-even water price: the water price at which the cost change is exactly zero,
   p_w* = p_fuel * (eta/eta_dry - 1) / r (reported in USD per US gallon of water; negative = never pays).
+* Water price: headline = James's test-case cost 0.10 USD/gal (2026-10-25 07:32 PDT); 0 USD/gal (free tap water,
+  paid via the utility bill - James 07:31 PDT) is the secondary comparison; retail distilled is a footnote.
 * Per mile: a fixed reference vehicle needing WORK_KWH_PER_MILE of indicated work per mile (documented
   assumption below). MPG(fuel gallons only) and cost/mile scale with it; their % changes do not.
 """
@@ -62,11 +64,17 @@ def load_prices(path=PRICES_FILE):
     return json.loads(Path(path).read_text())
 
 
-def usd_per_kg(fuel, prices=None):
-    """Price of the fuel (or 'water') in USD/kg, from the dated prices file."""
+# Water price cases (prices file 'water_cases'): 'headline' = James's test-case cost 0.10 USD/gal (default,
+# 2026-10-25 07:32 PDT); 'free' = 0 USD/gal (07:31 PDT: water is paid through the utility bill, no extra cost to
+# fill a tank); 'retail_sensitivity' = retail distilled water (footnote only).
+HEADLINE_WATER = "headline"
+
+
+def usd_per_kg(fuel, prices=None, water=HEADLINE_WATER):
+    """Price of the fuel (or 'water', for the given water case) in USD/kg, from the dated prices file."""
     P = prices or load_prices()
     if fuel == "water":
-        p = P["prices"]["water_distilled"]
+        p = P["prices"][P["water_cases"][water]]
         return p["usd"] / (US_GAL_M3 * WATER_RHO)
     key = P["fuel_to_price"][fuel]
     p = P["prices"][key]
@@ -92,10 +100,10 @@ def water_per_fuel(row):
     return r_w
 
 
-def cost_per_kwh(fuel, eta, r, prices=None, water_free=False):
-    """USD per kWh of indicated work (fuel + water)."""
+def cost_per_kwh(fuel, eta, r, prices=None, water=HEADLINE_WATER):
+    """USD per kWh of indicated work (fuel + water at the given water price case)."""
     pf = usd_per_kg(fuel, prices)
-    pw = 0.0 if water_free else usd_per_kg("water", prices)
+    pw = usd_per_kg("water", prices, water)
     return (pf + pw * r) / (eta * FUEL_PROPS[fuel]["lhv"] / 3.6e6)
 
 
@@ -119,14 +127,16 @@ def _engine(row, dry, eng):
     return (c, p * c / e, cd, pd * cd / ed)
 
 
-def compare(row, dry, prices=None):
-    """Cost metric of one result vs its fuel's dry baseline (same fuel, same regime). Both engines."""
+def compare(row, dry, prices=None, water=HEADLINE_WATER):
+    """Cost metric of one result vs its fuel's dry baseline (same fuel, same regime). Both engines.
+    cost_* = the selected water case (default: headline 0.10 USD/gal); *_water_free_pct = 0 USD/gal;
+    *_retail_water_pct = retail distilled (footnote sensitivity)."""
     fuel = row["fuel"]
     if dry["fuel"] != fuel:
         raise ValueError("dry baseline must be the same fuel")
     r = water_per_fuel(row)
-    pf, pw = usd_per_kg(fuel, prices), usd_per_kg("water", prices)
-    out = dict(fuel=fuel, w=float(row.get("w") or 0.0), water_per_fuel=r, price_fuel_usd_kg=pf,
+    pf, pw = usd_per_kg(fuel, prices), usd_per_kg("water", prices, water)
+    out = dict(fuel=fuel, w=float(row.get("w") or 0.0), water_per_fuel=r, price_fuel_usd_kg=pf, water_case=water,
                price_water_usd_kg=pw, water_to_fuel_price_ratio=pw / pf)
     for eng in ("m03", "crn"):
         v = _engine(row, dry, eng)
@@ -135,8 +145,9 @@ def compare(row, dry, prices=None):
             continue
         eta, imep, eta_d, imep_d = v
         fuel_rel = eta_d / eta - 1.0
-        c, cd = cost_per_kwh(fuel, eta, r, prices), cost_per_kwh(fuel, eta_d, 0.0, prices)
-        cf = cost_per_kwh(fuel, eta, r, prices, water_free=True)
+        c, cd = cost_per_kwh(fuel, eta, r, prices, water), cost_per_kwh(fuel, eta_d, 0.0, prices, water)
+        cf = cost_per_kwh(fuel, eta, r, prices, "free")
+        cr = cost_per_kwh(fuel, eta, r, prices, "retail_sensitivity")
         dp = imep / imep_d - 1.0
         dc = c / cd - 1.0
         power_ok = dp >= -POWER_TOL_REL
@@ -149,6 +160,7 @@ def compare(row, dry, prices=None):
             cost_usd_per_kwh=c, cost_usd_per_kwh_dry=cd, cost_per_kwh_pct=100 * dc,
             cost_per_mile_usd=c * WORK_KWH_PER_MILE, cost_per_mile_dry_usd=cd * WORK_KWH_PER_MILE,
             cost_per_mile_pct=100 * dc, cost_per_mile_water_free_pct=100 * (cf / cd - 1.0),
+            cost_per_mile_retail_water_pct=100 * (cr / cd - 1.0),
             mpg_fuel=mpg(fuel, eta), mpg_fuel_dry=mpg(fuel, eta_d),
             mpg_pct=100 * (eta / eta_d - 1.0),
             breakeven_water_usd_per_gal=(pf * (eta / eta_d - 1.0) / r * US_GAL_M3 * WATER_RHO) if r > 0 else None,
@@ -173,13 +185,15 @@ def verdict(c):
     return "no cost gain" + tag
 
 
-def best_cost(rows, dry, prices=None):
-    """Lowest M03 cost per mile among rows with equal-or-better power in every available engine (the dry
-    point itself is always a candidate, so 'w = 0' means water never pays). Returns (row, compare)."""
-    best = (dry, compare(dry, dry, prices))
+def best_cost(rows, dry, prices=None, water=HEADLINE_WATER):
+    """Lowest M03 cost per mile among rows with equal-or-better power in every engine the dry baseline has (a row
+    missing an engine the baseline has, e.g. an M03-CRN integrator failure, is not a candidate). The dry point is
+    always a candidate, so 'w = 0' means water never pays. Returns (row, compare)."""
+    best = (dry, compare(dry, dry, prices, water))
+    need = best[1]["engines"]
     for r in rows:
-        c = compare(r, dry, prices)
-        if not c["m03"] or not c["power_ok_all_engines"]:
+        c = compare(r, dry, prices, water)
+        if not c["m03"] or c["engines"] < need or not c["power_ok_all_engines"]:
             continue
         if c["m03"]["cost_per_mile_pct"] < best[1]["m03"]["cost_per_mile_pct"]:
             best = (r, c)

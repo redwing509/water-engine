@@ -92,12 +92,35 @@ def test_inconsistent_masses_rejected():
 def test_prices_have_source_and_date():
     P = C.load_prices()
     for k, v in P["prices"].items():
-        assert v["url"].startswith("https://") and len(v["date"]) == 10 and v["usd"] > 0, k
+        assert v["source"] and len(v["date"]) == 10 and v["usd"] >= 0, k
+        if k.startswith("water_") and k != "water_distilled":
+            assert v["source"].startswith("James") and v.get("url") is None, k  # owner decision, not a market quote
+        else:
+            assert v["url"].startswith("https://") and v["usd"] > 0, k
     for f in C.FUEL_PROPS:
         assert C.usd_per_kg(f, P) > 0
     assert C.usd_per_kg("CH3OH", P) == pytest.approx(1.45)
     assert C.usd_per_kg("CH4", P) == pytest.approx(3.10 / (5.660 * 0.45359237))
-    assert C.usd_per_kg("water", P) == pytest.approx(1.54 / 3.785411784 / 0.9982)
+    # headline water = James's 0.10 USD/gal test case; free = 0; retail distilled = footnote sensitivity
+    assert P["water_cases"]["headline"] == "water_test_case" and P["prices"]["water_test_case"]["usd"] == 0.10
+    assert C.usd_per_kg("water", P) == pytest.approx(0.10 / 3.785411784 / 0.9982)
+    assert C.usd_per_kg("water", P, "free") == 0.0
+    assert C.usd_per_kg("water", P, "retail_sensitivity") == pytest.approx(1.54 / 3.785411784 / 0.9982)
+
+
+def test_free_water_cost_equals_fuel_per_work_and_headline_between():
+    d, r = row(eta=0.40, crn=0.39), row(w=0.05, eta=0.41, imep=1.03e6, crn=0.40)
+    c = C.compare(r, d)
+    for e in ("m03", "crn"):
+        x = c[e]
+        assert x["cost_per_mile_water_free_pct"] == pytest.approx(x["fuel_mass_per_work_pct"])
+        assert x["cost_per_mile_water_free_pct"] < x["cost_per_mile_pct"] < x["cost_per_mile_retail_water_pct"]
+    assert C.compare(r, d, water="free")["m03"]["cost_per_mile_pct"] == pytest.approx(c["m03"]["cost_per_mile_water_free_pct"])
+
+
+def test_best_cost_needs_every_engine_the_dry_has():
+    d = row(eta=0.40, crn=0.40)
+    assert C.best_cost([row(w=0.003, eta=0.41)], d)[0] is d  # CRN missing on the wet step -> not a candidate
 
 
 def test_mpg():

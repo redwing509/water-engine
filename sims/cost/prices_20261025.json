@@ -1,16 +1,107 @@
 {
-  "_doc": "US fuel and water prices for the Water Engine cost metric (James, 2026-10-25 06:53 PDT: judge gains on cost too). Every price has a source URL and the date it refers to; all were fetched 2026-10-25 ~07:00 PDT. Retail for road fuels; alcohols are wholesale (no national retail neat-alcohol price exists) - so absolute $/mile is NOT comparable across fuels. The primary metric is the % change vs the same fuel's dry baseline, which only depends on the water/fuel price ratio.",
-  "fetched": "2026-10-25",
-  "prices": {
-    "gasoline_regular": {"usd": 4.2892, "unit": "USD/US gal", "basis": "US retail national average, regular unleaded (in practice E10)", "date": "2026-10-25", "source": "AAA Gas Prices, national average", "url": "https://gasprices.aaa.com/", "cross_check": "EIA weekly US regular retail 4.284 USD/gal, week of 2026-10-19 (https://www.eia.gov/petroleum/gasdiesel/, released 2026-10-20)"},
-    "gasoline_premium": {"usd": 5.1972, "unit": "USD/US gal", "basis": "US retail national average, premium", "date": "2026-10-25", "source": "AAA Gas Prices, national average", "url": "https://gasprices.aaa.com/"},
-    "e85": {"usd": 3.3585, "unit": "USD/US gal", "basis": "US retail national average, E85", "date": "2026-10-25", "source": "AAA Gas Prices, national average", "url": "https://gasprices.aaa.com/"},
-    "diesel": {"usd": 6.3474, "unit": "USD/US gal", "basis": "US retail national average, diesel (reference only; no diesel fuel is modelled)", "date": "2026-10-25", "source": "AAA Gas Prices, national average", "url": "https://gasprices.aaa.com/", "cross_check": "EIA weekly US on-highway diesel 6.276 USD/gal, week of 2026-10-19"},
-    "methanol": {"usd": 1450.0, "unit": "USD/metric ton", "alt": "4.36 USD/US gal (Methanex conversion 332.6 gal/MT)", "basis": "Methanex North America Non-Discounted Reference Price (wholesale contract), valid 2026-10-01..2026-10-31, posted 2026-09-29", "date": "2026-10-01", "source": "Methanex posted prices", "url": "https://www.methanex.com/about-methanol/pricing/"},
-    "ethanol": {"usd": 1.94, "unit": "USD/US gal", "basis": "USDA AMS National Weekly Ethanol Report, Iowa ethanol plant FOB truck average, week 2026-10-19..2026-10-23 (wholesale fuel ethanol; denaturant ignored)", "date": "2026-10-23", "source": "USDA AMS Livestock, Poultry & Grain Market News report 3616", "url": "https://www.ams.usda.gov/mnreports/ams_3616.pdf"},
-    "cng": {"usd": 3.10, "unit": "USD/GGE", "basis": "US national average retail CNG, Clean Cities Alternative Fuel Price Report July 2026 (latest quarterly issue; prices reported 2026-07-01..31). 1 GGE of CNG = 5.660 lb (NIST Handbook 44 Appendix D). Methane (CH4) is priced as CNG.", "date": "2026-07-31", "source": "US DOE Alternative Fuels Data Center", "url": "https://afdc.energy.gov/fuels/prices", "gge_lb": 5.660, "gge_source": "NIST Handbook 44, Appendix D (gasoline gallon equivalent, CNG = 5.660 lb)"},
-    "water_distilled": {"usd": 1.54, "unit": "USD/US gal", "basis": "Retail distilled water, Great Value 1 gal jug (conservative: bulk deionised/tap water is far cheaper; the free-water bound is also reported)", "date": "2026-10-25", "source": "Walmart.com product listing", "url": "https://www.walmart.com/ip/Great-Value-Distilled-Water-1-Gallon/17501951806"}
+ "_doc": "US fuel and water prices for the Water Engine cost metric (James, 2026-10-25 06:53 PDT: judge gains on cost too). Every price has a source URL and the date it refers to; all were fetched 2026-10-25 ~07:00 PDT. Retail for road fuels; alcohols are wholesale (no national retail neat-alcohol price exists) - so absolute $/mile is NOT comparable across fuels. The primary metric is the % change vs the same fuel's dry baseline, which only depends on the water/fuel price ratio. WATER (James, 2026-10-25): 7:31 AM PDT water set to free because most people pay for water through the utility bill with no extra cost to fill a tank; 7:32 AM PDT changed to a test-case water cost of 0.10 USD/gal as the default/headline case. Free water (0 USD/gal) is the secondary comparison; retail distilled water is a footnote sensitivity only.",
+ "fetched": "2026-10-25",
+ "prices": {
+  "water_test_case": {
+   "usd": 0.1,
+   "unit": "USD/US gal",
+   "basis": "HEADLINE / default. James's chosen test-case water cost for the Water Engine cost metric (decision 2026-10-25 07:32 PDT; he first set water free at 07:31 PDT because most people pay for water through the utility bill and have no extra cost to fill a tank of water). A stated assumption chosen by the project owner, not a market quote.",
+   "date": "2026-10-25",
+   "source": "James (project owner) decision, chat 2026-10-25 07:32 PDT",
+   "url": null
   },
-  "fuel_to_price": {"PRF87": "gasoline_regular", "PRF91": "gasoline_regular", "E10": "gasoline_regular", "PRF97": "gasoline_premium", "E85": "e85", "CH3OH": "methanol", "C2H5OH": "ethanol", "CH4": "cng"},
-  "fuel_to_price_note": "PRF87/PRF91 surrogates of US regular and E10 are priced as AAA regular (US regular is E10); PRF97 (premium surrogate) as AAA premium; E85 as AAA E85."
+  "water_free": {
+   "usd": 0.0,
+   "unit": "USD/US gal",
+   "basis": "Secondary comparison: free tap water (James 2026-10-25 07:31 PDT: water already paid through the utility bill, no extra cost to fill a tank).",
+   "date": "2026-10-25",
+   "source": "James (project owner) decision, chat 2026-10-25 07:31 PDT",
+   "url": null
+  },
+  "gasoline_regular": {
+   "usd": 4.2892,
+   "unit": "USD/US gal",
+   "basis": "US retail national average, regular unleaded (in practice E10)",
+   "date": "2026-10-25",
+   "source": "AAA Gas Prices, national average",
+   "url": "https://gasprices.aaa.com/",
+   "cross_check": "EIA weekly US regular retail 4.284 USD/gal, week of 2026-10-19 (https://www.eia.gov/petroleum/gasdiesel/, released 2026-10-20)"
+  },
+  "gasoline_premium": {
+   "usd": 5.1972,
+   "unit": "USD/US gal",
+   "basis": "US retail national average, premium",
+   "date": "2026-10-25",
+   "source": "AAA Gas Prices, national average",
+   "url": "https://gasprices.aaa.com/"
+  },
+  "e85": {
+   "usd": 3.3585,
+   "unit": "USD/US gal",
+   "basis": "US retail national average, E85",
+   "date": "2026-10-25",
+   "source": "AAA Gas Prices, national average",
+   "url": "https://gasprices.aaa.com/"
+  },
+  "diesel": {
+   "usd": 6.3474,
+   "unit": "USD/US gal",
+   "basis": "US retail national average, diesel (reference only; no diesel fuel is modelled)",
+   "date": "2026-10-25",
+   "source": "AAA Gas Prices, national average",
+   "url": "https://gasprices.aaa.com/",
+   "cross_check": "EIA weekly US on-highway diesel 6.276 USD/gal, week of 2026-10-19"
+  },
+  "methanol": {
+   "usd": 1450.0,
+   "unit": "USD/metric ton",
+   "alt": "4.36 USD/US gal (Methanex conversion 332.6 gal/MT)",
+   "basis": "Methanex North America Non-Discounted Reference Price (wholesale contract), valid 2026-10-01..2026-10-31, posted 2026-09-29",
+   "date": "2026-10-01",
+   "source": "Methanex posted prices",
+   "url": "https://www.methanex.com/about-methanol/pricing/"
+  },
+  "ethanol": {
+   "usd": 1.94,
+   "unit": "USD/US gal",
+   "basis": "USDA AMS National Weekly Ethanol Report, Iowa ethanol plant FOB truck average, week 2026-10-19..2026-10-23 (wholesale fuel ethanol; denaturant ignored)",
+   "date": "2026-10-23",
+   "source": "USDA AMS Livestock, Poultry & Grain Market News report 3616",
+   "url": "https://www.ams.usda.gov/mnreports/ams_3616.pdf"
+  },
+  "cng": {
+   "usd": 3.1,
+   "unit": "USD/GGE",
+   "basis": "US national average retail CNG, Clean Cities Alternative Fuel Price Report July 2026 (latest quarterly issue; prices reported 2026-07-01..31). 1 GGE of CNG = 5.660 lb (NIST Handbook 44 Appendix D). Methane (CH4) is priced as CNG.",
+   "date": "2026-07-31",
+   "source": "US DOE Alternative Fuels Data Center",
+   "url": "https://afdc.energy.gov/fuels/prices",
+   "gge_lb": 5.66,
+   "gge_source": "NIST Handbook 44, Appendix D (gasoline gallon equivalent, CNG = 5.660 lb)"
+  },
+  "water_distilled": {
+   "usd": 1.54,
+   "unit": "USD/US gal",
+   "basis": "FOOTNOTE SENSITIVITY ONLY (not a headline case). Retail distilled water, Great Value 1 gal jug (conservative: bulk deionised/tap water is far cheaper; the free-water bound is also reported)",
+   "date": "2026-10-25",
+   "source": "Walmart.com product listing",
+   "url": "https://www.walmart.com/ip/Great-Value-Distilled-Water-1-Gallon/17501951806"
+  }
+ },
+ "fuel_to_price": {
+  "PRF87": "gasoline_regular",
+  "PRF91": "gasoline_regular",
+  "E10": "gasoline_regular",
+  "PRF97": "gasoline_premium",
+  "E85": "e85",
+  "CH3OH": "methanol",
+  "C2H5OH": "ethanol",
+  "CH4": "cng"
+ },
+ "fuel_to_price_note": "PRF87/PRF91 surrogates of US regular and E10 are priced as AAA regular (US regular is E10); PRF97 (premium surrogate) as AAA premium; E85 as AAA E85.",
+ "water_cases": {
+  "headline": "water_test_case",
+  "free": "water_free",
+  "retail_sensitivity": "water_distilled"
+ }
 }

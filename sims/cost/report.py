@@ -79,9 +79,13 @@ def chain_cost(path, prices=None):
     accepted = [r for r in steps if r.get("decision") == "continue"]
     eff = accepted[-1] if accepted else dry
     cbest, cc = C.best_cost(steps, dry, prices)
+    fbest, fc = C.best_cost(steps, dry, prices, "free")
+    rbest, rc = C.best_cost(steps, dry, prices, "retail_sensitivity")
     last = max((r.get("step") or 0 for r in rows if r.get("kind") == "step"), default=0)
     stopped = any(r.get("decision") == "stop" for r in rows if r.get("kind") == "step")
     return dict(dry=dry, eff_row=eff, eff=C.compare(eff, dry, prices), cost_row=cbest, cost=cc,
+                free_row=fbest, free=fc, free_at_headline_opt=C.compare(cbest, dry, prices, "free"),
+                retail_row=rbest, retail=rc,
                 n_steps=len(steps), last_step=last, stopped=stopped,
                 all=[C.compare(r, dry, prices) for r in steps])
 
@@ -99,11 +103,11 @@ def _two(c, key, fmt="%+.3f"):
 def line(fuel, regime, mode, label, row, c, status=""):
     return (f"| {fuel} | {regime} | {mode} | {label} | {row.get('w', 0):.3f} | {_two(c, 'd_eta_pp')} | "
             f"{_two(c, 'power_change_pct')} | {_two(c, 'fuel_volume_per_work_pct')} | {_two(c, 'cost_per_mile_pct')} | "
-            f"{_p((c.get('m03') or {}).get('cost_per_mile_water_free_pct'))} | {C.verdict(c)} | {status} |")
+            f"{_two(c, 'cost_per_mile_water_free_pct')} | {C.verdict(c)} | {status} |")
 
 
 HDR = ("| fuel | regime | mode | point | w | d_eta pp (M03 / CRN) | power (IMEP) % (M03 / CRN) | fuel volume per unit "
-       "work % (M03 / CRN) | **cost per mile %** (M03 / CRN) | cost/mile if water free % (M03) | verdict | status |\n"
+       "work % (M03 / CRN) | **cost per mile % at $0.10/gal water** (M03 / CRN) | cost per mile % at $0 water (M03 / CRN) | verdict ($0.10) | status |\n"
        "|---|---|---|---|---|---|---|---|---|---|---|---|")
 
 
@@ -111,10 +115,12 @@ def prices_md(P):
     L = ["## Prices used (dated, cited; `sims/cost/prices_20261025.json`)\n",
          "| key | price | basis | date | source |", "|---|---|---|---|---|"]
     for k, v in P["prices"].items():
-        L.append(f"| {k} | {v['usd']} {v['unit']} | {v['basis']} | {v['date']} | [{v['source']}]({v['url']}) |")
+        src = f"[{v['source']}]({v['url']})" if v.get("url") else v["source"]
+        L.append(f"| {k} | {v['usd']} {v['unit']} | {v['basis']} | {v['date']} | {src} |")
     L.append("\nFuel -> price: " + ", ".join(f"{f} = {k}" for f, k in P["fuel_to_price"].items())
              + f". {P['fuel_to_price_note']} USD/kg: " + ", ".join(
-                 f"{f} {C.usd_per_kg(f, P):.3f}" for f in P["fuel_to_price"]) + f", water {C.usd_per_kg('water', P):.3f}.")
+                 f"{f} {C.usd_per_kg(f, P):.3f}" for f in P["fuel_to_price"]) + f", water (headline test case) {C.usd_per_kg('water', P):.4f}, free 0, retail distilled (footnote) "
+                 f"{C.usd_per_kg('water', P, 'retail_sensitivity'):.3f}.")
     return "\n".join(L)
 
 
@@ -128,13 +134,20 @@ def method_md():
   fuel energy, mass and volume per unit work all change by **eta_dry/eta - 1** vs the same fuel's dry baseline.
 * Power = IMEP (Module 03 `IMEP_Pa`; M03-CRN IMEP derived as IMEP_M03 x eta_CRN/eta_M03 at the same fuel mass).
   Equal-or-better = IMEP change >= -{100 * C.POWER_TOL_REL:.2f} % (the 3.3e-5 efficiency noise level is ~1e-4 relative).
+* **Water price.** Headline/default = **0.10 USD/gal, James's chosen test-case water cost** (2026-10-25 07:32 PDT).
+  Secondary comparison = **0 USD/gal** (free tap water; James 07:31 PDT: most people pay for water through the
+  utility bill and have no extra cost to fill a tank of water). Retail distilled water (1.54 USD/gal) is only a
+  footnote sensitivity. With free water the cost change equals the fuel-per-work change, so the cost optimum is the
+  efficiency optimum wherever power holds.
 * Cost per kWh of indicated work = (p_fuel + r x p_water) / (eta x LHV); cost per mile = that x
   {C.WORK_KWH_PER_MILE} kWh indicated work per mile (reference vehicle: 30 mpg gasoline car, 33.7 kWh/gal / 30 x ~0.35
   indicated efficiency). The % changes do not depend on the vehicle; they are the primary numbers.
-* **Verdict COST GAIN** = power equal or better in every engine AND cost per mile lower by more than
+* **Verdict COST GAIN** (at the headline 0.10 USD/gal) = power equal or better in every engine AND cost per mile lower by more than
   {100 * C.COST_TOL_REL:.2f} % in every engine (Track B: both engines; Track A grid: Module 03 only, labelled).
-* Two points per chain: **eff-opt** = the best-efficiency point the Track B rule accepted; **cost-opt** = the
-  water fraction with the lowest cost per mile among points with equal-or-better power (w = 0 means water never pays).
+* Points per chain: **eff-opt** = the best-efficiency point the Track B rule accepted; **cost-opt** = the water
+  fraction with the lowest cost per mile at 0.10 USD/gal among computed points with equal-or-better power in both
+  engines (w = 0 means water never pays); **cost-opt $0** = the same at free water. A cost-opt one step past eff-opt
+  is the first rejected step (gain positive but below the 3.3e-5 noise threshold) - equal within noise.
 """
 
 
@@ -155,49 +168,65 @@ def track_b(prices):
         st = ("stopped" if c["stopped"] else f"in progress (step {c['last_step']})")
         L.append(line(fuel, reg, mode, "eff-opt", c["eff_row"], c["eff"], st))
         L.append(line(fuel, reg, mode, "cost-opt", c["cost_row"], c["cost"], ""))
+        L.append(line(fuel, reg, mode, "cost-opt $0", c["free_row"], C.compare(c["free_row"], c["dry"], P), ""))
     return res, L
 
 
 def headline(res):
-    """Per fuel: (a) best cost-per-mile change (M03) at equal-or-better power, any regime/mode; (b) the biggest
-    fuel-per-work saving (Track B eff-opt) with its cost change; (c) the highest break-even water price."""
+    """Per fuel: best cost-per-mile change (M03) at equal-or-better power, any regime/mode, at the headline 0.10
+    USD/gal water, at 0 USD/gal and (footnote) retail distilled; plus the highest break-even water price."""
     H = {}
     for (fuel, regime, mode, src), c in res.items():
-        cc, ce = c["cost"], c["eff"]
-        if not cc["m03"]:
+        if not c["cost"]["m03"]:
             continue
         where = regime + ("/H1" if src != "track_b" else "") + " / " + mode
-        h = H.setdefault(fuel, dict(cost=None, eff=None, be=None))
-        if h["cost"] is None or cc["m03"]["cost_per_mile_pct"] < h["cost"][0]:
-            h["cost"] = (cc["m03"]["cost_per_mile_pct"], where, c["cost_row"].get("w", 0), cc)
-        if ce["m03"] and (h["eff"] is None or ce["m03"]["fuel_volume_per_work_pct"] < h["eff"][0]):
-            h["eff"] = (ce["m03"]["fuel_volume_per_work_pct"], where, c["eff_row"].get("w", 0), ce)
-        for a in c["all"]:
-            b = (a["m03"] or {}).get("breakeven_water_usd_per_gal")
-            if b is not None and a["power_ok_all_engines"] and (h["be"] is None or b > h["be"][0]):
-                h["be"] = (b, where, a["w"], ((a["crn"] or {}).get("breakeven_water_usd_per_gal")))
+        h = H.setdefault(fuel, dict(cost=None, free=None, retail=None, be=None))
+        for case, rk, ck in (("cost", "cost_row", "cost"), ("free", "free_row", "free"), ("retail", "retail_row", "retail")):
+            cc = c[ck]
+            if h[case] is None or cc["m03"]["cost_per_mile_pct"] < h[case][0]:
+                h[case] = (cc["m03"]["cost_per_mile_pct"], where, c[rk].get("w", 0), cc, c["eff_row"].get("w", 0), (fuel, regime, mode, src))
+        for x in c["all"]:
+            b = (x["m03"] or {}).get("breakeven_water_usd_per_gal")
+            if b is not None and x["power_ok_all_engines"] and x["engines"] == 2 and (h["be"] is None or b > h["be"][0]):
+                h["be"] = (b, where, x["w"], ((x["crn"] or {}).get("breakeven_water_usd_per_gal")))
     return H
 
 
 def headline_md(P, H):
+    wt = P["prices"]["water_test_case"]["usd"]
     M = ["\n## Headline per fuel (lowest cost per mile at equal-or-better power, any regime / mode)\n",
-         f"Water priced at retail distilled ({P['prices']['water_distilled']['usd']} USD/gal). 'w = 0' = no water amount "
-         "lowers cost at that price. Break-even = the highest water price at which some equal-or-better-power step still "
-         "lowers cost per mile (M03 / CRN at that step).\n",
-         "| fuel | best cost per mile: where, w | **cost per mile %** (M03 / CRN) | power % (M03 / CRN) | verdict | "
-         "biggest fuel saving (eff-opt): where, w | fuel per unit work % (M03 / CRN) | cost per mile % there (M03 / CRN) | "
-         "same, water free % (M03 / CRN) | power % there (M03 / CRN) | break-even water price USD/gal (M03 / CRN), where, w |",
-         "|---|---|---|---|---|---|---|---|---|---|---|"]
+         f"**Headline water price = {wt:.2f} USD/gal, James's chosen test-case water cost (2026-10-25 07:32 PDT).** "
+         "Comparison: free water (0 USD/gal; James 07:31 PDT - water is paid through the utility bill, no extra cost to "
+         "fill a tank). 'w = 0' = no amount of water lowers cost per mile at that price. Eff-opt w = the best-efficiency "
+         "step the Track B rule accepted in the same chain. Break-even = the highest water price at which some "
+         "equal-or-better-power step still lowers cost per mile (M03 / CRN at that step).\n",
+         f"| fuel | **${wt:.2f}/gal: where, w** | **cost per mile %** (M03 / CRN) | power % (M03 / CRN) | verdict | "
+         "eff-opt w in that chain | $0: where, w | cost per mile % at $0 (M03 / CRN) | power % (M03 / CRN) | "
+         "break-even water USD/gal (M03 / CRN), where, w |",
+         "|---|---|---|---|---|---|---|---|---|---|"]
     for fuel, h in H.items():
-        v, where, w, cc = h["cost"]
-        e = h["eff"]
+        v, where, w, cc, ew, _ = h["cost"]
+        fv, fwhere, fw, fc, few, _ = h["free"]
         be = h["be"]
         bes = f"{be[0]:.2f} / {_p(be[3], '%.2f')}, {be[1]}, {be[2]:.3f}" if be else "-"
         M.append(f"| {fuel} | {where}, {w:.3f} | {_two(cc, 'cost_per_mile_pct')} | {_two(cc, 'power_change_pct')} | "
-                 f"{C.verdict(cc)} | {e[1]}, {e[2]:.3f} | {_two(e[3], 'fuel_volume_per_work_pct')} | "
-                 f"{_two(e[3], 'cost_per_mile_pct')} | {_two(e[3], 'cost_per_mile_water_free_pct')} | "
-                 f"{_two(e[3], 'power_change_pct')} | {bes} |")
+                 f"{C.verdict(cc)} | {ew:.3f} | {fwhere}, {fw:.3f} | {_two(fc, 'cost_per_mile_pct')} | "
+                 f"{_two(fc, 'power_change_pct')} | {bes} |")
+    rp = P["prices"]["water_distilled"]
+    M.append(f"\n<sub>Footnote (sensitivity only): at retail distilled water ({rp['usd']} USD/gal, {rp['source']}, "
+             f"{rp['date']}) the best cost-per-mile changes are: " + "; ".join(
+                 f"{f} {h['retail'][0]:+.2f} % (w {h['retail'][2]:.3f}, {h['retail'][1]})" for f, h in H.items()) + ".</sub>")
     return M
+
+
+def power_drops(res):
+    out = []
+    for (fuel, regime, mode, src), c in res.items():
+        for x in c["all"]:
+            if x["engines"] and not x["power_ok_all_engines"]:
+                out.append((fuel, regime + ("/H1" if src != "track_b" else ""), mode, x["w"],
+                            (x["m03"] or {}).get("power_change_pct"), (x["crn"] or {}).get("power_change_pct")))
+    return out
 
 
 def write_track_b(P, out_md=TB / "COST.md"):
@@ -209,10 +238,16 @@ def write_track_b(P, out_md=TB / "COST.md"):
          "same or better, the fuel it saves per unit work is a cost-per-mile (MPG) gain. Existing result files only - "
          "no new combustion runs.\n", method_md(), prices_md(P)]
     M += headline_md(P, H)
+    pdl = power_drops(res)
+    M.append("\n**Power drops (any computed eligible step with IMEP down by more than the noise in any engine):** "
+             + ("; ".join(f"{f} {r} {m} w {w:.3f} ({_p(a, '%+.3f')} / {_p(b, '%+.3f')} %)" for f, r, m, w, a, b in pdl[:40])
+                if pdl else "none - every Track B step gains IMEP in both engines.") + "\n")
     M += ["\n## Every chain (both engines side by side)\n", HDR] + L
     M.append("\n" + CAVEATS)
     out_md.write_text("\n".join(M) + "\n")
-    js = {"|".join(k): dict(eff_w=c["eff_row"].get("w"), eff=c["eff"], cost_w=c["cost_row"].get("w"), cost=c["cost"],
+    js = {"|".join(k): dict(water_headline_usd_gal=P["prices"]["water_test_case"]["usd"], eff_w=c["eff_row"].get("w"),
+                            eff=c["eff"], cost_w=c["cost_row"].get("w"), cost=c["cost"], cost_w_free_water=c["free_row"].get("w"),
+                            cost_free_water=c["free"], cost_w_retail_water=c["retail_row"].get("w"), cost_retail_water=c["retail"],
                             last_step=c["last_step"], stopped=c["stopped"]) for k, c in res.items()}
     (TB / "cost_trackb.json").write_text(json.dumps(js, indent=1, default=float))
     return res, H
@@ -243,6 +278,9 @@ def write_track_a(P, reopt=None):
     g = [r for r in json.loads(grid.read_text()) if _ok(r)] if grid.exists() else []
     M = [f"# Water Engine - Track A cost metric\n\nGenerated {time.strftime('%Y-%m-%d %H:%M %Z')} by `python -m sims.cost.report`. "
          + BANNER + "\n",
+         "Headline water price 0.10 USD/gal (James's test-case cost, 2026-10-25 07:32 PDT); $0 (free tap water) shown "
+         "for comparison; retail distilled is a footnote sensitivity only (in `cost_tracka.json`, key "
+         "`retail-sensitivity-opt`).\n",
          "Track A = water-majority work (w = 0.5-0.8). Source: `results/track_b/trackA_humid_grid.json` (Module 03 "
          "dual-regime rerun, 3 water modes, CR 12-24; **single engine - no M03-CRN values saved**, so every verdict is "
          "labelled 1 engine). Dry reference = best eligible dry point of the same fuel and regime (Track B continuous "
@@ -250,7 +288,7 @@ def write_track_a(P, reopt=None):
          "are at their own best CR (best-dry-engine vs best-wet-engine, as Track A has always been compared).\n",
          method_md(), prices_md(P), "\n## Track A grid (Module 03)\n",
          "| fuel | regime | mode | point | CR / T_intake / w | d_eta pp (M03) | power % | fuel volume per unit work % | "
-         "**cost per mile %** | cost/mile if water free % | verdict | dry reference |", "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+         "**cost per mile % at $0.10/gal water** | cost per mile % at $0 water | verdict ($0.10) | dry reference |", "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     js = {}
     for fuel in ("CH3OH", "C2H5OH", "CH4"):
         for reg in ("normal", "hot"):
@@ -263,7 +301,11 @@ def write_track_a(P, reopt=None):
                 dry, tag = ref
                 eff = max(pts, key=lambda r: r["gross_indicated_efficiency"])
                 cb, cc = C.best_cost(pts, dry, P)
-                for lab, row, c in (("eff-opt", eff, C.compare(eff, dry, P)), ("cost-opt", cb, cc)):
+                fb, _ = C.best_cost(pts, dry, P, "free")
+                rb, rc = C.best_cost(pts, dry, P, "retail_sensitivity")
+                js[f"{fuel}|{reg}|{mode}|retail-sensitivity-opt"] = dict(CR=rb["CR"], T=rb["T_intake_K"], w=rb.get("w"), cost=rc)
+                for lab, row, c in (("eff-opt", eff, C.compare(eff, dry, P)), ("cost-opt", cb, cc),
+                                    ("cost-opt $0", fb, C.compare(fb, dry, P))):
                     m = c["m03"]
                     M.append(f"| {fuel} | {reg} | {mode} | {lab} | {row['CR']:.0f} / {row['T_intake_K']:.0f} / {row.get('w', 0):.2f} | "
                              f"{m['d_eta_pp']:+.3f} | {m['power_change_pct']:+.2f} | {m['fuel_volume_per_work_pct']:+.2f} | "
@@ -281,8 +323,10 @@ def write_track_a(P, reopt=None):
             dry = max(dry_rows, key=lambda r: r["gross_indicated_efficiency"])
             eff = max(wet, key=lambda r: r["gross_indicated_efficiency"])
             cb, cc = C.best_cost(wet, dry, P)
+            fb, _ = C.best_cost(wet, dry, P, "free")
             M.append(line("C2H5OH", "hot", "coupled", f"eff-opt CR {eff['CR']:.0f}", eff, C.compare(eff, dry, P)))
             M.append(line("C2H5OH", "hot", "coupled", f"cost-opt CR {cb['CR']:.0f}", cb, cc))
+            M.append(line("C2H5OH", "hot", "coupled", f"cost-opt $0 CR {fb['CR']:.0f}", fb, C.compare(fb, dry, P)))
     M.append("\n" + CAVEATS.replace("* **Lower bounds at w = 0.10", "* (Track B only) **Lower bounds at w = 0.10"))
     (TA / "COST_TRACK_A.md").write_text("\n".join(M) + "\n")
     (TA / "cost_tracka.json").write_text(json.dumps(js, indent=1, default=float))
