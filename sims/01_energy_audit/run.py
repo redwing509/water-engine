@@ -192,7 +192,10 @@ def main(argv=None) -> int:
     start = time.perf_counter()
     args = argument_parser(MODULE).parse_args(None if argv is None else list(map(str, argv)))
     count = QUICK_SAMPLES if args.mode == "quick" else FULL_SAMPLES
-    records = ordered_map(heating_value_record, FUELS, args.workers)
+    # SPEC §10 audit set only: Track B registers gasoline blends into the shared FUELS
+    # registry on import (sims/track_b/fuels_b.py), and those have no SPEC §10 LHV target.
+    audit_fuels = [f for f in FUELS if f in LHV_TARGETS_J_KG or f == "H2O"]
+    records = ordered_map(heating_value_record, audit_fuels, args.workers)
     efficiencies, gains = loop_gain_samples(count)
     stats = loop_gain_statistics(gains)
     parameters = KitParameters()
