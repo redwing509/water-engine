@@ -1,0 +1,13 @@
+fuel,regime,SMD,misfire_reachable_up_to_K,misfire_free_from_K
+CH3OH,normal,200,369.0,370.0
+CH3OH,normal,350,372.0,373.0
+CH3OH,normal,500,373.0,374.0
+CH3OH,hot,200,368.0,369.0
+CH3OH,hot,350,370.0,371.0
+CH3OH,hot,500,371.0,372.0
+C2H5OH,normal,200,373.0,374.0
+C2H5OH,normal,350,376.0,377.0
+C2H5OH,normal,500,377.0,378.0
+C2H5OH,hot,200,373.0,374.0
+C2H5OH,hot,350,375.0,376.0
+C2H5OH,hot,500,376.0,377.0
