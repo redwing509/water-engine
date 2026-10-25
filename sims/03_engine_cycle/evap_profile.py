@@ -286,3 +286,55 @@ def verify_three_fractions(tolerance_pp=1.0):
                     derived[2], m09_wall, (derived[2] - m09_wall) * 100.0,
                 ))
     return rows
+
+
+# --- coupling item B (2026-10-24): fixed-point and synthetic profiles -----
+
+class PointProfile(Profile):
+    """Profile pinned to one Module 09 design point, independent of T_intake.
+
+    Used for the dual-temperature HOT regime (T_intake 400 K), where the
+    Module 09 table (keyed at 320/360 K) has no entry: the design point's
+    fractions are applied unchanged. Caveat recorded by the caller: Module 09
+    was not rerun at 400 K (a hotter intake would evaporate more, so this is
+    conservative for the wet points).
+    """
+
+    def __init__(self, atomiser, variant, point):
+        super().__init__(atomiser, variant)
+        self.point = point
+
+    def target(self, fuel, cr, w, T_intake, theta_deg):
+        return profile_at(fuel, self.point, self.atomiser, self.variant, theta_deg)
+
+    def spark_target(self, fuel, cr, w, T_intake):
+        hit = lookup(fuel, self.point, self.atomiser, self.variant)
+        if hit is None:
+            return None
+        return hit[0], (hit[2], hit[3], hit[4])
+
+    def ivc_fraction(self, fuel):
+        hit = lookup(fuel, self.point, self.atomiser, self.variant)
+        return None if hit is None else hit[1]
+
+    def __repr__(self):
+        return f"PointProfile({self.atomiser!r}, {self.variant!r}, {self.point!r})"
+
+
+class SyntheticProfile:
+    """Flat test profile: fraction f_evap evaporated from IVC, spark at spark_deg.
+
+    Not Module 09 data; used by the unit tests to vary the liquid at spark.
+    """
+
+    atomiser = "synthetic"
+    variant = "synthetic"
+
+    def __init__(self, f_evap, spark_deg=-30.0):
+        self.f_evap, self.spark_deg = float(f_evap), float(spark_deg)
+
+    def target(self, fuel, cr, w, T_intake, theta_deg):
+        return self.f_evap
+
+    def spark_target(self, fuel, cr, w, T_intake):
+        return self.spark_deg, (self.f_evap, 1.0 - self.f_evap, 0.0)
