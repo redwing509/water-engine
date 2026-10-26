@@ -8,7 +8,7 @@ M03-CRN), NOT validated.
                      gain(cf 1.0) in Module 03 AND in M03-CRN.
   ch4 base WORKERS   CH4 Track B DEI hardware scan (dryevap CR grid 6-24, both regimes) + w 0 check.
   ch4 chains WORKERS CH4 Track B chains (normal+hot x liquid+humid_evap), dw 0.001, noise 3.3e-5 + CRN>0, cap 300.
-                     CH4 is gaseous: no fuel evaporation in the dry baseline (h_fg 0, the DEI key changes nothing).
+                     CH4 is gaseous: no fuel evaporation in the dry baseline (legacy premixed vapour, see ch4_point).
   report             CSVs for steps 2 and 3 (step 1 uses robust_20261026 report).
 """
 import csv
@@ -75,10 +75,27 @@ def step3(workers):
     RB._pool(tasks, workers, OUT / "step3_points.jsonl")
 
 
+def ch4_point(task):
+    """chains_sym.point with NO fuel-evaporation keys: CH4 is gaseous (h_fg 0; Module 03 refuses fuel_evap for a gas),
+    so the dry baseline and every wet step use the legacy premixed-vapour fuel charge (dryevap variant 'LIT' = {}),
+    and M03-CRN gets latent credit 0. Water handling is unchanged (liquid / humid_evap)."""
+    C = importlib.import_module("sims.track_b.chains_sym")
+    C._setup(task["fuel"], task["regime"])
+    D = C._S["D"]
+    D._set("B", D.VARIANTS["LIT"])
+    r = getattr(C, "_orig_point", C.point)(task)
+    r.update(fuel_treatment="gaseous CH4: no fuel evaporation (legacy premixed vapour at T_intake, latent credit 0)",
+             variant="symmetric_gaseous")
+    return r
+
+
 def _ch4():
     C = importlib.import_module("sims.track_b.chains_sym")
     C.FUELS = ("CH4",)
     C.OUT = CH4_OUT
+    if not hasattr(C, "_orig_point"):
+        C._orig_point = C.point
+    C.point = importlib.import_module("sims.robustness.mail_20261026").ch4_point
     return C
 
 
@@ -86,8 +103,8 @@ def ch4(sub, workers):
     C = _ch4()
     CH4_OUT.mkdir(parents=True, exist_ok=True)
     if sub == "smoke":
-        r = C.point(dict(fuel="CH4", regime="normal", CR=12.0, w=0.0, mode="liquid", crn=True, key="smoke/w0"))
-        r2 = C.point(dict(fuel="CH4", regime="normal", CR=12.0, w=0.01, mode="humid_evap", crn=True, key="smoke/w001"))
+        r = ch4_point(dict(fuel="CH4", regime="normal", CR=12.0, w=0.0, mode="liquid", crn=True, key="smoke/w0"))
+        r2 = ch4_point(dict(fuel="CH4", regime="normal", CR=12.0, w=0.01, mode="humid_evap", crn=True, key="smoke/w001"))
         for x in (r, r2):
             print(json.dumps({k: x.get(k) for k in ("_key", "status", "reason", "eligible", "gross_indicated_efficiency",
                   "crn_status", "crn_efficiency", "T_IVC_K", "fuel_evap_intake_fraction", "m03_plus_crn_seconds")},
