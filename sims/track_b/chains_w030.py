@@ -42,24 +42,35 @@ def src_file(fuel, regime, mode):
     return SRC / name
 
 
+def _fl_override(fuel, regime):
+    """Oct 26 fit-edge job (fitedge_w045): env W030_FL_DIR / W030_WMAX / W030_FIT_ONLY=fuel/regime; default unchanged."""
+    import os
+    o = os.environ.get("W030_FIT_ONLY")
+    if os.environ.get("W030_FL_DIR") and (not o or o == f"{fuel}/{regime}"):
+        return Path(os.environ["W030_FL_DIR"]), float(os.environ.get("W030_WMAX", "0.30"))
+    return FL, 0.30
+
+
 def flame_fit_w030(fuel, regime):
-    d = json.loads((FL / f"{fuel}_{regime}.json").read_text())
+    fl_dir, wmax = _fl_override(fuel, regime)
+    d = json.loads((fl_dir / f"{fuel}_{regime}.json").read_text())
     ws = np.array([r["w"] for r in d]); sl = np.array([r["S_L_m_s"] for r in d])
     c = np.polyfit(ws, sl, 3)
     st = d[0]
     return dict(status="fitted", mode="full", S_L_unit="m/s", coefficients_highest_first=[float(v) for v in c],
-                polynomial_degree=3, valid_w_range=[0.0, 0.30], phi=1.0, T_unburned_K=st["T_u_K"], p_Pa=st["p_Pa"],
+                polynomial_degree=3, valid_w_range=[0.0, wmax], phi=1.0, T_unburned_K=st["T_u_K"], p_Pa=st["p_Pa"],
                 rms_m_s=float(np.sqrt(np.mean((np.polyval(c, ws) - sl) ** 2))),
                 source="Cantera 3.2 FreeFlame, CRECK TPRF_HT_ALC_254_7568, phi=1, water vapour, "
-                       f"{regime} IVC state {st['T_u_K']} K {st['p_Pa']:.0f} Pa, w 0..0.30 (sims/track_b/flame_w030.py)")
+                       f"{regime} IVC state {st['T_u_K']} K {st['p_Pa']:.0f} Pa, w 0..{wmax:.2f} (sims/track_b/flame_w030.py)")
 
 
 def use_fits(fuel, regime):
     R.module03()
     ign, fl = R._FITS
     fl[fuel] = flame_fit_w030(fuel, regime)
-    ign[fuel] = dict(ign[fuel], valid_w_range=[0.0, 0.30],
-                     note="valid_w_range widened 0.1 -> 0.30 (c = 0, no explicit w term): assumption, chains_w030")
+    wmax = _fl_override(fuel, regime)[1]
+    ign[fuel] = dict(ign[fuel], valid_w_range=[0.0, wmax],
+                     note=f"valid_w_range widened 0.1 -> {wmax:.2f} (c = 0, no explicit w term): assumption, chains_w030")
 
 
 def judge(r, prev):

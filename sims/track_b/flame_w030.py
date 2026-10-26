@@ -17,6 +17,9 @@ COMP = {"IC8H18": (114.231, 0.6919, (8, 18, 0)), "NC7H16": (100.202, 0.6795, (7,
 STATES = {"normal": (312.35, 1.0e5), "hot": (388.8, 1.0e5), "ref400": (400.0, ct.one_atm)}
 T, p = STATES[state]
 WS = [0.0] if state == "ref400" else [0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30]
+import os  # Oct 26 fit-edge job: optional override, default unchanged
+if os.environ.get("FL_WS"):
+    WS = [float(v) for v in os.environ["FL_WS"].split(",")]
 mol = {k: v * COMP[k][1] / COMP[k][0] for k, v in VOL[blend].items()}
 n = sum(mol.values()); x = {k: v / n for k, v in mol.items()}
 mw_f = sum(x[k] * COMP[k][0] for k in x)
