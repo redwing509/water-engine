@@ -1,3 +1,5 @@
+> **Verification status: not yet peer-review verified.** For the pre-registered step-convergence results, see `verification/x5_m03/RESULTS.md`: A3 and A4 pass; A1, A1-pmax, A2 and A5 fail. No result on this branch counts toward the 2-engine rule, and none may be merged to `main`.
+
 # Water Engine — an honest, simulation-backed investigation
 
 > **Status: work in progress.** Simulations are being built and run; results land in `results/` as they finish.

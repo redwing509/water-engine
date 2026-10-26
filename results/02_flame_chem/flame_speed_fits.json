@@ -1,0 +1,86 @@
+{
+  "H2": {
+    "mode": "full",
+    "status": "fitted",
+    "coefficients_highest_first": [
+      -9.198355343382756,
+      8.113271392940547,
+      -2.2434346443113022,
+      3.737987887569177
+    ],
+    "polynomial_degree": 3,
+    "valid_w_range": [
+      0.0,
+      0.9
+    ],
+    "rms_m_s": 0.08249123625820241,
+    "number_of_points": 10,
+    "T_unburned_K": 400.0,
+    "p_Pa": 101325.0,
+    "phi": 1.0,
+    "S_L_unit": "m/s"
+  },
+  "CH4": {
+    "mode": "full",
+    "status": "fitted",
+    "coefficients_highest_first": [
+      -0.7673107303769526,
+      0.1952046948623931,
+      -0.2524668529887227,
+      0.6153827720073498
+    ],
+    "polynomial_degree": 3,
+    "valid_w_range": [
+      0.0,
+      0.8
+    ],
+    "rms_m_s": 0.001271595630618798,
+    "number_of_points": 9,
+    "T_unburned_K": 400.0,
+    "p_Pa": 101325.0,
+    "phi": 1.0,
+    "S_L_unit": "m/s"
+  },
+  "CH3OH": {
+    "mode": "full",
+    "status": "fitted",
+    "coefficients_highest_first": [
+      -0.08645588492524922,
+      -0.6302788464538581,
+      -0.253838765545468,
+      0.7209888530581408
+    ],
+    "polynomial_degree": 3,
+    "valid_w_range": [
+      0.0,
+      0.8
+    ],
+    "rms_m_s": 0.0032544725890679897,
+    "number_of_points": 9,
+    "T_unburned_K": 400.0,
+    "p_Pa": 101325.0,
+    "phi": 1.0,
+    "S_L_unit": "m/s"
+  },
+  "C2H5OH": {
+    "mode": "full",
+    "status": "fitted",
+    "coefficients_highest_first": [
+      -0.16249007438241833,
+      -0.5159102934688148,
+      -0.31680442408932447,
+      0.7464551991188761
+    ],
+    "polynomial_degree": 3,
+    "valid_w_range": [
+      0.0,
+      0.8
+    ],
+    "rms_m_s": 0.002531330027224368,
+    "number_of_points": 9,
+    "T_unburned_K": 400.0,
+    "p_Pa": 101325.0,
+    "phi": 1.0,
+    "S_L_unit": "m/s"
+  }
+}

@@ -1,0 +1,243 @@
+{
+ "fuels": {
+  "PRF87": {
+   "eligible": true,
+   "base_CR": 7.0,
+   "base_eta": 0.33953504635815573,
+   "base_crn": 0.3394011331967861,
+   "base_ca50": 10.547188760253906
+  },
+  "PRF91": {
+   "eligible": true,
+   "base_CR": 8.0,
+   "base_eta": 0.35037562039547765,
+   "base_crn": 0.3505285433126031,
+   "base_ca50": 14.479472686523435
+  },
+  "PRF97": {
+   "eligible": true,
+   "base_CR": 8.0,
+   "base_eta": 0.3561666470835923,
+   "base_crn": 0.35579187957993696,
+   "base_ca50": 9.040950866210938
+  },
+  "E10": {
+   "eligible": true,
+   "base_CR": 8.0,
+   "base_eta": 0.355671244544754,
+   "base_crn": 0.3554235556920367,
+   "base_ca50": 9.815825002685544
+  },
+  "CH3OH": {
+   "eligible": true,
+   "base_CR": 8.0,
+   "base_eta": 0.35017838014147257,
+   "base_crn": 0.35032160564140613,
+   "base_ca50": 13.49785116455078
+  }
+ },
+ "rule": "noise_3.3e-5",
+ "low_crs": [
+  6,
+  7,
+  8
+ ],
+ "chains": [
+  {
+   "fuel": "PRF87",
+   "regime": "hot",
+   "water_mode": "humid_ambient",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 3.47e-06 <= noise threshold 3.3e-05",
+   "best_eta": 0.33953504635815573,
+   "best_crn": 0.3394011331967861,
+   "dry_eta": 0.33953504635815573,
+   "dry_crn": 0.3394011331967861
+  },
+  {
+   "fuel": "PRF87",
+   "regime": "hot",
+   "water_mode": "humid_evap",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 3.08e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.33953504635815573,
+   "best_crn": 0.3394011331967861,
+   "dry_eta": 0.33953504635815573,
+   "dry_crn": 0.3394011331967861
+  },
+  {
+   "fuel": "PRF91",
+   "regime": "hot",
+   "water_mode": "humid_ambient",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 5.38e-06 <= noise threshold 3.3e-05",
+   "best_eta": 0.35037562039547765,
+   "best_crn": 0.3505285433126031,
+   "dry_eta": 0.35037562039547765,
+   "dry_crn": 0.3505285433126031
+  },
+  {
+   "fuel": "PRF97",
+   "regime": "hot",
+   "water_mode": "liquid",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 2.57e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.3561666470835923,
+   "best_crn": 0.35579187957993696,
+   "dry_eta": 0.3561666470835923,
+   "dry_crn": 0.35579187957993696
+  },
+  {
+   "fuel": "PRF97",
+   "regime": "hot",
+   "water_mode": "humid_evap",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 2.46e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.3561666470835923,
+   "best_crn": 0.35579187957993696,
+   "dry_eta": 0.3561666470835923,
+   "dry_crn": 0.35579187957993696
+  },
+  {
+   "fuel": "PRF97",
+   "regime": "hot",
+   "water_mode": "humid_ambient",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 2.44e-06 <= noise threshold 3.3e-05",
+   "best_eta": 0.3561666470835923,
+   "best_crn": 0.35579187957993696,
+   "dry_eta": 0.3561666470835923,
+   "dry_crn": 0.35579187957993696
+  },
+  {
+   "fuel": "E10",
+   "regime": "hot",
+   "water_mode": "humid_evap",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 2.75e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.355671244544754,
+   "best_crn": 0.3554235556920367,
+   "dry_eta": 0.355671244544754,
+   "dry_crn": 0.3554235556920367
+  },
+  {
+   "fuel": "E10",
+   "regime": "hot",
+   "water_mode": "liquid",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 2.99e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.355671244544754,
+   "best_crn": 0.3554235556920367,
+   "dry_eta": 0.355671244544754,
+   "dry_crn": 0.3554235556920367
+  },
+  {
+   "fuel": "E10",
+   "regime": "hot",
+   "water_mode": "humid_ambient",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 2.92e-06 <= noise threshold 3.3e-05",
+   "best_eta": 0.355671244544754,
+   "best_crn": 0.3554235556920367,
+   "dry_eta": 0.355671244544754,
+   "dry_crn": 0.3554235556920367
+  },
+  {
+   "fuel": "PRF87",
+   "regime": "hot",
+   "water_mode": "liquid",
+   "best_w": 0.022,
+   "steps_taken": 22,
+   "stop_reason": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.34029661109777665,
+   "best_crn": 0.34014609375714866,
+   "dry_eta": 0.33953504635815573,
+   "dry_crn": 0.3394011331967861
+  },
+  {
+   "fuel": "CH3OH",
+   "regime": "hot",
+   "water_mode": "humid_ambient",
+   "best_w": 0.0,
+   "steps_taken": 0,
+   "stop_reason": "M03 gain 1.33e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.35017838014147257,
+   "best_crn": 0.35032160564140613,
+   "dry_eta": 0.35017838014147257,
+   "dry_crn": 0.35032160564140613
+  },
+  {
+   "fuel": "CH3OH",
+   "regime": "hot",
+   "water_mode": "liquid",
+   "best_w": 0.063,
+   "steps_taken": 63,
+   "stop_reason": "M03 gain 3.25e-05 <= noise threshold 3.3e-05",
+   "best_eta": 0.3573417746131942,
+   "best_crn": 0.35726154862411513,
+   "dry_eta": 0.35017838014147257,
+   "dry_crn": 0.35032160564140613
+  },
+  {
+   "fuel": "PRF91",
+   "regime": "hot",
+   "water_mode": "humid_evap",
+   "best_w": 0.1,
+   "steps_taken": 100,
+   "stop_reason": "not eligible / not computed",
+   "best_eta": 0.35459134028946443,
+   "best_crn": 0.35476588050117996,
+   "dry_eta": 0.35037562039547765,
+   "dry_crn": 0.3505285433126031,
+   "cap_raised_to": 200
+  },
+  {
+   "fuel": "PRF91",
+   "regime": "hot",
+   "water_mode": "liquid",
+   "best_w": 0.1,
+   "steps_taken": 100,
+   "stop_reason": "not eligible / not computed",
+   "best_eta": 0.3552058861853232,
+   "best_crn": 0.3553195166205984,
+   "dry_eta": 0.35037562039547765,
+   "dry_crn": 0.3505285433126031,
+   "cap_raised_to": 200
+  },
+  {
+   "fuel": "CH3OH",
+   "regime": "hot",
+   "water_mode": "humid_evap",
+   "best_w": 0.2,
+   "steps_taken": 200,
+   "stop_reason": "cap 200 steps reached while still gaining",
+   "best_eta": 0.36440616178276247,
+   "best_crn": 0.36448463422948507,
+   "dry_eta": 0.35017838014147257,
+   "dry_crn": 0.35032160564140613,
+   "cap_raised_to": 200
+  }
+ ],
+ "c2h5oh_hot_humid_evap_ext": {
+  "fuel": "C2H5OH",
+  "regime": "hot",
+  "water_mode": "humid_evap",
+  "best_w": 0.288,
+  "steps_taken": 288,
+  "stop_reason": "M03 gain 2.80e-05 <= noise threshold 3.3e-05",
+  "best_eta": 0.40759258421326483,
+  "best_crn": 0.4074703237307378,
+  "dry_eta": 0.3897026815234563,
+  "dry_crn": 0.38962292197173726,
+  "cap_raised_to": 400
+ }
+}
