@@ -1,0 +1,17 @@
+[
+ {
+  "fuel": "E10",
+  "regime": "hot",
+  "mode": "humid_evap",
+  "start": 300,
+  "CR": 9.0,
+  "best_w": 0.302,
+  "steps": 303,
+  "stop_reason": "M03 gain 2.33e-05 <= noise threshold 3.3e-05",
+  "dry_eta": 0.3708584257821223,
+  "best_eta": 0.3836373515283671,
+  "dry_crn": 0.3709871025122707,
+  "best_crn": 0.3837929084665271,
+  "file": "steps_E10_hot_humid_evap__sym_from300.jsonl"
+ }
+]

@@ -1,0 +1,14 @@
+{
+ "elapsed_s": 50.518481492996216,
+ "pending": 7,
+ "chains": {
+  "steps_E10_hot_humid_evap__sym_from300.jsonl": {
+   "judged": 303,
+   "w": 0.303,
+   "stop": "M03 gain 2.33e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 1.2778925746244785,
+   "d_eta_crn_pp": 1.28058059542564
+  }
+ },
+ "updated": "2026-10-26T16:34:02-0700"
+}
