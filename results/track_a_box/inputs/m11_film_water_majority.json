@@ -1,0 +1,77 @@
+{
+ "source": "wme1-spray11 63815e6: sims/11_spray_flame film_strip.film_masses + bound_ii_film_strip/design_points.csv (x_strip_for_MIE_100mJ)",
+ "cases": {
+  "CH3OH/water_majority/carb_venturi/nominal": {
+   "film_alcohol_kg": 6.925465392224461e-05,
+   "film_water_kg": 0.00010950770592500359,
+   "m_fuel_kg": 7.362468384415644e-05,
+   "m_water_kg": 0.00011043702576623465,
+   "x_crit_SMD350": "0.1367000348759163",
+   "x_crit_SMD200": "0.4373495987910727",
+   "x_crit_SMD500": "0.06632658086009609"
+  },
+  "CH3OH/water_majority/carb_venturi/cfd_matched": {
+   "film_alcohol_kg": 7.18762080398835e-05,
+   "film_water_kg": 0.00011006502637553289,
+   "m_fuel_kg": 7.362468384415644e-05,
+   "m_water_kg": 0.00011043702576623465,
+   "x_crit_SMD350": "0.13731908876065096",
+   "x_crit_SMD200": "0.4395107655856583",
+   "x_crit_SMD500": "0.0666214437266918"
+  },
+  "CH3OH/water_majority/ultrasonic_120kHz/nominal": {
+   "film_alcohol_kg": 4.811308613086329e-05,
+   "film_water_kg": 9.365806050113784e-05,
+   "m_fuel_kg": 7.362468384415644e-05,
+   "m_water_kg": 0.00011043702576623465,
+   "x_crit_SMD350": "0.053312963630028624",
+   "x_crit_SMD200": "0.21354265535483638",
+   "x_crit_SMD500": "0.014658094382137552"
+  },
+  "CH3OH/water_majority/ultrasonic_120kHz/cfd_matched": {
+   "film_alcohol_kg": 5.2082636352310114e-05,
+   "film_water_kg": 9.41535220553756e-05,
+   "m_fuel_kg": 7.362468384415644e-05,
+   "m_water_kg": 0.00011043702576623465,
+   "x_crit_SMD350": "0.06163174426183894",
+   "x_crit_SMD200": "0.2519779803563756",
+   "x_crit_SMD500": "0.015936509072631756"
+  },
+  "C2H5OH/water_majority/carb_venturi/nominal": {
+   "film_alcohol_kg": 5.352912264293325e-05,
+   "film_water_kg": 8.383084498163138e-05,
+   "m_fuel_kg": 5.641201346126019e-05,
+   "m_water_kg": 8.461802019189027e-05,
+   "x_crit_SMD350": "0.16164373238570884",
+   "x_crit_SMD200": "0.5145184470498562",
+   "x_crit_SMD500": "0.0785122427370285"
+  },
+  "C2H5OH/water_majority/carb_venturi/cfd_matched": {
+   "film_alcohol_kg": 5.5331260824966676e-05,
+   "film_water_kg": 8.432348347956675e-05,
+   "m_fuel_kg": 5.641201346126019e-05,
+   "m_water_kg": 8.461802019189027e-05,
+   "x_crit_SMD350": "0.1614029469914029",
+   "x_crit_SMD200": "0.513830296328213",
+   "x_crit_SMD500": "0.07839284903134357"
+  },
+  "C2H5OH/water_majority/ultrasonic_120kHz/nominal": {
+   "film_alcohol_kg": 3.386651680750388e-05,
+   "film_water_kg": 6.964063474375797e-05,
+   "m_fuel_kg": 5.641201346126019e-05,
+   "m_water_kg": 8.461802019189027e-05,
+   "x_crit_SMD350": "0.10342609976500444",
+   "x_crit_SMD200": "0.3444328116484374",
+   "x_crit_SMD500": "0.04543411285644433"
+  },
+  "C2H5OH/water_majority/ultrasonic_120kHz/cfd_matched": {
+   "film_alcohol_kg": 3.926735774834866e-05,
+   "film_water_kg": 7.12396014438597e-05,
+   "m_fuel_kg": 5.641201346126019e-05,
+   "m_water_kg": 8.461802019189027e-05,
+   "x_crit_SMD350": "0.11353130933907755",
+   "x_crit_SMD200": "0.387465103313048",
+   "x_crit_SMD500": "0.04791503115720571"
+  }
+ }
+}
