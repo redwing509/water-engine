@@ -17,6 +17,7 @@ Status: EXECUTED, numerically cross-checked (2 in-repo engines), NOT validated.
 import csv
 import importlib
 import json
+import os
 import sys
 import time
 from multiprocessing import get_context
@@ -24,9 +25,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
-OUT = REPO / "results" / "track_a_sym"
-FUELS = ("CH3OH", "C2H5OH")
-WS = (0.55, 0.6, 0.7)
+OUT = REPO / "results" / os.environ.get("TA_OUT", "track_a_sym")  # env overrides: box queue
+FUELS = tuple(os.environ.get("TA_FUELS", "CH3OH,C2H5OH").split(","))
+WS = tuple(float(x) for x in os.environ.get("TA_WS", "0.55,0.6,0.7").split(","))
 CR_WET = tuple(range(9, 31))
 CR_DRY = tuple(range(6, 31))
 DRY_T = {"normal": (320.0, 360.0), "hot": (400.0,)}

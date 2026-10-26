@@ -24,6 +24,7 @@ Model (IVC -> EVO, crank angle theta [rad] after firing TDC, time t = (theta - t
 """
 
 from dataclasses import dataclass, field, replace
+import os
 import math
 
 import cantera as ct
@@ -205,6 +206,10 @@ class Case:
     # or port wall). Its release is the vapour LHV (LHV_liquid + H_VAP); the efficiency denominator stays
     # m_fuel LHV_liquid. 0 = legacy (bit-for-bit).
     fuel_latent_credit: float = 0.0
+    # Realised evaporative-cooling fraction (R-WE-11 robustness job, 2026-10-26): charge-paid share of the in-cylinder
+    # pre-combustion water latent heat (before spark in 'coupled' mode, whole schedule in 'legacy'); the rest is paid by
+    # the wall. Intake-stage cooling arrives through T_ivc from Module 03 (same fraction). Default env WE_COOL_FRAC or 1.0.
+    cool_frac: float = field(default_factory=lambda: float(os.environ.get("WE_COOL_FRAC", "1.0")))
 
 
 def lhv_liquid(fuel, gas):
@@ -400,11 +405,14 @@ class Engine:
                 else:
                     RHS[self.i0 + 5] = 0.0
                 me = evap_mdot(t, self)
-                RHS[2] -= me * eng.h_fg
+                lat = me * eng.h_fg
+                if c.cool_frac != 1.0 and (c.evap_mode != "coupled" or theta < theta_sp):
+                    lat *= c.cool_frac
+                RHS[2] -= lat
                 RHS[self.i0 + 0] = ph.P * dvolume_dtheta(theta) * omega
                 RHS[self.i0 + 1] = q_wall(t, self)
                 RHS[self.i0 + 2] = Qa * wb.dx(theta) * omega
-                RHS[self.i0 + 3] = me * eng.h_fg
+                RHS[self.i0 + 3] = lat
                 RHS[self.i0 + 4] = me * h_in
                 for k in range(6):
                     LHS[self.i0 + k] = 1.0

@@ -35,6 +35,7 @@ analytic constant-gamma Otto check (SPEC section 10) runs this integrator.
 """
 
 from dataclasses import asdict, dataclass, replace
+import os
 import hashlib
 import json
 import math
@@ -521,6 +522,16 @@ class Charge:
         self.fuel_evap_request = float(self.coupling.get("fuel_evap_intake", 0.0)) if self.coupling else 0.0
         self.fuel_evap_port = float(self.coupling.get("fuel_evap_port", 0.0)) if self.coupling else 0.0
         self.fuel_evap = 0.0
+        # Realised evaporative-cooling fraction (robustness job water-engine-box-20261026-0040, R-WE-11):
+        # fraction of the thermodynamic-maximum charge cooling actually taken from the charge, applied
+        # SYMMETRICALLY to fuel and water, intake (isobaric mixing) and in-cylinder pre-combustion evaporation.
+        # The rest (1 - cool_frac) of the latent heat is paid by the walls (as DEP / port film). Coupling key
+        # 'cool_frac', else env WE_COOL_FRAC, default 1.0 = legacy behaviour bit-for-bit (Kasseris & Heywood
+        # SAE 2012-01-1275: real DI ~70 %).
+        _cf = self.coupling.get("cool_frac") if self.coupling else None
+        self.cool_frac = float(_cf if _cf is not None else os.environ.get("WE_COOL_FRAC", "1.0"))
+        if not 0.0 <= self.cool_frac <= 1.0:
+            raise PointUnavailable("cool_frac outside [0, 1]")
         self._g = 0.0
         self._e_pre = None
         ph = self.ph = phases(fuel)
@@ -590,9 +601,12 @@ class Charge:
         g_credit = self.fuel_evap + self.fuel_evap_port
         self.lhv_release = ph.lhv + g_credit * self.fuel_h_fg
         self.Q_avail = par.combustion_efficiency * self.fuel_mass * self.lhv_release
-        self.Q_fuel_evap_intake = self.fuel_mass * self.fuel_evap * self.fuel_h_intake
-        self.L_cyl = self.water_mass * self.u_latent  # J per unit evaporated fraction
-        self.Q_evap_intake = self.water_mass * (self.e_intake - self.port_evap) * self.h_latent
+        cf = self.cool_frac  # charge-paid share of the latent heat (1.0 = legacy)
+        self.Q_fuel_evap_intake = cf * self.fuel_mass * self.fuel_evap * self.fuel_h_intake
+        self.L_cyl = cf * self.water_mass * self.u_latent  # J per unit evaporated fraction (charge-paid)
+        self.Q_evap_intake = cf * self.water_mass * (self.e_intake - self.port_evap) * self.h_latent
+        self.Q_cool_wall_intake_J = (1.0 - cf) * (self.fuel_mass * self.fuel_evap * self.fuel_h_intake
+                                                  + self.water_mass * (self.e_intake - self.port_evap) * self.h_latent)
         self.Q_port_wall_J = self.water_mass * self.port_evap * self.h_port
         self.intake_closure_J = (self.scale * (self._H(self.dry + self.port_evap * self.water, self.T_intake)
                                  - self._H(vec, self.T_ivc)) - self.Q_evap_intake - self.Q_fuel_evap_intake)
@@ -654,8 +668,8 @@ class Charge:
         if e <= base and self._g <= 0.0:
             return self.T_intake
         target = (self._H(self.dry + base * self.water, self.T_intake)
-                  - max(0.0, e - base) * self.m_water_basis * self.h_latent
-                  - self._g * self.fuel_h_intake)
+                  - self.cool_frac * (max(0.0, e - base) * self.m_water_basis * self.h_latent
+                                      + self._g * self.fuel_h_intake))
         vec = self.dry + e * self.water
 
         def balance(T):
