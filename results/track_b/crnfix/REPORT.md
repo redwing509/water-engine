@@ -51,3 +51,15 @@ sat_blend_frac > 0, so legacy stays bit-identical): drop grid points within 1e-9
 `python -m sims.track_b.crnfix_resume 3` (same rule: 0.1-pp steps, spark re-opt each step, continue while M03 gain
 > 3.3e-5 AND CRN gain > 0, cap 400). Results: `steps_*__noise.jsonl` here, `summary_crnfix.json`; cost metric
 `python -m sims.track_b.crnfix_cost` -> `COST.md` ($0.10/gal headline, $0 secondary).
+
+## PR 11 review item 2 (Claude reply-selfdir-1410-review-20261025-1725): CH3OH normal liquid vs humid_evap identical after resume
+
+Tags: Track B; EXECUTED + VERIFIED (fresh-process recompute); NOT validated. Verdict: **not a bug - physical convergence. No chain re-run needed.**
+
+- Mode flag is honoured. `sims/track_b/run.py` `point()`: `if mode == "humid_evap": par = replace(par, f_evap_intake=1.0)`; liquid keeps the Module 03 default `f_evap_intake=0.5`. `crnfix_resume.py` passes the mode to `chain_noise(fuel, regime, mode)` and reads/writes per-mode files (`steps_CH3OH_normal__noise.jsonl` vs `steps_CH3OH_normal_humid_evap__noise.jsonl`); every row carries the right `water_mode`.
+- Intake evaporation is wet-bulb limited. `sims/03_engine_cycle/run.py`: `# f_evap_intake is infeasible: evaporate only up to saturation (wet bulb).  e = brentq(excess, base, f, xtol=1e-12)`.
+- Stored rows (CR 17, T_intake 320 K, dry eta 0.42379): liquid f_evap_effective = 0.5, not saturation-limited up to w 0.139; humid_evap is saturation-limited throughout (f_evap 0.931 at w 0.080, 0.532 at 0.132, 0.5015 at 0.139). From w 0.140 BOTH are saturation-limited at the same f_evap (0.49735 at 0.140, 0.27571 at 0.227) -> same vapour, same excess liquid, same charge.
+- Fresh-process recompute (`sims/track_b/crnfix_mode_check.py`, one spawned process per mode, nice 19; `mode_check_CH3OH_normal.json`): all 18 points reproduce the stored rows exactly (max |diff| 0.0). M03 eta liquid - humid_evap: w 0.080 -8.42e-4, 0.132 -1.05e-4, 0.139 -4.9e-6, 0.140 -4e-14, 0.227 8e-14, 0.228 3e-14.
+- Before the resume the chains "differed" (best w 0.132 vs 0.080) only because each stopped at a CRN failure (liquid step 133, humid_evap step 81), not at an optimum. Both resumed chains run on to the same w 0.227 (+1.453 / +1.429 pp, power +9.8 %, cost/mile -2.80 % at $0.10/gal) and stop on the same significance rule (gain 3.29e-05 <= noise 3.3e-05).
+- Reading: for CH3OH normal, putting all water through the intake (humid_evap) only helps below w 0.140 (up to +0.084 pp at w 0.080); at the efficiency optimum it is the same engine state as liquid injection. Count the two chains as ONE result.
+- Track B CR: each chain runs at the dry-baseline CR chosen by the Module 03 knock model only -> CR choice "Not yet (single-engine knock)".

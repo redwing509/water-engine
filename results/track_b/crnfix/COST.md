@@ -20,3 +20,7 @@ Headline water $0.10/gal, secondary $0. Each row vs the chain's own dry baseline
 | CH3OH | hot | humid_evap | before cost-optimal w ($0.10) | 0.235 | +1.618 / +1.612 | +26.119 / +26.095 | -4.416 / -4.398 | -3.880 / -3.862 | -4.416 / -4.398 | COST GAIN | before: 236 steps, last 236, stopped |
 | CH3OH | hot | humid_evap | after best-eff (last accepted) | 0.325 | +1.941 / +1.927 | +27.230 / +27.181 | -5.251 / -5.214 | -4.418 / -4.381 | -5.251 / -5.214 | COST GAIN | after: 326 steps, last 326, stopped |
 | CH3OH | hot | humid_evap | after cost-optimal w ($0.10) | 0.326 | +1.944 / +1.930 | +27.241 / +27.191 | -5.259 / -5.222 | -4.423 / -4.385 | -5.259 / -5.222 | COST GAIN | after: 326 steps, last 326, stopped |
+
+Note (PR 11 review item 2, VERIFIED by fresh-process recompute in mode_check_CH3OH_normal.json): the CH3OH normal liquid and humid_evap 'after' rows are identical by physics, not by a resume bug. Intake evaporation is wet-bulb (saturation) limited; from w 0.140 the liquid mode's 0.5*w also exceeds the intake capacity, so both modes evaporate the same water and give the same charge (M03 eta diff < 1e-12). Below w 0.140 they differ (humid_evap up to +0.084 pp better at w 0.080). The 'before' best w (0.132 vs 0.080) were where each chain hit the CRN failure, not optima. Count the two chains as ONE result.
+
+Track B chains run at the fuel/regime dry-baseline CR chosen by the Module 03 knock model only (single-engine knock); CR choice: Not yet (single-engine knock) validated.

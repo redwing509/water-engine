@@ -36,6 +36,14 @@ def main():
             out.append(dict(fuel=f, regime=r, mode=m, label=label, eff_w=c["eff_row"].get("w"), eff=c["eff"],
                             cost_w=(c["cost_row"] or {}).get("w"), cost=c["cost"], n_steps=c["n_steps"],
                             last_step=c["last_step"], stopped=c["stopped"]))
+    md += ["", "Note (PR 11 review item 2, VERIFIED by fresh-process recompute in mode_check_CH3OH_normal.json): the CH3OH "
+           "normal liquid and humid_evap 'after' rows are identical by physics, not by a resume bug. Intake evaporation "
+           "is wet-bulb (saturation) limited; from w 0.140 the liquid mode's 0.5*w also exceeds the intake capacity, so "
+           "both modes evaporate the same water and give the same charge (M03 eta diff < 1e-12). Below w 0.140 they "
+           "differ (humid_evap up to +0.084 pp better at w 0.080). The 'before' best w (0.132 vs 0.080) were where each "
+           "chain hit the CRN failure, not optima. Count the two chains as ONE result.",
+           "", "Track B chains run at the fuel/regime dry-baseline CR chosen by the Module 03 knock model only "
+           "(single-engine knock); CR choice: Not yet (single-engine knock) validated."]
     (TB / "crnfix" / "COST.md").write_text("\n".join(md) + "\n")
     (TB / "crnfix" / "cost_crnfix.json").write_text(json.dumps(out, indent=1, default=float))
     print("\n".join(md))
