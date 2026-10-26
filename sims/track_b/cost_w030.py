@@ -19,15 +19,19 @@ def main():
           "dry-baseline hardware (CR, T_intake). 'old fit' = same chain under the w <= 0.1 Metghalchi-Keck dilution fit "
           "(stopped at w 0.101 by fit range). Hot-regime d_eta / cost vs dry: **pending dryevap verdict**.", "",
           "## Chain table", "",
-          "| fuel | regime | mode | CR | stop w (new) | stop reason | d_eta pp M03 / CRN (new) | engines agree | "
+          "Variants: **full** = every step recomputed from w 0 with the Cantera fit (self-consistent); **ext** = the old "
+          "chain path to w 0.100 kept, step 100 recomputed with the Cantera fit (consistency row, used as prev), then "
+          "steps 101..300 with the Cantera fit (the literal 'extend past w 0.1'). d_eta of any point is point-vs-dry "
+          "(path independent); only the stop decision depends on the path.", "",
+          "| variant | fuel | regime | mode | CR | stop w (new) | stop reason | d_eta pp M03 / CRN (new) | engines agree | "
           "old-fit stop w | old-fit d_eta pp M03 | cost/mile % @$0.10 at best-eff (M03 / CRN) | verdict | failed rows |",
-          "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+          "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     cost_md = ["", "## Cost metric (best-efficiency point and cost-optimal point, equal-or-better power)", "", REP.HDR]
     out = []
-    for f, g, m in W.jobs():
-        p = W.DST / f"steps_{f}_{g}{'' if m == 'liquid' else '_' + m}__w030.jsonl"
+    for f, g, m, v in W.jobs():
+        p = (W.DST if v == "full" else W.DST_EXT) / f"steps_{f}_{g}{'' if m == 'liquid' else '_' + m}__w030.jsonl"
         if not p.exists():
-            md.append(f"| {f} | {g} | {m} | - | - | NOT RUN | - | - | - | - | cost not computed yet | - | - |")
+            md.append(f"| {v} | {f} | {g} | {m} | - | - | NOT RUN | - | - | - | - | cost not computed yet | - | - |")
             continue
         rows = [json.loads(l) for l in p.open()]
         base = rows[0]
@@ -48,17 +52,17 @@ def main():
         c = REP.chain_cost(p, P)
         e = c["eff"] if c else {}
         cpm = REP._two(e, "cost_per_mile_pct") if c else "cost not computed yet"
-        md.append(f"| {f} | {g} | {m} | {base['CR']:.0f} | {best['w']:.3f} | {stop} | {de:+.3f} / {dc:+.3f} | {agree} "
+        md.append(f"| {v} | {f} | {g} | {m} | {base['CR']:.0f} | {best['w']:.3f} | {stop} | {de:+.3f} / {dc:+.3f} | {agree} "
                   f"(diff {abs(de - dc):.3f}) | {ob['w']:.3f} | {100 * (ob['gross_indicated_efficiency'] - base['gross_indicated_efficiency']):+.3f} | "
                   f"{cpm} | {C.verdict(e) if c else '-'} | {', '.join(fails) or 'none'} |")
         if c:
             s = f"{c['n_steps']} ok steps, last {c['last_step']}, {'stopped' if c['stopped'] else 'cap/running'}"
-            cost_md.append(REP.line(f, g, m, "best-eff (last accepted)", c["eff_row"], c["eff"], s))
+            cost_md.append(REP.line(f, g, m, f"[{v}] best-eff (last accepted)", c["eff_row"], c["eff"], s))
             if c["cost_row"] is not None:
-                cost_md.append(REP.line(f, g, m, "cost-optimal w ($0.10)", c["cost_row"], c["cost"], s))
+                cost_md.append(REP.line(f, g, m, f"[{v}] cost-optimal w ($0.10)", c["cost_row"], c["cost"], s))
             if c["free_row"] is not None:
-                cost_md.append(REP.line(f, g, m, "cost-optimal w ($0 water, secondary)", c["free_row"], c["free"], s))
-        out.append(dict(fuel=f, regime=g, mode=m, CR=base["CR"], stop_w=best["w"], stop=stop, d_eta_m03_pp=de,
+                cost_md.append(REP.line(f, g, m, f"[{v}] cost-optimal w ($0 water, secondary)", c["free_row"], c["free"], s))
+        out.append(dict(variant=v, fuel=f, regime=g, mode=m, CR=base["CR"], stop_w=best["w"], stop=stop, d_eta_m03_pp=de,
                         d_eta_crn_pp=dc, agree=agree, old_w=ob["w"], failed=fails,
                         cost_eff=e, cost_w=(c or {}).get("cost_row", {}) and c["cost_row"].get("w"),
                         cost=(c or {}).get("cost"), verdict=C.verdict(e) if c else None))

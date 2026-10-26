@@ -23,7 +23,9 @@ import numpy as np
 from sims.track_b import run as R
 
 SRC = R.OUT
-DST = R.OUT / "w030"
+DST = R.OUT / "w030"            # variant "full": every step recomputed from w = 0 with the Cantera fit
+DST_EXT = R.OUT / "w030_ext"    # variant "ext": old chain path to w 0.100 kept; step 100 recomputed with the
+                                # Cantera fit (consistency row), then steps 101..300 with the Cantera fit
 FL = DST / "cantera_flames"
 CAP = 300
 BLENDS = ("PRF87", "PRF91", "PRF97", "E10", "E85")
@@ -75,8 +77,15 @@ def judge(r, prev):
     return None
 
 
+def fit_limited_at_101(fuel, regime, mode):
+    rows = [json.loads(l) for l in src_file(fuel, regime, mode).open()]
+    return any(r.get("kind") == "step" and r.get("step") == 101 and "outside the flame-speed fit range"
+               in str(r.get("reason", "")) for r in rows)
+
+
 def chain(job):
-    fuel, regime, mode = job
+    fuel, regime, mode = job[:3]
+    variant = job[3] if len(job) > 3 else "full"
     t0 = time.time()
     use_fits(fuel, regime)
     src = src_file(fuel, regime, mode)
@@ -84,11 +93,23 @@ def chain(job):
     base = next(r for r in rows if r["kind"] == "dry_baseline")
     old_steps = {r["step"]: r for r in rows if r["kind"] == "step"}
     name = f"steps_{fuel}_{regime}{'' if mode == 'liquid' else '_' + mode}__w030.jsonl"
-    out = DST / name
+    out = (DST if variant == "full" else DST_EXT) / name
+    out.parent.mkdir(parents=True, exist_ok=True)
     done = [json.loads(l) for l in out.open()] if out.exists() else []
     if not done:
         out.write_text(json.dumps(dict(base, source_file=str(src.relative_to(R.REPO))), default=float) + "\n")
         done = [base]
+        if variant == "ext":
+            o = old_steps[100]
+            r = R.point(fuel, regime, base["CR"], base["T_intake_K"], o["w"], mode)
+            r.update(kind="step", step=100, flame_fit="cantera_w030", recomputed_consistency_row=True,
+                     old_fit_eta=o["gross_indicated_efficiency"], old_fit_crn=o.get("crn_efficiency"),
+                     decision="continue", stop_reason=None,
+                     note="old-fit chain path w 0.001..0.100 (decisions under the w<=0.1 fit); this row = same point "
+                          "recomputed with the Cantera fit, used as prev for step 101", **R.crn(r))
+            with out.open("a") as fh:
+                fh.write(json.dumps(r, default=float) + "\n")
+            done.append(r)
     steps = [r for r in done if r["kind"] == "step"]
     prev = steps[-1] if steps else base
     k = prev.get("step", 0) if steps else 0
@@ -117,7 +138,7 @@ def chain(job):
     best = prev
     old_best = max((r for r in old_steps.values() if r.get("decision") == "continue"), key=lambda r: r["step"],
                    default=None)
-    return dict(fuel=fuel, regime=regime, water_mode=mode, CR=base["CR"], T_intake_K=base["T_intake_K"],
+    return dict(variant=variant, fuel=fuel, regime=regime, water_mode=mode, CR=base["CR"], T_intake_K=base["T_intake_K"],
                 best_w=best["w"], steps_taken=best.get("step", 0), stop_reason=stop,
                 fit_range_limited=stop.startswith("cap"),
                 dry_eta=base["gross_indicated_efficiency"], best_eta=best["gross_indicated_efficiency"],
@@ -127,21 +148,25 @@ def chain(job):
                 seconds=time.time() - t0)
 
 
-def jobs():
+def jobs(variants=("full", "ext")):
     j = [(f, g, m) for g in ("normal", "hot") for f in BLENDS for m in MODES]
-    # longest (normal, previously fit-limited) first
-    return sorted(j, key=lambda x: (x[1] != "normal", x))
+    out = [x + ("full",) for x in j] if "full" in variants else []
+    if "ext" in variants:
+        out += [x + ("ext",) for x in j if fit_limited_at_101(*x)]
+    # longest first: ext (start at 101, run to stop), then normal full chains
+    return sorted(out, key=lambda x: (x[3] != "ext", x[1] != "normal", x))
 
 
 def main(workers=2, only=None):
     DST.mkdir(parents=True, exist_ok=True)
     js = jobs() if not only else [tuple(s.split("/")) for s in only.split(",")]
+    DST_EXT.mkdir(parents=True, exist_ok=True)
     res = []
     ctx = get_context("spawn")
     with ctx.Pool(workers) as pool:
         for r in pool.imap_unordered(chain, js):
             res.append(r)
-            print(f"[w030] {r['fuel']}/{r['regime']}/{r['water_mode']} CR{r['CR']} best_w={r['best_w']} "
+            print(f"[w030 {r['variant']}] {r['fuel']}/{r['regime']}/{r['water_mode']} CR{r['CR']} best_w={r['best_w']} "
                   f"d_eta={r['best_eta'] - r['dry_eta']:+.5f} d_crn={(r['best_crn'] or 0) - (r['dry_crn'] or 0):+.5f} "
                   f"stop={r['stop_reason']} {r['seconds']:.0f}s", flush=True)
             (DST / "summary_w030.json").write_text(json.dumps(res, indent=1, default=float))
