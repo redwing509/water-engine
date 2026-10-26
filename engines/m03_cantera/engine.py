@@ -459,6 +459,7 @@ class Engine:
         if self.anchor is None:  # Wiebe start before IVC (never at design points)
             raise RuntimeError("Wiebe start outside IVC..EVO")
         rec = np.array(rec)
+        self.trace = rec[:, :3].copy()  # (theta rad, P Pa, T K) for the end-gas knock engine (knock.py)
         aux = r.aux
         W, Qw, Qc, Qlat, Hin, Econv = aux
         U1 = r.phase.int_energy_mass * r.mass
