@@ -192,6 +192,10 @@ class Case:
     spark_deg: float = None
     f_ivc: float = None
     f_spark: float = None
+    # Dry-evap baseline check (2026-10-25): fraction of the fuel whose latent heat was paid before IVC (intake air
+    # or port wall). Its release is the vapour LHV (LHV_liquid + H_VAP); the efficiency denominator stays
+    # m_fuel LHV_liquid. 0 = legacy (bit-for-bit).
+    fuel_latent_credit: float = 0.0
 
 
 def lhv_liquid(fuel, gas):
@@ -249,7 +253,7 @@ class Engine:
         # Energies
         self.lhv = lhv_liquid(c.fuel, gas)
         self.Q_fuel = c.m_fuel * self.lhv
-        Qa = ETA_C * self.Q_fuel
+        Qa = ETA_C * (self.Q_fuel + c.fuel_latent_credit * c.m_fuel * H_VAP[c.fuel] * 1000.0 / mw_f)
         wb = Wiebe(c.ca50_deg * RAD, c.d1090_deg * RAD)
         self.wiebe = wb
         gas.TP = T_REF, ct.one_atm

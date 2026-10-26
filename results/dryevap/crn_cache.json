@@ -1,0 +1,557 @@
+{
+ "A|OLD|dry|||None|None|CH3OH|normal|20|0.0|320.0|0.4259513620066703": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.42597720352397356,
+  "crn_p_max_Pa": 6935659.293723655,
+  "crn_latent_credit": 0.0,
+  "crn_seconds": 0.329848051071167,
+  "d_eta_pp_crn": 0.0025841517303282213,
+  "pmax_ratio_crn": 0.999433423179811,
+  "c1_pass": true
+ },
+ "A|DEI|dry|||None|None|CH3OH|normal|21|0.0|360.0|0.45258917771381874": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4525222689253728,
+  "crn_p_max_Pa": 9360131.093496803,
+  "crn_latent_credit": 0.45796910935425855,
+  "crn_seconds": 0.23775005340576172,
+  "d_eta_pp_crn": -0.006690878844595183,
+  "pmax_ratio_crn": 0.9994250811358845,
+  "c1_pass": true
+ },
+ "A|DEI|dry|||None|None|CH3OH|normal|24|0.0|360.0|0.4559789014694417": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.45591456933435104,
+  "crn_p_max_Pa": 9410667.319056777,
+  "crn_latent_credit": 0.45796910935425855,
+  "crn_seconds": 0.21869707107543945,
+  "d_eta_pp_crn": -0.006433213509066116,
+  "pmax_ratio_crn": 0.9994803881387863,
+  "c1_pass": true
+ },
+ "A|DEP|dry|||None|None|CH3OH|normal|15|0.0|320.0|0.4369369696622419": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4369821431609866,
+  "crn_p_max_Pa": 6938646.172281915,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.23831915855407715,
+  "d_eta_pp_crn": 0.004517349874472165,
+  "pmax_ratio_crn": 1.0000140620497697,
+  "c1_pass": true
+ },
+ "A|DEP|dry|||None|None|CH3OH|normal|19|0.0|320.0|0.44439794216054795": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4445153123631026,
+  "crn_p_max_Pa": 6910305.337460851,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.2572054862976074,
+  "d_eta_pp_crn": 0.011737020255464525,
+  "pmax_ratio_crn": 0.9994514924821863,
+  "c1_pass": true
+ },
+ "A|OLD|dry|||None|None|CH3OH|hot|11|0.0|400.0|0.3554175886990588": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.35577770036970885,
+  "crn_p_max_Pa": 3286429.4732418335,
+  "crn_latent_credit": 0.0,
+  "crn_seconds": 0.2147829532623291,
+  "d_eta_pp_crn": 0.03601116706500318,
+  "pmax_ratio_crn": 1.0007387175488205,
+  "c1_pass": true
+ },
+ "A|DEI|dry|||None|None|CH3OH|hot|20|0.0|400.0|0.45740736932982934": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.45737551563656736,
+  "crn_p_max_Pa": 9159863.597302247,
+  "crn_latent_credit": 0.6949076255647179,
+  "crn_seconds": 0.22347784042358398,
+  "d_eta_pp_crn": -0.003185369326197396,
+  "pmax_ratio_crn": 0.9994337076919318,
+  "c1_pass": true
+ },
+ "A|DEI|dry|||None|None|CH3OH|hot|22|0.0|400.0|0.45916070398841896": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.45914990081644963,
+  "crn_p_max_Pa": 8966506.71707956,
+  "crn_latent_credit": 0.6949076255647179,
+  "crn_seconds": 0.23552489280700684,
+  "d_eta_pp_crn": -0.0010803171969331338,
+  "pmax_ratio_crn": 0.999410526904427,
+  "c1_pass": true
+ },
+ "A|DEP|dry|||None|None|CH3OH|hot|7|0.0|400.0|0.3548813864991872": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.3545414210306206,
+  "crn_p_max_Pa": 3638546.1488586655,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.21882081031799316,
+  "d_eta_pp_crn": -0.03399654685666276,
+  "pmax_ratio_crn": 1.0056948356977113,
+  "c1_pass": true
+ },
+ "A|DEP|dry|||None|None|CH3OH|hot|11|0.0|400.0|0.3730126146796318": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.3733611543430892,
+  "crn_p_max_Pa": 3397344.1595519194,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.21038246154785156,
+  "d_eta_pp_crn": 0.03485396634573812,
+  "pmax_ratio_crn": 1.0013466246154423,
+  "c1_pass": true
+ },
+ "A|OLD|dry|||None|None|C2H5OH|normal|24|0.0|320.0|0.4454665080499455": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.44526990786620557,
+  "crn_p_max_Pa": 9635910.18941707,
+  "crn_latent_credit": 0.0,
+  "crn_seconds": 0.24576473236083984,
+  "d_eta_pp_crn": -0.01966001837399034,
+  "pmax_ratio_crn": 0.9990480479974277,
+  "c1_pass": true
+ },
+ "A|DEI|dry|||None|None|C2H5OH|normal|20|0.0|360.0|0.4511597220299262": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4507923828432323,
+  "crn_p_max_Pa": 11604466.541089127,
+  "crn_latent_credit": 0.7268914131489992,
+  "crn_seconds": 0.25632357597351074,
+  "d_eta_pp_crn": -0.036733918669390464,
+  "pmax_ratio_crn": 0.9994508100713326,
+  "c1_pass": true
+ },
+ "A|DEP|dry|||None|None|C2H5OH|normal|23|0.0|320.0|0.45661633107807004": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4564364579111076,
+  "crn_p_max_Pa": 9479869.775545204,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.2409975528717041,
+  "d_eta_pp_crn": -0.017987316696244093,
+  "pmax_ratio_crn": 0.9990319469339253,
+  "c1_pass": true
+ },
+ "A|OLD|dry|||None|None|C2H5OH|hot|14|0.0|400.0|0.38957129242433586": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.3896804056695698,
+  "crn_p_max_Pa": 4410650.85060554,
+  "crn_latent_credit": 0.0,
+  "crn_seconds": 0.2180466651916504,
+  "d_eta_pp_crn": 0.010911324523393828,
+  "pmax_ratio_crn": 0.9996240012882506,
+  "c1_pass": true
+ },
+ "A|DEI|dry|||None|None|C2H5OH|hot|24|0.0|400.0|0.46438233128981127": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.46417960641381667,
+  "crn_p_max_Pa": 10250485.872928597,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.24976634979248047,
+  "d_eta_pp_crn": -0.020272487599459765,
+  "pmax_ratio_crn": 0.9990222367577241,
+  "c1_pass": true
+ },
+ "A|DEP|dry|||None|None|C2H5OH|hot|11|0.0|400.0|0.394667296131427": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.3943391246039647,
+  "crn_p_max_Pa": 4700872.65713942,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.23441314697265625,
+  "d_eta_pp_crn": -0.03281715274622843,
+  "pmax_ratio_crn": 1.0019024832151182,
+  "c1_pass": true
+ },
+ "A|DEP|dry|||None|None|C2H5OH|hot|14|0.0|400.0|0.40089285786347595": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4009312671710663,
+  "crn_p_max_Pa": 4493264.974079404,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.2282850742340088,
+  "d_eta_pp_crn": 0.00384093075903591,
+  "pmax_ratio_crn": 0.9998051079809711,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|C2H5OH|hot|18|0.5|400.0|0.4343937505666935": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4341983338895996,
+  "crn_p_max_Pa": 6752002.222402314,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.4209723472595215,
+  "d_eta_pp_crn": -0.019541667709388477,
+  "pmax_ratio_crn": 0.9991040104746454,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|ii|None|None|C2H5OH|hot|18|0.5|400.0|0.41916993382443174": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.418851435572502,
+  "crn_p_max_Pa": 7055595.126538322,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.31639790534973145,
+  "d_eta_pp_crn": -0.03184982519297552,
+  "pmax_ratio_crn": 0.9990821867689412,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|C2H5OH|hot|22|0.6|400.0|0.4428727046257965": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4425323148269738,
+  "crn_p_max_Pa": 8396032.168851703,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.29963183403015137,
+  "d_eta_pp_crn": -0.03403897988226712,
+  "pmax_ratio_crn": 0.9992806569952143,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|ii|None|None|C2H5OH|hot|23|0.6|400.0|0.42126030907559414": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.420851645800284,
+  "crn_p_max_Pa": 9308366.676027242,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.29865288734436035,
+  "d_eta_pp_crn": -0.040866327531013935,
+  "pmax_ratio_crn": 0.9992513550159496,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|C2H5OH|hot|24|0.7|400.0|0.4331622442520519": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.003795833333333333).\nCurrent integrator time: 0.003792431464964616\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 598.0612027645111
+ },
+ "A|DEP|coupled|dryair|ii|None|None|C2H5OH|hot|23|0.7|400.0|0.3982809103794458": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.003966666666666666).\nCurrent integrator time: 0.003964493740183343\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 468.2636902332306
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|C2H5OH|hot|23|0.5|400.0|0.4602094352336204": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4597193965181593,
+  "crn_p_max_Pa": 11870288.081648342,
+  "crn_latent_credit": 0.8944584488524919,
+  "crn_seconds": 54.975547552108765,
+  "d_eta_pp_crn": -0.04900387154611052,
+  "pmax_ratio_crn": 0.9991648585654032,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|C2H5OH|hot|23|0.5|400.0|0.4369091065967767": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4364999586976792,
+  "crn_p_max_Pa": 11819637.046713574,
+  "crn_latent_credit": 0.8944584488524919,
+  "crn_seconds": 0.31673216819763184,
+  "d_eta_pp_crn": -0.040914789909746174,
+  "pmax_ratio_crn": 0.9991635698906538,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|C2H5OH|hot|23|0.6|400.0|0.44150660694269145": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.44103488973231625,
+  "crn_p_max_Pa": 11791981.875331532,
+  "crn_latent_credit": 0.8944584488533072,
+  "crn_seconds": 55.67563199996948,
+  "d_eta_pp_crn": -0.04717172103751999,
+  "pmax_ratio_crn": 0.999220446377482,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|C2H5OH|hot|23|0.6|400.0|0.41960036810596696": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4192006435198496,
+  "crn_p_max_Pa": 11832203.205860887,
+  "crn_latent_credit": 0.8944584488533072,
+  "crn_seconds": 0.34616923332214355,
+  "d_eta_pp_crn": -0.039972458611736705,
+  "pmax_ratio_crn": 0.9992492757813021,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|C2H5OH|hot|23|0.7|400.0|0.40587904767343486": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4054979172796529,
+  "crn_p_max_Pa": 11848430.943585757,
+  "crn_latent_credit": 0.8944584488524903,
+  "crn_seconds": 61.577759981155396,
+  "d_eta_pp_crn": -0.03811303937819588,
+  "pmax_ratio_crn": 0.9992869036056391,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|C2H5OH|hot|23|0.7|400.0|0.3872834578841283": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n9: 0.6534718328405199\n4: -0.019991897214002873\n7: 0.0005891348368992954\n5: 0.0005538578293536385\n22: 0.0004641889765785496\n21: 6.349424848012168e-05\n2: -5.336846913124986e-05\n1: -4.4415860771819423e-05\n3: 8.293051081314594e-08\n6: -3.216321874370926e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 0.8944584488524903,
+  "crn_seconds": 0.1694812774658203
+ },
+ "A|DEP|coupled|dryair|i|None|None|C2H5OH|normal|24|0.5|360.0|0.4501324401317715": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.0007708333333333342).\nCurrent integrator time: 0.0007671913599819228\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 328.74302315711975
+ },
+ "A|DEP|coupled|dryair|ii|None|None|C2H5OH|normal|24|0.5|360.0|0.43729537172337474": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4369028724051977,
+  "crn_p_max_Pa": 10621810.87019972,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.3404552936553955,
+  "d_eta_pp_crn": -0.03924993181770309,
+  "pmax_ratio_crn": 0.9992020006198301,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|C2H5OH|normal|24|0.6|360.0|0.43272424597658904": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.004141666666666666).\nCurrent integrator time: 0.0041383189775314015\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 786.4666991233826
+ },
+ "A|DEP|coupled|dryair|ii|None|None|C2H5OH|normal|23|0.6|360.0|0.4224897795340125": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.0031291666666666672).\nCurrent integrator time: 0.0031256609347711673\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 2017.702877998352
+ },
+ "A|DEP|coupled|dryair|i|None|None|C2H5OH|normal|24|0.7|360.0|0.40662522807107054": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4057816085011371,
+  "crn_p_max_Pa": 11549876.245361976,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 1358.4431674480438,
+  "d_eta_pp_crn": -0.08436195699334514,
+  "pmax_ratio_crn": 1.000399271642932,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|ii|None|None|C2H5OH|normal|23|0.7|360.0|0.3988249766892297": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.3980355350395129,
+  "crn_p_max_Pa": 11601050.354737211,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 164.08377385139465,
+  "d_eta_pp_crn": -0.07894416497168377,
+  "pmax_ratio_crn": 1.0003017624358308,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|CH3OH|hot|14|0.5|400.0|0.424683274560675": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.42458974883204986,
+  "crn_p_max_Pa": 5271155.973294303,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.2983877658843994,
+  "d_eta_pp_crn": -0.009352572862514341,
+  "pmax_ratio_crn": 0.999455235413141,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|ii|None|None|CH3OH|hot|13|0.5|400.0|0.3984937124134042": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.3982570124413095,
+  "crn_p_max_Pa": 5290522.5091964295,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.2733163833618164,
+  "d_eta_pp_crn": -0.02366999720946894,
+  "pmax_ratio_crn": 0.9994161890245284,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|CH3OH|hot|17|0.6|400.0|0.43741163605757194": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.43715061631455576,
+  "crn_p_max_Pa": 6293965.183699431,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.27642250061035156,
+  "d_eta_pp_crn": -0.02610197430161776,
+  "pmax_ratio_crn": 0.9996632978907506,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|ii|None|None|CH3OH|hot|18|0.6|400.0|0.408495748638314": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.408159441544132,
+  "crn_p_max_Pa": 7219419.973678621,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.25885820388793945,
+  "d_eta_pp_crn": -0.03363070941820312,
+  "pmax_ratio_crn": 0.9996036489901939,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|CH3OH|hot|23|0.7|400.0|0.43261463387053095": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.004616666666666666).\nCurrent integrator time: 0.0046149468742867576\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 282.90809750556946
+ },
+ "A|DEP|coupled|dryair|ii|None|None|CH3OH|hot|24|0.7|400.0|0.3943905449162591": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.005266666666666666).\nCurrent integrator time: 0.005264329691453838\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 261.07192945480347
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|CH3OH|hot|23|0.5|400.0|0.45505088356713397": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n25: 1.765834840358887\n24: -1.7658348402217812\n8: -1.3787982474685867\n2: 0.8316842743884174\n18: 0.11381462307109833\n6: 0.11381461852987557\n19: 0.1138146153513123\n12: 0.11381449263779055\n0: -0.11381292880484598\n22: 2.7954960125987557e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 0.6228734947833785,
+  "crn_seconds": 52.22715616226196
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|CH3OH|hot|20|0.5|400.0|0.42231252442671013": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.42196338077828804,
+  "crn_p_max_Pa": 8918816.66339163,
+  "crn_latent_credit": 0.6228734947833785,
+  "crn_seconds": 0.33068323135375977,
+  "d_eta_pp_crn": -0.034914364842209,
+  "pmax_ratio_crn": 0.9995408843433844,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|CH3OH|hot|23|0.6|400.0|0.4322624537064885": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.43187601885212207,
+  "crn_p_max_Pa": 11596151.67444466,
+  "crn_latent_credit": 0.6228734947831608,
+  "crn_seconds": 52.40308690071106,
+  "d_eta_pp_crn": -0.03864348543664575,
+  "pmax_ratio_crn": 0.9995154187829322,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|CH3OH|hot|20|0.6|400.0|0.4022302371416097": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4018967170770777,
+  "crn_p_max_Pa": 8973940.790485032,
+  "crn_latent_credit": 0.6228734947831608,
+  "crn_seconds": 0.28719019889831543,
+  "d_eta_pp_crn": -0.03335200645320224,
+  "pmax_ratio_crn": 0.9996466001435197,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|CH3OH|hot|23|0.7|400.0|0.38921178394271366": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n25: 1.8994059888169161\n24: -1.8994059886098855\n8: -1.4220374796034523\n2: 0.7040390774071367\n18: 0.08877645761438123\n6: 0.08877645413801107\n19: 0.08877645170477581\n12: 0.08877635776583537\n0: -0.08877511119081986\n22: 2.9304544102348222e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 0.6228734947832358,
+  "crn_seconds": 57.36992073059082
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|CH3OH|hot|20|0.7|400.0|0.3649791197008004": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n9: 0.5352596841433063\n4: -0.016357144004257022\n22: 0.000519992171092787\n21: 0.0002935293457882521\n7: 0.00017512041646528412\n5: 0.00016411920417572592\n2: -0.00014656011600806584\n1: -5.956724840499594e-05\n3: 3.829504988077544e-08\n6: -2.7245213308208176e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 0.6228734947832358,
+  "crn_seconds": 0.15227603912353516
+ },
+ "A|DEP|coupled|dryair|i|None|None|CH3OH|normal|20|0.5|360.0|0.44725340937858593": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.0017291666666666673).\nCurrent integrator time: 0.0017284181933869323\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 300.61276412010193
+ },
+ "A|DEP|coupled|dryair|ii|None|None|CH3OH|normal|20|0.5|360.0|0.430160196810331": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4298348445971733,
+  "crn_p_max_Pa": 8250029.490252685,
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 0.3121652603149414,
+  "d_eta_pp_crn": -0.03253522131577147,
+  "pmax_ratio_crn": 0.9995791303088147,
+  "c1_pass": true
+ },
+ "A|DEP|coupled|dryair|i|None|None|CH3OH|normal|24|0.6|360.0|0.4366764169874108": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.004975).\nCurrent integrator time: 0.00497406778038995\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 260.45871686935425
+ },
+ "A|DEP|coupled|dryair|ii|None|None|CH3OH|normal|24|0.6|360.0|0.42500716203492767": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nMaximum number of timesteps (500000) taken without reaching output time (0.0041625).\nCurrent integrator time: 0.004160475012268222\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 2507.6561136245728
+ },
+ "A|DEP|coupled|dryair|i|None|None|CH3OH|normal|24|0.7|360.0|0.4022724313901691": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n25: 2.0310298707480943\n24: -2.031029870412971\n8: -0.6303242673265136\n2: 0.4605754191327047\n18: 0.07222617646769885\n6: 0.0722261735005702\n19: 0.07222617142377113\n12: 0.0722260912456288\n0: -0.0722249087037046\n22: 5.206961833751716e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 230.2244861125946
+ },
+ "A|DEP|coupled|dryair|ii|None|None|CH3OH|normal|24|0.7|360.0|0.39205165821206095": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n25: 2.456812419141649\n24: -2.456812418719007\n8: -1.1986654173153208\n2: 0.5334870407791052\n18: 0.07912353225605798\n6: 0.07912352914724138\n19: 0.07912352697127004\n12: 0.07912344296441558\n0: -0.07912223467460953\n22: 5.841878556901139e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 1.0,
+  "crn_seconds": 139.02287340164185
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|C2H5OH|normal|23|0.5|360.0|0.4504097194075856": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.44993103703945275,
+  "crn_p_max_Pa": 11699004.489478024,
+  "crn_latent_credit": 0.5041498727836454,
+  "crn_seconds": 52.150158643722534,
+  "d_eta_pp_crn": -0.04786823681328656,
+  "pmax_ratio_crn": 0.9991916205318543,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|C2H5OH|normal|22|0.5|360.0|0.4248882064972166": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.42450085182628183,
+  "crn_p_max_Pa": 11978004.055912118,
+  "crn_latent_credit": 0.5041498727836454,
+  "crn_seconds": 0.4203522205352783,
+  "d_eta_pp_crn": -0.03873546709347586,
+  "pmax_ratio_crn": 0.9991777386878021,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|C2H5OH|normal|23|0.6|360.0|0.43160041515700587": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4311492377180194,
+  "crn_p_max_Pa": 11617235.69778976,
+  "crn_latent_credit": 0.5041498727845304,
+  "crn_seconds": 50.19574785232544,
+  "d_eta_pp_crn": -0.04511774389864831,
+  "pmax_ratio_crn": 0.9992429350403336,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|C2H5OH|normal|22|0.6|360.0|0.40769305476104073": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4073259734592853,
+  "crn_p_max_Pa": 11880104.831476063,
+  "crn_latent_credit": 0.5041498727845304,
+  "crn_seconds": 0.29682350158691406,
+  "d_eta_pp_crn": -0.03670813017554453,
+  "pmax_ratio_crn": 0.9992333891893946,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|C2H5OH|normal|23|0.7|360.0|0.3958904027005667": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.3955372270253605,
+  "crn_p_max_Pa": 11665463.971328601,
+  "crn_latent_credit": 0.5041498727836489,
+  "crn_seconds": 58.457961320877075,
+  "d_eta_pp_crn": -0.03531756752062076,
+  "pmax_ratio_crn": 0.9993202559184554,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|C2H5OH|normal|22|0.7|360.0|0.37562121896556316": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.37536026173740145,
+  "crn_p_max_Pa": 11839938.016739015,
+  "crn_latent_credit": 0.5041498727836489,
+  "crn_seconds": 0.27165889739990234,
+  "d_eta_pp_crn": -0.026095722816171785,
+  "pmax_ratio_crn": 0.9993750720954322,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|CH3OH|normal|24|0.5|360.0|0.4463580159264868": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n25: 0.6910718082428089\n24: -0.6910718081879527\n8: -0.5385145775759786\n2: 0.3192566035002473\n18: 0.043640363678866353\n6: 0.0436403619400338\n19: 0.04364036072296294\n12: 0.04364031373599934\n0: -0.043639711725432594\n22: 1.0880241693061275e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 0.38238487849873204,
+  "crn_seconds": 50.21699547767639
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|CH3OH|normal|22|0.5|360.0|0.4185657333371424": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.4182217956753103,
+  "crn_p_max_Pa": 9578806.449060459,
+  "crn_latent_credit": 0.38238487849873204,
+  "crn_seconds": 0.27504587173461914,
+  "d_eta_pp_crn": -0.03439376618321055,
+  "pmax_ratio_crn": 0.9996318508140312,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|CH3OH|normal|24|0.6|360.0|0.42312940625072665": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.422762781644199,
+  "crn_p_max_Pa": 11882777.58512907,
+  "crn_latent_credit": 0.38238487849850233,
+  "crn_seconds": 48.526591062545776,
+  "d_eta_pp_crn": -0.03666246065276435,
+  "pmax_ratio_crn": 0.9995204639363395,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|CH3OH|normal|22|0.6|360.0|0.3977853314054897": {
+  "crn_status": "ok",
+  "crn_efficiency": 0.39747910023564587,
+  "crn_p_max_Pa": 9696474.598384965,
+  "crn_latent_credit": 0.38238487849850233,
+  "crn_seconds": 0.29227519035339355,
+  "d_eta_pp_crn": -0.030623116984385135,
+  "pmax_ratio_crn": 0.9997231740913305,
+  "c1_pass": true
+ },
+ "A|DEI|coupled|humid_evap|i|None|None|CH3OH|normal|24|0.7|360.0|0.37938141742327575": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n25: 2.483758046572791\n24: -2.4837580462937363\n8: -1.851102404902825\n2: 0.8979560156157057\n18: 0.11300283443536645\n6: 0.1130028300160824\n19: 0.11300282692286819\n12: 0.11300270750438447\n0: -0.11300111521570651\n22: 7.732733071455308e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 0.3823848784985801,
+  "crn_seconds": 56.87131452560425
+ },
+ "A|DEI|coupled|humid_evap|ii|None|None|CH3OH|normal|21|0.7|360.0|0.3579348607429806": {
+  "crn_status": "failed: CanteraError: \n*******************************************************************************\nCanteraError thrown by CVodesIntegrator::integrate:\nCVodes error encountered. Error code: -27\ncvHandleFailure: tout too close to t0 to start integration.\n\nComponents with largest weighted error estimates:\n9: -0.9212250742696442\n4: 0.02821321221629502\n7: -0.001334373229759432\n5: -0.001253840483871458\n22: 8.568005491480085e-06\n21: 2.000404212110352e-06\n2: -8.728232239648186e-07\n1: -4.4258116606770226e-07\n3: -1.8549158085788893e-07\n6: 4.699312827779527e-08\n*******************************************************************************\n",
+  "crn_latent_credit": 0.3823848784985801,
+  "crn_seconds": 0.1782374382019043
+ }
+}

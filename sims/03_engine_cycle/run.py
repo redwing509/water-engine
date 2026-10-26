@@ -374,6 +374,32 @@ def outside_fit(fit, T, p, w):
     return False
 
 
+_ANTOINE_IC8H18 = (3.93679, 1257.84, -52.415)  # NIST WebBook isooctane, log10(P/bar) = A - B/(T + C), 297-373 K
+
+
+def fuel_component_psat(fuel, T):
+    """[(liquid mole fraction, p_sat [Pa])] of the fuel's components (Raoult); single liquid fuels -> [(1, p_sat)].
+
+    Methanol / ethanol / n-heptane: CoolProp. Isooctane: NIST Antoine (extrapolated below 297 K). Track B blends
+    use their fuels_b component mole fractions.
+    """
+    names = {"CH3OH": "Methanol", "C2H5OH": "Ethanol", "NC7H16": "n-Heptane"}
+    try:
+        from sims.track_b import fuels_b as _fb
+        comps = _fb.mole_fractions(fuel) if fuel in _fb.BLENDS else {fuel: 1.0}
+    except ImportError:
+        comps = {fuel: 1.0}
+    out = []
+    for k, x in comps.items():
+        if k == "IC8H18":
+            a, b, c = _ANTOINE_IC8H18
+            ps = 1e5 * 10.0 ** (a - b / (T + c))
+        else:
+            ps = float(PropsSI("P", "T", T, "Q", 1, names[k]))
+        out.append((x, ps))
+    return out
+
+
 def water_p_sat(T):
     """Saturation pressure of water [Pa]; 0 below the triple point, inf above Tc."""
     if T >= WATER_T_CRIT:
@@ -483,6 +509,19 @@ class Charge:
         self.liquid_sink = bool(self.coupling and self.coupling.get("liquid_sink"))
         self.port_evap_request = float(self.coupling.get("port_evap_frac", 0.0)) if self.coupling else 0.0
         self.port_evap = 0.0
+        # Fuel evaporation option (dry-evap baseline check, Claude job water-engine-dryevap-baseline-20261025-1420).
+        # Absent keys keep the legacy model bit-for-bit (fuel = premixed vapour at T_intake, latent heat debited
+        # from the release, no fuel charge cooling). Otherwise:
+        #   fuel_evap_intake  requested fraction of the fuel that enters as liquid at T_REF and evaporates in the
+        #                     intake air before IVC (isobaric mixing, cools the charge; capped at fuel dew point,
+        #                     sum_i p_i / p_sat,i(T_IVC) <= 1); its latent heat is then paid by the charge, so its
+        #                     release is the vapour LHV (= liquid LHV + h_fg(298 K)).
+        #   fuel_evap_port    fraction evaporated off the port wall by wall/exhaust heat: enters as vapour at
+        #                     T_intake (no charge cooling), latent heat paid by the wall, release = vapour LHV.
+        self.fuel_evap_request = float(self.coupling.get("fuel_evap_intake", 0.0)) if self.coupling else 0.0
+        self.fuel_evap_port = float(self.coupling.get("fuel_evap_port", 0.0)) if self.coupling else 0.0
+        self.fuel_evap = 0.0
+        self._g = 0.0
         self._e_pre = None
         ph = self.ph = phases(fuel)
         i, MW = ph.i, ph.MW
@@ -528,6 +567,15 @@ class Charge:
         self.u_liq_Tw = float(PropsSI("Umass", "T", Tw, "Q", 0, "Water"))
         # Liquid at Tw -> ideal-gas vapour at T_intake (port film evaporated by wall heat).
         self.h_port = self.h_latent + float(ph.species_h(self.T_intake)[j] - ph.h_ref[j])
+        _fp = fuels.FUELS[fuel]
+        self.fuel_h_fg = float(_fp.h_fg or 0.0) if _fp.state == "liquid" else 0.0
+        # Liquid fuel at T_REF -> ideal-gas vapour at T_intake [J/kg fuel]: the enthalpy the intake air loses
+        # per kg of fuel evaporated, relative to the legacy 'vapour at T_intake' charge.
+        self.fuel_h_intake = self.fuel_h_fg + float(ph.species_h(self.T_intake)[ph.i_fuel] - ph.h_ref[ph.i_fuel])
+        if (self.fuel_evap_request > 0.0 or self.fuel_evap_port > 0.0) and self.fuel_h_fg <= 0.0:
+            raise PointUnavailable("fuel evaporation requested for a gaseous fuel")
+        if self.fuel_evap_request + self.fuel_evap_port > 1.0 + 1e-12:
+            raise PointUnavailable("fuel_evap_intake + fuel_evap_port > 1")
         self._intake()
         vec = self.dry + self.e_intake * self.water
         self.V_ivc = volume(par.ivc_rad, cr, par)
@@ -539,12 +587,15 @@ class Charge:
         self.residual_mass = self.scale * self.residual_basis
         self.gas_mass_ivc = self.scale * float(vec.sum())
         self.Q_fuel = self.fuel_mass * ph.lhv
-        self.Q_avail = par.combustion_efficiency * self.Q_fuel
+        g_credit = self.fuel_evap + self.fuel_evap_port
+        self.lhv_release = ph.lhv + g_credit * self.fuel_h_fg
+        self.Q_avail = par.combustion_efficiency * self.fuel_mass * self.lhv_release
+        self.Q_fuel_evap_intake = self.fuel_mass * self.fuel_evap * self.fuel_h_intake
         self.L_cyl = self.water_mass * self.u_latent  # J per unit evaporated fraction
         self.Q_evap_intake = self.water_mass * (self.e_intake - self.port_evap) * self.h_latent
         self.Q_port_wall_J = self.water_mass * self.port_evap * self.h_port
         self.intake_closure_J = (self.scale * (self._H(self.dry + self.port_evap * self.water, self.T_intake)
-                                 - self._H(vec, self.T_ivc)) - self.Q_evap_intake)
+                                 - self._H(vec, self.T_ivc)) - self.Q_evap_intake - self.Q_fuel_evap_intake)
         self.U_ivc = self.scale * float(vec @ (ph.species_u(self.T_ivc) - ph.u_ref))
         self.fuel_saturation_ratio_ivc = None
         props = fuels.FUELS[fuel]
@@ -600,10 +651,11 @@ class Charge:
     def _intake_T(self, e):
         """Mixed-charge temperature [K]; None if the latent demand needs T < 150 K."""
         base = self.port_evap
-        if e <= base:
+        if e <= base and self._g <= 0.0:
             return self.T_intake
         target = (self._H(self.dry + base * self.water, self.T_intake)
-                  - (e - base) * self.m_water_basis * self.h_latent)
+                  - max(0.0, e - base) * self.m_water_basis * self.h_latent
+                  - self._g * self.fuel_h_intake)
         vec = self.dry + e * self.water
 
         def balance(T):
@@ -643,18 +695,52 @@ class Charge:
             f = min(1.0, base + f)
         else:
             f = base + f * (1.0 - base)
-        if self.w == 0.0 or f <= base:
-            e = base
-        elif excess(f) <= 0.0:
-            e = f
-        else:
+        def water_e():
+            if self.w == 0.0 or f <= base:
+                return base
+            if excess(f) <= 0.0:
+                return f
             # f_evap_intake is infeasible: evaporate only up to saturation (wet bulb).
-            e = brentq(excess, base, f, xtol=1e-12)
+            return brentq(excess, base, f, xtol=1e-12)
+
+        self.fuel_evap_saturation_limited = False
+        if self.fuel_evap_request > 0.0:
+            gq = min(1.0, self.fuel_evap_request)
+
+            def fuel_excess(g):
+                self._g = g
+                if self.w > 0.0 and excess(base) > 0.0:
+                    # Fuel cooling alone would supersaturate the water vapour
+                    # already present: this much fuel cannot evaporate.
+                    return 1.0
+                ee = water_e()
+                T = self._intake_T(ee)
+                if T is None or T < WATER_T_TRIPLE:
+                    return 1.0
+                return self._fuel_sat_ratio(self.dry + ee * self.water, T) - 1.0
+
+            if fuel_excess(gq) > 0.0:
+                if fuel_excess(0.0) >= 0.0:
+                    # Already at/over the fuel dew point (or water-saturated)
+                    # with no fuel evaporation: no intake fuel evaporation.
+                    gq = 0.0
+                else:
+                    gq = brentq(fuel_excess, 0.0, gq, xtol=1e-12)
+                self.fuel_evap_saturation_limited = True
+            self._g = float(gq)
+            self.fuel_evap = float(gq)
+        e = water_e()
         self.e_intake = float(e)
         self.T_ivc = float(self._intake_T(e))
         self.intake_saturation_limited = bool(self.w > 0.0 and e < f - 1e-9)
         if self.T_ivc < WATER_T_TRIPLE:
             raise PointUnavailable("Intake evaporation would cool the charge below 273.16 K")
+
+    def _fuel_sat_ratio(self, vec, T):
+        """Fuel dew-point ratio sum_i p_i / p_sat,i(T) of the premixed fuel vapour (1 = dew point)."""
+        ph, p = self.ph, self.par.p_ivc_Pa
+        x_fuel = (vec[ph.i_fuel] / ph.MW[ph.i_fuel]) / float(vec @ ph.inv_MW)
+        return float(sum(xi * x_fuel * p / ps for xi, ps in fuel_component_psat(self.fuel, T)))
 
     # Closed cylinder: mixture properties by mass fraction burned.
     def masses(self, xb, e):
@@ -864,7 +950,7 @@ class Charge:
         # the 32b6350 version subtracted m_liq [kg/cycle, wrong basis] times
         # (CoolProp liquid h - Cantera gas formation h) [mixed references].
         H = (float(Yc @ ph.h_ref) + float(Yu @ (ph.species_h(T_u) - ph.h_ref))
-             + self.par.combustion_efficiency * ph.lhv
+             + self.par.combustion_efficiency * getattr(self, "lhv_release", ph.lhv)
              - (1.0 - e) * self.m_water_basis * self.h_latent)
         fl = ph.flame
         fl.HPY = H / mass, p, Yc / mass
@@ -1223,6 +1309,11 @@ def run_point(fuel, cr, w, T_intake, ignition, flame, par=DEFAULTS, mode="full",
             row["port_evap_saturation_limited"] = charge.port_evap_saturation_limited
         row.update(S_L_m_s=sl, S_L_ref_m_s=ref, T_IVC_K=charge.T_ivc,
                    f_evap_intake_effective=charge.e_intake,
+                   **({} if not (charge.fuel_evap_request or charge.fuel_evap_port) else dict(
+                       fuel_evap_intake_fraction=charge.fuel_evap, fuel_evap_port_fraction=charge.fuel_evap_port,
+                       fuel_evap_saturation_limited=charge.fuel_evap_saturation_limited,
+                       fuel_evaporation_intake_J=charge.Q_fuel_evap_intake,
+                       released_lhv_J_per_kg=charge.lhv_release)),
                    intake_saturation_limited=charge.intake_saturation_limited,
                    fuel_vapour_saturation_ratio_IVC=charge.fuel_saturation_ratio_ivc,
                    fuel_mass_kg=charge.fuel_mass, water_mass_kg=charge.water_mass,
