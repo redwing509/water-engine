@@ -333,10 +333,32 @@ def chains(workers, only=None):
     print("sym chains done", flush=True)
 
 
+def w0quick(workers):
+    """Pre-launch gate: w 0 start at the baselines.csv DEI hardware (liquid mode) vs baselines.csv, both engines."""
+    OUT.mkdir(parents=True, exist_ok=True)
+    refs = ref_baselines()
+    tasks = [dict(fuel=f, regime=g, CR=v["CR"], w=0.0, mode="liquid", crn=True, key=f"{f}/{g}") for (f, g), v in refs.items()]
+    with get_context("spawn").Pool(workers) as p:
+        res = p.map(point, tasks)
+    out = []
+    for t, r in zip(tasks, res):
+        v = refs[(t["fuel"], t["regime"])]
+        d = dict(key=t["key"], CR=t["CR"], eta=r.get("gross_indicated_efficiency"), ref=v["eta"], crn=r.get("crn_efficiency"),
+                 ref_crn=v["eta_crn"], T_IVC=r.get("T_IVC_K"), ref_T_IVC=v["T_IVC_K"], g=r.get("fuel_evap_intake_fraction"),
+                 elig=r.get("eligible"), status=r.get("status"), reason=r.get("reason"), crn_status=r.get("crn_status"),
+                 sec=r.get("m03_plus_crn_seconds"))
+        d["diff"] = None if d["eta"] is None else d["eta"] - d["ref"]
+        d["diff_crn"] = None if d["crn"] is None or d["ref_crn"] is None else d["crn"] - d["ref_crn"]
+        out.append(d); print(json.dumps(d, default=float), flush=True)
+    (OUT / "w0_quick_check.json").write_text(json.dumps(out, indent=1, default=float))
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1]
     n = int(sys.argv[2]) if len(sys.argv) > 2 else 2
     if cmd == "baselines":
         baselines(n)
+    elif cmd == "w0quick":
+        w0quick(n)
     elif cmd == "chains":
         chains(n, sys.argv[3] if len(sys.argv) > 3 else None)
