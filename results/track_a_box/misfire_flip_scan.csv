@@ -90,97 +90,97 @@ C2H5OH,hot,18,0.5,437.0,62.375283721138516,198.35952038307815,0.0,boiling (heat-
 C2H5OH,hot,18,0.5,438.0,62.375283721138516,198.35952038307815,0.0,boiling (heat-limited),False,False,False
 C2H5OH,hot,18,0.5,439.0,62.375283721138516,198.35952038307815,0.0,boiling (heat-limited),False,False,False
 C2H5OH,hot,18,0.5,440.0,62.375283721138516,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,350.0,70.64249969748388,9.78513903575718,0.8614836808201777,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,351.0,70.64249969748388,10.396889156460967,0.8528238779632075,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,352.0,70.64249969748388,11.062525291238586,0.8434012763051673,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,353.0,70.64249969748388,11.790045015586903,0.8331026638910566,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,354.0,70.64249969748388,12.589350418046896,0.8217878688897061,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,355.0,70.64249969748388,13.472905455462756,0.8092804542144107,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,356.0,70.64249969748388,14.456703689641216,0.7953540184513583,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,357.0,70.64249969748388,15.561740712495814,0.7797113525266421,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,358.0,70.64249969748388,16.816344157874813,0.7619514565610174,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,359.0,70.64249969748388,18.26004045967528,0.7415148028754472,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,360.0,70.64249969748388,19.95036164813504,0.7175869804498776,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,361.0,70.64249969748388,21.97576308585637,0.6889158342362693,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,362.0,70.64249969748388,24.48270497560587,0.6534281051711157,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,363.0,70.64249969748388,27.740910803063535,0.6073056457251669,gas-side mass transfer,True,True,True
-C2H5OH,normal,24,0.5,364.0,70.64249969748388,29.667413100016628,0.5800344944323466,heat-limited,True,True,True
-C2H5OH,normal,24,0.5,365.0,70.64249969748388,29.70774624512618,0.5794635471232582,heat-limited,True,True,True
-C2H5OH,normal,24,0.5,366.0,70.64249969748388,29.748368072202297,0.5788885132944714,heat-limited,True,True,True
-C2H5OH,normal,24,0.5,367.0,70.64249969748388,29.753928057461728,0.5788098073414935,boiling (heat-limited),True,True,True
-C2H5OH,normal,24,0.5,368.0,70.64249969748388,29.753928057461728,0.5788098073414935,boiling (heat-limited),True,True,True
-C2H5OH,normal,24,0.5,369.0,70.64249969748388,29.753928057461728,0.5788098073414935,boiling (heat-limited),True,True,True
-C2H5OH,normal,24,0.5,370.0,70.64249969748388,29.753928057461728,0.5788098073414935,boiling (heat-limited),True,True,True
-C2H5OH,normal,24,0.5,371.0,70.64249969748388,29.753928057461728,0.5788098073414935,boiling (heat-limited),True,True,True
-C2H5OH,normal,24,0.5,372.0,70.64249969748388,34.89352619005954,0.5060547639241826,boiling (heat-limited),True,True,True
-C2H5OH,normal,24,0.5,373.0,70.64249969748388,40.84431180155189,0.42181672539248116,boiling (heat-limited),True,True,True
-C2H5OH,normal,24,0.5,374.0,70.64249969748388,46.79509741304424,0.33757868686077985,boiling (heat-limited),False,True,True
-C2H5OH,normal,24,0.5,375.0,70.64249969748388,52.74588302453659,0.25334064832907854,boiling (heat-limited),False,True,True
-C2H5OH,normal,24,0.5,376.0,70.64249969748388,58.69666863602893,0.16910260979737723,boiling (heat-limited),False,True,True
-C2H5OH,normal,24,0.5,377.0,70.64249969748388,64.64745424752127,0.08486457126567615,boiling (heat-limited),False,False,True
-C2H5OH,normal,24,0.5,378.0,70.64249969748388,70.5982398590136,0.0006265327339748383,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,379.0,70.64249969748388,76.54902547050597,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,380.0,70.64249969748388,82.4998110819983,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,381.0,70.64249969748388,88.45059669349065,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,382.0,70.64249969748388,94.401382304983,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,383.0,70.64249969748388,100.35216791647532,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,384.0,70.64249969748388,106.30295352796767,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,385.0,70.64249969748388,112.25373913946002,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,386.0,70.64249969748388,118.20452475095237,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,387.0,70.64249969748388,124.15531036244471,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,388.0,70.64249969748388,130.10609597393704,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,389.0,70.64249969748388,136.0568815854294,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,390.0,70.64249969748388,142.00766719692172,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,391.0,70.64249969748388,147.95845280841405,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,392.0,70.64249969748388,153.90923841990642,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,393.0,70.64249969748388,159.86002403139878,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,394.0,70.64249969748388,165.81080964289112,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,395.0,70.64249969748388,171.76159525438345,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,396.0,70.64249969748388,177.7123808658758,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,397.0,70.64249969748388,183.66316647736815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,398.0,70.64249969748388,189.6139520888605,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,399.0,70.64249969748388,195.56473770035282,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,400.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,401.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,402.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,403.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,404.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,405.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,406.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,407.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,408.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,409.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,410.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,411.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,412.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,413.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,414.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,415.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,416.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,417.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,418.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,419.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,420.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,421.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,422.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,423.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,424.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,425.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,426.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,427.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,428.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,429.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,430.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,431.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,432.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,433.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,434.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,435.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,436.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,437.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,438.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,439.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
-C2H5OH,normal,24,0.5,440.0,70.64249969748388,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,350.0,70.26096622730245,9.78513903575718,0.8607315048287109,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,351.0,70.26096622730245,10.396889156460968,0.8520246772179902,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,352.0,70.26096622730245,11.062525291238586,0.8425509086304048,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,353.0,70.26096622730245,11.790045015586903,0.8321963723435751,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,354.0,70.26096622730245,12.589350418046896,0.8208201353605233,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,355.0,70.26096622730245,13.472905455462756,0.808244802499921,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,356.0,70.26096622730245,14.456703689641216,0.7942427429353578,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,357.0,70.26096622730245,15.561740712495814,0.7785151336781825,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,358.0,70.26096622730245,16.816344157874813,0.7606587973260719,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,359.0,70.26096622730245,18.26004045967528,0.7401111678339021,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,360.0,70.26096622730245,19.95036164813504,0.7160534117394104,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,361.0,70.26096622730245,21.975763085856375,0.6872265744999548,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,362.0,70.26096622730245,24.482704975605877,0.6515461387706872,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,363.0,70.26096622730245,27.740910803063535,0.6051732235887783,gas-side mass transfer,True,True,True
+C2H5OH,normal,27,0.5,364.0,70.26096622730245,29.667413100016628,0.5777539835697807,heat-limited,True,True,True
+C2H5OH,normal,27,0.5,365.0,70.26096622730245,29.70774624512618,0.5771799358833445,heat-limited,True,True,True
+C2H5OH,normal,27,0.5,366.0,70.26096622730245,29.748368072202297,0.5766017794864527,heat-limited,True,True,True
+C2H5OH,normal,27,0.5,367.0,70.26096622730245,29.753928057461728,0.5765226461417525,boiling (heat-limited),True,True,True
+C2H5OH,normal,27,0.5,368.0,70.26096622730245,29.753928057461728,0.5765226461417525,boiling (heat-limited),True,True,True
+C2H5OH,normal,27,0.5,369.0,70.26096622730245,29.753928057461728,0.5765226461417525,boiling (heat-limited),True,True,True
+C2H5OH,normal,27,0.5,370.0,70.26096622730245,29.753928057461728,0.5765226461417525,boiling (heat-limited),True,True,True
+C2H5OH,normal,27,0.5,371.0,70.26096622730245,29.753928057461728,0.5765226461417525,boiling (heat-limited),True,True,True
+C2H5OH,normal,27,0.5,372.0,70.26096622730245,34.89352619005954,0.5033725258321256,boiling (heat-limited),True,True,True
+C2H5OH,normal,27,0.5,373.0,70.26096622730245,40.84431180155189,0.41867705506047603,boiling (heat-limited),True,True,True
+C2H5OH,normal,27,0.5,374.0,70.26096622730245,46.79509741304424,0.3339815842888265,boiling (heat-limited),False,True,True
+C2H5OH,normal,27,0.5,375.0,70.26096622730245,52.74588302453659,0.249286113517177,boiling (heat-limited),False,True,True
+C2H5OH,normal,27,0.5,376.0,70.26096622730245,58.69666863602893,0.16459064274552748,boiling (heat-limited),False,True,True
+C2H5OH,normal,27,0.5,377.0,70.26096622730245,64.64745424752127,0.07989517197387819,boiling (heat-limited),False,False,True
+C2H5OH,normal,27,0.5,378.0,70.26096622730245,70.5982398590136,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,379.0,70.26096622730245,76.54902547050597,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,380.0,70.26096622730245,82.4998110819983,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,381.0,70.26096622730245,88.45059669349065,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,382.0,70.26096622730245,94.401382304983,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,383.0,70.26096622730245,100.35216791647532,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,384.0,70.26096622730245,106.30295352796767,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,385.0,70.26096622730245,112.25373913946002,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,386.0,70.26096622730245,118.20452475095237,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,387.0,70.26096622730245,124.15531036244471,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,388.0,70.26096622730245,130.10609597393704,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,389.0,70.26096622730245,136.0568815854294,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,390.0,70.26096622730245,142.00766719692172,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,391.0,70.26096622730245,147.95845280841405,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,392.0,70.26096622730245,153.90923841990642,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,393.0,70.26096622730245,159.86002403139878,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,394.0,70.26096622730245,165.81080964289112,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,395.0,70.26096622730245,171.76159525438345,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,396.0,70.26096622730245,177.7123808658758,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,397.0,70.26096622730245,183.66316647736815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,398.0,70.26096622730245,189.6139520888605,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,399.0,70.26096622730245,195.56473770035282,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,400.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,401.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,402.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,403.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,404.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,405.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,406.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,407.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,408.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,409.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,410.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,411.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,412.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,413.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,414.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,415.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,416.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,417.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,418.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,419.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,420.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,421.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,422.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,423.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,424.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,425.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,426.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,427.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,428.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,429.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,430.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,431.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,432.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,433.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,434.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,435.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,436.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,437.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,438.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,439.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
+C2H5OH,normal,27,0.5,440.0,70.26096622730245,198.35952038307815,0.0,boiling (heat-limited),False,False,False
 CH3OH,hot,14,0.5,350.0,83.85186618513558,18.570676335670726,0.778529957882288,gas-side mass transfer,True,True,True
 CH3OH,hot,14,0.5,351.0,83.85186618513558,20.402663699676392,0.756682055774053,gas-side mass transfer,True,True,True
 CH3OH,hot,14,0.5,352.0,83.85186618513558,22.63500577034481,0.7300596063017937,gas-side mass transfer,True,True,True
