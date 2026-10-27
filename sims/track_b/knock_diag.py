@@ -201,7 +201,7 @@ def idt(outp):
                 x = {}
                 g.set_equivalence_ratio(1.0, sp[f], "O2:1, N2:3.76", basis="mass")
                 g.TP = T, P_bar * 1e5
-                rr = ct.IdealGasReactor(g, clone=True); net = ct.ReactorNet([rr]); T0 = rr.T; tig = None
+                rr = ct.IdealGasReactor(g, clone=False); net = ct.ReactorNet([rr]); T0 = rr.T; tig = None  # OOM fix
                 while net.time < 0.2:
                     net.step()
                     if rr.T > T0 + 400: tig = net.time; break
