@@ -29,7 +29,7 @@ row's own M03 selection, ca50_used_deg).
 LABEL (Claude review Oct 26, Track B): knock engine 2: ranking validated, absolute klCR offset +2-2.5 CR vs M03 (gate
 FAILED). Not retuned. A 'knock ok' row means both knock engines are knock-free, NOT two-engine-validated knock.
 """
-import json, math, os, sys, time
+import gc, json, math, os, sys, time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -57,7 +57,7 @@ def m03(regime, outp, n):
     done = {(r["fuel"], r["CR"]) for r in jl(outp)}
     tasks = [dict(fuel=f, regime=regime, CR=c, w=0.0, mode="liquid", key=f"{f}|{regime}|{c}")
              for f in FUELS for c in CRS if (f, c) not in done]
-    with ProcessPoolExecutor(n) as ex, open(outp, "a") as fh:
+    with ProcessPoolExecutor(n, max_tasks_per_child=1) as ex, open(outp, "a") as fh:
         for r in ex.map(_m03, tasks):
             fh.write(json.dumps(r, default=str) + "\n"); fh.flush()
 
@@ -78,12 +78,13 @@ def lw_creck(tr, th0, th_end, T0, Y0, omega, node_deg=None, cap=None):
     for th in nodes:
         g.SPY = s0, float(np.interp(th, tr[:, 0], tr[:, 1])), Y0
         T = g.T
-        rr = ct.IdealGasReactor(g, clone=True); net = ct.ReactorNet([rr]); tig = None
+        rr = ct.IdealGasReactor(g, clone=False); net = ct.ReactorNet([rr]); tig = None  # no per-node mechanism clone (OOM fix 2026-10-26)
         while net.time < cap:
             net.step()
             if rr.T > T + 400: tig = net.time; break
         if tig is None: ncap += 1
         rate.append(None if tig is None else 1.0 / tig)
+        del net, rr; gc.collect()
     lw = lwu = 0.0; th1 = None
     for i in range(len(nodes) - 1):
         a, b = rate[i], rate[i + 1]
@@ -167,7 +168,7 @@ def split(rowsp, outp, n, ca50, full=True, crs=None):
     done = {(x["fuel"], x["CR"]) for x in jl(outp)}
     tasks = [(r, ca50, full) for r in rows if (r["fuel"], r["CR"]) not in done]
     print(f"split: {len(tasks)} rows, CA50 {ca50}, end-gas {'full' if full else 'skipped'}", flush=True)
-    with ProcessPoolExecutor(n) as ex, open(outp, "a") as fh:
+    with ProcessPoolExecutor(n, max_tasks_per_child=1) as ex, open(outp, "a") as fh:
         for x in ex.map(_sp, tasks):
             fh.write(json.dumps(x, default=str) + "\n"); fh.flush()
             print(x["fuel"], x["regime"], x["CR"], round(x["ca50_test"], 2), "LW M03/DE/CRECK",
@@ -182,7 +183,7 @@ def offsets(rowsp, outp, n, dts, ca50s):
     done = {(x["fuel"], x["CR"], x["ca50_test"], x["dT_K"]) for x in jl(outp)}
     tasks = [(r, c, d) for c in ca50s for d in dts for r in rows if (r["fuel"], r["CR"], c, d) not in done]
     print(f"{len(tasks)} end-gas runs", flush=True)
-    with ProcessPoolExecutor(n) as ex, open(outp, "a") as fh:
+    with ProcessPoolExecutor(n, max_tasks_per_child=1) as ex, open(outp, "a") as fh:
         for x in ex.map(_eg, tasks):
             fh.write(json.dumps(x, default=str) + "\n"); fh.flush()
             print(x["fuel"], x["regime"], x["CR"], x["ca50_test"], x["dT_K"], x.get("knock"), x["status"],
