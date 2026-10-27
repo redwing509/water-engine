@@ -1,0 +1,14 @@
+{
+ "fuel": "CH3OH",
+ "regime": "hot",
+ "water_mode": "humid_evap",
+ "best_w": 0.235,
+ "steps_taken": 235,
+ "stop_reason": "M03-CRN gain None not positive",
+ "best_eta": 0.36635619509378275,
+ "best_crn": 0.3664369537929091,
+ "dry_eta": 0.35017838014147257,
+ "dry_crn": 0.35032160564140613,
+ "cap_raised_to": 400,
+ "sec": 3573.2326114177704
+}

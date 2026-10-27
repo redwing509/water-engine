@@ -1,0 +1,120 @@
+{
+ "PRF87/normal": {
+  "CR": 9.0,
+  "eta": 0.3782802612471705,
+  "eta_crn": 0.37852837065404166,
+  "T_IVC_K": 300.25067777047826,
+  "T_intake_K": 320.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ },
+ "PRF87/hot": {
+  "CR": 7.0,
+  "eta": 0.3460771057393196,
+  "eta_crn": 0.3457429176991685,
+  "T_IVC_K": 372.314638421375,
+  "T_intake_K": 400.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ },
+ "PRF91/normal": {
+  "CR": 10.0,
+  "eta": 0.38703733078654057,
+  "eta_crn": null,
+  "klCR": 10.0,
+  "n_eligible": 6,
+  "n_scan": 26,
+  "source": "new DEI scan here (dryevap CR grid, LW, rule = best eligible eta)"
+ },
+ "PRF91/hot": {
+  "CR": 8.0,
+  "eta": 0.35852431801732587,
+  "eta_crn": null,
+  "klCR": 8.0,
+  "n_eligible": 3,
+  "n_scan": 26,
+  "source": "new DEI scan here (dryevap CR grid, LW, rule = best eligible eta)"
+ },
+ "PRF97/normal": {
+  "CR": 11.0,
+  "eta": 0.3965342366352684,
+  "eta_crn": null,
+  "klCR": 11.0,
+  "n_eligible": 8,
+  "n_scan": 26,
+  "source": "new DEI scan here (dryevap CR grid, LW, rule = best eligible eta)"
+ },
+ "PRF97/hot": {
+  "CR": 9.0,
+  "eta": 0.37000337573540965,
+  "eta_crn": null,
+  "klCR": 9.0,
+  "n_eligible": 4,
+  "n_scan": 26,
+  "source": "new DEI scan here (dryevap CR grid, LW, rule = best eligible eta)"
+ },
+ "E10/normal": {
+  "CR": 11.0,
+  "eta": 0.3977652439766359,
+  "eta_crn": null,
+  "klCR": 11.0,
+  "n_eligible": 8,
+  "n_scan": 26,
+  "source": "new DEI scan here (dryevap CR grid, LW, rule = best eligible eta)"
+ },
+ "E10/hot": {
+  "CR": 9.0,
+  "eta": 0.3708584257821223,
+  "eta_crn": null,
+  "klCR": 9.0,
+  "n_eligible": 4,
+  "n_scan": 26,
+  "source": "new DEI scan here (dryevap CR grid, LW, rule = best eligible eta)"
+ },
+ "E85/normal": {
+  "CR": 13.5,
+  "eta": 0.41797426551808875,
+  "eta_crn": 0.41826392464013407,
+  "T_IVC_K": 291.5224637162861,
+  "T_intake_K": 320.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ },
+ "E85/hot": {
+  "CR": 12.5,
+  "eta": 0.41345468211048675,
+  "eta_crn": 0.4138292008795575,
+  "T_IVC_K": 317.8804466916067,
+  "T_intake_K": 400.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ },
+ "CH3OH/normal": {
+  "CR": 22.0,
+  "eta": 0.44903537100965873,
+  "eta_crn": 0.4489407030664146,
+  "T_IVC_K": 291.0653304560814,
+  "T_intake_K": 320.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ },
+ "CH3OH/hot": {
+  "CR": 21.0,
+  "eta": 0.45870214443076185,
+  "eta_crn": 0.4586793953079778,
+  "T_IVC_K": 291.06533045605096,
+  "T_intake_K": 400.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ },
+ "C2H5OH/normal": {
+  "CR": 24.0,
+  "eta": 0.4558182715415778,
+  "eta_crn": 0.45554730165301005,
+  "T_IVC_K": 294.03995490577614,
+  "T_intake_K": 320.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ },
+ "C2H5OH/hot": {
+  "CR": 24.0,
+  "eta": 0.4657077945645476,
+  "eta_crn": 0.465458352867259,
+  "T_IVC_K": 304.14913774792444,
+  "T_intake_K": 400.0,
+  "source": "results/dryevap/baselines.csv (DEI, rule, LW)"
+ }
+}
