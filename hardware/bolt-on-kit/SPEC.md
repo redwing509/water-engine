@@ -8,7 +8,7 @@ engine ordered from the factory at a raised compression ratio (see `ENGINE-ORDER
 - At a fixed stock CR the fair-baseline model gain is about +1 to +2 pp efficiency (PRF91 hot ~+2.1 pp at W/F 0.43, R-WE-22 cap W/F <= 0.6).
 - With the factory CR raised to the wet knock limit, the old PR 10 numbers (+7 to +8 pp) were vs an unfair dry baseline. Against the
   fair dry baseline (dry also gets fuel-evap cooling AND its own knock-limited CR) the PR 10 rows were -1 to -3 pp with power loss.
-  The re-scan (box jobs 172-175) finds the real wet optimum CR per fuel; see `sims/pr10_fair_highcr/RESULT.md` when done.
+  The re-scan finds the wet optimum CR per fuel; see `sims/pr10_fair_highcr/RESULT.md` (done 2026-10-29) and ENGINE-ORDER-SPEC.md section 2.
 - High CR cannot run dry at full load/advance: section 5 failsafe is mandatory.
 - Warranty: a factory-modified engine + water injection is outside normal warranty; agree terms with the maker.
 - Emissions: EPA Phase 3 / CARB SORE certification covers the engine as certified; a modified CR or added injection needs the maker's
