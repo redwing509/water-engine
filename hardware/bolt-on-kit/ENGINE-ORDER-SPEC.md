@@ -14,14 +14,23 @@ Rule: factory CR = model knock-limited CR (klCR, best wet case, fair dry-DEI bas
 |---|---|---|---|---|
 | PRF91 / pump 91 | 8.5 (9.0 if liquid injection) | 8.5 +/- 0.2 | hot w0.3 humid klCR 9.5 (liquid 10.0), normal w0.3 klCR 14; d_eta +2.75 pp hot, cost/mile -6.6 % | 6.5 (hot dry klCR 7.5) |
 | E85 | 18 | 18 +/- 0.2 | hot w0.3 klCR 19 (normal 22, scan edge); d_eta +4.44 pp, cost/mile -8.8 % | 11 (hot dry klCR 12) |
-| Methanol (M100) | >= 31 (no knock found up to CR 32, scan edge) | James to decide; model does not limit it | hot w0.15 humid +2.03 pp, cost/mile -3.9 %; dry klCR >= 28 (scan edge) | >= 27 |
-| Ethanol (E100) | >= 31 at w0.3 (scan edge) | James to decide; model does not limit it | hot w0.3 humid +3.72 pp, cost/mile -6.2 %; w0.15 klCR only 22 | 15 (hot dry klCR 16) |
+| Methanol (M100) | >= 31 (no knock found up to CR 32, scan edge) | **32 +/- 0.2** (James 2026-10-29: cap at scan top) | hot w0.15 humid +2.03 pp, cost/mile -3.9 %; dry klCR >= 28 (scan edge) | >= 27 |
+| Ethanol (E100) | >= 31 at w0.3 (scan edge) | **32 +/- 0.2** (James 2026-10-29: cap at scan top); WATER REQUIRED | hot w0.3 humid +3.72 pp, cost/mile -6.2 %; w0.15 klCR only 22 | 15 (hot dry klCR 16) |
 Notes:
 - The alcohol gains hold only under the full-evaporation assumption (injected water fully evaporates); humid and liquid water give identical
   results wherever both were run (RESULT.md flags 1-2). Only PRF91 hot duty differs (liquid about 0.5 pp better, +0.5 CR).
 - For methanol and ethanol the model's knock limit sits at the top of the scan, so the order CR must be capped by things the model does not
   capture: hot-spot preignition in an air-cooled head, peak cylinder pressure (section 3), and the water-out event (section 6). Ethanol at
   CR > 16 is past its dry knock limit, so it must never run dry at full load.
+
+**CR 32 ALCOHOL WARNINGS (decided by James 2026-10-29, 21:19 PDT; CR 32 = top of the model scan, NOT a found knock limit):**
+- **ETHANOL MUST NEVER RUN DRY AT FULL LOAD.** Its dry knock limit is CR 16 (hot duty); at CR 32 it relies on water injection (w0.3) to avoid knock.
+- **Methanol and ethanol at CR 32 require a water-out interlock and derate:** the section 6 failsafe is mandatory (KNOCK_RETARD + FUEL_LIMIT
+  asserted on no confirmed water flow; load capped at 60 % with -6 deg retard), and no alcohol engine ships without it bench-verified.
+- **Preignition and peak cylinder pressure limits are NOT in the model and must be checked on the bench** (pressure transducer or
+  knock/preignition sensing, hot-duty soak) before any order; if either limits first, the order CR drops to the bench-safe value.
+- Gains assume the injected water fully evaporates (model assumption).
+
 - Specify CR by fuel, +/- 0.2 tolerance, measured by cc'ing the chamber.
 
 ## 3. Mechanical changes
