@@ -36,5 +36,5 @@ Change the oil and take a sample. Borescope the valves and bore for corrosion or
 
 ### D1c - duty cap, decay check and overspeed (CR-012/013)
 1. Command 100 % water: scope the pump PWM and confirm the duty is <= 85 %.
-2. At max duty, block the nozzle: the line pressure stays above 25 psi, so the unit must cut water and keep dry protection on within 2 s.
+2. At max duty, block the nozzle: the line pressure stays above 25 psi, so dry protection must stay on (never released) and the unit must fault ("water not confirmed": water off) within WATER_CONFIRM_TIMEOUT_MS = 3 s (+ <=1 s pressure window).
 3. Simulate rpm > RPM_MAX: the state must be ARMED_DRY ("overspeed") and the water must be off.
