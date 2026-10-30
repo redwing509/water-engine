@@ -86,6 +86,7 @@ static float readKnock() {
 static void failsafe(bool dryProtect) {
   digitalWrite(PIN_RETARD_RLY, dryProtect ? LOW : HIGH); digitalWrite(PIN_FUEL_LIM_RLY, dryProtect ? LOW : HIGH); }
 static void waterOff() { ledcWrite(PIN_METER_SOL, 0); digitalWrite(PIN_PUMP_EN, LOW); digitalWrite(PIN_SHUTOFF, LOW); }
+static uint32_t unconfMs = 0;   // CR-013: start of the current unconfirmed-delivery streak (0 = none); reset whenever not INJECTING
 static void fault(const char* why) { st = FAULT; faultWhy = why; waterOff(); failsafe(HIGH_CR_ENGINE); }
 
 // KILL latch that survives watchdog/panic/software resets (RTC no-init RAM); only a power-on reset clears it
@@ -167,12 +168,11 @@ void loop() {
     if (delivered && levelOk) { if (!waterOkMs) waterOkMs = now; } else waterOkMs = 0;
     // CR-013: commanded water that stays UNCONFIRMED for WATER_CONFIRM_TIMEOUT_MS (blocked nozzle, dead pump, bad sensor)
     // -> latch a fault: water off + dry protection on until the engine stops.
-    static uint32_t unconfMs = 0;
     if (pump > 0 && !delivered) { if (!unconfMs) unconfMs = now; else if (now - unconfMs > WATER_CONFIRM_TIMEOUT_MS) { unconfMs = 0; fault("water not confirmed"); } }
     else unconfMs = 0;
     // dry-protect released only after 2 s of CONFIRMED delivery, a verified TPIC link and no persistent knock
     failsafe(!(waterOkMs && now - waterOkMs > 2000 && knockI < KNOCK_THRESH && (KNOCK_FRONTEND != KNOCK_FRONTEND_TPIC || tpicOk)));
-  } else { waterOff(); waterOkMs = 0; failsafe(HIGH_CR_ENGINE); }
+  } else { waterOff(); waterOkMs = 0; unconfMs = 0; failsafe(HIGH_CR_ENGINE); }
   if (knockI > 0.95f && st != OFF) { killLatch = KILL_MAGIC; digitalWrite(PIN_KILL_RLY, HIGH); }  // heavy knock despite retard -> stop engine
   // latch lives in RTC no-init RAM: survives WDT/panic/soft reboot, cleared only by a power cycle (operator reset)
 
