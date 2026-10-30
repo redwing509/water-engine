@@ -1,6 +1,6 @@
 # Bench-test procedure (bench-spec rev)
 The compression ratios come from ENGINE-ORDER-SPEC.md: **PRF91 9.0, E85 12.5, methanol 14, ethanol 14**. They will change when the high-CR results come in.
-Equipment: load — the 5 kW load bank T3 is PREFERRED; if it is unavailable, use OPTIONAL (a) a space-heater bank, (b) a DIY water-barrel element box, or (c) a rented or partner bank (see `LOAD-OPTIONS.md`). Also: true-power kWh meter (T2, logs every run), plug-in power meter (T4, cross-check, required with every load option), 0.1 g scale under the fuel tank (T1), the kit logger (SD CSV).
+Equipment: load — the 5 kW load bank T3 is PREFERRED; if it is unavailable, use OPTIONAL (a) a space-heater bank, (b) a DIY water-barrel element box, or (c) a rented or partner bank (see `LOAD-OPTIONS.md`). Also: true-power kWh meter (T2, logs every run), plug-in power meter (T4, required with options (a)/(b), one step at a time, never on a bank feed), 0.1 g scale under the fuel tank (T1), the kit logger (SD CSV).
 All settings in the firmware are model-seeded, not measured. Nothing below counts as a result until it has been run and logged.
 
 ## A. Static (engine off)
@@ -14,9 +14,9 @@ All settings in the firmware are model-seeded, not measured. Nothing below count
 - A6 Knock chain: tap the block near the sensor with a 6 mm rod and confirm the logged `knock` rises. Set `TPIC_GAIN` so idle noise is 0.2-0.3.
 
 ## B. Running, dry baseline
-- B0 Load check: record which load option is in use. At each step, confirm T4 and T2 agree within 3 %. Steady-state the load before every measuring window (T2 kW within 2 % over 5 min; 10 min soak for heaters or elements) as described in `LOAD-OPTIONS.md`.
+- B0 Load check: record which load option is in use. For (a)/(b), at each heater/element step confirm T4 and T2 agree within 3 % (T4 one step at a time; never on the T3/rental feed). Steady-state the load before every measuring window (T2 kW within 2 % over 5 min; 10 min soak for heaters or elements) as described in `LOAD-OPTIONS.md`.
 - B1 Warm up 10 min. Confirm the state goes OFF→WARMUP→ARMED_DRY, then INJECTING once the load is above the gates.
-- B2 Dry, at the factory timing with retard asserted: 25/50/75/100 % rated load, 3 × 10 min each. Measure each window only after the load is steady. Log kW every 10 s and delivered kWh (T2 end − start), fuel g (T1), and report g/kWh from delivered kWh. Repeat any window where kW moves more than ±3 % or a thermostat cycles. Also log EGT, knock, T/RH and MAP.
+- B2 Dry, at the factory timing with retard asserted: 25/50/75/100 % rated load (with option (a)/(b), use the nearest step combination from `LOAD-OPTIONS.md` and report the measured kW), 3 × 10 min each. Measure each window only after the load is steady. Log kW every 10 s and delivered kWh (T2 end − start), fuel g (T1), and report g/kWh from delivered kWh. Repeat any window where kW moves more than ±3 % or a thermostat cycles. Also log EGT, knock, T/RH and MAP.
 
 ## C. Running, wet
 - C1 Enable water at the same load points. The W/F steps for PRF91 are 0.1, 0.2 and 0.3. For E85, methanol and ethanol, step in 0.15 increments up to the `WF_CAP`.
