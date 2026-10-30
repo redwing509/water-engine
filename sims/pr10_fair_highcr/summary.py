@@ -64,5 +64,6 @@ for fuel, v in sorted(rec.items()):
     bad = [] if fcr is not None else (bad0 or ["no CR"])
     if bad: out.append(f"- {fuel}: factory CR WITHHELD - no CR <= {cap} has passing evidence in both regimes ({'; '.join(bad)}) (per-regime best: {regs})"); continue
     edge = " (scan edge, true limit higher)" if v[0][4] else ""
-    out.append(f"- {fuel}: best {v[0][2]} ({v[0][3]}) klCR {v[0][1]}{edge} -> factory CR {fcr}{'' if fcr == cap else f' (klCR-1 = {cap} has no passing evidence: {"; ".join(bad0)})'} (per-regime best: {regs}; at CR {fcr}: {'; '.join(ev)})")
+    note = "" if fcr == cap else " (klCR-1 = %d has no passing evidence: %s)" % (cap, "; ".join(bad0))
+    out.append(f"- {fuel}: best {v[0][2]} ({v[0][3]}) klCR {v[0][1]}{edge} -> factory CR {fcr}{note} (per-regime best: {regs}; at CR {fcr}: {'; '.join(ev)})")
 open(f"{H}/RESULT.md", "w").write("\n".join(out) + "\n"); print("\n".join(out))
