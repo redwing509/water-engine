@@ -1,5 +1,9 @@
 // Water-injection intake spacer, parametric (Grok Bot 2026-10-29). Sits between carb/throttle body and intake port
-// (or between air filter and carb on engines with no room). Print in ASA or PA12-CF (see SPEC.md 2.2). Units mm.
+// (or between air filter and carb on engines with no room). Units mm. Carries the Snow SNO-N0050 nozzle (1/8-27 NPT).
+// PRINT SETTINGS (bench-spec rev): Polymaker PolyLite ASA (BOM P1), 0.4 mm nozzle, 0.2 mm layers, 6 perimeters, 100 % infill,
+// 255 C nozzle / 105 C bed, enclosure closed, fan <= 20 %, no supports needed if printed flange-face down.
+// Post: tap nozzle boss 1/8-27 NPT by hand (pilot printed 8.7 mm = 11/32" tap drill), thread sealant rated for methanol (PTFE paste).
+// Alternate material PA12-CF (drier, 0.6 mm hardened nozzle) for engines where the carb flange exceeds ~85 C.
 /* [Bore / flange] */
 bore_d        = 24;    // venturi-side bore, match carb outlet (GX200 ~19-21, 420cc ~24, EFI TB 28-32)
 thickness     = 12;    // spacer thickness; >=10 for nozzle boss
@@ -9,10 +13,10 @@ stud_spacing  = 46;    // centre-to-centre of the two carb studs
 stud_d        = 6.5;   // M6 clearance
 gasket_groove = true;  // 1.6 mm O-ring/gasket groove on both faces
 /* [Nozzle] */
-nozzle_type   = "mister";   // "mister" = 16/20 mm ultrasonic disc pocket upstream; "nozzle" = 1/8 NPT / M8 fine nozzle boss
+nozzle_type   = "nozzle";   // 1/8 NPT nozzle boss (Snow SNO-N0050). Ultrasonic mister option dropped for the bench kit.
 nozzle_angle  = 30;    // deg from bore axis, pointing downstream
-boss_d        = 14;
-nozzle_thread_d = 8.0; // M8x1 tap drill 7.0 -> print 7.0, tap after; or heat-set brass insert
+boss_d        = 16;    // >= 2x wall around 1/8 NPT
+nozzle_thread_d = 9.7; // pilot = nozzle_thread_d-1 = 8.7 mm -> tap 1/8-27 NPT
 egt_port      = false; // spacer does not carry EGT (EGT goes in exhaust flange)
 temp_rh_port_d = 0;    // 0 = none; else hole for SHT/BME probe upstream of nozzle
 $fn = 72;
