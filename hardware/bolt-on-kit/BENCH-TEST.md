@@ -33,3 +33,8 @@ All settings in the firmware are model-seeded, not measured. Nothing below count
 
 ## E. After the test
 Change the oil and take a sample. Borescope the valves and bore for corrosion or wash-down after 20 h. Archive the SD logs with the run sheet.
+
+### D1c - duty cap, decay check and overspeed (CR-012/013)
+1. Command 100 % water: scope the pump PWM and confirm the duty is <= 85 %.
+2. At max duty, block the nozzle: the line pressure stays above 25 psi, so the unit must cut water and keep dry protection on within 2 s.
+3. Simulate rpm > RPM_MAX: the state must be ARMED_DRY ("overspeed") and the water must be off.

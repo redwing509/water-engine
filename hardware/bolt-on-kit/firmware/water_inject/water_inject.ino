@@ -27,12 +27,12 @@ volatile uint32_t lastPulseUs = 0, periodUs = 0, flowPulses = 0;
 void IRAM_ATTR onIgn() { uint32_t t = micros(); if (t - lastPulseUs > 4000) { periodUs = t - lastPulseUs; lastPulseUs = t; } }
 void IRAM_ATTR onFlow() { flowPulses = flowPulses + 1; }
 // ---- knock window: 20 kHz tick opens/closes TPIC8101 INT/HOLD at crank-angle positions derived from the last period ----
-volatile uint32_t winStartUs = 0, winEndUs = 0; volatile bool winOpen = false, knockReady = false;
+volatile uint32_t winStartUs = 0, winEndUs = 0; volatile bool winOpen = false, knockReady = false, tpicBusy = false;
 hw_timer_t* tick = nullptr;
 void ARDUINO_ISR_ATTR onTick() {
   uint32_t p = periodUs; if (!p) return; uint32_t dt = micros() - lastPulseUs;
   uint32_t s = p * KNOCK_WIN_START_DEG / 360, e = p * (KNOCK_WIN_START_DEG + KNOCK_WIN_LEN_DEG) / 360;
-  bool open = dt >= s && dt < e;
+  bool open = dt >= s && dt < e && !tpicBusy;   // CR-014: never raise INT/HOLD while an SPI read is in progress
   if (open != winOpen) { winOpen = open; if (open) GPIO.out_w1ts = (1UL << PIN_KNOCK_INTHOLD); else GPIO.out_w1tc = (1UL << PIN_KNOCK_INTHOLD); /* ISR-safe direct register write */ if (!open) knockReady = true; }
 }
 static const SPISettings TPIC_SPI(1000000, MSBFIRST, SPI_MODE1);
@@ -68,8 +68,13 @@ static float readKnock() {
 #if KNOCK_FRONTEND == KNOCK_FRONTEND_TPIC
   // TPIC8101 advanced mode (SLIS110C): the response comes on the NEXT transfer. Prescaler cmd -> response D7..D0;
   // channel cmd -> response D9 D8 in bits 7..6 (rest 0). Re-sending prescaler + channel leaves the setup unchanged.
-  if (!knockReady) return lastKnock; knockReady = false;
+  // CR-014: the TPIC ignores SPI while INT/HOLD is high, so read only in the HOLD interval. tpicBusy is set first, so the
+  // timer ISR cannot open the next window mid-transfer (that window is skipped; knockReady is set again after the next one).
+  if (!knockReady) return lastKnock;
+  tpicBusy = true; if (winOpen) { tpicBusy = false; return lastKnock; }   // window already open: wait for it to close
+  knockReady = false;
   tpicXfer(TPIC_PRESCALER); uint8_t lo = tpicXfer(TPIC_CHANNEL), hi = tpicXfer(TPIC_CHANNEL);
+  tpicBusy = false;
   lastKnock = ((((hi >> 6) & 0x03) << 8) | lo) / 1023.0f; return lastKnock;
 #else // ANALOG budget front end: band-pass + envelope detector into ADC, peak over 2 ms
   int pk = 0; for (int k = 0; k < 40; k++) { int v = analogRead(PIN_KNOCK_ADC); if (v > pk) pk = v; delayMicroseconds(50); }
@@ -132,6 +137,7 @@ void loop() {
     else if (tIn < INTAKE_FREEZE_C) { st = ARMED_DRY; faultWhy = "freeze"; }
     else if (!levelOk) { st = ARMED_DRY; faultWhy = "low water"; }
     else if (rpm < RPM_MIN_WATER || mapKpa < MAP_MIN_KPA) { st = ARMED_DRY; faultWhy = "idle/light load"; }
+    else if (rpm > RPM_MAX) { st = ARMED_DRY; faultWhy = "overspeed"; }   // CR-012: outside the metering map -> water off, dry-protect
     else if (now - runStartMs < WARMUP_S * 1000UL || egtC < EGT_MIN_C) { st = WARMUP; faultWhy = "warmup"; }
     else { st = INJECTING; faultWhy = ""; }
   }
@@ -153,10 +159,11 @@ void loop() {
     // metering: pump holds constant pressure; solenoid duty = ml/min / calibrated full-duty flow (capped at 100 %)
     pump = constrain(mlMin / METER_ML_MIN_FULL, 0.0f, 1.0f);
     if (pump < METER_DUTY_MIN) pump = 0;
+    if (HIGH_CR_ENGINE) pump = min(pump, METER_DUTY_MAX_CONFIRMED);   // CR-013: keep off-time so decay can always be checked
     digitalWrite(PIN_SHUTOFF, HIGH); digitalWrite(PIN_PUMP_EN, HIGH); ledcWrite(PIN_METER_SOL, (int)(pump * 1023));
     // CR-001: delivery is CONFIRMED only by the nozzle-line transducer (S9): valid signal, pressure reaches WATER_PSI_ON_MIN
-    // and (unless duty is near 100 %) decays below WATER_PSI_OFF_MAX between pulses, both within the last 1 s window.
-    bool delivered = psiValid && pump > 0 && psiPk1s >= WATER_PSI_ON_MIN && (pump >= WATER_DUTY_NO_DECAY || psiLo1s <= WATER_PSI_OFF_MAX);
+    // and ALWAYS decays below WATER_PSI_OFF_MAX (CR-013: no high-duty bypass) between pulses, both within the last 1 s window.
+    bool delivered = psiValid && pump > 0 && psiPk1s >= WATER_PSI_ON_MIN && psiLo1s <= WATER_PSI_OFF_MAX;
     if (delivered && levelOk) { if (!waterOkMs) waterOkMs = now; } else waterOkMs = 0;
     // dry-protect released only after 2 s of CONFIRMED delivery, a verified TPIC link and no persistent knock
     failsafe(!(waterOkMs && now - waterOkMs > 2000 && knockI < KNOCK_THRESH && (KNOCK_FRONTEND != KNOCK_FRONTEND_TPIC || tpicOk)));

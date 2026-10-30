@@ -43,3 +43,8 @@ Notes
 
 ## IO0 / BOOT button (WE18-PA-001)
 - GPIO0 is the ESP32 strapping pin: LOW at reset = download mode, so the controller would not run and the NC relays would leave retard + fuel limit asserted. Use only the DevKitC's own BOOT button for test logging. Do NOT wire any external switch, pull-down, relay or long lead to IO0, and never hold BOOT while powering up.
+
+### CR-012 / CR-013 / CR-014 safety limits (2026-10-29)
+- **Duty cap 85 % (CR-013):** whenever delivery must be confirmed (`HIGH_CR_ENGINE 1`), metering duty is capped at `METER_DUTY_MAX_CONFIRMED` = 0.85, so every PWM period has >= 15 % off-time and the nozzle-line pressure must ALWAYS decay below `WATER_PSI_OFF_MAX` (blocked-nozzle check). There is no high-duty bypass any more. Max metered flow falls to 85 % of `METER_ML_MIN_FULL`. If delivery cannot be confirmed (bad sensor, no peak, no decay), water is cut and dry protection stays on.
+- **Overspeed (CR-012):** above `RPM_MAX` the controller goes ARMED_DRY (water off, dry protection on).
+- **TPIC read timing (CR-014):** the knock result is read over SPI only while INT/HOLD is low. The next integration window is held off until the read finishes.

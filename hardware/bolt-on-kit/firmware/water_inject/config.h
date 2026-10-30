@@ -49,7 +49,7 @@ static const float ENGINE_CR[4] = {9.0f, 12.5f, 14.0f, 14.0f};
 static const float WF_CAP[4]   = {0.43f, 0.45f, 0.60f, 0.55f};
 static const float FUEL_DENS[4]= {0.745f, 0.781f, 0.792f, 0.789f}; // kg/L
 #define RPM_MIN_WATER    2400  // no water below (cranking / idle-down)
-#define RPM_MAX          4200
+#define RPM_MAX          4200  // CR-012: above this -> no water, dry-protect (map is not valid there)
 #define WARMUP_S         90    // engine run time before water allowed
 #define EGT_MIN_C        450   // no water below (cold engine)
 #define EGT_MAX_C        780   // overtemp -> add water / derate
@@ -64,5 +64,6 @@ static const float FUEL_DENS[4]= {0.745f, 0.781f, 0.792f, 0.789f}; // kg/L
 #define WATER_PSI_FULL     100.0f // transducer span, psi at 4.5 V
 #define WATER_PSI_ON_MIN   50.0f  // nozzle-line peak over 1 s must reach this while metering (pump ~80 psi). BENCH-CALIBRATE (B3)
 #define WATER_PSI_OFF_MAX  25.0f  // and the 1 s minimum must fall below this (proves the nozzle is flowing, not blocked). BENCH-CALIBRATE
-#define WATER_DUTY_NO_DECAY 0.90f // at >= this duty the off-time is too short to check decay; peak check only
+#define METER_DUTY_MAX_CONFIRMED 0.85f // CR-013: duty cap whenever confirmation is needed (HIGH_CR_ENGINE): every PWM period keeps
+                                       // >= 15 % off-time so the line-pressure decay (blocked-nozzle check) is ALWAYS tested
 #define HIGH_CR_ENGINE   1     // dry operation needs retard + fuel limit (SPEC 5)
