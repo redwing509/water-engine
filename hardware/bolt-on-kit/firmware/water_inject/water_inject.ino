@@ -77,6 +77,10 @@ static void failsafe(bool dryProtect) {
 static void waterOff() { ledcWrite(PIN_METER_SOL, 0); digitalWrite(PIN_PUMP_EN, LOW); digitalWrite(PIN_SHUTOFF, LOW); }
 static void fault(const char* why) { st = FAULT; faultWhy = why; waterOff(); failsafe(HIGH_CR_ENGINE); }
 
+// KILL latch that survives watchdog/panic/software resets (RTC no-init RAM); only a power-on reset clears it
+static RTC_NOINIT_ATTR uint32_t killLatch;
+static const uint32_t KILL_MAGIC = 0x4B494C4CUL;
+
 void setup() {
   Serial.begin(115200);
   pinMode(PIN_IGN_PICKUP, INPUT); attachInterrupt(PIN_IGN_PICKUP, onIgn, FALLING);
@@ -86,6 +90,8 @@ void setup() {
     { pinMode(p, OUTPUT); digitalWrite(p, LOW); }
   for (int p : {PIN_CS_EGT, PIN_CS_SD, PIN_CS_KNOCK}) { pinMode(p, OUTPUT); digitalWrite(p, HIGH); }
   ledcAttach(PIN_METER_SOL, METER_PWM_HZ, 10); ledcWrite(PIN_METER_SOL, 0);
+  if (esp_reset_reason() == ESP_RST_POWERON) killLatch = 0;
+  else if (killLatch == KILL_MAGIC) { digitalWrite(PIN_KILL_RLY, HIGH); faultWhy = "kill latched before reset"; }
   failsafe(HIGH_CR_ENGINE);                       // boot state = dry-protect (retard + limit) until water proven
   SPI.begin(PIN_SPI_SCK, PIN_SPI_MISO, PIN_SPI_MOSI);
   egt.begin(); Wire.begin(PIN_I2C_SDA, PIN_I2C_SCL); sht.begin();
@@ -137,9 +143,9 @@ void loop() {
     if (pump > 0 && levelOk) { if (!waterOkMs) waterOkMs = now; } else waterOkMs = 0;
     // dry-protect released only after 2 s of confirmed flow and no persistent knock
     failsafe(!(waterOkMs && now - waterOkMs > 2000 && knockI < KNOCK_THRESH));
-    if (knockI > KNOCK_THRESH && trim >= 1.25f) failsafe(true);  // knock even at max water -> retard + limit
   } else { waterOff(); waterOkMs = 0; failsafe(HIGH_CR_ENGINE); }
-  if (knockI > 0.95f && st != OFF) digitalWrite(PIN_KILL_RLY, HIGH);   // heavy knock despite retard -> stop engine (latched until reset)
+  if (knockI > 0.95f && st != OFF) { killLatch = KILL_MAGIC; digitalWrite(PIN_KILL_RLY, HIGH); }  // heavy knock despite retard -> stop engine
+  // latch lives in RTC no-init RAM: survives WDT/panic/soft reboot, cleared only by a power cycle (operator reset)
 
   static uint32_t lastLog = 0;
   if (now - lastLog >= (testMode ? 1000 : 5000)) { lastLog = now;

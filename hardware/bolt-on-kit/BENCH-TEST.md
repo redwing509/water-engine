@@ -4,6 +4,7 @@ Equipment: load bank (T3 or the partner lab's own), true-power kWh meter (T2), 0
 All settings in the firmware are model-seeded, not measured. Nothing below counts as a result until it has been run and logged.
 
 ## A. Static (engine off)
+- A0 E-stop: before every run, with the engine idling, press the E-stop (E3). The engine must stop within 1 s and the pump and valve must de-energise. Twist to release; the engine must not restart on its own. Do not run without a working E-stop within the operator's reach.
 - A1 Power-up: with the controller unpowered, confirm RETARD and FUEL_LIMIT are asserted (NC continuity) and KILL is open. After boot they stay asserted.
 - A2 MAP: compare the logged MAP with the local station pressure, then adjust the offset in the `mapKpa` line to within ±1 kPa.
 - A3 Flow calibration: run the pump into a beaker on the scale for 60 s at duty 100/50/25/10 %. Set `METER_ML_MIN_FULL` from 100 % and
@@ -26,7 +27,7 @@ All settings in the firmware are model-seeded, not measured. Nothing below count
 - D1 Pull the tank feed (or let it run dry). The level sensor trips, and RETARD and FUEL_LIMIT must assert within 0.5 s, with no knock rise.
 - D2 Unplug the controller's 12 V. The relays drop, so retard and limit are asserted, and the NC valve closes (no spray).
 - D3 Disconnect the EGT thermocouple. The firmware must latch FAULT, turn the water off and assert dry-protect.
-- D4 Induce knock (advance or fuel). The trim rises, and at max trim the retard asserts. Confirm KILL fires only at knock > 0.95.
+- D4 Induce knock (advance or fuel). The trim rises, and at max trim the retard asserts. Confirm KILL fires only at knock > 0.95. Then press the board EN (reset) button: KILL must stay asserted after the reboot and clear only after a power cycle.
 
 ## E. After the test
 Change the oil and take a sample. Borescope the valves and bore for corrosion or wash-down after 20 h. Archive the SD logs with the run sheet.

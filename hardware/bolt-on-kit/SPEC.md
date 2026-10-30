@@ -54,12 +54,12 @@ water g/min = W/F x fuel g/min. 5 kW at ~300 g/kWh = 25 g/min fuel -> 2.5-7.5 g/
 ## 5. Safety interlocks and high-CR dry failsafe
 No water: rpm 0 / cranking / < 2400 rpm (idle), < 90 s run or EGT < 450 C (warm-up), MAP < 45 kPa (light load, hydrolock risk), intake < 3 C (freeze),
 low water. Fault-latch (until stop): EGT sensor fault, EGT > 840 C. Watchdog 2 s. Dry-protect (ECU retard + fuel limit) is asserted whenever
-water is not confirmed for 2 s, and on any fault, boot or controller power loss. Heavy knock with retard asserted -> kill request.
+water is not confirmed for 2 s, and on any fault, boot or controller power loss. Heavy knock with retard asserted -> kill request (latched across watchdog/soft resets; power cycle clears). A hardwired E-stop (BOM E3) stops the engine and cuts kit power independently of the controller.
 Hydrolock: pump flow capped by calibration and W/F cap; nozzle downstream of throttle only with MAP gate; drain the spacer low point.
 Freeze: drain reservoir below 3 C storage, or 10 % methanol in water ONLY for methanol-fuelled engines. Water: demineralised/distilled only.
 
 ## 6. BOM
-See **BOM.csv**: every part is off the shelf, and each link and price was checked on 2026-10-29. The kit costs **$831.98**, test equipment costs **$1,442.49** (load bank $1,320, out of stock until Jan 2027), and the total is **$2,274.47**.
+See **BOM.csv**: every part is off the shelf, and each link and price was checked on 2026-10-29. The kit costs **$867.97**, test equipment costs **$1,442.49** (load bank $1,320, out of stock until Jan 2027), and the total is **$2,310.46**.
 The v0.1 estimate of ~$240 assumed generic parts. The verified kit is dearer mainly because of the TPIC8101EVM ($154.72) and the Snow water components.
 Controller choice: CONTROLLER-CHOICE.md. Wiring: WIRING.md. Assembly: ASSEMBLY.md.
 

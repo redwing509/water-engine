@@ -22,10 +22,11 @@ W7,kit,water,Snow 20 ft high-temp nylon tubing,SNO-8088,1,20.82,20.82,OJ Perform
 W8,kit,water,Snow 1/8 NPT to 1/4in quick-connect fitting,SNO-82082R,4,8.35,33.40,GoTurbo,https://goturbo.net/snosno-82082r-snow-performance-1-8npt-1-4-quick-connect-fitting-sno-82082r,HTTP 200 + price read from page 2026-10-29,"Pump out, valve in/out"
 E1,kit,electrical,Deutsch DT 4-pin connector kit,DT 4-pin kit,4,6.99,27.96,Northeast Direct,https://northeastdirect.com/collections/i-deutsch-connectors,HTTP 200; 4-pin price from collection page,Crimp tool not included
 E2,kit,electrical,ATO/ATC 12 AWG 30A inline fuse holder,CrimpZone ATO 12AWG,3,2.32,6.96,CrimpZone,https://www.crimpzone.com/standard-ato-atc-12-awg-30-amp-in-line-fuse-holder/,HTTP 200 + price read from page 2026-10-29,"Controller, pump, valves"
+E3,kit,electrical,"Schneider Harmony XB4 E-stop, 40 mm mushroom, twist release, 1NO+1NC (hardwired, independent of controller)",XB4BS8445,1,35.99,35.99,Amazon (sold by clockwerk),https://www.amazon.com/Harmony-XB4-Emergency-Switch-Screws/dp/B01J3Y3DRA,WebFetch 200 + price read from page 2026-10-29,"NO grounds ignition kill lead directly; NC opens kit 12 V feed (pump off, NC master valve closes, RETARD/FUEL_LIMIT drop to asserted)"
 P1,kit,print,Polymaker PolyLite ASA 1 kg,PolyLite ASA,1,29.99,29.99,Polymaker US,https://us.polymaker.com/products/polylite-asa?variant=39574343090233,HTTP 200 + price read from page 2026-10-29,Intake spacer + bracket (~150 g)
 T1,test,test equipment,U.S. Solid 10 kg x 0.1 g balance (RS232/USB),USS-DBS,1,84.49,84.49,U.S. Solid,https://ussolid.com/products/u-s-solid-precision-balance-digital-lab-scale-3-kg-5-kg-10-kg-x-0-1g-rs232-and-usb-interface-ac-dc-power-ways-html,HTTP 200 + price read from page 2026-10-29 (10 kg variant),Fuel mass by weight
 T2,test,test equipment,Eastron SDM120M kWh meter (Modbus),SDM120M,1,38.00,38.00,boneIO (EUR 32.76),https://store.boneio.eu/product/sdm120m/,"HTTP 200 + price read from page 2026-10-29 (EUR 32.76, ~1.16 USD/EUR)",45 A direct; ships from EU
 T3,test,test equipment,Arcol Ohmite 5 kW 110V resistive load bank,FFLB-5KW 110V,1,1320.00,1320.00,RS (GBP 987.51 ex VAT),https://uk.rs-online.com/web/p/load-banks/1849571,"WebFetch 200 + price 2026-10-29 (GBP 987.51, ~1.34 USD/GBP)",TEMPORARILY OUT OF STOCK (ships from 13 Jan 2027); partner lab load bank may be used instead
-TOTAL_KIT,kit,,,,,,831.98,,,,
+TOTAL_KIT,kit,,,,,,867.97,,,,
 TOTAL_TEST,test,,,,,,1442.49,,,,
-TOTAL_ALL,,,,,,,2274.47,,,,
+TOTAL_ALL,,,,,,,2310.46,,,,

@@ -15,6 +15,8 @@ flowchart LR
   ESP -->|GPIO16| R1["Relay 4409 RETARD (NC)"] --> ECU1["ECU/CDI retard input"]
   ESP -->|GPIO17| R2["Relay 4409 FUEL_LIMIT (NC)"] --> ECU2["Fuel/load limit or governor stop"]
   ESP -->|GPIO13| R3["Relay 4409 KILL (NO)"] --> KILL["Ignition kill lead to GND"]
+  ES["E-stop XB4BS8445 (E3)"] -->|NO contact| KILL
+  ES -->|NC contact in series| V12["Kit +12 V feed (after fuses)"]
   MAP -->|"Vout via 10k/20k divider"| A32["GPIO32"] --> ESP
   KS["Bosch knock sensor (S5)"] --> TPIC
   TPIC -->|"SPI SCK18 MISO19 MOSI23 CS15, INT/HOLD 14"| ESP
@@ -29,7 +31,9 @@ Notes
 - Grounds: one star point at the battery negative. The knock sensor shield goes to TPIC ground only, so do not ground it at the engine too.
 - The solenoid and valve coils need flyback diodes. The Adafruit 5648 has one on board. Add a 1N5819 across the SNO-40060 at the coil if leads are longer than 1 m.
 - Relay contacts: RETARD and FUEL_LIMIT use **COM-NC**. With the coil unpowered (controller off, reset or dead) the ECU input is asserted.
-  KILL uses **COM-NO** and only grounds the kill lead when commanded. It stays latched until the controller is reset.
+  KILL uses **COM-NO** and only grounds the kill lead when commanded. The latch is held in RTC no-init RAM, so it survives watchdog, panic and software resets; only a power cycle of the controller clears it.
+
+**Hardwired E-stop (E3).** The NO contact grounds the ignition kill lead directly, and the NC contact is in series with the kit +12 V feed. Pressing it stops the engine and drops pump, valve and relay power with no controller involvement. It stays pressed until twisted to release.
 - The GPIO34/35/39 inputs have no internal pull-ups, so GPIO39 needs an external 10k to 3V3 when the flow meter is fitted.
 - TPIC8101EVM: power it from 5 V, check that the SPI logic level jumper is set to 3.3 V-compatible (or add a level shifter), and check its 8 MHz clock source against `TPIC_PRESCALER`.
 - Connectors: Deutsch DT (E1) at the engine-side break: (1) MAP+knock, (2) pump+valves, (3) ECU outputs, (4) EGT+pickup.
