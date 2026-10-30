@@ -31,7 +31,7 @@ for d in sorted(glob.glob(f"{H}/*-*/")):
     for g in sorted(k for k in G if k[0] != "dry"):
         lim, r = best(G[g])
         if r is None or dr is None: out.append(f"| {fuel} | {reg} | {g[0]} {g[1]} | | {lim} | - | | | | no knock-free 2-engine row |"); continue
-        c = C.compare(r, dr); f = lambda k: " / ".join("%+.2f" % c[x][k] if c[x] else "-" for x in ("m03", "crn"))
+        c = C.compare(r, dr); f = lambda k, c=c: " / ".join("%+.2f" % c[x][k] if c[x] else "-" for x in ("m03", "crn"))
         wf = r["w"] / (1 - r["w"]); pw = 100 * (r["IMEP_Pa"] / dr["IMEP_Pa"] - 1)
         v = C.verdict(c) + (" [W/F>0.6 R-WE-22]" if wf > 0.6 else "")
         out.append(f"| {fuel} | {reg} | {g[0]} {g[1]} | {wf:.2f} | {lim} | {r['gross_indicated_efficiency']:.4f}/{r['crn_efficiency']:.4f} | {f('d_eta_pp')} | {pw:+.1f} | {f('cost_per_mile_pct')} | {v} |")
