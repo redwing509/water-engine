@@ -10,4 +10,4 @@ set -uo pipefail
 cd /workspace/self-jobs/pr10-fair-highcr
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 MPLBACKEND=Agg FUEL=CH3OH REGIME=normal
 for st in points crn; do nice -n 15 /workspace/venv-we09/bin/python runs.py $st 2 > CH3OH-normal.$st.log 2>&1; rc=$?; echo "$(date -Is) $st rc=$rc"; [ $rc -eq 0 ] || exit $rc; done
-/workspace/venv-we09/bin/python summary.py > summary.log 2>&1; echo summary rc=$?
+/workspace/venv-we09/bin/python summary.py > summary.log 2>&1; rc=$?; echo summary rc=$rc; exit $rc

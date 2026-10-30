@@ -14,7 +14,8 @@ stud_d        = 6.5;   // M6 clearance
 gasket_groove = true;  // 1.6 mm O-ring/gasket groove on both faces
 /* [Nozzle] */
 nozzle_type   = "nozzle";   // 1/8 NPT nozzle boss (Snow SNO-N0050). Ultrasonic mister option dropped for the bench kit.
-nozzle_angle  = 30;    // deg from bore axis, pointing downstream
+nozzle_angle  = 30;    // deg the nozzle axis tilts DOWNSTREAM from the radial plane (spray goes inward and toward the port).
+                       // Orientation: z = 0 face = carb/throttle side (upstream), z = thickness face = intake-port side (downstream).
 boss_d        = 16;    // >= 2x wall around 1/8 NPT
 nozzle_thread_d = 9.7; // pilot = nozzle_thread_d-1 = 8.7 mm -> tap 1/8-27 NPT
 egt_port      = false; // spacer does not carry EGT (EGT goes in exhaust flange)
@@ -28,13 +29,14 @@ module body() {
     if (gasket_groove) for (z=[-0.01, thickness-1.2]) translate([0,0,z])
       difference(){ cylinder(d=bore_d+7, h=1.21); cylinder(d=bore_d+4, h=1.21); }
     // nozzle passage into bore
-    translate([0, -bore_d/2, thickness/2]) rotate([90-nozzle_angle,0,0]) translate([0,0,-2]) cylinder(d=nozzle_thread_d-1, h=30);
+    translate([0, -bore_d/2, thickness/2]) rotate([90+nozzle_angle,0,0])  /* CR-006: passage axis points outward and UPSTREAM, so the installed nozzle sprays inward and downstream (+z) */ translate([0,0,-2]) cylinder(d=nozzle_thread_d-1, h=30);
     if (temp_rh_port_d > 0) translate([0, bore_d/2, thickness/2]) rotate([-90,0,0]) cylinder(d=temp_rh_port_d, h=30);
   }
 }
 module boss() {
-  translate([0, -bore_d/2-2, thickness/2]) rotate([90-nozzle_angle,0,0]) difference() {
+  translate([0, -bore_d/2-2, thickness/2]) rotate([90+nozzle_angle,0,0]) difference() {
     cylinder(d=boss_d, h=12); translate([0,0,-1]) cylinder(d=nozzle_thread_d-1, h=14);
   }
 }
-union(){ body(); boss(); }
+// boss is clipped flush with both flange faces so it can never stand proud of a gasket face
+union(){ body(); intersection(){ boss(); translate([-100,-100,0]) cube([200,200,thickness]); } }

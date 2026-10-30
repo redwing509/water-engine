@@ -4,9 +4,9 @@ Knock engine 2 = full CRECK end-gas (knock_sym at the row CA50) on the limit-bra
 klCR stops at the first M03, LW-CRECK or end-gas knock. "EDGE" = klCR is the top of the CR scan (no knock found; true limit is higher).
 Liquid dirs were not end-gas checked (humid and liquid rows are identical wherever both ran). Factory CR = klCR - 1 margin. EXECUTED, not validated."""
 import json, os, sys, glob, collections
-sys.path.insert(0, "/opt/water-engine/pr10-fair-highcr-20261029/we-boxq")
+sys.path.insert(0, os.environ.get("WE_BOXQ", "/opt/water-engine/pr10-fair-highcr-20261029/we-boxq"))
 from sims.cost import cost as C
-H = os.path.dirname(os.path.abspath(__file__))
+H = os.environ.get("SUMMARY_DIR") or os.path.dirname(os.path.abspath(__file__))
 jl = lambda p: [json.loads(l) for l in open(p) if l.strip()] if os.path.exists(p) else []
 out = ["# PR 10 high-CR fair rerun (dry DEI at own klCR)", "", __doc__, "",
        "| fuel | regime | case | W/F | klCR | eta M03/CRN | d_eta pp M03/CRN | power % | cost/mile % M03/CRN | verdict |", "|---|---|---|---|---|---|---|---|---|---|"]
@@ -45,5 +45,8 @@ for d in sorted(glob.glob(f"{H}/*-*/")):
         if pw >= 0 and wf <= 0.6 and c["m03"] and c["m03"]["cost_per_mile_pct"] < 0: rec[fuel].append((c["m03"]["cost_per_mile_pct"], lim, g[0], reg, E(lim, G[g]).endswith("EDGE")))
 out += ["", "## Recommended factory CR (cost-best wet case with power >= dry and W/F <= 0.6, klCR - 1 margin; lower of hot/normal)"]
 for fuel, v in rec.items():
-    v.sort(); out.append(f"- {fuel}: best {v[0][2]} ({v[0][3]}) klCR {v[0][1]}{' (scan edge, true limit higher)' if v[0][4] else ''} -> factory CR {min(x[1] for x in v[:2]) - 1}")
+    v.sort(); br = {}
+    for x in v: br.setdefault(x[3], x)   # CR-008: cost-best eligible row PER REGIME, then the lower klCR of those
+    fcr = min(x[1] for x in br.values()) - 1; regs = "/".join(f"{k} klCR {x[1]}" for k, x in sorted(br.items()))
+    out.append(f"- {fuel}: best {v[0][2]} ({v[0][3]}) klCR {v[0][1]}{' (scan edge, true limit higher)' if v[0][4] else ''} -> factory CR {fcr} (per-regime best: {regs})")
 open(f"{H}/RESULT.md", "w").write("\n".join(out) + "\n"); print("\n".join(out))

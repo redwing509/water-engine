@@ -12,6 +12,8 @@ S4,kit,sensor,GM-style 1-bar MAP sensor,FAST 307029,1,69.95,69.95,Speedway Motor
 S5,kit,sensor,Bosch piezo knock sensor,0261231176,1,20.85,20.85,Lordco (CAD 28.99),https://lordco.com/Product/Knock-Sensor-BOS0261231176,"HTTP 200 + price read from page 2026-10-29 (CAD 28.99, ~0.72 USD/CAD)",Converted price
 S6,kit,sensor,TI TPIC8101 knock DSP evaluation module,TPIC8101EVM,1,154.72,154.72,TI / DigiKey 296-46793-ND,https://www.ti.com/tool/TPIC8101EVM,TI page HTTP 200; price from DigiKey search listing (DigiKey 403 to bots),Budget alternative: analog front end (firmware KNOCK_FRONTEND_ANALOG)
 S7,kit,sensor,Optomax optical liquid level sensor,Adafruit 3397 / LLC200D3SH-LLPK1,1,39.95,39.95,Adafruit,https://www.adafruit.com/product/3397,HTTP 200 + price read from page 2026-10-29,Low-water lockout in tank
+S9,kit,sensor,"FUSCH 100 psi 0.5-4.5 V 316SS pressure transducer, 1/8 NPT (REQUIRED water-delivery confirmation, CR-001)",FUPTS100,1,16.99,16.99,Amazon,https://www.amazon.com/dp/B0CRQTNY9F,search listing price 2026-10-29,"Nozzle line after metering solenoid; GPIO36 via 10k/20k divider; harness included"
+S10,kit,sensor,1/8 NPT female brass equal tee (for S9),101SA,1,2.90,2.90,TACC Air,https://www.taccair.com/products/101sa-1-8-female-pipe-tee,search listing price 2026-10-29,"Solenoid out -> tee -> nozzle; S9 in branch"
 W1,kit,water,SEAFLO 21-series 12V 80 psi Viton diaphragm pump,SFDP1-011-080-21,1,37.99,37.99,SeaFlo Direct,https://seaflodirect.com/seaflo-12v-80-psi-21-series-dc-viton-diaphragm-pump/,HTTP 200 + price read from page 2026-10-29,Viton for methanol; built-in pressure switch
 W2,kit,water,"Snow high-flow water/meth solenoid, quick-connect",SNO-40060,1,73.00,73.00,Nitrous Express,https://nitrousexpress.com/water-meth-solenoids/snow-performance-high-flow-water-methanol-solenoid-upgrade-quick-connect-fittings,HTTP 200 + price read from page 2026-10-29,"Metering solenoid, 8 Hz PWM"
 W3,kit,water,"U.S. Solid 1/4in 12V NC brass solenoid valve, Viton",USS2-00006,1,15.94,15.94,U.S. Solid,https://ussolid.com/products/u-s-solid-electric-solenoid-valve-1-4-12v-dc-solenoid-valve-brass-body-normally-closed-viton-seal-html,HTTP 200 + price read from page 2026-10-29,"Master shutoff, fails closed"
@@ -19,7 +21,7 @@ W4,kit,water,Snow 0.5 GPH nozzle,SNO-N0050,1,40.99,40.99,Boosted Beauties,https:
 W5,kit,water,Snow 3-quart reservoir with tabs,SNO-40012,1,58.13,58.13,iRace Autosports,https://www.iraceautosports.com/product/snow-performance-3-quart-reservoir-incl-tabs/,HTTP 200; price from page earlier 2026-10-29,
 W6,kit,water,Snow inline filter,SNO-82204,1,24.73,24.73,Autoplicity,https://autoplicity.com/634-snow-performance-water-methanol-injection-filter-20080,WebFetch 200 + price 2026-10-29 (curl bot-blocked),
 W7,kit,water,Snow 20 ft high-temp nylon tubing,SNO-8088,1,20.82,20.82,OJ Performance,https://www.ojperformance.com/shop/fuel-ignition/fuel-fluid-lines-fittings/snow-performance-20ft-black-high-temp-water-nylon-tubing/,HTTP 202 to curl; price from page via search 2026-10-29,
-W8,kit,water,Snow 1/8 NPT to 1/4in quick-connect fitting,SNO-82082R,4,8.35,33.40,GoTurbo,https://goturbo.net/snosno-82082r-snow-performance-1-8npt-1-4-quick-connect-fitting-sno-82082r,HTTP 200 + price read from page 2026-10-29,"Pump out, valve in/out"
+W8,kit,water,Snow 1/8 NPT to 1/4in quick-connect fitting,SNO-82082R,6,8.35,50.10,GoTurbo,https://goturbo.net/snosno-82082r-snow-performance-1-8npt-1-4-quick-connect-fitting-sno-82082r,HTTP 200 + price read from page 2026-10-29,"Pump out, valve in/out, +2 for S9 pressure tee (CR-001)"
 E1,kit,electrical,Deutsch DT 4-pin connector kit,DT 4-pin kit,4,6.99,27.96,Northeast Direct,https://northeastdirect.com/collections/i-deutsch-connectors,HTTP 200; 4-pin price from collection page,Crimp tool not included
 E2,kit,electrical,ATO/ATC 12 AWG 30A inline fuse holder,CrimpZone ATO 12AWG,3,2.32,6.96,CrimpZone,https://www.crimpzone.com/standard-ato-atc-12-awg-30-amp-in-line-fuse-holder/,HTTP 200 + price read from page 2026-10-29,"Controller, pump, valves"
 E3,kit,electrical,"Schneider Harmony XB4 E-stop, 40 mm mushroom, twist release, 1NO+1NC (hardwired, independent of controller)",XB4BS8445,1,35.99,35.99,Amazon (sold by clockwerk),https://www.amazon.com/Harmony-XB4-Emergency-Switch-Screws/dp/B01J3Y3DRA,WebFetch 200 + price read from page 2026-10-29,"NO grounds ignition kill lead directly; NC in series ahead of 3 A controller fuse F1: controller power loss turns pump off, closes NC master valve, drops RETARD/FUEL_LIMIT to asserted"
@@ -38,9 +40,9 @@ B6,opt-b,optional load (b) DIY water-barrel element box,RACO 2-toggle box cover,
 R1,opt-c,optional load (c) rent/borrow,"AET 100 kW load bank rental, 1 day (single-phase 120/240 V, 3.75 kW steps)",AET 100 kW,1,300.00,300.00,AET,https://aetpro.com/load-banks/,WebFetch/curl 200 + price read from page 2026-10-29,"Steps 3.75 kW are coarse for a 5 kW genset: use with A or B for trim; ship/delivery extra; weekly $750"
 R2,opt-c,optional load (c) rent/borrow,AET load bank cables 1 day,AET cables,1,30.00,30.00,AET,https://aetpro.com/load-banks/,WebFetch/curl 200 + price read from page 2026-10-29,
 R3,opt-c,optional load (c) rent/borrow,Test partner lab load bank (borrow),partner,1,0.00,0.00,Test partner,,n/a,"Cost $0 if offered; record its make, step size and calibration date"
-TOTAL_KIT,kit,,,,,,867.97,,,,
+TOTAL_KIT,kit,,,,,,904.56,,,,
 TOTAL_TEST,test,,,,,,1472.48,,,,
-TOTAL_ALL,,,,,,,2340.45,,,,main total: kit + test (preferred load bank); optional options excluded
+TOTAL_ALL,,,,,,,2377.04,,,,main total: kit + test (preferred load bank); optional options excluded
 TOTAL_OPT_A,opt-a,,,,,,159.96,,,,OPTIONAL (a) space heaters; not in TOTAL_ALL
 TOTAL_OPT_B,opt-b,,,,,,147.18,,,,OPTIONAL (b) DIY element box; not in TOTAL_ALL
 TOTAL_OPT_C,opt-c,,,,,,330.00,,,,OPTIONAL (c) rent 1 day; not in TOTAL_ALL

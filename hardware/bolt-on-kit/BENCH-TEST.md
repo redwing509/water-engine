@@ -27,6 +27,7 @@ All settings in the firmware are model-seeded, not measured. Nothing below count
 ## D. Fail-safe tests (100 % load, each 3 times)
 - D1 Pull the tank feed (or let it run dry). The level sensor trips, and RETARD and FUEL_LIMIT must assert within 0.5 s, with no knock rise.
 - D2 Unplug the controller's 12 V. The relays drop, so retard and limit are asserted, and the NC valve closes (no spray).
+- D1b Unplug S9 (pressure transducer), then separately block the nozzle (cap it) and disconnect the nozzle hose. In each case RETARD and FUEL_LIMIT must stay asserted (no release after 2 s). Record the real line peak/min psi at 10/50/90 % duty and set WATER_PSI_ON_MIN / WATER_PSI_OFF_MAX between the good and fault readings.
 - D3 Disconnect the EGT thermocouple. The firmware must latch FAULT, turn the water off and assert dry-protect.
 - D4 Induce knock (advance or fuel). The trim rises, and at max trim the retard asserts. Confirm KILL fires only at knock > 0.95. Then press the board EN (reset) button: KILL must stay asserted after the reboot and clear only after a power cycle.
 

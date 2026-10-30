@@ -11,6 +11,7 @@ plate_l  = 160; plate_w = 90; plate_t = 5;
 pump_holes = [[30,20],[30,70],[95,20],[95,70]]; // SEAFLO 21-series foot pattern - MEASURE your pump and edit
 valve_holes = [[125,30],[145,30]];              // valve / solenoid strap holes (zip-tie or P-clip)
 hole_d = 5.5;
+clamp_overlap = wall;   // CR-007: clamp ring sinks this far into the plate edge (positive-volume overlap; at 0 it only touched along one line)
 $fn = 64;
 module clamp() difference() {
   union() { cylinder(d=tube_d+2*wall, h=clamp_w); translate([tube_d/2, -wall, 0]) cube([wall+6, 2*wall, clamp_w]); }
@@ -21,7 +22,7 @@ module clamp() difference() {
 difference() {
   union() {
     cube([plate_l, plate_w, plate_t]);
-    for (x=[0, plate_l-clamp_w]) translate([x+clamp_w, -tube_d/2-wall, plate_t]) rotate([0,-90,0]) clamp();
+    for (x=[0, plate_l-clamp_w]) translate([x+clamp_w, -tube_d/2-wall+clamp_overlap, plate_t]) rotate([0,-90,0]) clamp();
   }
   for (h=concat(pump_holes, valve_holes)) translate([h[0], h[1], -1]) cylinder(d=hole_d, h=plate_t+2);
 }

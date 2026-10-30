@@ -79,4 +79,4 @@ Liquid dirs were not end-gas checked (humid and liquid rows are identical wherev
 
 ## Recommended factory CR (cost-best wet case with power >= dry and W/F <= 0.6, klCR - 1 margin; lower of hot/normal)
 - C2H5OH: best humid_evap-w0.3 (hot) klCR 32 (scan edge, true limit higher) -> factory CR 31
-- CH3OH: best liquid-w0.15 (hot) klCR 26 (scan edge, true limit higher) -> factory CR 25
+- CH3OH: best liquid-w0.15 (hot) klCR 26 (scan edge, true limit higher) -> factory CR 25 **LIQUID-SCAN-ONLY value, NOT the order CR**: the liquid scan stops at CR 26; the extended humid scan is knock-free to CR 32 (see RESULT.md). Order CR = 32 per ENGINE-ORDER-SPEC.md (James 2026-10-29).

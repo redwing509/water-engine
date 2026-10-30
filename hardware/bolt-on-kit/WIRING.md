@@ -36,3 +36,10 @@ Notes
 - The GPIO34/35/39 inputs have no internal pull-ups. GPIO34 (ignition pickup, open-collector opto) ALWAYS needs an external 10k to 3V3, or it floats and gives false RPM. GPIO39 needs an external 10k to 3V3 when the flow meter is fitted; set FLOW_METER_FITTED 1 in config.h only then (with 0 the GPIO39 interrupt is not attached).
 - TPIC8101EVM: power it from 5 V, check that the SPI logic level jumper is set to 3.3 V-compatible (or add a level shifter), and check its 8 MHz clock source against `TPIC_PRESCALER`.
 - Connectors: Deutsch DT (E1) at the engine-side break: (1) MAP+knock, (2) pump+valves, (3) ECU outputs, (4) EGT+pickup.
+
+## Water-delivery confirmation (CR-001, REQUIRED)
+- S9 FUSCH FUPTS100 0-100 psi transducer sits in a 1/8 NPT tee (S10) between the SNO-40060 metering solenoid outlet and the nozzle. Red = +5V (D24V22F5), black = GND, blue = signal -> 10k/20k divider -> GPIO36 (VP, input-only, ADC1).
+- The firmware releases RETARD/FUEL_LIMIT only after 2 s in which the line pressure peaks >= WATER_PSI_ON_MIN and (below 90 % duty) decays <= WATER_PSI_OFF_MAX each 1 s window. A missing, unplugged or out-of-range (<0.3 V or >4.8 V) sensor reads as NOT delivered, so dry-protect stays asserted.
+
+## IO0 / BOOT button (WE18-PA-001)
+- GPIO0 is the ESP32 strapping pin: LOW at reset = download mode, so the controller would not run and the NC relays would leave retard + fuel limit asserted. Use only the DevKitC's own BOOT button for test logging. Do NOT wire any external switch, pull-down, relay or long lead to IO0, and never hold BOOT while powering up.

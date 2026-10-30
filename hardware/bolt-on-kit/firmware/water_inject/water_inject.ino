@@ -38,8 +38,13 @@ void ARDUINO_ISR_ATTR onTick() {
 static const SPISettings TPIC_SPI(1000000, MSBFIRST, SPI_MODE1);
 static uint8_t tpicXfer(uint8_t c) { SPI.beginTransaction(TPIC_SPI); digitalWrite(PIN_CS_KNOCK, LOW);
   uint8_t r = SPI.transfer(c); digitalWrite(PIN_CS_KNOCK, HIGH); SPI.endTransaction(); return r; }
-static void tpicInit() { for (uint8_t c : {(uint8_t)TPIC_PRESCALER, (uint8_t)TPIC_CHANNEL, (uint8_t)TPIC_BANDPASS,
-                                          (uint8_t)TPIC_GAIN, (uint8_t)TPIC_INTEGRATOR}) tpicXfer(c); }
+// CR-002 (TI SLIS110C): in default mode SDO only echoes SDI. Command 6 (0x71) enters advanced mode; from then on each
+// transfer returns the response to the PREVIOUS command. tpicInit checks the 0x8E ack; tpicOk=false keeps dry-protect on.
+static bool tpicOk = false;
+static void tpicInit() { tpicXfer(TPIC_ADV_MODE);
+  uint8_t ack = tpicXfer(TPIC_PRESCALER);              // response to 0x71
+  for (uint8_t c : {(uint8_t)TPIC_CHANNEL, (uint8_t)TPIC_BANDPASS, (uint8_t)TPIC_GAIN, (uint8_t)TPIC_INTEGRATOR}) tpicXfer(c);
+  tpicOk = (ack == TPIC_ADV_ACK); }
 static float lastKnock = 0;
 
 enum State { OFF, WARMUP, ARMED_DRY, INJECTING, FAULT };
@@ -61,11 +66,11 @@ static float fuelGs() { float airGs = DISP_L * 1e-3f * (rpm / 120.0f) * VE * (ma
   return airGs / AFR[FUEL_SELECTED]; }
 static float readKnock() {
 #if KNOCK_FRONTEND == KNOCK_FRONTEND_TPIC
-  // TPIC8101: after INT/HOLD falls the 10-bit integrator result shifts out on the next two SPI frames (low 8, then high 2).
-  // Re-sending channel + gain keeps the setup unchanged while clocking the result out.
+  // TPIC8101 advanced mode (SLIS110C): the response comes on the NEXT transfer. Prescaler cmd -> response D7..D0;
+  // channel cmd -> response D9 D8 in bits 7..6 (rest 0). Re-sending prescaler + channel leaves the setup unchanged.
   if (!knockReady) return lastKnock; knockReady = false;
-  uint8_t lo = tpicXfer(TPIC_CHANNEL), hi = tpicXfer(TPIC_GAIN);
-  lastKnock = (((hi & 0x03) << 8) | lo) / 1023.0f; return lastKnock;
+  tpicXfer(TPIC_PRESCALER); uint8_t lo = tpicXfer(TPIC_CHANNEL), hi = tpicXfer(TPIC_CHANNEL);
+  lastKnock = ((((hi >> 6) & 0x03) << 8) | lo) / 1023.0f; return lastKnock;
 #else // ANALOG budget front end: band-pass + envelope detector into ADC, peak over 2 ms
   int pk = 0; for (int k = 0; k < 40; k++) { int v = analogRead(PIN_KNOCK_ADC); if (v > pk) pk = v; delayMicroseconds(50); }
   return pk / 4095.0f;
@@ -132,6 +137,12 @@ void loop() {
   }
   if (st == FAULT && rpm == 0) st = OFF;          // faults latch until engine stops
 
+  // nozzle-line pressure (CR-001): 0.5-4.5 V via 10k/20k divider (x1.5). Out-of-range = broken sensor/wire -> invalid.
+  static float psiPk = 0, psiLo = 1e9f, psiPk1s = 0, psiLo1s = 1e9f; static uint32_t psiWinMs = 0; static bool psiValid = false, psiBad = false;
+  { float v = analogReadMilliVolts(PIN_WATER_PSI) * 1.5f / 1000.0f; bool ok = v > 0.3f && v < 4.8f;
+    float psi = (v - 0.5f) * WATER_PSI_FULL / 4.0f; if (!ok) { psiBad = true; psiValid = false; }
+    else { psiPk = max(psiPk, psi); psiLo = min(psiLo, psi); }
+    if (now - psiWinMs >= 1000) { psiWinMs = now; psiPk1s = psiPk; psiLo1s = psiLo; psiValid = !psiBad && psiPk > 0; psiBad = false; psiPk = 0; psiLo = 1e9f; } }
   float wfCmd = 0, pump = 0;
   if (st == INJECTING) {
     // closed-loop trim: knock -> add water (charge cooling) up to cap; EGT high -> add; EGT well below & no knock -> creep down to save water
@@ -143,9 +154,12 @@ void loop() {
     pump = constrain(mlMin / METER_ML_MIN_FULL, 0.0f, 1.0f);
     if (pump < METER_DUTY_MIN) pump = 0;
     digitalWrite(PIN_SHUTOFF, HIGH); digitalWrite(PIN_PUMP_EN, HIGH); ledcWrite(PIN_METER_SOL, (int)(pump * 1023));
-    if (pump > 0 && levelOk) { if (!waterOkMs) waterOkMs = now; } else waterOkMs = 0;
-    // dry-protect released only after 2 s of confirmed flow and no persistent knock
-    failsafe(!(waterOkMs && now - waterOkMs > 2000 && knockI < KNOCK_THRESH));
+    // CR-001: delivery is CONFIRMED only by the nozzle-line transducer (S9): valid signal, pressure reaches WATER_PSI_ON_MIN
+    // and (unless duty is near 100 %) decays below WATER_PSI_OFF_MAX between pulses, both within the last 1 s window.
+    bool delivered = psiValid && pump > 0 && psiPk1s >= WATER_PSI_ON_MIN && (pump >= WATER_DUTY_NO_DECAY || psiLo1s <= WATER_PSI_OFF_MAX);
+    if (delivered && levelOk) { if (!waterOkMs) waterOkMs = now; } else waterOkMs = 0;
+    // dry-protect released only after 2 s of CONFIRMED delivery, a verified TPIC link and no persistent knock
+    failsafe(!(waterOkMs && now - waterOkMs > 2000 && knockI < KNOCK_THRESH && (KNOCK_FRONTEND != KNOCK_FRONTEND_TPIC || tpicOk)));
   } else { waterOff(); waterOkMs = 0; failsafe(HIGH_CR_ENGINE); }
   if (knockI > 0.95f && st != OFF) { killLatch = KILL_MAGIC; digitalWrite(PIN_KILL_RLY, HIGH); }  // heavy knock despite retard -> stop engine
   // latch lives in RTC no-init RAM: survives WDT/panic/soft reboot, cleared only by a power cycle (operator reset)
