@@ -1,3 +1,4 @@
+#include "soc/gpio_struct.h"
 // Water-injection controller for factory high-CR generator engines (Grok Bot 2026-10-29, redwing509/water-engine).
 // Open-loop W/F map (load x RPM) seeded from model optima, closed-loop trim on knock and EGT, safety interlocks,
 // HIGH-CR DRY FAILSAFE (asserts ECU retard + fuel limit whenever water is not confirmed flowing), CSV logging,
@@ -32,7 +33,7 @@ void ARDUINO_ISR_ATTR onTick() {
   uint32_t p = periodUs; if (!p) return; uint32_t dt = micros() - lastPulseUs;
   uint32_t s = p * KNOCK_WIN_START_DEG / 360, e = p * (KNOCK_WIN_START_DEG + KNOCK_WIN_LEN_DEG) / 360;
   bool open = dt >= s && dt < e;
-  if (open != winOpen) { winOpen = open; digitalWrite(PIN_KNOCK_INTHOLD, open); if (!open) knockReady = true; }
+  if (open != winOpen) { winOpen = open; if (open) GPIO.out_w1ts = (1UL << PIN_KNOCK_INTHOLD); else GPIO.out_w1tc = (1UL << PIN_KNOCK_INTHOLD); /* ISR-safe direct register write */ if (!open) knockReady = true; }
 }
 static const SPISettings TPIC_SPI(1000000, MSBFIRST, SPI_MODE1);
 static uint8_t tpicXfer(uint8_t c) { SPI.beginTransaction(TPIC_SPI); digitalWrite(PIN_CS_KNOCK, LOW);
@@ -84,7 +85,9 @@ static const uint32_t KILL_MAGIC = 0x4B494C4CUL;
 void setup() {
   Serial.begin(115200);
   pinMode(PIN_IGN_PICKUP, INPUT); attachInterrupt(PIN_IGN_PICKUP, onIgn, FALLING);
+#if FLOW_METER_FITTED
   pinMode(PIN_FLOW_PULSE, INPUT); attachInterrupt(PIN_FLOW_PULSE, onFlow, FALLING);
+#endif
   pinMode(PIN_LEVEL, INPUT_PULLUP); pinMode(PIN_TEST_BTN, INPUT_PULLUP);
   for (int p : {PIN_PUMP_EN, PIN_SHUTOFF, PIN_RETARD_RLY, PIN_FUEL_LIM_RLY, PIN_KILL_RLY, PIN_KNOCK_INTHOLD})
     { pinMode(p, OUTPUT); digitalWrite(p, LOW); }

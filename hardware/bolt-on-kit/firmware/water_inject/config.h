@@ -2,11 +2,12 @@
 // Arduino-ESP32 core 3.x, FQBN esp32:esp32:esp32. All maps are MODEL-SEEDED, NOT MEASURED - calibrate per BENCH-TEST.md.
 #pragma once
 // ---- pins (avoid strapping pins 2/12 for outputs that must be low at boot; see WIRING.md) ----
-#define PIN_IGN_PICKUP   34   // in-only. opto-isolated inductive pickup on spark lead, 1 pulse/rev (magneto, wasted spark)
+#define PIN_IGN_PICKUP   34   // in-only, NO internal pull-up: EXTERNAL 10k to 3V3 REQUIRED (open-collector opto). opto-isolated inductive pickup on spark lead, 1 pulse/rev (magneto, wasted spark)
 #define PIN_KNOCK_ADC    35   // in-only. ANALOG knock front end (budget option, KNOCK_FRONTEND_ANALOG)
 #define PIN_MAP_ADC      32   // GM 1-bar MAP (FAST 307029), 5V out -> 10k/20k divider -> 3.33 V max
 #define PIN_LEVEL        27   // Optomax LLC200D3SH optical level: open-collector, LOW = liquid present (pull-up)
 #define PIN_FLOW_PULSE   39   // in-only, optional fuel flow meter (needs EXTERNAL 10k pull-up to 3V3)
+#define FLOW_METER_FITTED 0   // 1 only when the meter AND its pull-up are fitted; 0 = GPIO39 interrupt not attached
 #define PIN_TEST_BTN     0    // BOOT button toggles efficiency-test logging
 #define PIN_SPI_SCK      18
 #define PIN_SPI_MISO     19

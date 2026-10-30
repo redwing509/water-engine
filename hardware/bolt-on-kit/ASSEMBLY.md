@@ -9,7 +9,7 @@ Tools: 1/8-27 NPT tap, 11/32" drill, Deutsch DT crimper, wire strippers, multime
    with Snow 1/4" nylon tube (W7) and quick-connect fittings (W8). Mount the solenoid within 300 mm of the nozzle to keep the line volume small. Fit the Optomax sensor (S7) in the lower third of the tank.
 4. **Sensors:** EGT probe 50 mm from the exhaust port (drill and tap 1/8 NPT in the header flange or a weld bung). Knock sensor on a flat machined boss
    on the cylinder or head, M8 at 20 N·m, no washer. Tee the MAP sensor into the spacer below the throttle, or into the intake runner. Mount the SHT45 in the air box upstream of the carb.
-   Clamp the inductive pickup on the spark lead and wire it through the opto to GPIO34.
+   Clamp the inductive pickup on the spark lead and wire it through the opto to GPIO34, with a 10k pull-up from GPIO34 to 3V3 (required: GPIO34 has no internal pull-up).
 5. **Controller box:** build the electronics per `WIRING.md` (ESP32, buck, relays, MOSFETs, SD) and fuse each branch.
 5a. **E-stop (E3):** mount the XB4BS8445 in a 22 mm hole on the bench panel within reach of the operator. Wire its NO contact from the ignition kill lead to engine ground and its NC contact between the battery and the 3 A controller fuse (F1), as shown in `WIRING.md`.
 6. **ECU outputs:** find the factory module's retard / limp / governor input. If there is none, use FUEL_LIMIT on a governor stop solenoid and treat RETARD as not connected.
