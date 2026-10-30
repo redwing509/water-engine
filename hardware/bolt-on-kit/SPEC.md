@@ -59,7 +59,7 @@ Hydrolock: pump flow capped by calibration and W/F cap; nozzle downstream of thr
 Freeze: drain reservoir below 3 C storage, or 10 % methanol in water ONLY for methanol-fuelled engines. Water: demineralised/distilled only.
 
 ## 6. BOM
-See **BOM.csv**: every part is off the shelf, and each link and price was checked on 2026-10-29. The kit costs **$867.97**, test equipment costs **$1,442.49** (load bank $1,320, out of stock until Jan 2027), and the total is **$2,310.46**.
+See **BOM.csv**: every part is off the shelf, and each link and price was checked on 2026-10-29. The kit costs **$867.97**, test equipment costs **$1,472.48** (preferred 5 kW load bank $1,320, out of stock until Jan 2027; Kill A Watt cross-check meter $29.99), and the main total is **$2,340.45**. Optional load alternatives are priced separately and excluded from the main total: (a) heaters $159.96, (b) DIY element box $147.18, (c) rental $330/day or $0 borrowed. See `LOAD-OPTIONS.md`.
 The v0.1 estimate of ~$240 assumed generic parts. The verified kit is dearer mainly because of the TPIC8101EVM ($154.72) and the Snow water components.
 Controller choice: CONTROLLER-CHOICE.md. Wiring: WIRING.md. Assembly: ASSEMBLY.md.
 
