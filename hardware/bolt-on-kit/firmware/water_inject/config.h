@@ -64,6 +64,7 @@ static const float FUEL_DENS[4]= {0.745f, 0.781f, 0.792f, 0.789f}; // kg/L
 #define WATER_PSI_FULL     100.0f // transducer span, psi at 4.5 V
 #define WATER_PSI_ON_MIN   50.0f  // nozzle-line peak over 1 s must reach this while metering (pump ~80 psi). BENCH-CALIBRATE (B3)
 #define WATER_PSI_OFF_MAX  25.0f  // and the 1 s minimum must fall below this (proves the nozzle is flowing, not blocked). BENCH-CALIBRATE
+#define WATER_CONFIRM_TIMEOUT_MS 3000UL // CR-013: unconfirmed delivery longer than this -> fault (water off, dry-protect)
 #define METER_DUTY_MAX_CONFIRMED 0.85f // CR-013: duty cap whenever confirmation is needed (HIGH_CR_ENGINE): every PWM period keeps
                                        // >= 15 % off-time so the line-pressure decay (blocked-nozzle check) is ALWAYS tested
 #define HIGH_CR_ENGINE   1     // dry operation needs retard + fuel limit (SPEC 5)

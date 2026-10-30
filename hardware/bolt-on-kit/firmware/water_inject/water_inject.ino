@@ -165,6 +165,11 @@ void loop() {
     // and ALWAYS decays below WATER_PSI_OFF_MAX (CR-013: no high-duty bypass) between pulses, both within the last 1 s window.
     bool delivered = psiValid && pump > 0 && psiPk1s >= WATER_PSI_ON_MIN && psiLo1s <= WATER_PSI_OFF_MAX;
     if (delivered && levelOk) { if (!waterOkMs) waterOkMs = now; } else waterOkMs = 0;
+    // CR-013: commanded water that stays UNCONFIRMED for WATER_CONFIRM_TIMEOUT_MS (blocked nozzle, dead pump, bad sensor)
+    // -> latch a fault: water off + dry protection on until the engine stops.
+    static uint32_t unconfMs = 0;
+    if (pump > 0 && !delivered) { if (!unconfMs) unconfMs = now; else if (now - unconfMs > WATER_CONFIRM_TIMEOUT_MS) { unconfMs = 0; fault("water not confirmed"); } }
+    else unconfMs = 0;
     // dry-protect released only after 2 s of CONFIRMED delivery, a verified TPIC link and no persistent knock
     failsafe(!(waterOkMs && now - waterOkMs > 2000 && knockI < KNOCK_THRESH && (KNOCK_FRONTEND != KNOCK_FRONTEND_TPIC || tpicOk)));
   } else { waterOff(); waterOkMs = 0; failsafe(HIGH_CR_ENGINE); }
