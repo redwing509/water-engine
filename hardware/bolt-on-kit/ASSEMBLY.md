@@ -11,7 +11,7 @@ Tools: 1/8-27 NPT tap, 11/32" drill, Deutsch DT crimper, wire strippers, multime
    on the cylinder or head, M8 at 20 N·m, no washer. Tee the MAP sensor into the spacer below the throttle, or into the intake runner. Mount the SHT45 in the air box upstream of the carb.
    Clamp the inductive pickup on the spark lead and wire it through the opto to GPIO34.
 5. **Controller box:** build the electronics per `WIRING.md` (ESP32, buck, relays, MOSFETs, SD) and fuse each branch.
-5a. **E-stop (E3):** mount the XB4BS8445 in a 22 mm hole on the bench panel within reach of the operator. Wire its NO contact from the ignition kill lead to engine ground and its NC contact in series with the kit +12 V feed, as shown in `WIRING.md`.
+5a. **E-stop (E3):** mount the XB4BS8445 in a 22 mm hole on the bench panel within reach of the operator. Wire its NO contact from the ignition kill lead to engine ground and its NC contact between the battery and the 3 A controller fuse (F1), as shown in `WIRING.md`.
 6. **ECU outputs:** find the factory module's retard / limp / governor input. If there is none, use FUEL_LIMIT on a governor stop solenoid and treat RETARD as not connected.
    That case is not safe at high CR, so do not run water-free at high CR without a working retard path (SPEC 5).
 7. **Firmware:** set `FUEL_SELECTED`, then `arduino-cli compile --fqbn esp32:esp32:esp32 firmware/water_inject` and
