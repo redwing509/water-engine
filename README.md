@@ -37,6 +37,7 @@ Notes and caveats:
 - The Track B gain is mostly knock relief: water lets a knock-limited engine run a higher compression ratio. The PRF87 dry baseline at this point is weak (knock-limited at CR 5), which inflates the relative gain.
 - `*` marks a grid edge: w = 0.30 is the top of the water grid and CR 32 is the CR cap, so these are not interior optima.
 - None of these cases is a "water-majority" engine (w > 0.5); at w >= 0.5 the screening so far shows power and cost losses versus the fair dry baseline.
+- **Full list of every good (COST GAIN) case:** [`results/SCREENING_RESULTS.md`](results/SCREENING_RESULTS.md) (328 rows: Track A 84, Track B 244; CSV alongside).
 - Source tables: geometry study `RESULT_BALL.md` (Track B) and `RESULT_AALL.md` (Track A), combined stages through 2026-11-01.
 
 ## Repository layout
