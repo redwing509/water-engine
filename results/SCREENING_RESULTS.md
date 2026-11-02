@@ -4,54 +4,54 @@
 
 A row is listed when the best-cost wet case has **lower cost per mile than its own dry baseline** (DEI dry, spark optimised) at **equal-or-better power** in both engines (verdict COST GAIN). Water $0.10/gal, dated retail fuel prices. Normal regime: coolant 363 K, intake 320 K; hot: coolant 388 K, intake 400 K. `w` = water mass fraction of liquid intake. Edge flags mean the best point sits on the edge of the tested grid, so the true optimum may lie beyond it.
 
-Source: geometry study combined tables `RESULT_AALL.md` (Track A, 120 groups, 84 COST GAIN) and `RESULT_BALL.md` (Track B, 244 groups, 244 COST GAIN), generated 2026-11-01 13:21-13:23 PST including Muse-merged chunks. Machine-readable copy: [`screening_results_cost_gain.csv`](screening_results_cost_gain.csv).
+Source: geometry study combined tables `RESULT_AALL.md` (Track A, 132 groups, 84 COST GAIN) and `RESULT_BALL.md` (Track B, 256 groups, 244 COST GAIN), generated 2026-11-02 00:05 PST including Muse-merged chunks (MA2, MB3) and box job 248; in-progress files points_AQ2/points_BQ1 excluded. Machine-readable copy: [`screening_results_cost_gain.csv`](screening_results_cost_gain.csv).
 
 ## Track A - C2H5OH (24 rows)
 
 | regime | rpm | bore x stroke mm | water w | CR dry -> wet | d eta pp M03/CRN | power % | cost/mile % | edge flags | source |
 |---|---|---|---|---|---|---|---|---|---|
 | hot | 1000 | 105x131 | 0.28 | 22 -> 30 | +2.04/+2.14 | +5.3 | -2.86 | - | RESULT_AALL.md |
-| hot | 1500 | 105x131 | 0.1 | 24 -> 30 | +1.23/+1.21 | +4.4 | -2.12 | - | RESULT_AALL.md |
+| hot | 1500 | 105x131 | 0.08 | 24 -> 30 | +1.22/+1.20 | +4.3 | -2.18 | - | RESULT_AALL.md |
 | hot | 1500 | 65x81 | 0.28 | 24 -> 30 | +1.61/+1.64 | +4.8 | -1.99 | - | RESULT_AALL.md |
 | hot | 1000 | 65x81 | 0.3 | 16 -> 18 | +1.50/+1.49 | +5.0 | -1.92 | w top of grid | RESULT_AALL.md |
-| hot | 1500 | 86x86 | 0.28 | 24 -> 30 | +1.58/+1.61 | +4.7 | -1.86 | - | RESULT_AALL.md |
+| hot | 1500 | 86x86 | 0.08 | 24 -> 30 | +1.03/+1.13 | +4.0 | -1.89 | - | RESULT_AALL.md |
 | hot | 2000 | 65x52 | 0.3 | 22 -> 26 | +1.52/+1.66 | +4.8 | -1.70 | w top of grid | RESULT_AALL.md |
 | hot | 2000 | 65x65 | 0.3 | 26 -> 31 | +1.49/+1.58 | +4.7 | -1.51 | w top of grid | RESULT_AALL.md |
 | hot | 2000 | 65x81 | 0.3 | 26 -> 31 | +1.50/+1.56 | +4.7 | -1.49 | w top of grid | RESULT_AALL.md |
+| hot | 2000 | 105x131 | 0.08 | 26 -> 30 | +0.84/+0.80 | +3.8 | -1.37 | - | RESULT_AALL.md |
 | hot | 2000 | 86x69 | 0.3 | 26 -> 31 | +1.43/+1.45 | +4.5 | -1.33 | w top of grid | RESULT_AALL.md |
 | hot | 2000 | 86x108 | 0.3 | 26 -> 31 | +1.48/+1.39 | +4.5 | -1.33 | w top of grid | RESULT_AALL.md |
 | hot | 2000 | 86x86 | 0.3 | 26 -> 31 | +1.44/+1.41 | +4.5 | -1.29 | w top of grid | RESULT_AALL.md |
-| hot | 2000 | 105x131 | 0.1 | 26 -> 30 | +0.85/+0.81 | +3.8 | -1.29 | - | RESULT_AALL.md |
 | hot | 2000 | 105x84 | 0.27 | 26 -> 31 | +1.28/+1.22 | +4.1 | -1.18 | - | RESULT_AALL.md |
 | hot | 2000 | 105x105 | 0.27 | 26 -> 31 | +1.29/+1.19 | +4.1 | -1.18 | - | RESULT_AALL.md |
 | normal | 1000 | 65x81 | 0.3 | 16 -> 18 | +1.05/+1.05 | +0.5 | -0.92 | w top of grid | RESULT_AALL.md |
 | hot | 2500 | 65x81 | 0.08 | 28 -> 30 | +0.53/+0.53 | +3.4 | -0.77 | - | RESULT_AALL.md |
 | hot | 2500 | 105x131 | 0.04 | 28 -> 30 | +0.41/+0.38 | +1.8 | -0.66 | - | RESULT_AALL.md |
 | hot | 2500 | 86x86 | 0.08 | 29 -> 30 | +0.46/+0.45 | +3.4 | -0.59 | - | RESULT_AALL.md |
-| hot | 3000 | 65x81 | 0.1 | 29 -> 30 | +0.33/+0.42 | +3.2 | -0.24 | - | RESULT_AALL.md |
-| hot | 3000 | 86x86 | 0.1 | 29 -> 30 | +0.26/+0.36 | +3.0 | -0.08 | - | RESULT_AALL.md |
-| hot | 5000 | 65x81 | 0.01 | 29 -> 30 | +0.04/+0.11 | +0.2 | -0.04 | - | RESULT_AALL.md |
+| hot | 3000 | 65x81 | 0.08 | 30 -> 30 | +0.30/+0.34 | +3.2 | -0.27 | - | RESULT_AALL.md |
+| hot | 3000 | 86x86 | 0.08 | 30 -> 30 | +0.23/+0.28 | +3.0 | -0.11 | - | RESULT_AALL.md |
+| hot | 3000 | 105x131 | 0.01 | 29 -> 30 | +0.07/+0.10 | +0.3 | -0.09 | - | RESULT_AALL.md |
+| normal | 1500 | 105x131 | 0.01 | 30 -> 30 | +0.04/+0.04 | +0.0 | -0.05 | - | RESULT_AALL.md |
 | hot | 4000 | 65x81 | 0.08 | 30 -> 30 | +0.19/+0.31 | +2.9 | -0.03 | - | RESULT_AALL.md |
 | hot | 5000 | 86x86 | 0.01 | 29 -> 30 | +0.03/+0.09 | +0.2 | -0.02 | - | RESULT_AALL.md |
-| hot | 6000 | 65x81 | 0.01 | 29 -> 30 | +0.03/+0.11 | +0.2 | -0.02 | - | RESULT_AALL.md |
 
 ## Track A - CH3OH (60 rows)
 
 | regime | rpm | bore x stroke mm | water w | CR dry -> wet | d eta pp M03/CRN | power % | cost/mile % | edge flags | source |
 |---|---|---|---|---|---|---|---|---|---|
 | hot | 1000 | 105x131 | 0.3 | 16 -> 32 | +4.29/+4.39 | +5.5 | -8.29 | w top of grid; CR edge of grid | RESULT_AALL.md |
-| hot | 1500 | 105x131 | 0.3 | 18 -> 32 | +3.90/+3.55 | +5.0 | -7.18 | w top of grid; CR edge of grid | RESULT_AALL.md |
-| hot | 2000 | 105x131 | 0.3 | 18 -> 32 | +3.78/+3.31 | +4.6 | -6.80 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| hot | 1500 | 105x131 | 0.3 | 19 -> 32 | +3.73/+3.38 | +5.0 | -6.83 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 2000 | 86x108 | 0.3 | 18 -> 32 | +3.71/+3.47 | +4.6 | -6.76 | w top of grid; CR edge of grid | RESULT_AALL.md |
-| hot | 2000 | 65x81 | 0.3 | 18 -> 32 | +3.55/+3.66 | +4.5 | -6.67 | w top of grid; CR edge of grid | RESULT_AALL.md |
-| hot | 1500 | 65x81 | 0.3 | 18 -> 32 | +3.42/+3.77 | +4.4 | -6.61 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 2000 | 105x105 | 0.3 | 18 -> 32 | +3.63/+3.35 | +4.4 | -6.57 | w top of grid; CR edge of grid | RESULT_AALL.md |
-| hot | 1500 | 86x86 | 0.3 | 18 -> 32 | +3.46/+3.67 | +4.3 | -6.54 | w top of grid; CR edge of grid | RESULT_AALL.md |
-| hot | 2000 | 86x86 | 0.3 | 18 -> 32 | +3.54/+3.51 | +4.3 | -6.51 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 2000 | 65x65 | 0.3 | 18 -> 32 | +3.37/+3.69 | +4.2 | -6.40 | w top of grid; CR edge of grid | RESULT_AALL.md |
-| normal | 1000 | 105x131 | 0.3 | 18 -> 32 | +3.27/+3.35 | +4.1 | -6.38 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 2000 | 105x84 | 0.3 | 18 -> 32 | +3.49/+3.39 | +4.1 | -6.36 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 2000 | 86x69 | 0.3 | 18 -> 32 | +3.38/+3.55 | +4.0 | -6.30 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| hot | 1500 | 65x81 | 0.3 | 19 -> 32 | +3.21/+3.59 | +4.2 | -6.16 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| hot | 2000 | 105x131 | 0.3 | 20 -> 32 | +3.44/+2.94 | +4.5 | -6.12 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| hot | 1500 | 86x86 | 0.3 | 19 -> 32 | +3.25/+3.49 | +4.2 | -6.10 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| normal | 1000 | 105x131 | 0.3 | 19 -> 32 | +3.08/+3.19 | +4.0 | -5.97 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| hot | 2000 | 65x81 | 0.3 | 20 -> 32 | +3.15/+3.26 | +4.1 | -5.81 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| hot | 2000 | 86x86 | 0.3 | 20 -> 32 | +3.13/+3.10 | +4.0 | -5.68 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | normal | 1500 | 105x131 | 0.3 | 20 -> 32 | +3.05/+2.70 | +3.9 | -5.63 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 2500 | 65x81 | 0.3 | 20 -> 32 | +3.11/+3.13 | +3.9 | -5.62 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 2500 | 105x131 | 0.3 | 22 -> 32 | +3.05/+2.49 | +4.0 | -5.27 | w top of grid; CR edge of grid | RESULT_AALL.md |
@@ -80,12 +80,12 @@ Source: geometry study combined tables `RESULT_AALL.md` (Track A, 120 groups, 84
 | normal | 3000 | 65x81 | 0.3 | 24 -> 32 | +2.11/+2.12 | +2.7 | -3.63 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 4000 | 86x86 | 0.3 | 24 -> 32 | +2.22/+2.11 | +2.6 | -3.60 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | normal | 3000 | 86x86 | 0.28 | 24 -> 32 | +2.04/+1.91 | +2.4 | -3.50 | CR edge of grid | RESULT_AALL.md |
-| normal | 1000 | 86x86 | 0.3 | 18 -> 22 | +1.75/+1.69 | +2.4 | -3.35 | w top of grid | RESULT_AALL.md |
 | hot | 1000 | 65x81 | 0.3 | 16 -> 18 | +1.65/+1.65 | +2.5 | -3.16 | w top of grid | RESULT_AALL.md |
 | hot | 5000 | 65x81 | 0.3 | 26 -> 32 | +1.97/+2.04 | +2.5 | -3.11 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | hot | 5000 | 105x131 | 0.3 | 26 -> 32 | +1.90/+1.52 | +2.2 | -2.89 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | normal | 1000 | 65x81 | 0.3 | 16 -> 18 | +1.48/+1.50 | +2.2 | -2.87 | w top of grid | RESULT_AALL.md |
 | normal | 4000 | 65x81 | 0.3 | 26 -> 32 | +1.76/+1.83 | +2.2 | -2.84 | w top of grid; CR edge of grid | RESULT_AALL.md |
+| normal | 1000 | 86x86 | 0.3 | 19 -> 22 | +1.53/+1.41 | +2.1 | -2.83 | w top of grid | RESULT_AALL.md |
 | hot | 5000 | 86x86 | 0.3 | 26 -> 32 | +1.84/+1.80 | +2.2 | -2.83 | w top of grid; CR edge of grid | RESULT_AALL.md |
 | normal | 4000 | 105x131 | 0.28 | 26 -> 32 | +1.75/+1.36 | +2.0 | -2.79 | CR edge of grid | RESULT_AALL.md |
 | normal | 2000 | 65x52 | 0.3 | 22 -> 26 | +1.54/+1.83 | +2.1 | -2.74 | w top of grid | RESULT_AALL.md |
@@ -280,12 +280,10 @@ Source: geometry study combined tables `RESULT_AALL.md` (Track A, 120 groups, 84
 | normal | 2000 | 105x131 | 0.3 | 10 -> 14 | +3.78/+3.56 | +9.9 | -8.15 | - | RESULT_BALL.md |
 | normal | 2000 | 105x105 | 0.3 | 10 -> 14 | +3.70/+3.57 | +9.8 | -8.01 | - | RESULT_BALL.md |
 | normal | 2000 | 86x108 | 0.3 | 10 -> 14 | +3.67/+3.55 | +9.7 | -7.99 | - | RESULT_BALL.md |
-| normal | 2500 | 105x131 | 0.3 | 10 -> 14 | +3.77/+3.48 | +9.7 | -7.95 | w top of grid | RESULT_BALL.md |
 | normal | 2000 | 105x84 | 0.3 | 10 -> 14 | +3.60/+3.58 | +9.5 | -7.82 | - | RESULT_BALL.md |
 | normal | 2000 | 86x86 | 0.3 | 10 -> 14 | +3.57/+3.55 | +9.5 | -7.80 | - | RESULT_BALL.md |
 | normal | 2000 | 65x81 | 0.3 | 10 -> 14 | +3.47/+3.51 | +9.4 | -7.70 | - | RESULT_BALL.md |
 | normal | 2500 | 86x86 | 0.3 | 10 -> 14 | +3.58/+3.46 | +9.3 | -7.65 | w top of grid | RESULT_BALL.md |
-| normal | 2500 | 65x81 | 0.3 | 10 -> 14 | +3.50/+3.42 | +9.3 | -7.58 | w top of grid | RESULT_BALL.md |
 | normal | 2000 | 86x69 | 0.3 | 10 -> 14 | +3.44/+3.55 | +9.2 | -7.57 | - | RESULT_BALL.md |
 | normal | 2000 | 65x65 | 0.3 | 10 -> 14 | +3.34/+3.50 | +9.1 | -7.45 | - | RESULT_BALL.md |
 | normal | 4000 | 105x131 | 0.3 | 12 -> 18 | +3.77/+3.39 | +9.3 | -7.45 | w top of grid | RESULT_BALL.md |
@@ -293,13 +291,12 @@ Source: geometry study combined tables `RESULT_AALL.md` (Track A, 120 groups, 84
 | normal | 4000 | 65x81 | 0.3 | 12 -> 18 | +3.61/+3.35 | +9.1 | -7.28 | w top of grid | RESULT_BALL.md |
 | normal | 2000 | 65x52 | 0.3 | 10 -> 14 | +3.16/+3.49 | +8.7 | -7.13 | - | RESULT_BALL.md |
 | normal | 3000 | 105x131 | 0.3 | 12 -> 16 | +3.50/+3.08 | +9.7 | -7.11 | w top of grid | RESULT_BALL.md |
+| normal | 2500 | 105x131 | 0.3 | 11 -> 14 | +3.38/+3.02 | +9.7 | -7.05 | w top of grid | RESULT_BALL.md |
 | hot | 1000 | 105x131 | 0.3 | 6 -> 7 | +2.61/+2.76 | +12.0 | -6.96 | w top of grid | RESULT_BALL.md |
-| hot | 2500 | 105x131 | 0.3 | 8 -> 10 | +2.98/+2.91 | +11.8 | -6.80 | w top of grid | RESULT_BALL.md |
 | hot | 2000 | 105x131 | 0.3 | 8 -> 10 | +2.91/+2.86 | +11.8 | -6.79 | - | RESULT_BALL.md |
 | normal | 3000 | 86x86 | 0.3 | 12 -> 16 | +3.31/+3.04 | +9.3 | -6.79 | w top of grid | RESULT_BALL.md |
 | hot | 2000 | 105x105 | 0.3 | 8 -> 10 | +2.88/+2.87 | +11.7 | -6.73 | - | RESULT_BALL.md |
 | hot | 2000 | 86x108 | 0.3 | 8 -> 10 | +2.85/+2.85 | +11.7 | -6.71 | - | RESULT_BALL.md |
-| hot | 2500 | 65x81 | 0.3 | 8 -> 10 | +2.87/+2.91 | +11.7 | -6.71 | w top of grid | RESULT_BALL.md |
 | hot | 2500 | 86x86 | 0.3 | 8 -> 10 | +2.91/+2.94 | +11.7 | -6.71 | w top of grid | RESULT_BALL.md |
 | normal | 3000 | 65x81 | 0.3 | 12 -> 16 | +3.22/+2.99 | +9.2 | -6.68 | w top of grid | RESULT_BALL.md |
 | hot | 2000 | 105x84 | 0.3 | 8 -> 10 | +2.84/+2.88 | +11.6 | -6.66 | - | RESULT_BALL.md |
@@ -310,6 +307,7 @@ Source: geometry study combined tables `RESULT_AALL.md` (Track A, 120 groups, 84
 | hot | 1000 | 86x86 | 0.3 | 6 -> 7 | +2.40/+2.74 | +11.4 | -6.50 | w top of grid | RESULT_BALL.md |
 | hot | 4000 | 65x81 | 0.3 | 10 -> 14 | +3.03/+3.09 | +11.1 | -6.50 | w top of grid | RESULT_BALL.md |
 | hot | 2000 | 65x65 | 0.3 | 8 -> 10 | +2.70/+2.83 | +11.4 | -6.48 | - | RESULT_BALL.md |
+| normal | 2500 | 65x81 | 0.3 | 11 -> 14 | +3.04/+2.91 | +9.1 | -6.48 | w top of grid | RESULT_BALL.md |
 | hot | 4000 | 86x86 | 0.3 | 10 -> 14 | +3.05/+3.11 | +11.1 | -6.48 | w top of grid | RESULT_BALL.md |
 | hot | 4000 | 105x131 | 0.3 | 10 -> 14 | +3.06/+3.06 | +11.0 | -6.42 | w top of grid | RESULT_BALL.md |
 | normal | 5000 | 86x86 | 0.3 | 14 -> 20 | +3.32/+2.88 | +8.8 | -6.37 | w top of grid | RESULT_BALL.md |
@@ -328,8 +326,10 @@ Source: geometry study combined tables `RESULT_AALL.md` (Track A, 120 groups, 84
 | hot | 6000 | 65x81 | 0.3 | 12 -> 16 | +2.69/+2.66 | +10.7 | -5.38 | w top of grid | RESULT_BALL.md |
 | hot | 6000 | 105x131 | 0.3 | 12 -> 16 | +2.74/+2.67 | +10.7 | -5.38 | w top of grid | RESULT_BALL.md |
 | hot | 1500 | 65x81 | 0.3 | 7 -> 8 | +2.13/+2.34 | +10.9 | -5.35 | w top of grid | RESULT_BALL.md |
+| hot | 2500 | 105x131 | 0.3 | 9 -> 10 | +2.32/+2.14 | +11.6 | -5.14 | w top of grid | RESULT_BALL.md |
 | hot | 5000 | 105x131 | 0.3 | 12 -> 14 | +2.45/+2.13 | +11.2 | -4.87 | w top of grid | RESULT_BALL.md |
 | hot | 5000 | 86x86 | 0.3 | 12 -> 14 | +2.36/+2.06 | +11.0 | -4.72 | w top of grid | RESULT_BALL.md |
+| hot | 2500 | 65x81 | 0.3 | 9 -> 10 | +2.08/+2.02 | +11.0 | -4.67 | w top of grid | RESULT_BALL.md |
 | hot | 5000 | 65x81 | 0.3 | 12 -> 14 | +2.30/+2.01 | +10.9 | -4.64 | w top of grid | RESULT_BALL.md |
 
 ## Track B - PRF97 (32 rows)
