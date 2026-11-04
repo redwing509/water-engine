@@ -1,0 +1,203 @@
+{
+ "elapsed_s": 19205.294097185135,
+ "pending": 0,
+ "chains": {
+  "steps_PRF87_normal__sym.jsonl": {
+   "judged": 151,
+   "w": 0.151,
+   "stop": "M03 gain 3.28e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.6334866184715071,
+   "d_eta_crn_pp": 0.6217905163977244
+  },
+  "steps_PRF87_normal_humid_evap__sym.jsonl": {
+   "judged": 150,
+   "w": 0.15,
+   "stop": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.6305199096154124,
+   "d_eta_crn_pp": 0.6195229482278519
+  },
+  "steps_PRF87_hot__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain 2.35e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_PRF87_hot_humid_evap__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain 2.35e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_PRF91_normal__sym.jsonl": {
+   "judged": 188,
+   "w": 0.188,
+   "stop": "M03 gain 3.27e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.9039043590190032,
+   "d_eta_crn_pp": 0.887619980626414
+  },
+  "steps_PRF91_normal_humid_evap__sym.jsonl": {
+   "judged": 188,
+   "w": 0.188,
+   "stop": "M03 gain 3.27e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.9039043590201135,
+   "d_eta_crn_pp": 0.8876182828927937
+  },
+  "steps_PRF91_hot__sym.jsonl": {
+   "judged": 126,
+   "w": 0.126,
+   "stop": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.470402082612853,
+   "d_eta_crn_pp": 0.4646606920914731
+  },
+  "steps_PRF91_hot_humid_evap__sym.jsonl": {
+   "judged": 27,
+   "w": 0.027,
+   "stop": "M03 gain 3.30e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.08833242239031924,
+   "d_eta_crn_pp": 0.08933625901029751
+  },
+  "steps_PRF97_normal__sym.jsonl": {
+   "judged": 186,
+   "w": 0.186,
+   "stop": "M03 gain 3.26e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.865216308899941,
+   "d_eta_crn_pp": 0.8499940643331316
+  },
+  "steps_PRF97_normal_humid_evap__sym.jsonl": {
+   "judged": 186,
+   "w": 0.186,
+   "stop": "M03 gain 3.26e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.865216308899941,
+   "d_eta_crn_pp": 0.8499912273256693
+  },
+  "steps_PRF97_hot__sym.jsonl": {
+   "judged": 183,
+   "w": 0.183,
+   "stop": "M03 gain 3.26e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.7324894922559777,
+   "d_eta_crn_pp": 0.7257981192088259
+  },
+  "steps_PRF97_hot_humid_evap__sym.jsonl": {
+   "judged": 3,
+   "w": 0.003,
+   "stop": "M03 gain 3.28e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0073694981910621404,
+   "d_eta_crn_pp": 0.007452419766135199
+  },
+  "steps_E10_normal__sym.jsonl": {
+   "judged": 175,
+   "w": 0.175,
+   "stop": "M03 gain 3.24e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.8590914039313835,
+   "d_eta_crn_pp": 0.8420952881033339
+  },
+  "steps_E10_normal_humid_evap__sym.jsonl": {
+   "judged": 175,
+   "w": 0.175,
+   "stop": "M03 gain 3.24e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.8590914039307118,
+   "d_eta_crn_pp": 0.8420928137510386
+  },
+  "steps_E10_hot__sym.jsonl": {
+   "judged": 191,
+   "w": 0.191,
+   "stop": "M03 gain 3.26e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.8116013476155426,
+   "d_eta_crn_pp": 0.8029022027582544
+  },
+  "steps_E10_hot_humid_evap__sym.jsonl": {
+   "judged": 300,
+   "w": 0.3,
+   "stop": "cap 300 steps reached (w 0.30 = flame-fit edge): fit-range limited",
+   "d_eta_m03_pp": 1.2717009613037233,
+   "d_eta_crn_pp": 1.2744391675982514
+  },
+  "steps_E85_normal__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain 2.99e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_E85_normal_humid_evap__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain -2.31e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_E85_hot__sym.jsonl": {
+   "judged": 187,
+   "w": 0.187,
+   "stop": "M03 gain 3.01e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 1.2208281613533156,
+   "d_eta_crn_pp": 1.19630726806087
+  },
+  "steps_E85_hot_humid_evap__sym.jsonl": {
+   "judged": 183,
+   "w": 0.183,
+   "stop": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 1.2084572430504537,
+   "d_eta_crn_pp": 1.1849799880788103
+  },
+  "steps_CH3OH_normal__sym.jsonl": {
+   "judged": 31,
+   "w": 0.031,
+   "stop": "M03 gain 3.21e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.13467299955657874,
+   "d_eta_crn_pp": 0.13088926567053072
+  },
+  "steps_CH3OH_normal_humid_evap__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain -2.96e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_CH3OH_hot__sym.jsonl": {
+   "judged": 63,
+   "w": 0.063,
+   "stop": "M03 gain 3.27e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.35387861008398525,
+   "d_eta_crn_pp": 0.34529602045229035
+  },
+  "steps_CH3OH_hot_humid_evap__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain -1.96e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_C2H5OH_normal__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain -4.69e-06 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_C2H5OH_normal_humid_evap__sym.jsonl": {
+   "judged": 1,
+   "w": 0.001,
+   "stop": "M03 gain -3.40e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.0,
+   "d_eta_crn_pp": 0.0
+  },
+  "steps_C2H5OH_hot__sym.jsonl": {
+   "judged": 86,
+   "w": 0.086,
+   "stop": "M03 gain 2.32e-06 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.3350168128688491,
+   "d_eta_crn_pp": 0.332302750375707
+  },
+  "steps_C2H5OH_hot_humid_evap__sym.jsonl": {
+   "judged": 45,
+   "w": 0.045,
+   "stop": "M03 gain 4.19e-06 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.21769442807534345,
+   "d_eta_crn_pp": 0.2155560668009593
+  }
+ },
+ "updated": "2026-10-26T10:57:00+0100"
+}
