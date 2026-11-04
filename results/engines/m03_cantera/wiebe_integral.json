@@ -1,0 +1,25 @@
+{
+ "criterion": "V-C Wiebe integral |err| <= 1e-6 relative (rtol 1e-9, woschni + hohenberg, all 18 rows)",
+ "max_rel_err": 3.805758486130628e-09,
+ "per_row": {
+  "normal|C2H5OH/CR=22/w=0.0/T_intake=320": 1.3819431154971085e-09,
+  "hot|C2H5OH/CR=22/w=0.0/T_intake=320": 1.3391719955180292e-09,
+  "normal|C2H5OH/CR=23/w=0.4/T_intake=320": 1.994953757744611e-09,
+  "hot|C2H5OH/CR=23/w=0.4/T_intake=320": 2.0320367610793255e-09,
+  "normal|C2H5OH/CR=24/w=0.0/T_intake=320": 1.7212360425844508e-09,
+  "hot|C2H5OH/CR=24/w=0.0/T_intake=320": 1.0673364414515163e-09,
+  "normal|C2H5OH/CR=24/w=0.6/T_intake=360": 2.3245116942405275e-09,
+  "hot|C2H5OH/CR=24/w=0.6/T_intake=360": 3.192350606084915e-09,
+  "hot|C2H5OH/CR=24/w=0.6/T_intake=400": 3.805758486130628e-09,
+  "normal|CH3OH/CR=15/w=0.0/T_intake=320": 1.9005366169722038e-09,
+  "hot|CH3OH/CR=15/w=0.0/T_intake=320": 9.754519414428842e-10,
+  "normal|CH3OH/CR=16/w=0.0/T_intake=320": 1.3094637596466896e-09,
+  "hot|CH3OH/CR=16/w=0.0/T_intake=320": 8.10274070062178e-10,
+  "normal|CH3OH/CR=23/w=0.3/T_intake=320": 3.5434580825111084e-09,
+  "hot|CH3OH/CR=23/w=0.3/T_intake=320": 3.074789312051962e-09,
+  "normal|CH3OH/CR=24/w=0.6/T_intake=360": 1.6828609616936774e-09,
+  "hot|CH3OH/CR=24/w=0.6/T_intake=360": 3.2693301399433494e-09,
+  "hot|CH3OH/CR=24/w=0.6/T_intake=400": 3.1670915889847606e-09
+ },
+ "pass_": true
+}

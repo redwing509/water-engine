@@ -1,0 +1,37 @@
+{
+ "source": "no measured data at /workspace/self-jobs/we45/we45_measured.csv",
+ "mean_bias_pct": null,
+ "flagged": null,
+ "mode": "bracket, no measured bias",
+ "cases": {
+  "bracket+10": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    0.2,
+    0.1
+   ],
+   [
+    0.3,
+    0.15
+   ]
+  ],
+  "bracket+20": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    0.2,
+    0.2
+   ],
+   [
+    0.3,
+    0.3
+   ]
+  ],
+  "fit": null
+ }
+}

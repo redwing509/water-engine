@@ -1,0 +1,392 @@
+{
+  "module": "06_carburetor",
+  "version": "1.0.0",
+  "git_sha": "unknown",
+  "synthetic_fits": false,
+  "design_status": "preliminary sizing; flow-bench and engine calibration required",
+  "provenance": {
+    "design_point.json": "95c259480b296b6b344d7538f18bef3e877236f2e25882a08f729707b255a3ff",
+    "evo_states.json": "1db5b1261338a70ea1cad0c8cfc3c8ad95e159f1545a1b154da3523d10dfbeda"
+  },
+  "design_point": {
+    "fuel": "CH3OH",
+    "CR": 24,
+    "w": 0.6,
+    "WFR": 1.5,
+    "T_intake_K": 360,
+    "rpm": 2000.0,
+    "displacement_m3": 0.0005,
+    "module03_displacement_m3": 0.0004995572142179272,
+    "p_manifold_Pa": 100000.0,
+    "air_mass_flow_kg_s": 0.007895798355385208,
+    "fuel_mass_flow_kg_s": 0.0012281656926827731,
+    "water_mass_flow_kg_s": 0.0018422485390241594,
+    "stoichiometric_AFR": 6.428935771799513,
+    "evo_state_key": "CH3OH/CR=24/w=0.6/T_intake=360"
+  },
+  "venturi": {
+    "throat_diameter_m": 0.027,
+    "inlet_diameter_m": 0.03915,
+    "throttle_bore_diameter_m": 0.0351,
+    "design_signal_Pa": 1455.1122390675155,
+    "maximum_event_air_mass_flow_kg_s": 0.06316638684308166,
+    "maximum_mach": 0.2998654789992279
+  },
+  "option_A": {
+    "fuel": "CH3OH",
+    "water_mass_fraction": 0.6,
+    "main_jet_diameter_m": 0.0036000000000000003,
+    "idle_jet_diameter_m": 0.00054,
+    "float_level_below_throat_m": 0.006,
+    "needle_seat_diameter_m": 0.00161,
+    "jet_length_m": 0.001,
+    "liquid_properties": {
+      "density_kg_m3": 930.0,
+      "viscosity_Pa_s": 0.0016,
+      "surface_tension_N_m": 0.035
+    },
+    "main_jet_Cd_effective": 0.7486243514383931,
+    "needle_capacity_kg_s": 0.009290081284164798,
+    "main_jet_reynolds": 2718.4892254236192,
+    "circuit": "One premix bowl supplies main and idle/progression passages; both meter 40/60 methanol/water by mass"
+  },
+  "option_B": {
+    "fuel": {
+      "main_jet_diameter_m": 0.00237,
+      "idle_jet_diameter_m": 0.00035000000000000005,
+      "float_level_below_throat_m": 0.006,
+      "needle_seat_diameter_m": 0.0010600000000000002,
+      "jet_length_m": 0.001,
+      "liquid_properties": {
+        "density_kg_m3": 785.0,
+        "viscosity_Pa_s": 0.00055,
+        "surface_tension_N_m": 0.022
+      },
+      "main_jet_Cd_effective": 0.748815863384278,
+      "needle_capacity_kg_s": 0.003700983904379833,
+      "main_jet_reynolds": 4799.037412444655
+    },
+    "water": {
+      "main_jet_diameter_m": 0.00158,
+      "idle_jet_diameter_m": 0.00024000000000000003,
+      "float_level_below_throat_m": 0.004726542900150526,
+      "needle_seat_diameter_m": 0.0012300000000000002,
+      "jet_length_m": 0.001,
+      "liquid_properties": {
+        "density_kg_m3": 996.5,
+        "viscosity_Pa_s": 0.000855,
+        "surface_tension_N_m": 0.0717
+      },
+      "main_jet_Cd_effective": 0.7463300452906371,
+      "needle_capacity_kg_s": 0.005614318067662728,
+      "main_jet_reynolds": 2311.1022683231076
+    },
+    "cruise_WFR_target": 0.5,
+    "WOT_WFR_target": 1.5,
+    "water_power_valve": {
+      "jet_diameter_m": 0.00223,
+      "fully_open_below_vacuum_Pa": 15000.0,
+      "closed_above_vacuum_Pa": 25000.0,
+      "topology": "Parallel water enrichment jet at the same throat signal; manifold vacuum closes the diaphragm valve",
+      "interlock": "Normally closed liquid shutoff linked to engine-running and warm-intake permissives; vacuum alone opens at engine stop",
+      "model": "Linear effective-area opening between thresholds; no transient/hysteresis prediction"
+    },
+    "WFR_formula": "sum(Cd_w*A_w*opening)*sqrt(rho_w*dp_w)/(Cd_f*A_f*sqrt(rho_f*dp_f))",
+    "equal_head_formula": "sum(Cd_w*A_w*opening)*sqrt(rho_w)/(Cd_f*A_f*sqrt(rho_f))",
+    "float_head_note": "Water float set for equal hydrostatic pressure lift, not equal geometric float height"
+  },
+  "assumptions": {
+    "parameters": {
+      "displacement_m3": 0.0005,
+      "rpm_min": 1000.0,
+      "rpm_max": 4000.0,
+      "ambient_Pa": 101325.0,
+      "tank_T_K": 300.0,
+      "intake_event_duty": 0.25,
+      "throat_max_mach": 0.3,
+      "venturi_Cd": 0.95,
+      "jet_Cd_inviscid": 0.75,
+      "jet_length_m": 0.001,
+      "fuel_float_drop_m": 0.006,
+      "idle_map_ratio": 0.3,
+      "idle_taper_signal_Pa": 700.0,
+      "cruise_WFR": 0.5,
+      "valve_fully_open_vacuum_Pa": 15000.0,
+      "valve_closed_vacuum_Pa": 25000.0,
+      "needle_supply_gauge_Pa": 20000.0,
+      "needle_capacity_margin": 1.5,
+      "inlet_throat_ratio": 1.45,
+      "throttle_throat_ratio": 1.3,
+      "drill_increment_m": 1e-05,
+      "hx_effectiveness": 0.6,
+      "exhaust_minimum_T_K": 360.0,
+      "water_latent_300K_J_kg": 2437000.0,
+      "methanol_latent_300K_J_kg": 1169000.0,
+      "plenum_volume_m3": 0.001,
+      "droplet_surface_T_K": 310.0,
+      "gas_conductivity_W_m_K": 0.03,
+      "gas_cp_J_kg_K": 1050.0,
+      "power_valve_starts_vacuum_Pa": 25000.0,
+      "power_valve_full_vacuum_Pa": 15000.0
+    },
+    "sources": {
+      "compressible_flow": "https://www.grc.nasa.gov/www/k-12/airplane/mflchk.html",
+      "blend_properties": "https://trc.nist.gov/ThermoML/10.1016/j.jct.2007.05.004.html",
+      "atomization": "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=91016WNN.TXT",
+      "evaporation": "https://ntrs.nasa.gov/citations/20040084641",
+      "methanol_latent_heat": "https://webbook.nist.gov/cgi/cbook.cgi?ID=C67561&Mask=4",
+      "water_properties": "https://iapws.org/relguide/IAPWS95-2018.pdf"
+    },
+    "liquid_properties_basis": "Rounded estimates near 300 K; blend viscosity/density informed by Gonzalez 2007; no exact data fit claimed",
+    "air_demand": "Module 03 fresh charge scaled by 500 cc / source displacement, rpm and manifold pressure ratio; constant trapped-temperature/VE proxy",
+    "metering": "Quasi-steady rectangular intake pulses; atmosphere-vented bowls; main at throat, idle downstream of throttle",
+    "idle_progression": "Idle effective port area tapers linearly to zero at 700 Pa venturi signal; empirical layout assumption requiring bench calibration",
+    "throttle": "Map coordinate is manifold pressure ratio, not butterfly angle; no throttle-angle torque model",
+    "heat_model": "Frozen NASA7 enthalpy from source mechanism; 300 K liquids; additive pure-component vaporization; no water fuel energy",
+    "viscosity": "Quadratic orifice pressure drop plus laminar bore loss; Cd_inviscid 0.75; effective Cd is reported",
+    "drill_sizes": "Rounded to 0.01 mm; geometric diameters, not commercial jet-number labels",
+    "plot_renderer": "matplotlib",
+    "workers_requested": 8,
+    "execution": "Serial deterministic algebraic sizing; no benefit from multiprocessing"
+  },
+  "heat_balance": {
+    "basis": "2000 rpm WOT; fresh exhaust mass; frozen EVO composition; no condensation credit",
+    "EVO_T_K": 877.0899878569235,
+    "exhaust_minimum_T_K": 360.0,
+    "hx_effectiveness": 0.6,
+    "effectiveness_definition": "0.6 times hot-side sensible availability down to 360 K; screening heat-recovery factor, not a solved two-stream HX",
+    "fresh_exhaust_mass_flow_kg_s": 0.010966212587092142,
+    "exhaust_sensible_available_kW": 7.683910199361884,
+    "recovered_exhaust_heat_kW": 4.61034611961713,
+    "intake_heating_needed_kW": 6.718741155934031,
+    "air_sensible_kW": 0.4800859274923429,
+    "methanol_vaporization_and_sensible_kW": 1.541914951457144,
+    "water_vaporization_and_sensible_kW": 4.696740276984543,
+    "margin_kW": -2.1083950363169,
+    "passed": false,
+    "status": "FAIL",
+    "pass_fail": "FAIL",
+    "module03_compatible": {
+      "description": "Energy budget for Module 03 idealization: air and methanol vapour initially at 360 K, water at 300 K; subsequent mixing cools the charge. Not a selective vaporization prediction for the premix",
+      "intake_heating_needed_kW": 2.022000878949487,
+      "passed": true,
+      "T_IVC_K": 305.65935510086405,
+      "water_evaporated_fraction": 0.12444199664160992
+    },
+    "limitations": [
+      "EVO temperature is an optimistic HX inlet proxy; exhaust blowdown and pipe losses are not resolved.",
+      "Full vaporization at 360 K changes trapped density and the Module 03 cycle; rerun Module 03 for that configuration.",
+      "Heat of mixing, wall films and cold-start heat supply are not included; water has zero fuel heating value."
+    ],
+    "mechanism_sha256": "859b088d3e973c9803267fa0e6a05d7a82b5a473a994e43b3b4e158783191e20"
+  },
+  "validation": {
+    "design_AFR_relative_error": {
+      "A": 0.001341550410201453,
+      "B": 8.772336465290298e-05
+    },
+    "AFR_tolerance": 0.03,
+    "AFR_passed": true,
+    "option_B_WFR_from_flow": 1.4957173739289387,
+    "option_B_WFR_from_jet_area_formula": 1.4957173739289384,
+    "option_B_formula_relative_error": 1.1102230246251565e-16,
+    "option_B_formula_passed": true,
+    "option_B_WFR_target_passed": true,
+    "heat_balance_passed": false,
+    "sizing_passed": true
+  },
+  "validation_passed": true,
+  "use_for_design": true,
+  "use_for_design_scope": "Concept CAD dimensions only; thermal/full-map feasibility is reported separately",
+  "design_point_metering": [
+    {
+      "option": "A",
+      "rpm": 2000.0,
+      "manifold_ratio": 1.0,
+      "manifold_Pa": 100000.0,
+      "air_mass_flow_kg_s": 0.007895798355385208,
+      "fuel_mass_flow_kg_s": 0.0012298155522413546,
+      "water_mass_flow_kg_s": 0.0018447233283620315,
+      "main_fuel_mass_flow_kg_s": 0.0012298155522413546,
+      "idle_fuel_mass_flow_kg_s": 0.0,
+      "AFR": 6.420311030377697,
+      "phi": 1.0013433525854134,
+      "WFR": 1.4999999999999996,
+      "throat_signal_Pa": 1455.1122390675155,
+      "throat_mach": 0.14389921095787017,
+      "water_power_valve_open_fraction": 0.0,
+      "main_water_mass_flow_kg_s": 0.0018447233283620315,
+      "power_water_mass_flow_kg_s": 0.0
+    },
+    {
+      "option": "B",
+      "rpm": 2000.0,
+      "manifold_ratio": 1.0,
+      "manifold_Pa": 100000.0,
+      "air_mass_flow_kg_s": 0.007895798355385208,
+      "fuel_mass_flow_kg_s": 0.001228273440961728,
+      "water_mass_flow_kg_s": 0.0018371499255819372,
+      "main_fuel_mass_flow_kg_s": 0.001228273440961728,
+      "idle_fuel_mass_flow_kg_s": 0.0,
+      "AFR": 6.428371803922474,
+      "phi": 1.0000877310607168,
+      "WFR": 1.4957173739289387,
+      "throat_signal_Pa": 1455.1122390675155,
+      "throat_mach": 0.14389921095787017,
+      "water_power_valve_open_fraction": 1,
+      "main_water_mass_flow_kg_s": 0.0006130166289578849,
+      "power_water_mass_flow_kg_s": 0.0012241332966240522
+    }
+  ],
+  "design_table": [
+    {
+      "circuit": "option_A_premix",
+      "main_jet_diameter_m": 0.0036000000000000003,
+      "idle_jet_diameter_m": 0.00054,
+      "float_level_below_throat_m": 0.006,
+      "needle_seat_diameter_m": 0.00161,
+      "throat_diameter_m": 0.027,
+      "inlet_diameter_m": 0.03915,
+      "throttle_bore_diameter_m": 0.0351
+    },
+    {
+      "circuit": "option_B_fuel",
+      "main_jet_diameter_m": 0.00237,
+      "idle_jet_diameter_m": 0.00035000000000000005,
+      "float_level_below_throat_m": 0.006,
+      "needle_seat_diameter_m": 0.0010600000000000002,
+      "throat_diameter_m": 0.027,
+      "inlet_diameter_m": 0.03915,
+      "throttle_bore_diameter_m": 0.0351
+    },
+    {
+      "circuit": "option_B_water",
+      "main_jet_diameter_m": 0.00158,
+      "idle_jet_diameter_m": 0.00024000000000000003,
+      "float_level_below_throat_m": 0.004726542900150526,
+      "needle_seat_diameter_m": 0.0012300000000000002,
+      "throat_diameter_m": 0.027,
+      "inlet_diameter_m": 0.03915,
+      "throttle_bore_diameter_m": 0.0351
+    },
+    {
+      "circuit": "option_B_water_power",
+      "main_jet_diameter_m": 0.00223,
+      "idle_jet_diameter_m": 0.0,
+      "float_level_below_throat_m": 0.004726542900150526,
+      "needle_seat_diameter_m": 0.0012300000000000002,
+      "throat_diameter_m": 0.027,
+      "inlet_diameter_m": 0.03915,
+      "throttle_bore_diameter_m": 0.0351
+    }
+  ],
+  "atomization": {
+    "design_point": {
+      "blend": {
+        "SMD_m": 8.638682406146324e-05,
+        "d2_constant_m2_s": 6.596968629156822e-09,
+        "evaporation_time_s": 1.131229173721269,
+        "residence_time_s": 0.08064421405759793,
+        "evaporation_within_residence": false
+      },
+      "fuel": {
+        "SMD_m": 6.546412366176172e-05,
+        "d2_constant_m2_s": 1.2791535352349919e-08,
+        "evaporation_time_s": 0.3350302656213303,
+        "residence_time_s": 0.08064421405759793,
+        "evaporation_within_residence": false
+      },
+      "water": {
+        "SMD_m": 0.00010333681396266519,
+        "d2_constant_m2_s": 4.888908312128149e-09,
+        "evaporation_time_s": 2.184229369461443,
+        "residence_time_s": 0.08064421405759793,
+        "evaporation_within_residence": false
+      }
+    },
+    "model": "Nukiyama-Tanasawa SMD + isolated-droplet heat-limited d2 law",
+    "limitation": "Screening only: low throat velocity extrapolates the correlation; blend preferential evaporation, spray humidity and wall films unresolved. SMD factor-two uncertainty means evaporation-time factor four."
+  },
+  "schema_version": 1,
+  "options": {
+    "A": {
+      "venturi_throat_diameter_m": 0.027,
+      "venturi_inlet_diameter_m": 0.03915,
+      "throttle_bore_diameter_m": 0.0351,
+      "circuits": [
+        {
+          "liquid": "wet_methanol_w0.6",
+          "main_jet_diameter_m": 0.0036000000000000003,
+          "idle_jet_diameter_m": 0.00054,
+          "needle_seat_diameter_m": 0.00161,
+          "float_level_m": -0.006,
+          "jet_length_m": 0.001,
+          "vacuum_power_valve": false
+        }
+      ]
+    },
+    "B": {
+      "venturi_throat_diameter_m": 0.027,
+      "venturi_inlet_diameter_m": 0.03915,
+      "throttle_bore_diameter_m": 0.0351,
+      "circuits": [
+        {
+          "liquid": "methanol",
+          "main_jet_diameter_m": 0.00237,
+          "idle_jet_diameter_m": 0.00035000000000000005,
+          "needle_seat_diameter_m": 0.0010600000000000002,
+          "float_level_m": -0.006,
+          "jet_length_m": 0.001,
+          "vacuum_power_valve": false
+        },
+        {
+          "liquid": "water",
+          "main_jet_diameter_m": 0.00158,
+          "idle_jet_diameter_m": 0.00024000000000000003,
+          "needle_seat_diameter_m": 0.0012300000000000002,
+          "float_level_m": -0.004726542900150526,
+          "jet_length_m": 0.001,
+          "vacuum_power_valve": true
+        }
+      ],
+      "water_power_jet_diameter_m": 0.00223,
+      "water_power_jet_topology": "Parallel to baseline water main jet"
+    }
+  },
+  "operating_map": {
+    "rpm_range": [
+      1000,
+      4000
+    ],
+    "manifold_ratio_range": [
+      0.3,
+      1.0
+    ],
+    "rows": 210,
+    "heat_balance_scope": "Design point only; no Module 03 part-load EVO sweep is available",
+    "ranges": {
+      "A": {
+        "phi": [
+          0.8218300957202647,
+          1.1974123588102117
+        ],
+        "WFR": [
+          1.4999999999999996,
+          1.5
+        ]
+      },
+      "B": {
+        "phi": [
+          0.7940640639885537,
+          1.2229280439802208
+        ],
+        "WFR": [
+          0.49832558041540465,
+          1.4970351360682037
+        ]
+      }
+    },
+    "full_map_AFR_within_3pct": false,
+    "limitation": "Fixed main/idle jets and assumed progression do not guarantee target AFR throughout the map; tune air bleed/progression on a flow bench"
+  }
+}

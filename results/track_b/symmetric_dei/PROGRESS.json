@@ -1,0 +1,14 @@
+{
+ "elapsed_s": 432.3588194847107,
+ "pending": 8,
+ "chains": {
+  "steps_CH3OH_normal_humid_evap__sym_from141.jsonl": {
+   "judged": 216,
+   "w": 0.216,
+   "stop": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+   "d_eta_m03_pp": 0.7993331170703999,
+   "d_eta_crn_pp": 0.7798110517021117
+  }
+ },
+ "updated": "2026-10-25T22:18:00-0700"
+}
