@@ -1,0 +1,58 @@
+{
+"A0": {
+"penetration_eoi_mm": 18.131600000000002,
+"evaporated_eoi_pct": 92.94649378195315,
+"runtime_s": 22311,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+},
+"A1-BLEND": {
+"penetration_eoi_mm": 97.18549999999999,
+"evaporated_eoi_pct": 0.7352852088785555,
+"runtime_s": 2956,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+},
+"A1-CH3OH": {
+"penetration_eoi_mm": 97.1919,
+"evaporated_eoi_pct": 2.205189328548418,
+"runtime_s": 235,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+},
+"A1-H2O": {
+"penetration_eoi_mm": 97.1254,
+"evaporated_eoi_pct": 0.3586804705611346,
+"runtime_s": 210,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+},
+"A2-BLEND": {
+"penetration_eoi_mm": 51.2128,
+"evaporated_eoi_pct": 21.39659593218114,
+"runtime_s": 8022,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+},
+"A2-CH3OH": {
+"penetration_eoi_mm": 49.534099999999995,
+"evaporated_eoi_pct": 48.00042125428463,
+"runtime_s": 2933,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+},
+"A2-H2O": {
+"penetration_eoi_mm": 52.7265,
+"evaporated_eoi_pct": 12.29737196225037,
+"runtime_s": 408,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+},
+"grid_check_A1-BLEND": {
+"penetration_eoi_mm": null,
+"evaporated_eoi_pct": null,
+"runtime_s": null,
+"penetration_change_pct": null,
+"evaporated_change_pct": null
+}
+}
