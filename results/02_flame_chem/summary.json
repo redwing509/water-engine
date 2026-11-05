@@ -1,0 +1,624 @@
+{
+  "module": "02_flame_chem",
+  "version": "1.0.0",
+  "git_sha": "unknown",
+  "mode": "full",
+  "assumptions": {
+    "reference_temperature_K": {
+      "value": 298.15,
+      "source": "SPEC \u00a7\u00a74,8"
+    },
+    "reference_pressure_Pa": {
+      "value": 101325.0,
+      "rationale": "Standard atmosphere; ideal-gas enthalpy is pressure independent"
+    },
+    "air_N2_per_O2_mol": {
+      "value": 3.76,
+      "source": "SPEC/user contract"
+    },
+    "water_heating_value_J_kg": {
+      "value": 0.0,
+      "rationale": "Fully oxidised; identity reaction, not vaporization or condensation"
+    },
+    "lhv_basis": {
+      "value": "Registered reactant phase, CO2(g) and H2O(g) products",
+      "source": "SPEC \u00a710 liquid-alcohol targets; Cantera heating-value method"
+    },
+    "thermo_data": {
+      "value": "Cantera species enthalpies and element weights",
+      "source": "Smith et al. (1999), GRI-Mech 3.0 / UCSD YAML thermodynamic data; mechanisms/PROVENANCE.md",
+      "cantera_version": "3.2.0",
+      "coolprop_version": "8.0.0"
+    },
+    "temperature_evaluation_policy": {
+      "value": "Evaluate species thermo at 298.15 K even if a polynomial lower bound is 300 K",
+      "rationale": "SPEC standard-state LHV reference; short polynomial extrapolation is explicit, without changing the reference temperature"
+    },
+    "fuel_registry": {
+      "H2": {
+        "formula": "H2",
+        "state": "gas",
+        "molar_mass_kg_mol": 0.002016,
+        "liquid_density_kg_m3": null,
+        "density_source": "No liquid phase at 298.15 K",
+        "h_fg_J_kg": null,
+        "h_fg_source": "Not defined at 298.15 K: above critical temperature"
+      },
+      "CH4": {
+        "formula": "CH4",
+        "state": "gas",
+        "molar_mass_kg_mol": 0.016042999999999998,
+        "liquid_density_kg_m3": null,
+        "density_source": "No liquid phase at 298.15 K",
+        "h_fg_J_kg": null,
+        "h_fg_source": "Not defined at 298.15 K: above critical temperature"
+      },
+      "CH3OH": {
+        "formula": "CH3OH",
+        "state": "liquid",
+        "molar_mass_kg_mol": 0.032042,
+        "liquid_density_kg_m3": 786.3266764548082,
+        "density_source": "CoolProp Methanol EOS: de Reuck and Craven (1993)",
+        "h_fg_J_kg": 1173459.8339679171,
+        "h_fg_source": "NIST SRD 69 methanol standard vaporization enthalpy table"
+      },
+      "C2H5OH": {
+        "formula": "C2H5OH",
+        "state": "liquid",
+        "molar_mass_kg_mol": 0.046069000000000006,
+        "liquid_density_kg_m3": 785.1332673410258,
+        "density_source": "CoolProp Ethanol EOS: Schroeder et al. (2014)",
+        "h_fg_J_kg": 918187.9354880721,
+        "h_fg_source": "NIST SRD 69 ethanol standard vaporization enthalpy table"
+      },
+      "H2O": {
+        "formula": "H2O",
+        "state": "liquid",
+        "molar_mass_kg_mol": 0.018015,
+        "liquid_density_kg_m3": 997.047636760347,
+        "density_source": "CoolProp Water EOS: Wagner and Pruss (2002), IAPWS-95",
+        "h_fg_J_kg": 2442631.14071607,
+        "h_fg_source": "Chase (1998), JANAF H2O(g) minus H2O(l)"
+      }
+    },
+    "mechanisms": {
+      "H2": {
+        "name": "gri30.yaml",
+        "mechanism_fallback": false,
+        "selected_in_mode": true
+      },
+      "CH4": {
+        "name": "gri30.yaml",
+        "mechanism_fallback": false,
+        "selected_in_mode": true
+      },
+      "CH3OH": {
+        "name": "mechanisms/sandiego.yaml",
+        "mechanism_fallback": false,
+        "selected_in_mode": true
+      },
+      "C2H5OH": {
+        "name": "mechanisms/sandiego.yaml",
+        "mechanism_fallback": false,
+        "selected_in_mode": true
+      }
+    },
+    "mechanism_fallback": false,
+    "parameters": {
+      "defaults": {
+        "water_T_K": 300.0,
+        "intake_T_K": 320.0,
+        "cooling_p_Pa": 101325.0,
+        "dew_margin_K": 0.1,
+        "flame_width_1atm_m": 0.03,
+        "flame_width_5bar_m": 0.01,
+        "refine_ratio": 3.0,
+        "refine_slope": 0.07,
+        "refine_curve": 0.14,
+        "flame_stop_m_s": 0.02,
+        "robust_m_s": 0.15,
+        "marginal_m_s": 0.08,
+        "ignition_max_time_s": 0.5,
+        "ignition_min_rise_K": 200.0,
+        "ignition_max_step_s": 0.005,
+        "reactor_rtol": 1e-09,
+        "reactor_atol": 1e-15,
+        "ignition_pressure_exponent": 1.0,
+        "fit_max_evaluations": 2000
+      },
+      "ignition_max_time_s_used": 0.5,
+      "sources": {
+        "water_T_K,intake_T_K,refine_ratio,refine_slope,refine_curve,flame_stop_m_s,robust_m_s,marginal_m_s,ignition_max_time_s,ignition_pressure_exponent": "SPEC section 5 and task contract",
+        "cooling_p_Pa": "Standard atmosphere: unboosted intake model",
+        "dew_margin_K": "0.1 K numerical margin to remain strictly above saturation",
+        "flame_width_1atm_m,flame_width_5bar_m": "Task suggested 0.03 m at 1 atm; 0.01 m for thinner elevated-pressure flames; auto domain expansion allowed",
+        "ignition_min_rise_K": "200 K operational ignition criterion to reject slow preignition drift; not an experimental ignition threshold",
+        "ignition_max_step_s": "5 ms maximum adaptive step; resolves horizon and post-peak evolution; CVODES resolves fast chemistry internally",
+        "reactor_rtol,reactor_atol": "Explicit tight integration error tolerances; convergence must be assessed on server",
+        "fit_max_evaluations": "Numerical nonlinear least-squares iteration budget"
+      }
+    },
+    "sweeps": {
+      "full_fuels": [
+        "H2",
+        "CH4",
+        "CH3OH",
+        "C2H5OH"
+      ],
+      "phi": [
+        0.8,
+        1.0
+      ],
+      "full_w": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9
+      ],
+      "adiabatic_states_K_Pa": [
+        [
+          300.0,
+          101325.0
+        ],
+        [
+          400.0,
+          101325.0
+        ],
+        [
+          750.0,
+          2500000.0
+        ]
+      ],
+      "flame_states_K_Pa": [
+        [
+          400.0,
+          101325.0
+        ],
+        [
+          450.0,
+          500000.0
+        ]
+      ],
+      "ignition_T_K": [
+        750.0,
+        800.0,
+        850.0,
+        900.0,
+        950.0,
+        1000.0,
+        1050.0,
+        1100.0
+      ],
+      "ignition_p_Pa": [
+        2000000.0,
+        4000000.0,
+        8000000.0
+      ],
+      "ignition_phi": 1.0,
+      "quick_fuels": [
+        "H2",
+        "CH4"
+      ],
+      "quick_w": [
+        0.0,
+        0.3
+      ],
+      "quick_ignition_T_K": [
+        900.0,
+        1000.0,
+        1100.0
+      ],
+      "quick_ignition_p_Pa": [
+        4000000.0
+      ],
+      "quick_flame_state_K_Pa_phi": [
+        400.0,
+        101325.0,
+        1.0
+      ],
+      "source": "SPEC section 5; quick subset selected to target <120 s on two cores"
+    },
+    "unburned_phase": {
+      "value": "All fuel and added water are vapour for equilibrium, flame and ignition calculations, including liquid alcohols",
+      "rationale": "Specified premixed states, even if supersaturated; external vaporization/preheat energy is not chemical fuel energy"
+    },
+    "evaporation": {
+      "value": "Adiabatic mixing; dry ideal gas and H2O vapour cp frozen at 320 K; dry fuel already vaporized; no reactions, heat loss, pressure loss or fuel latent heat",
+      "source": "CoolProp Water / IAPWS-95 (Wagner & Pruss, 2002); Cantera mechanism species cp",
+      "enthalpy_reference": "CoolProp h_v,sat(300)-h_l(300,p) plus Cantera vapour sensible heat; absolute enthalpy references never mixed",
+      "feasibility": "temperature_drop_K is hypothetical full-evaporation demand when infeasible; final_all_vapour_T_K is null then; no two-phase state inferred",
+      "dew_domain": "CoolProp saturation at water partial pressure; below triple pressure use triple T plus margin as conservative minimum bound; dry minimum is undefined",
+      "limitation": "Frozen cp extrapolation is an engineering estimate, especially at high w; minimum intake temperatures are within this same model"
+    },
+    "flame_model": {
+      "value": "FreeFlame, mixture-averaged transport, Soret disabled, auto=True, previous converged profile for upward continuation",
+      "rationale": "SPEC transport model; failed solver is not evidence of physical extinction; unattempted later points retain no_flame and reason"
+    },
+    "ignition_model": {
+      "value": "Adiabatic constant-volume IdealGasReactor; direct energy-equation dT/dt at adaptive steps; entire time horizon integrated",
+      "rationale": "SPEC ignition definition; resolved interior maximum and minimum rise reject censored or non-igniting trajectories"
+    },
+    "fits": {
+      "value": "Unweighted least squares in ln(tau); n FREE when >=2 distinct pressures are computed (20/40/80 bar), fixed at 1.0 for single-pressure data; unconstrained E and c except 1+c*w>0; no extrapolation beyond observed ranges",
+      "rationale": "Ignition delays are now computed at 20, 40 and 80 bar so the pressure exponent is identifiable; the fit reports rms_ln_tau and rms_log10_tau",
+      "flame_polynomial": "Cubic requires >=4 points; quick mode uses explicit degree-1 surrogate padded to four coefficients; insufficient data gives null parameters",
+      "limits": "Largest sampled qualifying w, not interpolated extinction limits; quick values apply only to sparse subset"
+    },
+    "workers": {
+      "value": 8,
+      "chunksize": 1,
+      "rationale": "io.ordered_map spawn pool, per-task gas construction, no pickled Cantera objects; one task per chunk balances long flame sweeps"
+    },
+    "validation_targets": {
+      "T_ad_K": {
+        "CH4": [
+          2225.0,
+          20.0
+        ],
+        "H2": [
+          2380.0,
+          25.0
+        ]
+      },
+      "flame_ranges": [
+        [
+          "CH4",
+          1.0,
+          300.0,
+          0.34,
+          0.42
+        ],
+        [
+          "H2",
+          1.0,
+          300.0,
+          1.9,
+          2.6
+        ],
+        [
+          "CH4",
+          0.7,
+          298.0,
+          0.116,
+          0.196
+        ],
+        [
+          "CH4",
+          1.3,
+          298.0,
+          0.197,
+          0.297
+        ]
+      ],
+      "source": "SPEC section 10; research note 02 references 38/40 with user-specified model tolerances"
+    }
+  },
+  "key_results": {
+    "w_SI_robust": {
+      "H2": 0.9,
+      "CH4": 0.7,
+      "CH3OH": 0.7,
+      "C2H5OH": 0.7
+    },
+    "w_SI_marginal": {
+      "H2": 0.9,
+      "CH4": 0.8,
+      "CH3OH": 0.7,
+      "C2H5OH": 0.8
+    },
+    "ignition_fits": {
+      "H2": {
+        "mode": "full",
+        "status": "fitted",
+        "A": 1.3847360819239294e-08,
+        "n": 0.6050911558804164,
+        "E_J_per_mol": 180466.39267523226,
+        "c": 0.12991970403407765,
+        "valid_T_K_range": [
+          850.0,
+          1100.0
+        ],
+        "valid_w_range": [
+          0.0,
+          0.9
+        ],
+        "valid_p_Pa_range": [
+          2000000.0,
+          8000000.0
+        ],
+        "rms_ln_tau": 0.03729785456601066,
+        "rms_log10_tau": 0.016198252424848434,
+        "number_of_points": 180,
+        "pressure_unit": "Pa",
+        "A_unit": "s*Pa",
+        "pressure_exponent_fitted": true
+      },
+      "CH4": {
+        "mode": "full",
+        "status": "fitted",
+        "A": 0.00017910159086437488,
+        "n": 0.9326742396970503,
+        "E_J_per_mol": 156647.54102730827,
+        "c": 0.430876274899357,
+        "valid_T_K_range": [
+          850.0,
+          1100.0
+        ],
+        "valid_w_range": [
+          0.0,
+          0.9
+        ],
+        "valid_p_Pa_range": [
+          2000000.0,
+          8000000.0
+        ],
+        "rms_ln_tau": 0.08983359068856518,
+        "rms_log10_tau": 0.03901423272559921,
+        "number_of_points": 160,
+        "pressure_unit": "Pa",
+        "A_unit": "s*Pa",
+        "pressure_exponent_fitted": true
+      },
+      "CH3OH": {
+        "mode": "full",
+        "status": "fitted",
+        "A": 2.337184625591402e-07,
+        "n": 0.7466927717567721,
+        "E_J_per_mol": 154107.05358529292,
+        "c": 0.388347347343456,
+        "valid_T_K_range": [
+          750.0,
+          1100.0
+        ],
+        "valid_w_range": [
+          0.0,
+          0.9
+        ],
+        "valid_p_Pa_range": [
+          2000000.0,
+          8000000.0
+        ],
+        "rms_ln_tau": 0.13773683790573535,
+        "rms_log10_tau": 0.05981834865726351,
+        "number_of_points": 240,
+        "pressure_unit": "Pa",
+        "A_unit": "s*Pa",
+        "pressure_exponent_fitted": true
+      },
+      "C2H5OH": {
+        "mode": "full",
+        "status": "fitted",
+        "A": 1.0619643079543478e-06,
+        "n": 0.6997350467782417,
+        "E_J_per_mol": 146449.12309735673,
+        "c": 0.2222601144823456,
+        "valid_T_K_range": [
+          750.0,
+          1100.0
+        ],
+        "valid_w_range": [
+          0.0,
+          0.9
+        ],
+        "valid_p_Pa_range": [
+          2000000.0,
+          8000000.0
+        ],
+        "rms_ln_tau": 0.09436285055303902,
+        "rms_log10_tau": 0.04098126529184605,
+        "number_of_points": 229,
+        "pressure_unit": "Pa",
+        "A_unit": "s*Pa",
+        "pressure_exponent_fitted": true
+      }
+    },
+    "flame_speed_fits": {
+      "H2": {
+        "mode": "full",
+        "status": "fitted",
+        "coefficients_highest_first": [
+          -9.198355343382756,
+          8.113271392940547,
+          -2.2434346443113022,
+          3.737987887569177
+        ],
+        "polynomial_degree": 3,
+        "valid_w_range": [
+          0.0,
+          0.9
+        ],
+        "rms_m_s": 0.08249123625820241,
+        "number_of_points": 10,
+        "T_unburned_K": 400.0,
+        "p_Pa": 101325.0,
+        "phi": 1.0,
+        "S_L_unit": "m/s"
+      },
+      "CH4": {
+        "mode": "full",
+        "status": "fitted",
+        "coefficients_highest_first": [
+          -0.7673107303769526,
+          0.1952046948623931,
+          -0.2524668529887227,
+          0.6153827720073498
+        ],
+        "polynomial_degree": 3,
+        "valid_w_range": [
+          0.0,
+          0.8
+        ],
+        "rms_m_s": 0.001271595630618798,
+        "number_of_points": 9,
+        "T_unburned_K": 400.0,
+        "p_Pa": 101325.0,
+        "phi": 1.0,
+        "S_L_unit": "m/s"
+      },
+      "CH3OH": {
+        "mode": "full",
+        "status": "fitted",
+        "coefficients_highest_first": [
+          -0.08645588492524922,
+          -0.6302788464538581,
+          -0.253838765545468,
+          0.7209888530581408
+        ],
+        "polynomial_degree": 3,
+        "valid_w_range": [
+          0.0,
+          0.8
+        ],
+        "rms_m_s": 0.0032544725890679897,
+        "number_of_points": 9,
+        "T_unburned_K": 400.0,
+        "p_Pa": 101325.0,
+        "phi": 1.0,
+        "S_L_unit": "m/s"
+      },
+      "C2H5OH": {
+        "mode": "full",
+        "status": "fitted",
+        "coefficients_highest_first": [
+          -0.16249007438241833,
+          -0.5159102934688148,
+          -0.31680442408932447,
+          0.7464551991188761
+        ],
+        "polynomial_degree": 3,
+        "valid_w_range": [
+          0.0,
+          0.8
+        ],
+        "rms_m_s": 0.002531330027224368,
+        "number_of_points": 9,
+        "T_unburned_K": 400.0,
+        "p_Pa": 101325.0,
+        "phi": 1.0,
+        "S_L_unit": "m/s"
+      }
+    },
+    "counts": {
+      "adiabatic": {
+        "computed": 240
+      },
+      "cooling": {
+        "computed": 80
+      },
+      "flame": {
+        "computed": 153,
+        "no_flame": 11
+      },
+      "ignition": {
+        "ignited": 809,
+        "no_ignition": 151
+      }
+    },
+    "no_flame": 11,
+    "no_ignition": 151,
+    "validation_values": {
+      "CH4_T_ad": {
+        "actual_K": 2225.524583476995,
+        "target_K": 2225.0,
+        "tolerance_K": 20.0,
+        "status": "passed"
+      },
+      "H2_T_ad": {
+        "actual_K": 2380.8062780784453,
+        "target_K": 2380.0,
+        "tolerance_K": 25.0,
+        "status": "passed"
+      },
+      "CH4_S_L_phi_1.0_T_300.0": {
+        "actual_m_s": 0.38135480978304115,
+        "allowed_range_m_s": [
+          0.34,
+          0.42
+        ],
+        "status": "passed"
+      },
+      "H2_S_L_phi_1.0_T_300.0": {
+        "actual_m_s": 2.343043903827552,
+        "allowed_range_m_s": [
+          1.9,
+          2.6
+        ],
+        "status": "passed"
+      },
+      "CH4_S_L_phi_0.7_T_298.0": {
+        "actual_m_s": 0.19333380606717127,
+        "allowed_range_m_s": [
+          0.116,
+          0.196
+        ],
+        "status": "passed"
+      },
+      "CH4_S_L_phi_1.3_T_298.0": {
+        "actual_m_s": 0.2357150728482997,
+        "allowed_range_m_s": [
+          0.197,
+          0.297
+        ],
+        "status": "passed"
+      }
+    },
+    "energy_source": "Fuel LHV only; water heating value is zero"
+  },
+  "validation": {
+    "passed": true,
+    "scope": "In-run reference points only; server pytest required for full validation",
+    "checks": {
+      "CH4_T_ad": {
+        "actual_K": 2225.524583476995,
+        "target_K": 2225.0,
+        "tolerance_K": 20.0,
+        "status": "passed"
+      },
+      "H2_T_ad": {
+        "actual_K": 2380.8062780784453,
+        "target_K": 2380.0,
+        "tolerance_K": 25.0,
+        "status": "passed"
+      },
+      "CH4_S_L_phi_1.0_T_300.0": {
+        "actual_m_s": 0.38135480978304115,
+        "allowed_range_m_s": [
+          0.34,
+          0.42
+        ],
+        "status": "passed"
+      },
+      "H2_S_L_phi_1.0_T_300.0": {
+        "actual_m_s": 2.343043903827552,
+        "allowed_range_m_s": [
+          1.9,
+          2.6
+        ],
+        "status": "passed"
+      },
+      "CH4_S_L_phi_0.7_T_298.0": {
+        "actual_m_s": 0.19333380606717127,
+        "allowed_range_m_s": [
+          0.116,
+          0.196
+        ],
+        "status": "passed"
+      },
+      "CH4_S_L_phi_1.3_T_298.0": {
+        "actual_m_s": 0.2357150728482997,
+        "allowed_range_m_s": [
+          0.197,
+          0.297
+        ],
+        "status": "passed"
+      }
+    }
+  },
+  "runtime_s": 1728.4440231499611
+}
