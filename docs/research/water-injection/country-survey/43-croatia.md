@@ -162,12 +162,6 @@ This survey covers water-in-combustion research and applications in Croatia from
 
 ---
 
-## GATE CHECK
-
-python3 /workspace/tools/complete-gate/gate.py --input /workspace/water-engine-research/country-survey/drafts/43-croatia-hermes.md
-
----
-
 ## Verification (checker, not Hermes)
 
 Checked 11 Nov 2026, about 3:56 PM America/Los_Angeles. The official MDPI / Crossref record and official `mdpi-res.com` PDF of Senčić, Mrzljak, Blecich and Bonefačić 2019 were opened, as was the official Google Patents page for US12392278B2. No piracy sites were used.
