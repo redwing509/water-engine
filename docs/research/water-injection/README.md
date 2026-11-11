@@ -11,7 +11,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
 - When a paper is paywalled, a **legitimate** alternate copy is used if one exists (author preprint, thesis, university repository, conference slides, or a later open paper that quotes the numbers). Piracy sites are not used. If no legitimate open copy is found, the bibliographic record is cited and unseen numbers are marked paywalled.
 - **Copyrighted PDFs are not committed here.** Links and citations only.
-- Country reports 01–35 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Portugal in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
+- Country reports 01–36 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Greece in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
 
 ## Contents
 
@@ -54,6 +54,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/33-thailand.md](country-survey/33-thailand.md) | Checked 11 Nov 2026 | Thailand: no production WI vehicle; Munsin and Nuntapap 2018 official PDF, RMUTL 5-stroke, BSFC improved 26 % and efficiency +3.3 % at 1,500 rpm; PSU 2022 nanoemulsion official abstract BTE figures are usable, but most % cuts are DI vs IDI; Sittichompoo 2025 80 % NOx not taken |
 | [country-survey/34-malaysia.md](country-survey/34-malaysia.md) | Checked 11 Nov 2026 | Malaysia: no production WI vehicle; UTP 2019 official abstract WiBE vs B5, 11.7 % lower power, up to 79 % NOx and 23 % smoke at 15 % water; Khathri 2022 Malaysia-led Isuzu 4JJ1 optimum 5 % water 103.7 Nm / 43.8 % BTE / 172 g/kWh; Kamaludin 2020 is a CamPro simulation and official-body BSFC rose 23.3 %, not an improvement |
 | [country-survey/35-portugal.md](country-survey/35-portugal.md) | Checked 11 Nov 2026 | Portugal: no production WI vehicle; Oliveira et al. 2025 official MDPI PDF, UBI Hatz 1B40 8 %/16 % WiDE, official abstract max 46.86 % NO and 83.67 % smoke vs diesel; draft had called those figures paywalled |
+| [country-survey/36-greece.md](country-survey/36-greece.md) | Checked 11 Nov 2026 | Greece: no production WI vehicle; Tzirakis et al. 2006 official SAE abstract, NTUA 13 % v/v emulsion on 4 Athens buses, smoke opacity down, NOx mixed at no load; Hountalas 2006/2007 official abstracts are simulations; draft 10–60 % NOx and 2–4 % BSFC not in the official 2007 abstract |
 
 ## Usable measured / official figures (short)
 
@@ -177,6 +178,8 @@ See the individual notes for caveats, units, and links. Headline items as of the
 
 
 - **No Portuguese series-production road vehicle** with factory combustion-cycle water injection was found. Oliveira, Brójo, Serôdio and Serôdio (UBI, 2025 official MDPI PDF, DOI 10.3390/en18040934): Hatz 1B40 single-cylinder, **8 %** and **16 %** water-in-diesel by mass. Official abstract: maximum **46.86 % NO** and **83.67 % smoke** reductions versus diesel at specific conditions. Official conclusions: smoke down at every load; CO/CO2/HC up at every load; NO down except 8 % at minimum load and 16 % at maximum load; 8 % thermal efficiency up except at 50 % load. The draft said these percentages were paywalled; the official PDF is open access.
+
+- **No Greek series-production road vehicle** with factory combustion-cycle water injection was found. Tzirakis et al. (NTUA, official SAE 2006-01-3398 abstract): **13 % v/v** water in low-sulfur diesel on **4** Athens public buses; CO/HC/CO2 no significant differences; NOx mixed at **no load**; smoke opacity clearly reduced. Hountalas et al. SAE 2007-01-0120 and 2006-01-1414 official abstracts are **multi-zone simulations**; the 2007 official abstract’s **30 % NOx** is a study-design upper limit, and the draft’s **10–60 % NOx** and **~2–4 % BSFC** figures are not in that abstract.
 
 - **Why production programmes were not continued (checked follow-up):** added tank/pump/injectors and a refill of distilled water are documented official features (BMW M4 GTS, Bosch WaterBoost). The GTS was a **700-unit** limited run; BMW M’s Frank van Meel said the engine was meant for that car and that further use depended on the vehicle concept. Official EU/EPA figures show the GTS was not a cycle-economy win versus the M4 Coupe (combined **8.5 L/100 km** / EPA combined **19 mpg**). Jetfire field problems and a 1965 free de-turbo conversion are documented in secondary histories; Saab’s system was a **Sport kit**, not a 1970–73 “Turbo X” factory programme. Draft claims of a regulatory “no fuel-economy credit” rule (40 CFR 86.1807, UNECE R94, EU 2020/…) were **incorrect**. **No documented oil-company lobbying** was found.
 
