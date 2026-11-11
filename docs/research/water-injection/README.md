@@ -4,14 +4,14 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 
 **Date:** 11 November 2026, America/Los_Angeles.  
 **Repository path:** `docs/research/water-injection/`  
-**Branch / PR:** `research/water-injection-20261111` (docs-only).
+**Branch / PR:** first survey notes merged via [PR #22](https://github.com/redwing509/water-engine/pull/22). The why-not-adopted study is a later docs-only addition.
 
 ## How to read this folder
 
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
 - When a paper is paywalled, a **legitimate** alternate copy is used if one exists (author preprint, thesis, university repository, conference slides, or a later open paper that quotes the numbers). Piracy sites are not used. If no legitimate open copy is found, the bibliographic record is cited and unseen numbers are marked paywalled.
 - **Copyrighted PDFs are not committed here.** Links and citations only.
-- Country reports are added as each one is checked. A follow-up study on why production programmes were not continued will be added in `why-not-adopted/` when that job runs.
+- Country reports 01–15 were checked in the first survey pass. A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
 
 ## Contents
 
@@ -83,6 +83,9 @@ See the individual notes for caveats, units, and links. Headline items as of the
 
 - **No Indian series-production road vehicle** with factory combustion-cycle water injection was found.
 - **Ashok Leyland / Amrita, IOP 2019 (open PDF):** heavy-duty diesel, atomized intake-manifold water injection. At **2.8 mg/cylinder**: in-cylinder temperature about **90 °C** down, **NOx 8–10 %** down, **smoke about 20 %** up, power unchanged. DOI 10.1088/1757-899X/577/1/012186. Laboratory/conference result, not a production truck. Do not use a 176 km/L six-stroke news claim, or the draft’s ARAI 33/36/24/20 % emission cuts, without an opened open copy.
+
+- **Why production programmes were not continued (checked follow-up):** added tank/pump/injectors and a refill of distilled water are documented official features (BMW M4 GTS, Bosch WaterBoost). The GTS was a **700-unit** limited run; BMW M’s Frank van Meel said the engine was meant for that car and that further use depended on the vehicle concept. Official EU/EPA figures show the GTS was not a cycle-economy win versus the M4 Coupe (combined **8.5 L/100 km** / EPA combined **19 mpg**). Jetfire field problems and a 1965 free de-turbo conversion are documented in secondary histories; Saab’s system was a **Sport kit**, not a 1970–73 “Turbo X” factory programme. Draft claims of a regulatory “no fuel-economy credit” rule (40 CFR 86.1807, UNECE R94, EU 2020/…) were **incorrect**. **No documented oil-company lobbying** was found.
+
 
 
 
