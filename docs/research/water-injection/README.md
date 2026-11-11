@@ -23,6 +23,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/02-usa.md](country-survey/02-usa.md) | Checked 11 Nov 2026 | United States: Jetfire, ADI (aviation), aftermarket, labs; source checks and rejected paper/patent IDs |
 | [country-survey/03-japan.md](country-survey/03-japan.md) | Checked 11 Nov 2026 | Japan: SIP Tokyo Tech/Keio super-lean + in-cylinder WI, patents (not production cars), source checks and corrections |
 | [country-survey/04-france.md](country-survey/04-france.md) | Checked 11 Nov 2026 | France: Aquazole emulsion fleets, Renault F1 racing WI, IFPEN/Renault/PSA SAE 2019 work; source checks and corrections |
+| [country-survey/05-uk.md](country-survey/05-uk.md) | Checked 11 Nov 2026 | United Kingdom: Bath/Golzari WI on the ULTRABOOST engine, no production car; source checks and corrections |
 
 ## Usable measured / official figures (short)
 
@@ -40,6 +41,9 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **Elf Aquazole (late 1990s, heavy-duty emulsion fuel, not a passenger-car injection system):** official CORDIS 1998 figures — NOx **15–30 %**, PM **10–50 %**, black smoke **30–80 %**, energy/CO₂ **1–4 %** down, volumetric fuel consumption up. https://cordis.europa.eu/article/id/10155-adding-water-to-diesel-fuel-to-reduce-pollution
 - **IFPEN / Renault / PSA / Magneti Marelli, SAE 2019-01-1139 (open abstract):** downsized GDI single-cylinder, port and direct water injection; over-fuelling eliminated; **about 13 %** fuel-consumption reduction at the stated high-load condition. DOI 10.4271/2019-01-1139 (PDF paywalled).
 - **No French production passenger car** with combustion-cycle water injection was confirmed. Renault F1 water injection (1983–1986) is racing only.
+
+- **University of Bath / Golzari et al., 2019 (open abstract):** port water injection on a boosted downsized GDI using ULTRABOOST engine hardware — up to about **5 %** net indicated efficiency at medium load and **15 %** at high load; NOx down up to about **60 %**. DOI 10.1177/1468087419832791 (PDF paywalled). These figures are **not** from the 2010–2013 ULTRABOOST project paper (SAE 2014-01-1185), which has an open White Rose copy and does not study water injection.
+- **No UK production road car** with combustion-cycle water injection was confirmed.
 
 
 Corrections already found in the Germany draft (do not reuse the wrong figures): the GTS is not a 500-car run; “+37 hp vs M4” is wrong; Alpina/Brabus factory water-injection kits were not confirmed; a shared patent list was mis-attributed across firms; “up to 50% NOx” is not what Welscher’s abstract says.
