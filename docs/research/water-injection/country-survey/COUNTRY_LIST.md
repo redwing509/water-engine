@@ -7,10 +7,10 @@ Rules (James, t878u, 2026-11-11 12:28 AM America/Los_Angeles):
 - Prompt written in that country's native/official language (for multilingual countries: main research language, noted below).
 - Hermes reports in English; keep native-language source titles.
 - No invented sources. After each job, a human check (source sanity, spot-checked links) is required before the country is marked DONE.
-- Research only. No git, pushes, PRs, emails, or security-suite work.
+- These notes are literature research only and do not change Water Engine model code or results.
 - Paywalled sources (James t880u): seek a legitimate alternate copy (author preprint, thesis, university repository, conference slides, or a later open paper quoting the numbers). No piracy sites. If no legitimate open copy is found, cite the bibliographic record and mark numbers as paywalled.
 
-Prompt language is listed after each country. Status is tracked in `PROGRESS.md`.
+Prompt language is listed after each country. Checked reports for countries 01–15 are in this folder (session of 11 Nov 2026). Countries 16–20 of Priority A, and Priority B, remain for a later session.
 
 ## Priority A — start here (explicit order)
 
@@ -165,11 +165,9 @@ Countries with essentially no car industry and no identifiable engine-research u
 
 Run order is the table order above. Do not skip Priority A. After Priority A, continue down Priority B until time runs out (target stop ~6:30 AM America/Los_Angeles on 2026-11-11) or the list is finished.
 
-## Output files
+## Public files in this folder
 
 - `COUNTRY_LIST.md` — this list
-- `PROGRESS.md` — one line per country after the check
-- `prompts/NN-<slug>.md` — the Hermes prompt (native language)
-- `drafts/NN-<slug>-hermes.md` — raw Hermes report
-- `NN-<slug>.md` — checked report (Hermes text plus a verification section)
-- `verification/` — link-check notes if needed
+- `NN-<slug>.md` — checked report for each completed country (Hermes draft plus a verification section)
+
+Internal prompts, raw drafts, and progress notes are not published here.
