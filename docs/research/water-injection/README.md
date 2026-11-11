@@ -29,6 +29,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/08-russia.md](country-survey/08-russia.md) | Checked 11 Nov 2026 | Russia/USSR: patents and later diesel intake-WI research; no production car; unsourced NAMI figures rejected |
 | [country-survey/09-china.md](country-survey/09-china.md) | Checked 11 Nov 2026 | China: no production WI car; Japanese figures and a US-origin CN filing rejected; missed Chongqing/CNHTC research noted |
 | [country-survey/10-south-korea.md](country-survey/10-south-korea.md) | Checked 11 Nov 2026 | South Korea: KAIST/SNU–Hyundai lab work, no production car; IJAT 2024 open-access BSFC figures |
+| [country-survey/11-czech-republic.md](country-survey/11-czech-republic.md) | Checked 11 Nov 2026 | Czech Republic: Hanon Hluk / BUT WAHASY harvester (open 2021 paper); no production car; source checks |
 
 ## Usable measured / official figures (short)
 
@@ -65,6 +66,10 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **No Korean OEM series-production passenger car** with factory combustion-cycle water injection was found (Hyundai/Kia patents are not production evidence).
 - **KAIST / Bae with Hyundai, IJER 2016 (open abstract):** 1.6 L NA prototype, CR 13.5, 5 MPa direct water injection; over-fuelling eliminated at 1,500–3,000 r/min full load; BSFC improved. No percentage in the abstract. DOI 10.1177/1468087415613221.
 - **Seoul National University / Min with Hyundai, IJAT 2024 (open access):** 2.0 L NA PFI, 100 bar direct WI. WI-only BSFC down up to **4.95 %** / **6.1 %**; WI + EGR up to **9.14 % versus base** (not 9.3 %). DOI 10.1007/s12239-024-00058-y.
+
+- **No Czech series-production passenger car** with factory combustion-cycle water injection was found.
+- **Hanon Systems (Hluk) / Brno University of Technology with FEV and Hanon Germany, 2021 (open MDPI):** WAHASY exhaust-condensate harvester on FEV’s Audi TT-S water-injection demonstrator; vehicle-point **90 % harvest efficiency** (not thermal efficiency). DOI 10.3390/ijerph18105392. Do not use “40–50 % WFR = 10 % EGR” as a Czech measurement (Conway 2019).
+
 
 
 
