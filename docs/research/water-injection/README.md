@@ -22,6 +22,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/01-germany.md](country-survey/01-germany.md) | Checked 11 Nov 2026 | Germany: makers, universities, measured data, source checks, and corrections |
 | [country-survey/02-usa.md](country-survey/02-usa.md) | Checked 11 Nov 2026 | United States: Jetfire, ADI (aviation), aftermarket, labs; source checks and rejected paper/patent IDs |
 | [country-survey/03-japan.md](country-survey/03-japan.md) | Checked 11 Nov 2026 | Japan: SIP Tokyo Tech/Keio super-lean + in-cylinder WI, patents (not production cars), source checks and corrections |
+| [country-survey/04-france.md](country-survey/04-france.md) | Checked 11 Nov 2026 | France: Aquazole emulsion fleets, Renault F1 racing WI, IFPEN/Renault/PSA SAE 2019 work; source checks and corrections |
 
 ## Usable measured / official figures (short)
 
@@ -35,6 +36,10 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **Oldsmobile Jetfire (1962–1963):** official **215 hp / 300 lb-ft**, **10.25:1** CR, water-methanol Turbo-Rocket Fluid, ~5 psi boost, 9,607 built. Use SAE **620221** (not 620001). Do not use a 10–15% economy claim. Failsafe when the fluid tank is dry.
 - **Tokyo Tech / Keio (SIP, Nagasawa et al., 2020):** 0.5 L single-cylinder, super-lean burn plus in-cylinder water injection. Open write-ups: gross indicated thermal efficiency **48.7 % → 50.2 %** at CR 15, λ=1.9, W/F 39 %; **52.6 %** (abstract **52.63 %**) at CR 17, λ=1.9, W/F 50 %. Official Tokyo Tech press also gives **51.5 %** brake thermal efficiency. The 52.6 % figure is the combined system, not a water-only gain. DOI 10.1177/1468087420908164 (PDF paywalled; figures from official PR, JSAE Engine Review, and Keio abstract).
 - **No Japanese production road car** with combustion-cycle water injection was confirmed. Honda holds port-WI patents; Subaru STI S209 uses intercooler water spray, which is out of scope.
+
+- **Elf Aquazole (late 1990s, heavy-duty emulsion fuel, not a passenger-car injection system):** official CORDIS 1998 figures — NOx **15–30 %**, PM **10–50 %**, black smoke **30–80 %**, energy/CO₂ **1–4 %** down, volumetric fuel consumption up. https://cordis.europa.eu/article/id/10155-adding-water-to-diesel-fuel-to-reduce-pollution
+- **IFPEN / Renault / PSA / Magneti Marelli, SAE 2019-01-1139 (open abstract):** downsized GDI single-cylinder, port and direct water injection; over-fuelling eliminated; **about 13 %** fuel-consumption reduction at the stated high-load condition. DOI 10.4271/2019-01-1139 (PDF paywalled).
+- **No French production passenger car** with combustion-cycle water injection was confirmed. Renault F1 water injection (1983–1986) is racing only.
 
 
 Corrections already found in the Germany draft (do not reuse the wrong figures): the GTS is not a 500-car run; “+37 hp vs M4” is wrong; Alpina/Brabus factory water-injection kits were not confirmed; a shared patent list was mis-attributed across firms; “up to 50% NOx” is not what Welscher’s abstract says.
