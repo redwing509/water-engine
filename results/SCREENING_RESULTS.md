@@ -1,5 +1,7 @@
 # Screening results: every COST GAIN case
 
+> **Later complete rescore (2026-11-10):** the R31+R32 campaign is in [`R31_R32_RESULTS.md`](R31_R32_RESULTS.md) (CSV: [`r31_r32_cost_gain.csv`](r31_r32_cost_gain.csv)). Its best modelled cost per mile is -9.728 %. Those figures are model arithmetic only, not experimentally validated. This file is the earlier 2026-11-01 geometry-study snapshot and is unchanged.
+
 > **Screening results: executed, not validated.** 0-D simulation screening (Module 03 engine cycle + independent M03-CRN Cantera cross-check, M03 knock model only). Not validated against experiment and not peer-reviewed. Not engine performance claims.
 
 A row is listed when the best-cost wet case has **lower cost per mile than its own dry baseline** (DEI dry, spark optimised) at **equal-or-better power** in both engines (verdict COST GAIN). Water $0.10/gal, dated retail fuel prices. Normal regime: coolant 363 K, intake 320 K; hot: coolant 388 K, intake 400 K. `w` = water mass fraction of liquid intake. Edge flags mean the best point sits on the edge of the tested grid, so the true optimum may lie beyond it.

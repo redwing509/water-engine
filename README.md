@@ -20,7 +20,27 @@ A design for a **Water-Majority Engine (WME-1)**: a spark-ignited engine whose *
 
 The question the simulations answer: **how much water can an engine take, and still run well — and is it better or worse than running dry?**
 
-## Current best screening results (as of 2026-11-01)
+## Current best modelled results (as of 2026-11-10)
+
+> **Model arithmetic only, not experimentally validated.** These numbers come from a 0-D engine-cycle cost rescore of the completed R31+R32 campaign (R32 finished 12:40 PM Pacific Time on 10 Nov 2026). They have **not** been validated against experiment and are not engine performance claims. The factory compression ratio is withheld and is not published here.
+
+Comparisons are against a dry baseline in the same group (same fuel, climate, geometry, rpm, and intake mode), using the project's existing cost model at dated retail fuel prices with water at $0.10/gal. "Hot" = high-performance regime (coolant 388 K, intake 400 K); "normal" = coolant 363 K, intake 320 K. `w` = water mass fraction of the liquid intake.
+
+| Fuel | Case | Bore x stroke | Mode | Water w | CR (dry -> wet) | Power | Cost per mile |
+|---|---|---|---|---|---|---|---|
+| PRF91 (premium gasoline surrogate) | normal, 1500 rpm | 86 x 107.5 mm | humid_evap / liquid (tied) | 0.30 | 8 -> 12 | +10.16 % | **-9.728 %** |
+| PRF91 | normal, 1500 rpm | 105 x 105 mm | humid_evap / liquid (tied) | 0.30 | 8 -> 12 | +10.15 % | -9.717 % |
+| PRF87 (regular gasoline surrogate) | hot, 1500 rpm | 86 x 107.5 mm | liquid | 0.30 | 6 -> 8 | +13.03 % | -9.715 % |
+
+Notes and caveats:
+
+- This is the best modelled cost-per-mile result from the complete R31+R32 rescore (792 groups, 433 COST GAIN cases after). It is model arithmetic, not a measured engine result.
+- **Baseline shift:** an earlier partial R31+R32 figure of about 16.7 % was an artifact of missing compression-ratio-6 dry baseline rows. With those eligible dry rows included, the PRF87 hot 86 x 107.5 mm liquid result moved from -13.572 % (dry CR 5 -> 7) to -9.715 % (dry CR 6 -> 8). A reconstruction that drops those CR-6 dry rows recovers -16.652 %, which supports the mechanism. That -16.652 % figure is a reconstruction, not the original partial file.
+- An independent Hermes recompute confirmed the top-12 table, the headline figures, and the group counts. A controller recheck matched the scoring table to the thousandth.
+- **Full list of every COST GAIN case from this rescore:** [`results/R31_R32_RESULTS.md`](results/R31_R32_RESULTS.md) (433 rows; CSV alongside).
+- The 1 Nov 2026 geometry-study screening below is a prior snapshot and was not replaced. Its headline of -12.35 % (PRF87 hot, 1000 rpm, 105 x 131 mm, dry CR 5 -> 7) was not re-run here (this campaign did not include 1000 rpm or that geometry) and still carries the weak dry-baseline caveat already noted in that section.
+
+## Prior geometry-study screening (as of 2026-11-01)
 
 > **Screening results: executed, not validated.** These numbers come from 0-D simulation screening (Module 03 engine cycle + the independent M03-CRN Cantera reactor-network cross-check, M03 knock model only). They have **not** been validated against experiment or independently peer-reviewed, and several best points sit on the edge of the tested grid (marked `*`), so the true optimum may lie outside it. Do not treat them as engine performance claims.
 
