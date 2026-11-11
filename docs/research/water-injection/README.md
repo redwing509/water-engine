@@ -11,7 +11,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
 - When a paper is paywalled, a **legitimate** alternate copy is used if one exists (author preprint, thesis, university repository, conference slides, or a later open paper that quotes the numbers). Piracy sites are not used. If no legitimate open copy is found, the bibliographic record is cited and unseen numbers are marked paywalled.
 - **Copyrighted PDFs are not committed here.** Links and citations only.
-- Country reports 01–22 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Finland in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
+- Country reports 01–23 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Norway in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
 
 ## Contents
 
@@ -41,6 +41,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/20-canada.md](country-survey/20-canada.md) | Checked 11 Nov 2026 | Canada: no production WI vehicle; Rival Technologies patent tests (NOx up to −33.5 %); ORF SAE 790925 and Transport Canada ICEF2005-1235 records without opened percentages |
 | [country-survey/21-belgium.md](country-survey/21-belgium.md) | Checked 11 Nov 2026 | Belgium: no production WI vehicle; missed UCLouvain 2019 water-DI HCCI thesis; VUB mHAT is industrial; German Aarburg emulsion numbers corrected |
 | [country-survey/22-finland.md](country-survey/22-finland.md) | Checked 11 Nov 2026 | Finland: no production WI road vehicle; Wärtsilä marine DWI (official 50–60 % NOx); missed Åbo Akademi 2009 official abstract |
+| [country-survey/23-norway.md](country-survey/23-norway.md) | Checked 11 Nov 2026 | Norway: no production WI road vehicle; company-hosted MARINTEK 2009 White Diesel summary (NOx −0.88 % per percent water); Danish EPA report removed from Norway totals |
 
 ## Usable measured / official figures (short)
 
@@ -122,6 +123,10 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **No Finnish series-production road vehicle** with factory combustion-cycle water injection was found.
 - **Wärtsilä official encyclopedia, Direct Water Injection (marine):** combined fuel/water valve, water pressure **200–400 bar**, **50–60 % NOx** reduction with some fuel-consumption penalty. The official page opened here does not state a 0.4–0.7 water-to-fuel ratio or “up to 70 %” NOx. https://www.wartsila.com/encyclopedia/term/direct-water-injection-(dwi) . Two-stroke Winterthur DWI remains in the Switzerland report.
 - **Sarvi, Kilpinen, and Zevenhoven, Åbo Akademi, Fuel Processing Technology 2009 (open official abstract):** large medium-speed diesel; NOx “can be more than halved” by DWI; common rail + DWI **maximum about 50 %** NOx reduction. Finnish university work, not an external paper. DOI 10.1016/j.fuproc.2008.09.003.
+
+
+- **No Norwegian series-production road vehicle** with factory combustion-cycle water injection was found.
+- **Eco Energy Holding company summary of commissioned MARINTEK tests (February 2009):** Lite White Diesel emulsions with **8–15 % water**. Average NOx reduction factor **0.88** (NOx down **0.88 % per percent water** in that range); average **CO −39 %**, **THC −12 %**, **smoke about −50 %**, **PM about −21 %**. Marine laboratory test, company-hosted summary; engine identity and SFC were not taken from that page. https://www.eco.as/tests/marintek/2009/ . Do not use the draft’s executive-summary “NOx up to 50 % / PM up to 89 %,” which were not in the opened summary. A Danish EPA 2011 emulsion report listed in the draft belongs under Denmark.
 
 - **Why production programmes were not continued (checked follow-up):** added tank/pump/injectors and a refill of distilled water are documented official features (BMW M4 GTS, Bosch WaterBoost). The GTS was a **700-unit** limited run; BMW M’s Frank van Meel said the engine was meant for that car and that further use depended on the vehicle concept. Official EU/EPA figures show the GTS was not a cycle-economy win versus the M4 Coupe (combined **8.5 L/100 km** / EPA combined **19 mpg**). Jetfire field problems and a 1965 free de-turbo conversion are documented in secondary histories; Saab’s system was a **Sport kit**, not a 1970–73 “Turbo X” factory programme. Draft claims of a regulatory “no fuel-economy credit” rule (40 CFR 86.1807, UNECE R94, EU 2020/…) were **incorrect**. **No documented oil-company lobbying** was found.
 
