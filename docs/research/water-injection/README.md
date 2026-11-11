@@ -11,7 +11,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
 - When a paper is paywalled, a **legitimate** alternate copy is used if one exists (author preprint, thesis, university repository, conference slides, or a later open paper that quotes the numbers). Piracy sites are not used. If no legitimate open copy is found, the bibliographic record is cited and unseen numbers are marked paywalled.
 - **Copyrighted PDFs are not committed here.** Links and citations only.
-- Country reports 01–17 have been checked (01–15 in the first pass; Brazil and Spain in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
+- Country reports 01–18 have been checked (01–15 in the first pass; Brazil, Spain, and Poland in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
 
 ## Contents
 
@@ -36,6 +36,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/15-india.md](country-survey/15-india.md) | Checked 11 Nov 2026 | India: no production WI vehicle; open Ashok Leyland/Amrita 2019 intake-WI paper; ARAI and six-stroke figures qualified |
 | [country-survey/16-brazil.md](country-survey/16-brazil.md) | Checked 11 Nov 2026 | Brazil: no production WI vehicle; Unicamp/MWM 2009 emulsion and UFMG/Bosch research; several open sources the draft had marked paywalled |
 | [country-survey/17-spain.md](country-survey/17-spain.md) | Checked 11 Nov 2026 | Spain: no production WI vehicle; Seville 2019 intake-WI (open abstract NOx 60–70 %); student work qualified; Austrian and news figures rejected |
+| [country-survey/18-poland.md](country-survey/18-poland.md) | Checked 11 Nov 2026 | Poland: no production WI vehicle; Lublin 2024 hydrogen Wankel + WI (open abstract); Gulak news and Ursus C-45 WI claims rejected |
 
 ## Usable measured / official figures (short)
 
@@ -94,6 +95,9 @@ See the individual notes for caveats, units, and links. Headline items as of the
 
 - **No Spanish series-production road vehicle** with factory combustion-cycle water injection was found.
 - **Serrano et al., Universidad de Sevilla, Energy 2019 (open idus abstract):** intake-manifold water injection with a flow-blurring injector on a modern diesel; **NOx down around 60–70 %** at different loads and speeds. DOI 10.1016/j.energy.2018.11.136; https://hdl.handle.net/11441/163994 . Laboratory, not production. Do not use AVL Racetech 410 hp here (Austrian) or news-site 67 % / 68 % emulsion figures.
+
+- **No Polish series-production road vehicle** with factory combustion-cycle water injection was found.
+- **Biały, Politechnika Lubelska, 2024 thesis (open official abstract):** hydrogen-fuelled Wankel on a dynamometer with in-chamber water injection; water quantity and duration can suppress or eliminate knock. PDF is closed access; no BSFC/NOx percentages extracted. https://hdl.handle.net/20.500.14629/18642 . Do not use Jan Gulak news figures or treat the Ursus C-45 as a water-injection tractor.
 
 - **Why production programmes were not continued (checked follow-up):** added tank/pump/injectors and a refill of distilled water are documented official features (BMW M4 GTS, Bosch WaterBoost). The GTS was a **700-unit** limited run; BMW M’s Frank van Meel said the engine was meant for that car and that further use depended on the vehicle concept. Official EU/EPA figures show the GTS was not a cycle-economy win versus the M4 Coupe (combined **8.5 L/100 km** / EPA combined **19 mpg**). Jetfire field problems and a 1965 free de-turbo conversion are documented in secondary histories; Saab’s system was a **Sport kit**, not a 1970–73 “Turbo X” factory programme. Draft claims of a regulatory “no fuel-economy credit” rule (40 CFR 86.1807, UNECE R94, EU 2020/…) were **incorrect**. **No documented oil-company lobbying** was found.
 
