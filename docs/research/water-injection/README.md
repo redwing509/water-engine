@@ -27,6 +27,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/06-italy.md](country-survey/06-italy.md) | Checked 11 Nov 2026 | Italy: CNR and PoliTo/Marelli research, racing specials; intercooler spray excluded; source checks and corrections |
 | [country-survey/07-sweden.md](country-survey/07-sweden.md) | Checked 11 Nov 2026 | Sweden: Saab Sport kit accessory, Chalmers/Volvo Cars PWI, missed KTH methanol work; source checks |
 | [country-survey/08-russia.md](country-survey/08-russia.md) | Checked 11 Nov 2026 | Russia/USSR: patents and later diesel intake-WI research; no production car; unsourced NAMI figures rejected |
+| [country-survey/09-china.md](country-survey/09-china.md) | Checked 11 Nov 2026 | China: no production WI car; Japanese figures and a US-origin CN filing rejected; missed Chongqing/CNHTC research noted |
 
 ## Usable measured / official figures (short)
 
@@ -57,6 +58,9 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **No modern Swedish series-production passenger car** with factory combustion-cycle water injection was found.
 
 - **No Soviet or Russian series-production passenger car** with factory combustion-cycle water injection was found. Confirmed USSR/RU patents include SU 769051, SU 1677356, and **RU 2069274** (not SU). Do not use unsourced NAMI “11.6 K / 11.8 %” figures. Later Russian diesel intake-WI work exists (Dmitriev & Khlyupin 2008; *Energies* 2020 on a 12CHN15/18), without extracted maps in this pass.
+
+- **No Chinese OEM series-production passenger car** with factory combustion-cycle water injection was found. Do not use Tokyo Tech 52.6 % / 60 % NOx figures here (they are Japanese). CN1164268A is an Entherm/US filing published in China in 1997, not a 2006 Chinese invention. Later Chinese academic work exists (Chongqing University / CNHTC, *Fuel* 2020, DOI 10.1016/j.fuel.2020.117376); no map was extracted from an opened open copy in this pass.
+
 
 
 
