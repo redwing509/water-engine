@@ -11,7 +11,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
 - When a paper is paywalled, a **legitimate** alternate copy is used if one exists (author preprint, thesis, university repository, conference slides, or a later open paper that quotes the numbers). Piracy sites are not used. If no legitimate open copy is found, the bibliographic record is cited and unseen numbers are marked paywalled.
 - **Copyrighted PDFs are not committed here.** Links and citations only.
-- Country reports 01–27 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Turkey in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
+- Country reports 01–28 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Mexico in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
 
 ## Contents
 
@@ -46,6 +46,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/25-hungary.md](country-survey/25-hungary.md) | Checked 11 Nov 2026 | Hungary: no production WI vehicle; Hegedűs 2024 quotes Nánási 1973 (3.5 % / 6.5 % parameter arithmetic) and Hofherr 1952; Szűcs 2021 is a theoretical concept |
 | [country-survey/26-romania.md](country-survey/26-romania.md) | Checked 11 Nov 2026 | Romania: no production WI vehicle; Benea 2022 K9K diesel intake WI (NOx up to −22 %, power −3 %, PM +36 %); UPT Borborean 2024 NOx about −38 % at 40 % water/fuel; UPT “60 %” and Lazăr 2020 not taken as WI maps |
 | [country-survey/27-turkey.md](country-survey/27-turkey.md) | Checked 11 Nov 2026 | Turkey: no production WI vehicle; Gazi 2013 body NOx −45.9 % at 15 % emulsion (abstract swaps CO/NOx); Ayhan 2016 intake water NOx −55 %; Ayhan and Ece 2019 direct WI NOx −38 % at 40 % water; six-stroke +12.27 % torque not taken |
+| [country-survey/28-mexico.md](country-survey/28-mexico.md) | Checked 11 Nov 2026 | Mexico: no production WI vehicle and no usable opened Mexican vehicle-engine map; unnamed thesis titles not verified; IMT PT 417 is not WI; IMP WAG and a Cranfield aviation paper in a Mexican journal were not taken as Mexican road-engine data |
 
 ## Usable measured / official figures (short)
 
@@ -150,6 +151,9 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **No Turkish series-production road vehicle** with factory combustion-cycle water injection was found.
 - **Yılmaz, Solmaz, Polat, and Altın, Gazi University, 2013 (official open PDF):** three-phase 15 % water emulsion on a single-cylinder DI diesel. Use the body figures, not the swapped abstract: **NOx −45.9 %**, **CO −26.9 %**, **smoke −18.8 %**, **torque −15.72 %**, **SFC +32.6 %**. https://dergipark.org.tr/tr/pub/gazimmfd/article/89066
 - **Ayhan, 2016, and Ayhan and Ece, 2019 (official open PDFs):** Sakarya full-load single-cylinder DI diesel. 2016 intake liquid water **NOx −55 %** (with intake corrosion); steam **NOx −33 %**. 2019 direct in-cylinder water at 40 % of fuel: **NOx −38 %** at 1200 rpm and maximum **power +6 %**. https://dergipark.org.tr/en/pub/saufenbilder/article/270005
+
+
+- **No Mexican series-production road vehicle** with factory combustion-cycle water injection was found, and no usable opened Mexican vehicle-engine map was located in this pass. Unnamed IPN/UNAM/ITESM thesis titles in the draft were not verified. IMT Publicación Técnica No. 417 is an engine-fuel characterization, not water injection. IMP “inyección de agua” is oilfield WAG, out of scope.
 
 - **Why production programmes were not continued (checked follow-up):** added tank/pump/injectors and a refill of distilled water are documented official features (BMW M4 GTS, Bosch WaterBoost). The GTS was a **700-unit** limited run; BMW M’s Frank van Meel said the engine was meant for that car and that further use depended on the vehicle concept. Official EU/EPA figures show the GTS was not a cycle-economy win versus the M4 Coupe (combined **8.5 L/100 km** / EPA combined **19 mpg**). Jetfire field problems and a 1965 free de-turbo conversion are documented in secondary histories; Saab’s system was a **Sport kit**, not a 1970–73 “Turbo X” factory programme. Draft claims of a regulatory “no fuel-economy credit” rule (40 CFR 86.1807, UNECE R94, EU 2020/…) were **incorrect**. **No documented oil-company lobbying** was found.
 
