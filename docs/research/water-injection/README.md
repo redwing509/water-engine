@@ -11,7 +11,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
 - When a paper is paywalled, a **legitimate** alternate copy is used if one exists (author preprint, thesis, university repository, conference slides, or a later open paper that quotes the numbers). Piracy sites are not used. If no legitimate open copy is found, the bibliographic record is cited and unseen numbers are marked paywalled.
 - **Copyrighted PDFs are not committed here.** Links and citations only.
-- Country reports 01–18 have been checked (01–15 in the first pass; Brazil, Spain, and Poland in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
+- Country reports 01–19 have been checked (01–15 in the first pass; Brazil, Spain, and Poland in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
 
 ## Contents
 
@@ -37,6 +37,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/16-brazil.md](country-survey/16-brazil.md) | Checked 11 Nov 2026 | Brazil: no production WI vehicle; Unicamp/MWM 2009 emulsion and UFMG/Bosch research; several open sources the draft had marked paywalled |
 | [country-survey/17-spain.md](country-survey/17-spain.md) | Checked 11 Nov 2026 | Spain: no production WI vehicle; Seville 2019 intake-WI (open abstract NOx 60–70 %); student work qualified; Austrian and news figures rejected |
 | [country-survey/18-poland.md](country-survey/18-poland.md) | Checked 11 Nov 2026 | Poland: no production WI vehicle; Lublin 2024 hydrogen Wankel + WI (open abstract); Gulak news and Ursus C-45 WI claims rejected |
+| [country-survey/19-australia.md](country-survey/19-australia.md) | Checked 11 Nov 2026 | Australia: no production WI vehicle; Deakin 2024 open model of intake WI on a hydrogen/diesel Cummins; missed Monash emulsion and Melbourne H2+WI work |
 
 ## Usable measured / official figures (short)
 
@@ -98,6 +99,10 @@ See the individual notes for caveats, units, and links. Headline items as of the
 
 - **No Polish series-production road vehicle** with factory combustion-cycle water injection was found.
 - **Biały, Politechnika Lubelska, 2024 thesis (open official abstract):** hydrogen-fuelled Wankel on a dynamometer with in-chamber water injection; water quantity and duration can suppress or eliminate knock. PDF is closed access; no BSFC/NOx percentages extracted. https://hdl.handle.net/20.500.14629/18642 . Do not use Jan Gulak news figures or treat the Ursus C-45 as a water-injection tractor.
+
+- **No Australian series-production road vehicle** with factory combustion-cycle water injection was found.
+- **Sharkey and Zare, Deakin, *Energies* 2024 (open MDPI):** AVL Boost model of a Cummins ISBe 220 with intake-manifold water injection (0–700 mg/cycle), validated on baseline diesel only. Simulated water-injection increments at 700 mg/cycle include about **0.5 %** power / thermal-efficiency change and up to about **16 % / 83 %** NO / NO2 cuts versus the same hydrogen fraction. The **94 % / 96 %** CO / CO2 cuts and **~8.8 %** power rise at 90 % hydrogen are hydrogen-substitution effects, not measured water-only gains. DOI 10.3390/en17235838.
+- **Mortimer et al., University of Melbourne, *Fuel* 2023 (open official poster):** Caterpillar C15 hydrogen DI test with intake-manifold water; about **25 % more power** at efficient combustion phasing by suppressing autoignition. https://energy.unimelb.edu.au/__data/assets/pdf_file/0003/4922751/mortimerMEI23A_v2.pdf (journal PDF paywalled). Do not use HYDI / HHO / Yull Brown claims as water-injection data.
 
 - **Why production programmes were not continued (checked follow-up):** added tank/pump/injectors and a refill of distilled water are documented official features (BMW M4 GTS, Bosch WaterBoost). The GTS was a **700-unit** limited run; BMW M’s Frank van Meel said the engine was meant for that car and that further use depended on the vehicle concept. Official EU/EPA figures show the GTS was not a cycle-economy win versus the M4 Coupe (combined **8.5 L/100 km** / EPA combined **19 mpg**). Jetfire field problems and a 1965 free de-turbo conversion are documented in secondary histories; Saab’s system was a **Sport kit**, not a 1970–73 “Turbo X” factory programme. Draft claims of a regulatory “no fuel-economy credit” rule (40 CFR 86.1807, UNECE R94, EU 2020/…) were **incorrect**. **No documented oil-company lobbying** was found.
 
