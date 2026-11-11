@@ -31,6 +31,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/10-south-korea.md](country-survey/10-south-korea.md) | Checked 11 Nov 2026 | South Korea: KAIST/SNU–Hyundai lab work, no production car; IJAT 2024 open-access BSFC figures |
 | [country-survey/11-czech-republic.md](country-survey/11-czech-republic.md) | Checked 11 Nov 2026 | Czech Republic: Hanon Hluk / BUT WAHASY harvester (open 2021 paper); no production car; source checks |
 | [country-survey/12-austria.md](country-survey/12-austria.md) | Checked 11 Nov 2026 | Austria: AVL RACETECH hydrogen race engine with port WI, TU Wien thesis, TU Graz HD hydrogen work; no production car |
+| [country-survey/13-netherlands.md](country-survey/13-netherlands.md) | Checked 11 Nov 2026 | Netherlands: no production WI car; TU/e 2019 TGDI work missed by the draft; Delft/NPS hydrogen items relabelled |
 
 ## Usable measured / official figures (short)
 
@@ -73,6 +74,9 @@ See the individual notes for caveats, units, and links. Headline items as of the
 
 - **No Austrian series-production passenger car** with factory combustion-cycle water injection was found.
 - **AVL RACETECH (Graz) hydrogen ICE race prototype (official press release):** **410 hp** from a **2 L** hydrogen combustion engine on the testbed; port water injection is described for combustion/thermal control. Racing only; do not treat 410 hp as a water-only gain. https://www.avl.com/en/press/press-release/410-hp-2-liter-displacement-prototype-h2-ice-race-engine-avl-racetech-proves-itself-testbed
+
+- **No Dutch series-production passenger car** with factory combustion-cycle water injection was found. A 2009 Dutch-inventor patent (US 2009/0188467 A1) is a concept only. Eindhoven University of Technology published 2019 work on intake water injection on a 1.5 L TGDI engine (open record; percentages not extracted here). Do not attribute water injection or a 17 % NOx figure to the NPS Driven MH2X 250G hydrogen conversion.
+
 
 
 
