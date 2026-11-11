@@ -33,6 +33,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/12-austria.md](country-survey/12-austria.md) | Checked 11 Nov 2026 | Austria: AVL RACETECH hydrogen race engine with port WI, TU Wien thesis, TU Graz HD hydrogen work; no production car |
 | [country-survey/13-netherlands.md](country-survey/13-netherlands.md) | Checked 11 Nov 2026 | Netherlands: no production WI car; TU/e 2019 TGDI work missed by the draft; Delft/NPS hydrogen items relabelled |
 | [country-survey/14-switzerland.md](country-survey/14-switzerland.md) | Checked 11 Nov 2026 | Switzerland: no production road WI vehicle; Wärtsilä Winterthur marine DWI and ETH/FHNW emulsion research |
+| [country-survey/15-india.md](country-survey/15-india.md) | Checked 11 Nov 2026 | India: no production WI vehicle; open Ashok Leyland/Amrita 2019 intake-WI paper; ARAI and six-stroke figures qualified |
 
 ## Usable measured / official figures (short)
 
@@ -79,6 +80,10 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **No Dutch series-production passenger car** with factory combustion-cycle water injection was found. A 2009 Dutch-inventor patent (US 2009/0188467 A1) is a concept only. Eindhoven University of Technology published 2019 work on intake water injection on a 1.5 L TGDI engine (open record; percentages not extracted here). Do not attribute water injection or a 17 % NOx figure to the NPS Driven MH2X 250G hydrogen conversion.
 
 - **No Swiss series-production road vehicle** with factory combustion-cycle water injection was found. Wärtsilä NSD Schweiz (Winterthur) direct water injection is a **marine** large-bore diesel technology. FHNW/ETH 2017 medium-speed emulsion + EGR work is also marine; do not use the draft’s 20 % / ~70 % figures.
+
+- **No Indian series-production road vehicle** with factory combustion-cycle water injection was found.
+- **Ashok Leyland / Amrita, IOP 2019 (open PDF):** heavy-duty diesel, atomized intake-manifold water injection. At **2.8 mg/cylinder**: in-cylinder temperature about **90 °C** down, **NOx 8–10 %** down, **smoke about 20 %** up, power unchanged. DOI 10.1088/1757-899X/577/1/012186. Laboratory/conference result, not a production truck. Do not use a 176 km/L six-stroke news claim, or the draft’s ARAI 33/36/24/20 % emission cuts, without an opened open copy.
+
 
 
 
