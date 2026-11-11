@@ -24,6 +24,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/03-japan.md](country-survey/03-japan.md) | Checked 11 Nov 2026 | Japan: SIP Tokyo Tech/Keio super-lean + in-cylinder WI, patents (not production cars), source checks and corrections |
 | [country-survey/04-france.md](country-survey/04-france.md) | Checked 11 Nov 2026 | France: Aquazole emulsion fleets, Renault F1 racing WI, IFPEN/Renault/PSA SAE 2019 work; source checks and corrections |
 | [country-survey/05-uk.md](country-survey/05-uk.md) | Checked 11 Nov 2026 | United Kingdom: Bath/Golzari WI on the ULTRABOOST engine, no production car; source checks and corrections |
+| [country-survey/06-italy.md](country-survey/06-italy.md) | Checked 11 Nov 2026 | Italy: CNR and PoliTo/Marelli research, racing specials; intercooler spray excluded; source checks and corrections |
 
 ## Usable measured / official figures (short)
 
@@ -44,6 +45,10 @@ See the individual notes for caveats, units, and links. Headline items as of the
 
 - **University of Bath / Golzari et al., 2019 (open abstract):** port water injection on a boosted downsized GDI using ULTRABOOST engine hardware — up to about **5 %** net indicated efficiency at medium load and **15 %** at high load; NOx down up to about **60 %**. DOI 10.1177/1468087419832791 (PDF paywalled). These figures are **not** from the 2010–2013 ULTRABOOST project paper (SAE 2014-01-1185), which has an open White Rose copy and does not study water injection.
 - **No UK production road car** with combustion-cycle water injection was confirmed.
+
+- **CNR Istituto Motori (Marchitto, Tornatore, Valentino et al., 2018, open abstract):** port water injection on a small turbocharged PFI SI engine reduced over-fuelling and particle number and improved efficiency without a load penalty. DOI 10.1061/(ASCE)EY.1943-7897.0000559. No percentage map extracted from a paywalled PDF.
+- **Politecnico di Torino, SAE 2023-01-0181 (open abstract):** numerical cycle study after wet/dry map validation — potential **4–8 %** CO₂ reduction, water **< 1.1 L/100 km**, with high CR and Miller. DOI 10.4271/2023-01-0181 (PDF paywalled).
+- **No Italian series-production passenger car** with combustion-cycle water injection was confirmed. Autodelta GTA SA and Ferrari F1 Emulsistem are competition/racing. Fiat Uno and Integrale “Sacca” systems are intercooler spray, out of scope.
 
 
 Corrections already found in the Germany draft (do not reuse the wrong figures): the GTS is not a 500-car run; “+37 hp vs M4” is wrong; Alpina/Brabus factory water-injection kits were not confirmed; a shared patent list was mis-attributed across firms; “up to 50% NOx” is not what Welscher’s abstract says.
