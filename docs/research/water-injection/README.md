@@ -20,6 +20,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [bmw-m4-gts-bosch-waterboost-20261111.md](bmw-m4-gts-bosch-waterboost-20261111.md) | Checked 11 Nov 2026 | BMW M4 GTS / Bosch WaterBoost hardware, official ratings, and what is (and is not) usable for Water Engine calibration |
 | [country-survey/COUNTRY_LIST.md](country-survey/COUNTRY_LIST.md) | Plan | Ordered country list for the worldwide historical survey |
 | [country-survey/01-germany.md](country-survey/01-germany.md) | Checked 11 Nov 2026 | Germany: makers, universities, measured data, source checks, and corrections |
+| [country-survey/02-usa.md](country-survey/02-usa.md) | Checked 11 Nov 2026 | United States: Jetfire, ADI (aviation), aftermarket, labs; source checks and rejected paper/patent IDs |
 
 ## Usable measured / official figures (short)
 
@@ -29,5 +30,7 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **Hoppe, Thewes, Baumgarten, Dohmen (RWTH Aachen / FEV), 2016**, open RWTH copy: laboratory single-cylinder, about **3.3%–3.8%** efficiency gain near minimum BSFC (stoichiometric, Miller + cooled EGR), up to **16%** at full load, about **4.5%** with homogeneous lean. DOI 10.1177/1468087415599867; https://publications.rwth-aachen.de/record/567619
 - **Massoud, TU Berlin dissertation, 2024**, open DepositOnce (CC BY 4.0): indicated efficiency about **+0.8 pp** (port, 10 bar), **+1.2 pp** (direct, 400 bar), **+2.0 pp** (best 10% microemulsion, 200 bar). https://doi.org/10.14279/depositonce-21307
 - **Welscher et al., KIT / Stuttgart, 2023**: 562 port-WI points on a Euro 6d diesel single-cylinder. Use the abstract’s 62/40/20 soot-neutral shares and g/kWh NOx figures, **not** a “50% NOx” shorthand. DOI 10.1177/14680874211044297; KITopen 1000137777.
+
+- **Oldsmobile Jetfire (1962–1963):** official **215 hp / 300 lb-ft**, **10.25:1** CR, water-methanol Turbo-Rocket Fluid, ~5 psi boost, 9,607 built. Use SAE **620221** (not 620001). Do not use a 10–15% economy claim. Failsafe when the fluid tank is dry.
 
 Corrections already found in the Germany draft (do not reuse the wrong figures): the GTS is not a 500-car run; “+37 hp vs M4” is wrong; Alpina/Brabus factory water-injection kits were not confirmed; a shared patent list was mis-attributed across firms; “up to 50% NOx” is not what Welscher’s abstract says.
