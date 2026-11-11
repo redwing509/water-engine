@@ -11,7 +11,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
 - When a paper is paywalled, a **legitimate** alternate copy is used if one exists (author preprint, thesis, university repository, conference slides, or a later open paper that quotes the numbers). Piracy sites are not used. If no legitimate open copy is found, the bibliographic record is cited and unseen numbers are marked paywalled.
 - **Copyrighted PDFs are not committed here.** Links and citations only.
-- Country reports 01–25 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Hungary in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
+- Country reports 01–26 have been checked (01–15 in the first pass; Brazil through Canada and Priority B Belgium–Romania in a later 11 Nov 2026 pass). A follow-up study on why production programmes were not continued is in [`why-not-adopted/why-not-adopted.md`](why-not-adopted/why-not-adopted.md).
 
 ## Contents
 
@@ -44,6 +44,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/23-norway.md](country-survey/23-norway.md) | Checked 11 Nov 2026 | Norway: no production WI road vehicle; company-hosted MARINTEK 2009 White Diesel summary (NOx −0.88 % per percent water); Danish EPA report removed from Norway totals |
 | [country-survey/24-denmark.md](country-survey/24-denmark.md) | Checked 11 Nov 2026 | Denmark: no production WI road vehicle; official EPA 1380 Copenhagen 4T50ME-X WIF tests (NOx approaching −60 % at 50 % load); MAN DWI ratios and DTU SCR paper not taken as combustion-cycle maps |
 | [country-survey/25-hungary.md](country-survey/25-hungary.md) | Checked 11 Nov 2026 | Hungary: no production WI vehicle; Hegedűs 2024 quotes Nánási 1973 (3.5 % / 6.5 % parameter arithmetic) and Hofherr 1952; Szűcs 2021 is a theoretical concept |
+| [country-survey/26-romania.md](country-survey/26-romania.md) | Checked 11 Nov 2026 | Romania: no production WI vehicle; Benea 2022 K9K diesel intake WI (NOx up to −22 %, power −3 %, PM +36 %); UPT Borborean 2024 NOx about −38 % at 40 % water/fuel; UPT “60 %” and Lazăr 2020 not taken as WI maps |
 
 ## Usable measured / official figures (short)
 
@@ -138,6 +139,11 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **No Hungarian series-production road vehicle** with factory combustion-cycle water injection was found.
 - **Hegedűs, Katonai Logisztika 2024 (official open PDF):** review quoting Hofherr 1952 water-diesel emulsion tests as successful (no percentages) and Nánási 1973 Pannonia P10 in-cylinder water tests: at **1.2×** water/fuel, power/SFC parameters improved **3.5 %** instead of an expected **3 %** loss, called a **6.5 %** specific-parameter improvement. Secondary quotation; original 1973 paper not opened. https://epa.oszk.hu/02700/02735/00101/pdf/EPA02735_katlog_2024_ksz_182-206.pdf
 - **Szűcs and Vehovszky, OGÉT 2021 (official open PDF):** Széchenyi István University / Audi Hungaria Győr; a **theoretical** water-injection concept for a five-cylinder SI engine, not a new measured map. https://ojs.emt.ro/oget/article/view/469
+
+
+- **No Romanian series-production road vehicle** with factory combustion-cycle water injection was found.
+- **Benea, Transilvania University of Brașov, 2022 (official open PDF):** Renault K9K 720 diesel, intake-manifold water at 5/10/20 % of diesel; at 20 % water and full load, power **−3 %** from a 63.8 kW diesel baseline; **NOx up to −22 %**; particulates **about +36 %**. https://iopscience.iop.org/article/10.1088/1757-899X/1256/1/012039
+- **Borborean, Stoica, and Lelea, Politehnica Timișoara, 2024 (official open PDF):** Daewoo 1.6 L PFI SI, intake water 10–45 % of fuel; at about 40 % water/fuel mass, **NOx about −38 %**. A 2019 paper on the same bench reports **NOx −30 % on average** (water/fuel ratio not stated). An official UPT feature’s “up to 60 %” NOx claim was not taken. https://iopscience.iop.org/article/10.1088/1757-899X/1311/1/012005
 
 - **Why production programmes were not continued (checked follow-up):** added tank/pump/injectors and a refill of distilled water are documented official features (BMW M4 GTS, Bosch WaterBoost). The GTS was a **700-unit** limited run; BMW M’s Frank van Meel said the engine was meant for that car and that further use depended on the vehicle concept. Official EU/EPA figures show the GTS was not a cycle-economy win versus the M4 Coupe (combined **8.5 L/100 km** / EPA combined **19 mpg**). Jetfire field problems and a 1965 free de-turbo conversion are documented in secondary histories; Saab’s system was a **Sport kit**, not a 1970–73 “Turbo X” factory programme. Draft claims of a regulatory “no fuel-economy credit” rule (40 CFR 86.1807, UNECE R94, EU 2020/…) were **incorrect**. **No documented oil-company lobbying** was found.
 
