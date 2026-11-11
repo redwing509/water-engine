@@ -30,6 +30,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/09-china.md](country-survey/09-china.md) | Checked 11 Nov 2026 | China: no production WI car; Japanese figures and a US-origin CN filing rejected; missed Chongqing/CNHTC research noted |
 | [country-survey/10-south-korea.md](country-survey/10-south-korea.md) | Checked 11 Nov 2026 | South Korea: KAIST/SNU–Hyundai lab work, no production car; IJAT 2024 open-access BSFC figures |
 | [country-survey/11-czech-republic.md](country-survey/11-czech-republic.md) | Checked 11 Nov 2026 | Czech Republic: Hanon Hluk / BUT WAHASY harvester (open 2021 paper); no production car; source checks |
+| [country-survey/12-austria.md](country-survey/12-austria.md) | Checked 11 Nov 2026 | Austria: AVL RACETECH hydrogen race engine with port WI, TU Wien thesis, TU Graz HD hydrogen work; no production car |
 
 ## Usable measured / official figures (short)
 
@@ -69,6 +70,10 @@ See the individual notes for caveats, units, and links. Headline items as of the
 
 - **No Czech series-production passenger car** with factory combustion-cycle water injection was found.
 - **Hanon Systems (Hluk) / Brno University of Technology with FEV and Hanon Germany, 2021 (open MDPI):** WAHASY exhaust-condensate harvester on FEV’s Audi TT-S water-injection demonstrator; vehicle-point **90 % harvest efficiency** (not thermal efficiency). DOI 10.3390/ijerph18105392. Do not use “40–50 % WFR = 10 % EGR” as a Czech measurement (Conway 2019).
+
+- **No Austrian series-production passenger car** with factory combustion-cycle water injection was found.
+- **AVL RACETECH (Graz) hydrogen ICE race prototype (official press release):** **410 hp** from a **2 L** hydrogen combustion engine on the testbed; port water injection is described for combustion/thermal control. Racing only; do not treat 410 hp as a water-only gain. https://www.avl.com/en/press/press-release/410-hp-2-liter-displacement-prototype-h2-ice-race-engine-avl-racetech-proves-itself-testbed
+
 
 
 
