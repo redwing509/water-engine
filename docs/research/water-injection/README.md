@@ -25,6 +25,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/04-france.md](country-survey/04-france.md) | Checked 11 Nov 2026 | France: Aquazole emulsion fleets, Renault F1 racing WI, IFPEN/Renault/PSA SAE 2019 work; source checks and corrections |
 | [country-survey/05-uk.md](country-survey/05-uk.md) | Checked 11 Nov 2026 | United Kingdom: Bath/Golzari WI on the ULTRABOOST engine, no production car; source checks and corrections |
 | [country-survey/06-italy.md](country-survey/06-italy.md) | Checked 11 Nov 2026 | Italy: CNR and PoliTo/Marelli research, racing specials; intercooler spray excluded; source checks and corrections |
+| [country-survey/07-sweden.md](country-survey/07-sweden.md) | Checked 11 Nov 2026 | Sweden: Saab Sport kit accessory, Chalmers/Volvo Cars PWI, missed KTH methanol work; source checks |
 
 ## Usable measured / official figures (short)
 
