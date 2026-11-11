@@ -26,6 +26,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/05-uk.md](country-survey/05-uk.md) | Checked 11 Nov 2026 | United Kingdom: Bath/Golzari WI on the ULTRABOOST engine, no production car; source checks and corrections |
 | [country-survey/06-italy.md](country-survey/06-italy.md) | Checked 11 Nov 2026 | Italy: CNR and PoliTo/Marelli research, racing specials; intercooler spray excluded; source checks and corrections |
 | [country-survey/07-sweden.md](country-survey/07-sweden.md) | Checked 11 Nov 2026 | Sweden: Saab Sport kit accessory, Chalmers/Volvo Cars PWI, missed KTH methanol work; source checks |
+| [country-survey/08-russia.md](country-survey/08-russia.md) | Checked 11 Nov 2026 | Russia/USSR: patents and later diesel intake-WI research; no production car; unsourced NAMI figures rejected |
 
 ## Usable measured / official figures (short)
 
@@ -50,6 +51,13 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **CNR Istituto Motori (Marchitto, Tornatore, Valentino et al., 2018, open abstract):** port water injection on a small turbocharged PFI SI engine reduced over-fuelling and particle number and improved efficiency without a load penalty. DOI 10.1061/(ASCE)EY.1943-7897.0000559. No percentage map extracted from a paywalled PDF.
 - **Politecnico di Torino, SAE 2023-01-0181 (open abstract):** numerical cycle study after wet/dry map validation — potential **4–8 %** CO₂ reduction, water **< 1.1 L/100 km**, with high CR and Miller. DOI 10.4271/2023-01-0181 (PDF paywalled).
 - **No Italian series-production passenger car** with combustion-cycle water injection was confirmed. Autodelta GTA SA and Ferrari F1 Emulsistem are competition/racing. Fiat Uno and Integrale “Sacca” systems are intercooler spray, out of scope.
+
+- **Saab Sport kit (late 1970s–1980s accessory):** official kit for 99/900 Turbo, water injected upstream of the compressor; PistonHeads: boost about **10 → 17.4 psi**, claimed **145 → at least 160 bhp**. Not standard on every car. Do not use a 15–25 % fuel-economy claim.
+- **Chalmers / Khatri (2019–2022), Volvo Cars 1.5 L 3-cyl turbo GDI, port WI:** open licentiate PDF plus SAE 2019-01-0034 / **2020-01-0798**. Experimental knock/enrichment work; **~0.5–1 %** cycle fuel-consumption figures are **mild-hybrid simulations**, not a measured map.
+- **No modern Swedish series-production passenger car** with factory combustion-cycle water injection was found.
+
+- **No Soviet or Russian series-production passenger car** with factory combustion-cycle water injection was found. Confirmed USSR/RU patents include SU 769051, SU 1677356, and **RU 2069274** (not SU). Do not use unsourced NAMI “11.6 K / 11.8 %” figures. Later Russian diesel intake-WI work exists (Dmitriev & Khlyupin 2008; *Energies* 2020 on a 12CHN15/18), without extracted maps in this pass.
+
 
 
 Corrections already found in the Germany draft (do not reuse the wrong figures): the GTS is not a 500-car run; “+37 hp vs M4” is wrong; Alpina/Brabus factory water-injection kits were not confirmed; a shared patent list was mis-attributed across firms; “up to 50% NOx” is not what Welscher’s abstract says.
