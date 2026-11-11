@@ -21,6 +21,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 | [country-survey/COUNTRY_LIST.md](country-survey/COUNTRY_LIST.md) | Plan | Ordered country list for the worldwide historical survey |
 | [country-survey/01-germany.md](country-survey/01-germany.md) | Checked 11 Nov 2026 | Germany: makers, universities, measured data, source checks, and corrections |
 | [country-survey/02-usa.md](country-survey/02-usa.md) | Checked 11 Nov 2026 | United States: Jetfire, ADI (aviation), aftermarket, labs; source checks and rejected paper/patent IDs |
+| [country-survey/03-japan.md](country-survey/03-japan.md) | Checked 11 Nov 2026 | Japan: SIP Tokyo Tech/Keio super-lean + in-cylinder WI, patents (not production cars), source checks and corrections |
 
 ## Usable measured / official figures (short)
 
@@ -32,5 +33,8 @@ See the individual notes for caveats, units, and links. Headline items as of the
 - **Welscher et al., KIT / Stuttgart, 2023**: 562 port-WI points on a Euro 6d diesel single-cylinder. Use the abstract’s 62/40/20 soot-neutral shares and g/kWh NOx figures, **not** a “50% NOx” shorthand. DOI 10.1177/14680874211044297; KITopen 1000137777.
 
 - **Oldsmobile Jetfire (1962–1963):** official **215 hp / 300 lb-ft**, **10.25:1** CR, water-methanol Turbo-Rocket Fluid, ~5 psi boost, 9,607 built. Use SAE **620221** (not 620001). Do not use a 10–15% economy claim. Failsafe when the fluid tank is dry.
+- **Tokyo Tech / Keio (SIP, Nagasawa et al., 2020):** 0.5 L single-cylinder, super-lean burn plus in-cylinder water injection. Open write-ups: gross indicated thermal efficiency **48.7 % → 50.2 %** at CR 15, λ=1.9, W/F 39 %; **52.6 %** (abstract **52.63 %**) at CR 17, λ=1.9, W/F 50 %. Official Tokyo Tech press also gives **51.5 %** brake thermal efficiency. The 52.6 % figure is the combined system, not a water-only gain. DOI 10.1177/1468087420908164 (PDF paywalled; figures from official PR, JSAE Engine Review, and Keio abstract).
+- **No Japanese production road car** with combustion-cycle water injection was confirmed. Honda holds port-WI patents; Subaru STI S209 uses intercooler water spray, which is out of scope.
+
 
 Corrections already found in the Germany draft (do not reuse the wrong figures): the GTS is not a 500-car run; “+37 hp vs M4” is wrong; Alpina/Brabus factory water-injection kits were not confirmed; a shared patent list was mis-attributed across firms; “up to 50% NOx” is not what Welscher’s abstract says.
