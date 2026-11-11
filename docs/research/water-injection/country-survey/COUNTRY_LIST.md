@@ -10,7 +10,7 @@ Rules (James, t878u, 2026-11-11 12:28 AM America/Los_Angeles):
 - These notes are literature research only and do not change Water Engine model code or results.
 - Paywalled sources (James t880u): seek a legitimate alternate copy (author preprint, thesis, university repository, conference slides, or a later open paper quoting the numbers). No piracy sites. If no legitimate open copy is found, cite the bibliographic record and mark numbers as paywalled.
 
-Prompt language is listed after each country. Checked reports for countries 01–28 are in this folder (sessions of 11 Nov 2026). Priority A is complete; Priority B continues from 29 Argentina.
+Prompt language is listed after each country. Checked reports for countries 01–29 are in this folder (sessions of 11 Nov 2026). Priority A is complete; Priority B continues from 30 South Africa.
 
 ## Priority A — start here (explicit order)
 
