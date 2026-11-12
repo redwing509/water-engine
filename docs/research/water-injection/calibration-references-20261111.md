@@ -76,3 +76,12 @@ Designated by James at 5:53 PM on 11 Nov 2026 as the calibration reference for *
 | Attia and Kulchitskiy 2014, Benha | Diesel, water-in-fuel emulsion, 17% water by volume | Water-in-fuel efficiency target | Effective efficiency up to +20% with finer droplets | Diesel emulsion, not injection; droplet size changes which gain you get (efficiency vs NOx) |
 
 Country-survey notes: [Germany](country-survey/01-germany.md), [Turkey](country-survey/27-turkey.md), [Egypt](country-survey/46-egypt.md). M4 GTS hardware notes, including the original RWTH trust-tier entry: [bmw-m4-gts-bosch-waterboost-20261111.md](bmw-m4-gts-bosch-waterboost-20261111.md).
+
+---
+
+### Addendum (11 Nov 2026, evening): Attia droplet sizes and efficiency-improvement study
+
+- Measured droplet D50 (Attia Fig. 5, after one month): **0.53 µm** (0.2 µm membrane) and **5.5 µm** (0.45 µm membrane). The 0.2/0.45 µm values are membrane pore sizes, not droplet sizes.
+- The +20% is a best-point maximum from Fig. 7. Some points read only about +10–13%. At 2000 rpm / 35 kW the coarse emulsion matched the fine one. The paper does not define η_e.
+- New supporting gasoline reference (water-in-gasoline emulsion): Tornatore et al. 2021, *Appl. Sci.* 11:9453, DOI 10.3390/app11209453. Indicated fuel use (gasoline only) **−3.7% / −7.1%** at 10 / 20 vol% water, measured only after moving to stoichiometric and knock-limited spark advance.
+- Full checked study and ranked improvement paths: [egypt-efficiency-improvement-20261111.md](egypt-efficiency-improvement-20261111.md).
