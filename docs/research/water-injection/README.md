@@ -6,6 +6,16 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 **Repository path:** `docs/research/water-injection/`  
 **Branch / PR:** first survey notes merged via [PR #22](https://github.com/redwing509/water-engine/pull/22). The why-not-adopted study is a later docs-only addition.
 
+## Calibration references
+
+James designated three measured datasets as Water Engine calibration references on 11 November 2026 (America/Los_Angeles). They are not interchangeable: each is a different method. Full note: [`calibration-references-20261111.md`](calibration-references-20261111.md).
+
+- **Hoppe et al. 2016, RWTH Aachen / FEV** — gasoline direct water injection (HIGH-TRUST). About 3.3–3.8% efficiency near peak efficiency; up to 16% at full load (the 16% figure uses an extrapolated dry baseline).
+- **Ayhan and Ece 2019, Sakarya** — diesel direct in-cylinder water injection. About 8.5% lower brake specific fuel consumption at 1600 rpm / 40% water, plus up to 6% more peak power at 1200 rpm. Do not add the two percentages.
+- **Attia and Kulchitskiy 2014, Benha** — water-in-fuel emulsion at 17% water by volume. Effective efficiency up to +20% with finer droplets. This is the water-in-fuel efficiency target.
+
+None of these is a production-vehicle fuel-economy certification. The Water Engine model result they are checked against is model-only.
+
 ## How to read this folder
 
 - Unverified, secondary, manufacturer-claim, or paywalled figures are marked in the notes. Prefer the verification sections over raw draft text.
@@ -17,6 +27,7 @@ Literature research only. These notes collect **summaries, numbers, citations, a
 
 | File | Status | What it is |
 | --- | --- | --- |
+| [calibration-references-20261111.md](calibration-references-20261111.md) | Designated 11 Nov 2026 | Three calibration references: RWTH/FEV gasoline direct WI (HIGH-TRUST); Ayhan and Ece 2019 diesel direct WI; Attia and Kulchitskiy 2014 water-in-fuel emulsion |
 | [bmw-m4-gts-bosch-waterboost-20261111.md](bmw-m4-gts-bosch-waterboost-20261111.md) | Checked 11 Nov 2026 | BMW M4 GTS / Bosch WaterBoost hardware, official ratings, and what is (and is not) usable for Water Engine calibration |
 | [country-survey/COUNTRY_LIST.md](country-survey/COUNTRY_LIST.md) | Plan | Ordered country list for the worldwide historical survey |
 | [country-survey/01-germany.md](country-survey/01-germany.md) | Checked 11 Nov 2026 | Germany: makers, universities, measured data, source checks, and corrections |

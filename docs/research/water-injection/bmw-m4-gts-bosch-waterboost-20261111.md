@@ -364,3 +364,11 @@ The open Hoppe/Thewes 2016 IJER paper is the first **peer-reviewed, page-cited, 
 
 ## Trust tier (James, Nov 11 2026 12:44 AM PST)
 James designated the German RWTH Aachen / FEV measured data (Hoppe, Thewes, Baumgarten, Dohmen, IJER 17(1) 2016; Voßhall 2022 RWTH dissertation quoting Thewes 2016) as HIGH-TRUST reference data for Water Engine calibration checks. Caveat kept: IJER high-load 16% figure uses an extrapolated dry baseline.
+
+
+## Additional calibration references (James, 11 Nov 2026, 5:52–5:53 PM America/Los_Angeles)
+James also designated:
+- **Ayhan and Ece 2019** (Sakarya, official open PDF) as a calibration reference for diesel direct in-cylinder water injection, alongside this RWTH HIGH-TRUST gasoline data. Body BSFC about -8.5% at 1600 rpm / 40% water; do not add the +6% peak-power figure to it.
+- **Attia and Kulchitskiy 2014** (Benha, official staff PDF) as the calibration reference for water-in-fuel emulsion. Effective efficiency up to +20% (1.2 times diesel) with finer droplets, at 17% water by volume. He directed research on how to improve on that efficiency number.
+
+Full note with all three references: [`calibration-references-20261111.md`](calibration-references-20261111.md).
