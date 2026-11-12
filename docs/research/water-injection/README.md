@@ -16,6 +16,8 @@ James designated three measured datasets as Water Engine calibration references 
 
 **Follow-up (11 Nov 2026):** [`egypt-efficiency-improvement-20261111.md`](egypt-efficiency-improvement-20261111.md) checks what produced Attia's +20%: it is a best-point figure, droplet D50 is 0.53 µm vs 5.5 µm, and η_e is not defined in the paper. It also reviews later emulsion studies and ranks paths to beat it. No verified equal-power multi-cylinder result exceeds +20%. For Water Engine (naturally aspirated gasoline), the gasoline emulsion map found is −3.7% / −7.1% indicated fuel use (Tornatore et al. 2021).
 
+The follow-up work queue is [`replication-baseline-queue-20261111.md`](replication-baseline-queue-20261111.md): new baselines and the tests to run next, with Water Engine and diesel-emulsion tracks kept separate.
+
 None of these is a production-vehicle fuel-economy certification. The Water Engine model result they are checked against is model-only.
 
 ## How to read this folder
@@ -31,6 +33,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | --- | --- | --- |
 | [calibration-references-20261111.md](calibration-references-20261111.md) | Designated 11 Nov 2026 | Three calibration references: RWTH/FEV gasoline direct WI (HIGH-TRUST); Ayhan and Ece 2019 diesel direct WI; Attia and Kulchitskiy 2014 water-in-fuel emulsion |
 | [egypt-efficiency-improvement-20261111.md](egypt-efficiency-improvement-20261111.md) | Checked 11 Nov 2026 | How to beat Attia 2014's +20% water-in-fuel efficiency: what the paper actually shows, later verified emulsion data, ranked improvement paths, and what applies to Water Engine |
+| [replication-baseline-queue-20261111.md](replication-baseline-queue-20261111.md) | Queued 11 Nov 2026 | Tests worth replicating from the Egypt study, and new baselines to work from: Water Engine gasoline (B-WE-01 model −9.728% cost/mi, RWTH, Tornatore) and a diesel-emulsion side project (Attia equal-power first) |
 | [bmw-m4-gts-bosch-waterboost-20261111.md](bmw-m4-gts-bosch-waterboost-20261111.md) | Checked 11 Nov 2026 | BMW M4 GTS / Bosch WaterBoost hardware, official ratings, and what is (and is not) usable for Water Engine calibration |
 | [country-survey/COUNTRY_LIST.md](country-survey/COUNTRY_LIST.md) | Plan | Ordered country list for the worldwide historical survey |
 | [country-survey/01-germany.md](country-survey/01-germany.md) | Checked 11 Nov 2026 | Germany: makers, universities, measured data, source checks, and corrections |
