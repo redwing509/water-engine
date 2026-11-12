@@ -281,3 +281,7 @@ Do not use: Gazi 2013 abstract CO/NOx swap; six-stroke torque +12.27 %; unopened
 ## Link-check notes
 
 Opened: official DergiPark PDFs of Yılmaz et al. 2013, Ayhan 2016, and Ayhan and Ece 2019; official ITU research-portal abstract for Okumuş et al. 2023; official Gazi AVESIS abstract for Arabaci et al. 2015; official Yıldız dspace abstract for Galata 2017. Elsevier and Taylor & Francis full PDFs were not opened. No piracy sites were used. Those PDFs were saved only to the private archive, not to the public GitHub repository.
+
+
+## Calibration-reference designation (James, 11 Nov 2026 5:52 PM America/Los_Angeles)
+James designated Ayhan and Ece 2019 (official open PDF, direct in-cylinder diesel water injection) as a Water Engine calibration reference, alongside the German RWTH Aachen / FEV HIGH-TRUST gasoline data. Use the body BSFC figure of about -8.5% at 1600 rpm / 40% water, not an 8.5+6 added total. Full note: [`calibration-references-20261111.md`](../calibration-references-20261111.md).

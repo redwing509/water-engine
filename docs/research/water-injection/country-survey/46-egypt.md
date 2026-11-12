@@ -42,3 +42,7 @@ Do not use: 85% or 88% NOx as a water-injection-only map; the 40%/45% Nour 2016 
 ## Link-check notes
 
 Opened: official Benha staff PDF of Attia and Kulchitskiy 2014; official Benha staff OA PDF of Nour et al. 2016; official J-STAGE PDF of Farag et al. 2017. Official Benha staff pages for Attia 2011 *Mir transporta* and a 2013 Volgograd paper were identified; the 2013 PDF was downloaded but Cyrillic text extraction was not clean enough to take figures from it in this pass. No piracy sites were used. No copyrighted PDF was saved to the public GitHub repository.
+
+
+## Calibration-reference designation (James, 11 Nov 2026 5:53 PM America/Los_Angeles)
+James designated Attia and Kulchitskiy 2014 (official Benha staff PDF, water-in-fuel emulsion at 17% water by volume) as the Water Engine calibration reference for water mixed into the fuel. The target figure is effective efficiency up to +20% (1.2 times diesel) with finer droplets. He also directed research on how to improve on that efficiency number. Full note: [`calibration-references-20261111.md`](../calibration-references-20261111.md).
