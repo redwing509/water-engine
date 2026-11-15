@@ -166,6 +166,7 @@ C2-style CR-only hardware bumps are left out of this list unless James wants the
 5. No request here to raise the project-wide water cap. If he wants that, it is a separate decision.
 
 Sources used (all pre-existing, checked files; no new invented citations): the first-pass Ghent track result note and Dierickx et al. *Fuel* 333 (2023) 126349; Sileghem, Casier, Coppens, Vancoillie, Verhelst, FISITA F2014-CET-014 (2014, open PDF https://biblio.ugent.be/publication/5694558/file/5694573.pdf) and Sileghem et al., SAE 2013-01-1319 (NOx percentages paywalled, not used); [country-survey/21-belgium.md](country-survey/21-belgium.md) (UCLouvain 2019, VUB mHAT); [country-survey/19-australia.md](country-survey/19-australia.md) (Mortimer *Fuel* 335 (2023) 126652); Hefei/JAC *Fuel* 282 (2020) 118839 (Chinese bench, UTS co-author, not an Australian result); [country-survey/54-morocco.md](country-survey/54-morocco.md) (UIR abstract); [calibration-references-20261111.md](calibration-references-20261111.md) (Hoppe 2016, Attia 2014); project Track A/B status tables and later point shards (summaries only, not in this repository); Module 13 SPEC.
+
 ---
 
 ## Additional findings (Nov 14, 2026)
@@ -249,7 +250,7 @@ Confidence: **high** that a tighter CA50 grid will not beat the existing spark o
 
 Local branch `track/h2-water-20261114`. Calibrated conceptually to University of Melbourne, Mortimer, Poursadegh, Brear et al., *Fuel* 335 (2023) 126652, doi:10.1016/j.fuel.2022.126652, using the open ARENA / Melbourne Energy Institute conditions already recorded in [country-survey/19-australia.md](country-survey/19-australia.md): Caterpillar C15, one cylinder converted to hydrogen DI SI; CR 12 and 14; 0.4 bar boost; CA50 = 5 ± 1° ATDC; water in the intake airstream; **close to 25% more power** at efficient phasing. Programme ITE ~47% is *not* a water-only delta. Water-to-hydrogen ratios and BTE deltas in the *Fuel* paper are paywalled and were not used.
 
-Geometry used: bore × stroke **137 × 171 mm** (published C15 15.2 L six-cylinder; not in the open ARENA excerpt). Speed **1500 rpm** assumed (genset-like; not stated in the open survey sources). *p*_IVC = 1.4 bar. Grid: CR 12/14 × φ 0.40/0.60/0.80/1.00 × *w* = 0…0.30 × CA50 4–12° (336 points). 230 passed; 93 knock rejects. No FMEP was fitted (no open Melbourne dry BTE). All efficiencies below are **gross indicated**.
+Geometry used: bore × stroke **137 × 171 mm** (published C15 15.2 L six-cylinder; not in the open ARENA excerpt). Speed **1500 rpm** assumed (genset-like; not stated in the open survey sources). *p*_IVC = 1.4 bar. Grid: CR 12/14 × φ 0.40/0.60/0.80/1.00 × *w* = 0…0.30 × CA50 4–12° (336 points). 230 passed; 93 knock rejects; a handful of state-inversion failures, all rejected. No FMEP was fitted (no open Melbourne dry BTE). All efficiencies below are **gross indicated**.
 
 | Comparison | Dry | Wet (*w* ≤ 0.30) | Δ |
 |---|---|---|---|
