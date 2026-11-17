@@ -1,6 +1,6 @@
 # Jamaica — water in the combustion cycle (checked)
 
-Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:07–9:10 PM America/Los_Angeles). Searches in English (official language), plus an OpenAlex filter on Jamaican institutions (0 relevant results).
+Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:06–9:07 PM America/Los_Angeles). Searches in English (official language), plus an OpenAlex filter on Jamaican institutions (0 relevant results).
 
 Prompt language: English (official language). Report language: English.
 

@@ -1,6 +1,6 @@
 # Paraguay — water in the combustion cycle (checked)
 
-Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:04–9:10 PM America/Los_Angeles). Searches in Spanish, plus an OpenAlex filter on Paraguayan institutions (0 relevant results).
+Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:03–9:04 PM America/Los_Angeles). Searches in Spanish, plus an OpenAlex filter on Paraguayan institutions (0 relevant results).
 
 Prompt language: Spanish. Report language: English.
 

@@ -1,6 +1,6 @@
 # Myanmar — water in the combustion cycle (checked)
 
-Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:09–9:14 PM America/Los_Angeles). Searches in English (main research language per COUNTRY_LIST), plus an OpenAlex filter on Myanmar institutions.
+Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:08–9:10 PM America/Los_Angeles). Searches in English (main research language per COUNTRY_LIST), plus an OpenAlex filter on Myanmar institutions.
 
 Prompt language: English. Report language: English.
 
