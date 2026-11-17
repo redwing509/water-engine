@@ -1,6 +1,6 @@
 # Puerto Rico — water in the combustion cycle (checked)
 
-Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:12–9:15 PM America/Los_Angeles). Searches in Spanish, plus an OpenAlex filter on Puerto Rican institutions (0 relevant results).
+Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:12–9:14 PM America/Los_Angeles). Searches in Spanish, plus an OpenAlex filter on Puerto Rican institutions (0 relevant results).
 
 Prompt language: Spanish. Report language: English.
 
