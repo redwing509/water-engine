@@ -164,6 +164,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [country-survey/127-turkmenistan.md](country-survey/127-turkmenistan.md) | Checked 16 Nov 2026 | Turkmenistan: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (OpenAlex Turkmenistan filter 0). Researched directly (no Hermes). Simulators: none. |
 | [country-survey/128-montenegro.md](country-survey/128-montenegro.md) | Checked 16 Nov 2026 | Montenegro: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (UCG Kotor marine-diesel work is on biodiesel). Researched directly (no Hermes). Simulators: none. |
 | [country-survey/129-kosovo.md](country-survey/129-kosovo.md) | Checked 16 Nov 2026 | Kosovo: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (one OpenAlex query not run: rate limit). Researched directly (no Hermes). Simulators: none. |
+| [country-survey/130-albania.md](country-survey/130-albania.md) | Checked 16 Nov 2026 | Albania: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (OpenAlex Albania filter 0). Researched directly (no Hermes). Simulators: none. |
 
 ## Usable measured / official figures (short)
 
