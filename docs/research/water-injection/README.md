@@ -152,6 +152,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [country-survey/115-tanzania.md](country-survey/115-tanzania.md) | Checked 16 Nov 2026 | Tanzania: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (only oil-reservoir water injection, not combustion). Researched directly (no Hermes). Simulators: none. |
 | [country-survey/116-uganda.md](country-survey/116-uganda.md) | Checked 16 Nov 2026 | Uganda: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection. Researched directly (no Hermes). Simulators: none. |
 | [country-survey/117-zimbabwe.md](country-survey/117-zimbabwe.md) | Checked 16 Nov 2026 | Zimbabwe: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection, including in mining diesels (OpenAlex Zimbabwe filter 0). Researched directly (no Hermes). Simulators: none. |
+| [country-survey/118-namibia.md](country-survey/118-namibia.md) | Checked 16 Nov 2026 | Namibia: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection, including mining diesels. Researched directly (no Hermes). Simulators: none. |
 
 ## Usable measured / official figures (short)
 
