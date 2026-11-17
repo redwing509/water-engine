@@ -174,6 +174,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [country-survey/136-honduras.md](country-survey/136-honduras.md) | Checked 17 Nov 2026 | Honduras: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine test of water injection, emulsion or steam injection. Hermes' only source (UNAH 2022 bunker C / diesel power-plant thermal-performance paper) was opened in full and has no water-injection or emulsion content. Simulators: none found. |
 | [country-survey/137-nicaragua.md](country-survey/137-nicaragua.md) | Checked 17 Nov 2026 | Nicaragua: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine test of water injection, emulsion or steam injection. Hermes listed no sources; Crossref checks found no Nicaraguan engine item. Simulators: none found. |
 | [country-survey/138-laos.md](country-survey/138-laos.md) | Checked 17 Nov 2026 | Laos: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine test of water injection, emulsion or steam injection. Hermes listed no sources; Crossref checks found no Lao engine item. Simulators: none found. |
+| [country-survey/139-bahrain.md](country-survey/139-bahrain.md) | Checked 17 Nov 2026 | Bahrain: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine test. Hermes' one "Bahrain" patent (US 11970966 B2) was wrong: inventors are UK-based split-cycle engine inventors, not Bahraini; dropped. Simulators: none found. |
 
 ## Usable measured / official figures (short)
 
