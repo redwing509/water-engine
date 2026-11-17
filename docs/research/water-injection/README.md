@@ -142,6 +142,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [country-survey/105-liechtenstein.md](country-survey/105-liechtenstein.md) | Checked 16 Nov 2026 | Liechtenstein: NOT FOUND: no Liechtenstein firm or institute working on water injection, water-fuel emulsion or steam injection was found (German search found only German/Swiss suppliers). Researched directly (no Hermes). Simulators: none. |
 | [country-survey/106-malta.md](country-survey/106-malta.md) | Checked 16 Nov 2026 | Malta: University of Malta benches: 592 cc SI port water injection, torque up to +16 % at 120 kPa (MMSJ 2015); 2.0 L diesel–LPG dual-fuel water port injection cut knock energy 88 % and peak HRR 56 % but lowered BMEP/BTE, NOx down (Energies 2026). No production vehicle or product found. Researched directly (no Hermes). Simulators: none. |
 | [country-survey/107-cyprus.md](country-survey/107-cyprus.md) | Checked 16 Nov 2026 | Cyprus: NOT FOUND for Cypriot tests or products. Only a 2015 UAE-led thermo-economic model with a Cyprus University of Technology co-author (steam injection in air bottoming cycles) and a Greek-led marine review with a CMMI author; not counted. Researched directly (no Hermes). Simulators: none. |
+| [country-survey/108-north-korea.md](country-survey/108-north-korea.md) | Checked 16 Nov 2026 | North Korea: NOT FOUND in verifiable open sources (OpenAlex North Korea filter 0; Korean search returned only South Korean work). Researched directly (no Hermes). Simulators: none. |
 
 ## Usable measured / official figures (short)
 
