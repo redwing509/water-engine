@@ -158,6 +158,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [country-survey/121-sudan.md](country-survey/121-sudan.md) | Checked 16 Nov 2026 | Sudan: SUST turbocharged-diesel intake water injection + EGR bench (brake power up to +13.7 % at 2500 rpm with best water setting, more water cut power; NOx reduced, most with EGR+WI); 2022 Khartoum/SUST NOx correlation from water-injection tests; 2025 Diesel-RK simulation. No production vehicle or product found. Researched directly (no Hermes). Simulators: none released. |
 | [country-survey/122-yemen.md](country-survey/122-yemen.md) | Checked 16 Nov 2026 | Yemen: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection. Researched directly (no Hermes). Simulators: none. |
 | [country-survey/123-syria.md](country-survey/123-syria.md) | Checked 16 Nov 2026 | Syria: only a 2017 Syrian physical/mathematical study of fuel–water emulsion droplet evaporation and micro-explosion (university not named on the opened page). No production vehicle, product or engine test found. Researched directly (no Hermes). Simulators: none. |
+| [country-survey/124-afghanistan.md](country-survey/124-afghanistan.md) | Checked 16 Nov 2026 | Afghanistan: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (OpenAlex Afghanistan filter 0). Researched directly (no Hermes). Simulators: none. |
 
 ## Usable measured / official figures (short)
 
