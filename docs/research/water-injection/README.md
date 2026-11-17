@@ -147,6 +147,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [country-survey/110-macau.md](country-survey/110-macau.md) | Checked 16 Nov 2026 | Macau: University of Macau 2012 thermodynamic model of a water-injection gas turbine with rotor air cooling, validated on real data from a Macau power plant (unit and numbers not in the abstract). No production vehicle, product or engine test found. Researched directly (no Hermes). Simulators: none. |
 | [country-survey/111-puerto-rico.md](country-survey/111-puerto-rico.md) | Checked 16 Nov 2026 | Puerto Rico: NOT FOUND for PR-specific water injection, emulsion or steam injection (OpenAlex PR filter 0). Researched directly (no Hermes). Simulators: none. |
 | [country-survey/112-senegal.md](country-survey/112-senegal.md) | Checked 16 Nov 2026 | Senegal: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (OpenAlex Senegal filter 0). Researched directly (no Hermes). Simulators: none. |
+| [country-survey/113-cote-d-ivoire.md](country-survey/113-cote-d-ivoire.md) | Checked 16 Nov 2026 | Côte d'Ivoire: NOT FOUND in open sources: no production WI vehicle, product, patent, or engine/turbine test of water injection, emulsion or steam injection (OpenAlex Côte d'Ivoire filter 0). Researched directly (no Hermes). Simulators: none. |
 
 ## Usable measured / official figures (short)
 
