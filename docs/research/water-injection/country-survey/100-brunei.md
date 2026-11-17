@@ -1,6 +1,6 @@
 # Brunei — water in the combustion cycle (checked)
 
-Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:08–9:11 PM America/Los_Angeles). Searches in Malay, plus English, plus an OpenAlex filter on Bruneian institutions (0 relevant results).
+Status: DONE (checked). No Hermes job: researched directly by the checker with web search and fetch (James t1114u/t1115u, 16 Nov 2026, about 9:07–9:08 PM America/Los_Angeles). Searches in Malay, plus English, plus an OpenAlex filter on Bruneian institutions (0 relevant results).
 
 Prompt language: Malay, plus English. Report language: English.
 
