@@ -145,6 +145,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [country-survey/108-north-korea.md](country-survey/108-north-korea.md) | Checked 16 Nov 2026 | North Korea: NOT FOUND in verifiable open sources (OpenAlex North Korea filter 0; Korean search returned only South Korean work). Researched directly (no Hermes). Simulators: none. |
 | [country-survey/109-hong-kong.md](country-survey/109-hong-kong.md) | Checked 16 Nov 2026 | Hong Kong: NOT FOUND for HK-specific water injection, water emulsion or steam injection (the PolyU-area 2008 emulsified fuel is methanol, not water; a CityU-co-authored H2-engine review is mainland-led). Researched directly (no Hermes). Simulators: none. |
 | [country-survey/110-macau.md](country-survey/110-macau.md) | Checked 16 Nov 2026 | Macau: University of Macau 2012 thermodynamic model of a water-injection gas turbine with rotor air cooling, validated on real data from a Macau power plant (unit and numbers not in the abstract). No production vehicle, product or engine test found. Researched directly (no Hermes). Simulators: none. |
+| [country-survey/111-puerto-rico.md](country-survey/111-puerto-rico.md) | Checked 16 Nov 2026 | Puerto Rico: NOT FOUND for PR-specific water injection, emulsion or steam injection (OpenAlex PR filter 0). Researched directly (no Hermes). Simulators: none. |
 
 ## Usable measured / official figures (short)
 
