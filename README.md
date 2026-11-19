@@ -22,7 +22,7 @@ The question the simulations answer: **how much water can an engine take, and st
 
 ## Current best modelled results (as of 2026-11-10)
 
-> **Model arithmetic only, not experimentally validated.** These numbers come from a 0-D engine-cycle cost rescore of the completed R31+R32 campaign (R32 finished 12:40 PM Pacific Time on 10 Nov 2026). They have **not** been validated against experiment and are not engine performance claims. The factory compression ratio is withheld and is not published here.
+> **Model arithmetic only, not experimentally validated.** These numbers come from Steamline (`steamline/`, the Water Engine scoring and ranking code), a 0-D engine-cycle cost rescore of the completed R31+R32 campaign (R32 finished 12:40 PM Pacific Time on 10 Nov 2026). They have **not** been validated against experiment and are not engine performance claims. The factory compression ratio is withheld and is not published here.
 
 Comparisons are against a dry baseline in the same group (same fuel, climate, geometry, rpm, and intake mode), using the project's existing cost model at dated retail fuel prices with water at $0.10/gal. "Hot" = high-performance regime (coolant 388 K, intake 400 K); "normal" = coolant 363 K, intake 320 K. `w` = water mass fraction of the liquid intake.
 
@@ -69,6 +69,7 @@ Notes and caveats:
 | `sims/` | Simulation modules (Cantera chemistry, 0-D engine cycle, six-stroke steam cycle, carburetor sizing, CAD) |
 | `results/` | Outputs: CSV, plots, `summary.json` per module |
 | `cad/` | Carburetor CAD (STEP/STL) generated from the sizing model |
+| `steamline/` | Steamline: scoring and ranking code that rescores existing combustion-candidate rows |
 | `tests/` | Validation tests against published combustion data |
 
 ## Simulators used
@@ -78,6 +79,18 @@ Notes and caveats:
 - A **0-D engine cycle model** (Wiebe heat release, Woschni heat transfer, Livengood–Wu knock integral) built on Cantera thermodynamics
 - **[CadQuery](https://cadquery.readthedocs.io)** — parametric carburetor CAD
 - **[OpenFOAM](https://openfoam.org)** — venturi CFD check (planned)
+
+
+## Steamline
+
+Steamline (`steamline/rescore_ah26_bh26.py` and `steamline/reference/sims/cost/cost.py`) is the scoring and ranking code that rescores combustion-candidate result rows. It does not run a new combustion simulation. It is model-only arithmetic. Water is never a fuel: water has no heating value in the cost model, and all chemical energy comes from the fuel share. Factory compression-ratio recommendations stay withheld.
+
+See [`steamline/README.md`](steamline/README.md) for how to run it, its requirements, and its tests.
+
+
+## Improvements welcome
+
+This project is free and open source under the MIT license. You can use the code, and you can request improvements by opening a GitHub [issue](https://github.com/redwing509/water-engine/issues/new) or a pull request from a fork. Every proposed change is reviewed before it is merged. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
