@@ -1,0 +1,418 @@
+{
+  "source_gzip_sha256": "960e0bd7f6b1c5af1bc37de0edd9d82c6e2911c9d661eccd6789a277269dcc9d",
+  "source_gzip_name": "completed-grid-inputs-and-keys.json_2790.gz",
+  "campaigns": {
+    "AH24": {
+      "rows": 1500,
+      "prefixes": {
+        "H24": 1500
+      },
+      "engines": {
+        "A2": 1500
+      },
+      "fuels": {
+        "CH3OH": 750,
+        "C2H5OH": 750
+      }
+    },
+    "AH25": {
+      "rows": 1500,
+      "prefixes": {
+        "L24": 1500
+      },
+      "engines": {
+        "A2": 1500
+      },
+      "fuels": {
+        "CH3OH": 750,
+        "C2H5OH": 750
+      }
+    },
+    "AH26": {
+      "rows": 1500,
+      "prefixes": {
+        "A24": 1500
+      },
+      "engines": {
+        "A2": 1500
+      },
+      "fuels": {
+        "CH3OH": 750,
+        "C2H5OH": 750
+      }
+    },
+    "BH24": {
+      "rows": 1800,
+      "prefixes": {
+        "H24": 1800
+      },
+      "engines": {
+        "B2": 1800
+      },
+      "fuels": {
+        "PRF87": 450,
+        "PRF91": 450,
+        "E10": 450,
+        "E85": 450
+      }
+    },
+    "BH25": {
+      "rows": 1800,
+      "prefixes": {
+        "L24": 1800
+      },
+      "engines": {
+        "B2": 1800
+      },
+      "fuels": {
+        "PRF87": 450,
+        "PRF91": 450,
+        "E10": 450,
+        "E85": 450
+      }
+    },
+    "BH26": {
+      "rows": 1800,
+      "prefixes": {
+        "A24": 1800
+      },
+      "engines": {
+        "B2": 1800
+      },
+      "fuels": {
+        "PRF87": 450,
+        "PRF91": 450,
+        "E10": 450,
+        "E85": 450
+      }
+    }
+  },
+  "body_equality": {
+    "AH24_vs_AH25": {
+      "same": 1500,
+      "only_left": 0,
+      "only_right": 0
+    },
+    "AH24_vs_AH26": {
+      "same": 1500,
+      "only_left": 0,
+      "only_right": 0
+    },
+    "AH25_vs_AH26": {
+      "same": 1500,
+      "only_left": 0,
+      "only_right": 0
+    },
+    "BH24_vs_BH25": {
+      "same": 1800,
+      "only_left": 0,
+      "only_right": 0
+    },
+    "BH24_vs_BH26": {
+      "same": 1800,
+      "only_left": 0,
+      "only_right": 0
+    },
+    "BH25_vs_BH26": {
+      "same": 1800,
+      "only_left": 0,
+      "only_right": 0
+    }
+  },
+  "ladders": {
+    "AH24": {
+      "groups": 60,
+      "interior_missing": 0,
+      "shapes": [
+        {
+          "cr": [
+            "18.0",
+            "22.0",
+            "26.0",
+            "29.0",
+            "32.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 60
+        }
+      ]
+    },
+    "AH25": {
+      "groups": 60,
+      "interior_missing": 0,
+      "shapes": [
+        {
+          "cr": [
+            "18.0",
+            "22.0",
+            "26.0",
+            "29.0",
+            "32.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 60
+        }
+      ]
+    },
+    "AH26": {
+      "groups": 60,
+      "interior_missing": 0,
+      "shapes": [
+        {
+          "cr": [
+            "18.0",
+            "22.0",
+            "26.0",
+            "29.0",
+            "32.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 60
+        }
+      ]
+    },
+    "BH24": {
+      "groups": 72,
+      "interior_missing": 0,
+      "shapes": [
+        {
+          "cr": [
+            "5.0",
+            "7.0",
+            "9.0",
+            "11.0",
+            "13.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "6.0",
+            "8.0",
+            "10.0",
+            "12.0",
+            "14.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "9.0",
+            "12.0",
+            "15.0",
+            "16.0",
+            "18.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "12.0",
+            "14.0",
+            "16.0",
+            "18.0",
+            "20.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        }
+      ]
+    },
+    "BH25": {
+      "groups": 72,
+      "interior_missing": 0,
+      "shapes": [
+        {
+          "cr": [
+            "5.0",
+            "7.0",
+            "9.0",
+            "11.0",
+            "13.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "6.0",
+            "8.0",
+            "10.0",
+            "12.0",
+            "14.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "9.0",
+            "12.0",
+            "15.0",
+            "16.0",
+            "18.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "12.0",
+            "14.0",
+            "16.0",
+            "18.0",
+            "20.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        }
+      ]
+    },
+    "BH26": {
+      "groups": 72,
+      "interior_missing": 0,
+      "shapes": [
+        {
+          "cr": [
+            "5.0",
+            "7.0",
+            "9.0",
+            "11.0",
+            "13.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "6.0",
+            "8.0",
+            "10.0",
+            "12.0",
+            "14.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "9.0",
+            "12.0",
+            "15.0",
+            "16.0",
+            "18.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        },
+        {
+          "cr": [
+            "12.0",
+            "14.0",
+            "16.0",
+            "18.0",
+            "20.0"
+          ],
+          "w": [
+            "0.0",
+            "0.1",
+            "0.2",
+            "0.26",
+            "0.3"
+          ],
+          "groups": 18
+        }
+      ]
+    }
+  },
+  "total_keys": 9900,
+  "next_simulation": "WITHHELD",
+  "next_simulation_reason": "Every designed joint in the six campaigns is present (9900 unique keys). AH24/AH25/AH26 share one 1500-key body and BH24/BH25/BH26 share one 1800-key body. Per-fuel CR ladders are fully crossed with the five water fractions. The larger BH marginal cartesian is not a hole. No nonduplicate joint remains inside this design, and no attached result row identifies a single next input inside the existing fit and factory-CR limits."
+}

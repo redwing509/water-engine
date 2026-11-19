@@ -1,0 +1,75 @@
+{
+  "stage_id": "rescore-AH26-BH26-matched-dry-cost",
+  "date_prepared": "2026-11-08",
+  "computational_class": "postprocess_existing_rows",
+  "combustion_runs": 0,
+  "publish": false,
+  "git_write": false,
+  "workers": 1,
+  "nice": 19,
+  "omp_threads": 1,
+  "campaigns": {
+    "AH26": {
+      "file": "points_AH26.jsonl",
+      "track": "A",
+      "eng": "A2",
+      "key_prefix": "A24",
+      "intake_mode": "humid_ambient",
+      "mechanism": "mechanisms/sandiego.yaml",
+      "sibling_dry_files": [
+        "points_AH24.jsonl",
+        "points_AH25.jsonl"
+      ]
+    },
+    "BH26": {
+      "file": "points_BH26.jsonl",
+      "track": "B",
+      "eng": "B2",
+      "key_prefix": "A24",
+      "intake_mode": "humid_ambient",
+      "mechanism": "mechanisms/trackb_fuels.yaml",
+      "sibling_dry_files": [
+        "points_BH24.jsonl",
+        "points_BH25.jsonl"
+      ]
+    }
+  },
+  "expected_full_grid": {
+    "AH26_groups": 60,
+    "BH26_groups": 72,
+    "keys_per_group": 25,
+    "allow_keys": 3300
+  },
+  "water_case": "headline",
+  "wf_promotion_max": 0.6,
+  "wf_rule": "R-WE-22 as applied in sims/pr10_fair_highcr/summary.py: W/F = w/(1-w); W/F > 0.6 is not promoted",
+  "order_cap_source": "hardware/bolt-on-kit/ENGINE-ORDER-SPEC.md section 2, recommended order CR, 2026-10-29. Caps are not updated by this rescore.",
+  "order_cap_CR": {
+    "CH3OH": 32.0,
+    "C2H5OH": 32.0,
+    "E85": 18.0,
+    "PRF91": 8.5
+  },
+  "order_cap_absent": [
+    "E10",
+    "PRF87"
+  ],
+  "factory_cr_recommendation": "WITHHELD",
+  "validation_status": "executed_not_validated",
+  "independent_validation": false,
+  "cost_reference": {
+    "module": "sims.cost.cost",
+    "git_commit": "027f9d776c1e95f43ac369f9107a12ed7554cd5b",
+    "blob_sha1": "d6b4cbbbdcbb115be40a27b79b2cf8bd1745b413",
+    "prices_blob_sha1": "eb7c866b255c7a2fa08c952fe821e8e2bcf78e56",
+    "branch_read": "origin/track-ab/robustness-20261026",
+    "checkout_head": "d2b063bd5d697cd1c717833c9e4503d98a0d3a45"
+  },
+  "runtime_paths": {
+    "python": "python3",
+    "pythonpath": "reference",
+    "jobs": "directory of points_AH26.jsonl and points_BH26.jsonl (set --jobs or WE_JOBS)",
+    "results_root": "output directory (set --outdir or WE_RESULTS_ROOT)"
+  },
+  "next_simulation": "WITHHELD"
+}

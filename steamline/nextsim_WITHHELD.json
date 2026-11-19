@@ -1,0 +1,18 @@
+{
+  "decision": "WITHHELD",
+  "launch": false,
+  "inputs": null,
+  "combustion_runs": 0,
+  "next_computational_stage": "rescore-AH26-BH26-matched-dry-cost",
+  "reason": "The attached completed-key file contains 9900 unique keys and no missing joint inside the per-fuel ladders that were actually run. AH24, AH25, and AH26 are the same 1500-key body under humid_evap, liquid, and humid_ambient. BH24, BH25, and BH26 are the same 1800-key body. A new simulation point would either duplicate one of those keys or leave the executed fuel, geometry, speed, water-fraction, compression-ratio, mechanism, and factory-CR bounds. The attached files do not include the full result rows needed to justify one specific extra input, and this preparation does not invent one.",
+  "evidence": "evidence/grid-audit.json",
+  "not_a_hole": "BH marginal CR values in INPUT-SUMMARY are the union of four different per-fuel ladders. Crossing every fuel with every listed CR would invent 3240 joints per BH campaign that were never part of the executed design.",
+  "holds_unchanged": [
+    "factory order CR caps are not raised",
+    "no new mechanism, license, flame-fit domain, or measured data",
+    "Track A and Track B both stay in the rescore; neither is dropped or expanded",
+    "executed rows remain not validated",
+    "two same-toolchain engines are not independent validation",
+    "no hardware, firmware, Docker, or supply-chain change"
+  ]
+}
