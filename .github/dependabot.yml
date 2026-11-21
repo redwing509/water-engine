@@ -1,0 +1,24 @@
+# Read from the default branch only. Version updates below scan the branches
+# that actually contain manifests. Security updates always use the default
+# branch, which does not contain these files.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "wme1-dev"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    target-branch: "wme1-dev"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directories:
+      - "/gpu-queue/fan-11-ehd-convergence"
+      - "/gpu-queue/we-08-m13-gci-dualT"
+    target-branch: "gpu-queue/20261024"
+    schedule:
+      interval: "weekly"
