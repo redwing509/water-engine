@@ -1,0 +1,191 @@
+CR scan: 156 points
+scan/PRF91/normal/8.0 computed True 0.369528078482406
+scan/PRF91/normal/7.0 computed True 0.35356229474122497
+scan/PRF91/normal/6.0 computed True 0.33354691992110624
+scan/PRF91/normal/13.0 computed False 0.38918942338802265
+scan/PRF91/normal/13.5 computed False 0.3880680864672311
+scan/PRF91/normal/9.5 computed True 0.3846881669568228
+scan/PRF91/normal/11.0 computed False 0.389651507272909
+scan/PRF91/normal/10.5 computed False 0.38864031185911047
+scan/PRF91/normal/12.5 computed False 0.389911977093704
+scan/PRF91/normal/12.0 computed False 0.3902403749916296
+scan/PRF91/normal/10.0 computed True 0.38703733078654057
+scan/PRF91/normal/9.0 computed True 0.3813064195815686
+scan/PRF91/normal/11.5 computed False 0.3901640409979579
+scan/PRF91/normal/14.0 computed False 0.3865436148388635
+scan/PRF91/normal/19.0 computed False 0.3813006864801691
+scan/PRF91/normal/14.5 computed False 0.384583877908806
+scan/PRF91/normal/21.0 computed False 0.38606053024563386
+scan/PRF91/normal/17.0 computed False 0.3754835749597163
+scan/PRF91/normal/20.0 computed False 0.3837952152490925
+scan/PRF91/normal/18.0 computed False 0.37854356298123876
+scan/PRF91/normal/15.0 computed False 0.38212605636147506
+scan/PRF91/normal/23.0 computed False 0.3900108057220848
+scan/PRF91/normal/24.0 computed False 0.3917392894705982
+scan/PRF91/normal/22.0 computed False 0.3881245485614582
+scan/PRF91/normal/15.5 computed False 0.37909867954312365
+scan/PRF91/normal/16.0 computed False 0.3754145450167186
+scan/PRF91/hot/7.0 computed True 0.3464591371180309
+scan/PRF91/hot/6.0 computed True 0.32685631347525473
+scan/PRF91/hot/12.5 computed False 0.34887587538058623
+scan/PRF91/hot/13.0 computed False 0.3514994809830409
+scan/PRF91/hot/13.5 computed False 0.3539499929153663
+scan/PRF91/hot/14.0 computed False 0.35624336666626827
+scan/PRF91/hot/12.0 computed False 0.3497339818733452
+scan/PRF91/hot/10.5 computed False 0.3596940302576158
+scan/PRF91/hot/10.0 computed False 0.3612554019400841
+scan/PRF91/hot/14.5 computed False 0.35839362879002307
+scan/PRF91/hot/11.0 computed False 0.3573064545182126
+scan/PRF91/hot/9.5 computed False 0.3620246438352695
+scan/PRF91/hot/11.5 computed False 0.3540354293939179
+scan/PRF91/hot/9.0 computed False 0.36194406686602637
+scan/PRF91/hot/15.0 computed False 0.36041316329399326
+scan/PRF91/hot/8.0 computed True 0.35852431801732587
+scan/PRF91/hot/16.0 computed False 0.36410275160320466
+scan/PRF91/hot/15.5 computed False 0.36231294811559944
+scan/PRF91/hot/17.0 computed False 0.3673863968196584
+scan/PRF91/hot/18.0 computed False 0.37032366497379643
+scan/PRF91/hot/21.0 computed False 0.3774994035754957
+scan/PRF91/hot/20.0 computed False 0.37534386382811813
+scan/PRF91/hot/22.0 computed False 0.3794570606653435
+scan/PRF91/hot/19.0 computed False 0.3729629204984466
+scan/PRF91/hot/23.0 computed False 0.3812400355210161
+scan/PRF91/hot/24.0 computed False 0.38286802938032966
+scan/PRF97/normal/7.0 computed True 0.35353165075200743
+scan/PRF97/normal/6.0 computed True 0.33351807446690823
+scan/PRF97/normal/8.0 computed True 0.36949597630161096
+scan/PRF97/normal/9.0 computed True 0.38250329984300896
+scan/PRF97/normal/9.5 computed True 0.38793413231570045
+scan/PRF97/normal/12.0 computed False 0.39876076688349765
+scan/PRF97/normal/13.5 computed False 0.39897161416131943
+scan/PRF97/normal/13.0 computed False 0.39926567015596703
+scan/PRF97/normal/10.0 computed True 0.3918114364310551
+scan/PRF97/normal/12.5 computed False 0.39920430001850704
+scan/PRF97/normal/14.5 computed False 0.3973565814076873
+scan/PRF97/normal/11.5 computed False 0.3978985876561117
+scan/PRF97/normal/14.0 computed False 0.39832868536568034
+scan/PRF97/normal/10.5 computed True 0.394568516535647
+scan/PRF97/normal/11.0 computed True 0.3965342366352684
+scan/PRF97/normal/15.0 computed False 0.3960214585299071
+scan/PRF97/normal/15.5 computed False 0.3943161328347509
+scan/PRF97/normal/18.0 computed False 0.37849223609414684
+scan/PRF97/normal/23.0 computed False 0.3899575875209309
+scan/PRF97/normal/21.0 computed False 0.3860079514275866
+scan/PRF97/normal/22.0 computed False 0.38807163334974176
+scan/PRF97/normal/20.0 computed False 0.3837430101334963
+scan/PRF97/normal/19.0 computed False 0.3812488968896742
+scan/PRF97/normal/24.0 computed False 0.3916857983422427
+scan/PRF97/hot/7.0 computed True 0.3464369972815607
+scan/PRF97/hot/6.0 computed True 0.3268351903874508
+scan/PRF97/normal/17.0 computed False 0.38651273192111674
+scan/PRF97/normal/16.0 computed False 0.3921992368052359
+scan/PRF97/hot/8.0 computed True 0.3620343108580532
+scan/PRF97/hot/14.0 computed False 0.3562028947453113
+scan/PRF97/hot/9.0 computed True 0.37000337573540965
+scan/PRF97/hot/14.5 computed False 0.3583529117978601
+scan/PRF97/hot/11.0 computed False 0.3711431472853455
+scan/PRF97/hot/9.5 computed False 0.37159297625429694
+scan/PRF97/hot/10.5 computed False 0.37203063833193206
+scan/PRF97/hot/10.0 computed False 0.372208815966845
+scan/PRF97/hot/12.0 computed False 0.3672743332936451
+scan/PRF97/hot/11.5 computed False 0.3695644480703295
+scan/PRF97/hot/12.5 computed False 0.3642081097815554
+scan/PRF97/hot/13.0 computed False 0.3602495325146263
+scan/PRF97/hot/13.5 computed False 0.355207359851388
+scan/PRF97/hot/15.0 computed False 0.36037222113425865
+scan/PRF97/hot/15.5 computed False 0.3622717991790046
+scan/PRF97/hot/16.0 computed False 0.3640614129101801
+scan/PRF97/hot/17.0 computed False 0.3673447248347971
+scan/PRF97/hot/20.0 computed False 0.37530149210993674
+scan/PRF97/hot/19.0 computed False 0.3729207386189108
+scan/PRF97/hot/18.0 computed False 0.3702817143168361
+scan/PRF97/hot/21.0 computed False 0.3774568782787429
+scan/PRF97/hot/22.0 computed False 0.3794144136550269
+scan/PRF97/hot/23.0 computed False 0.38119729486905074
+scan/PRF97/hot/24.0 computed False 0.38282521988604007
+scan/E10/normal/7.0 computed True 0.3546830897713962
+scan/E10/normal/6.0 computed True 0.33459092664787016
+scan/E10/normal/8.0 computed True 0.3707155212753362
+scan/E10/normal/9.0 computed True 0.3837830927961064
+scan/E10/normal/10.0 computed True 0.39303772917185054
+scan/E10/normal/11.5 computed False 0.39914516590792215
+scan/E10/normal/11.0 computed True 0.3977652439766359
+scan/E10/normal/12.5 computed False 0.4005069797995179
+scan/E10/normal/9.5 computed True 0.38919224991324985
+scan/E10/normal/12.0 computed False 0.4000316503158987
+scan/E10/normal/13.0 computed False 0.40060887149513724
+scan/E10/normal/10.5 computed True 0.3957895671156827
+scan/E10/normal/14.0 computed False 0.39977595391757753
+scan/E10/normal/13.5 computed False 0.400357720257468
+scan/E10/normal/14.5 computed False 0.39885751415399434
+scan/E10/normal/15.0 computed False 0.39758936446652027
+scan/E10/normal/15.5 computed False 0.39597474536712285
+scan/E10/normal/20.0 computed False 0.3850761897398963
+scan/E10/normal/21.0 computed False 0.3873563004870032
+scan/E10/normal/19.0 computed False 0.3825660978120009
+scan/E10/normal/24.0 computed False 0.39307558372574297
+scan/E10/normal/23.0 computed False 0.3913341724036914
+scan/E10/normal/22.0 computed False 0.38943442682313445
+scan/E10/hot/6.0 computed True 0.32786963971135447
+scan/E10/hot/7.0 computed True 0.3475444165560895
+scan/E10/normal/18.0 computed False 0.3806111796060458
+scan/E10/normal/17.0 computed False 0.3885110941412754
+scan/E10/normal/16.0 computed False 0.3939422843154355
+scan/E10/hot/9.0 computed True 0.3708584257821223
+scan/E10/hot/8.0 computed True 0.36316419546211737
+scan/E10/hot/14.0 computed False 0.3573775343205648
+scan/E10/hot/14.5 computed False 0.3595379794180565
+scan/E10/hot/10.5 computed False 0.37282738841875773
+scan/E10/hot/9.5 computed False 0.37240341831380613
+scan/E10/hot/10.0 computed False 0.3730075113906541
+scan/E10/hot/11.0 computed False 0.3719452598378058
+scan/E10/hot/12.0 computed False 0.3681270872856872
+scan/E10/hot/11.5 computed False 0.3703839066773629
+scan/E10/hot/12.5 computed False 0.36510405746535224
+scan/E10/hot/13.0 computed False 0.36120584302848313
+scan/E10/hot/15.0 computed False 0.3615673212794558
+scan/E10/hot/15.5 computed False 0.3634765666663531
+scan/E10/hot/16.0 computed False 0.3652755094462904
+scan/E10/hot/13.5 computed False 0.3562266371197062
+scan/E10/hot/17.0 computed False 0.3685765590071347
+scan/E10/hot/19.0 computed False 0.3741849088343568
+scan/E10/hot/18.0 computed False 0.3715301941418363
+scan/E10/hot/20.0 computed False 0.37658051044509727
+scan/E10/hot/21.0 computed False 0.3787499975753822
+scan/E10/hot/22.0 computed False 0.38072096716954024
+scan/E10/hot/23.0 computed False 0.3825166841353657
+scan/E10/hot/24.0 computed False 0.3841569055064307
+# w 0 start vs DEI baseline (symmetric DEI rebase)
+
+| fuel | regime | CR | mode | eta M03 (w0) | ref eta M03 | diff | eta CRN (w0) | ref eta CRN | diff | eligible | ref source |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| PRF87 | normal | 9.0 | liquid | 0.378280 | 0.378280 | -3.89e-15 | 0.378528 | 0.378528 | -5.13e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| PRF87 | normal | 9.0 | humid_evap | 0.378280 | 0.378280 | -3.89e-15 | 0.378528 | 0.378528 | -5.13e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| PRF87 | hot | 7.0 | liquid | 0.346077 | 0.346077 | -3.11e-15 | 0.345743 | 0.345743 | -7.64e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| PRF87 | hot | 7.0 | humid_evap | 0.346077 | 0.346077 | -3.11e-15 | 0.345743 | 0.345743 | -7.64e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| PRF91 | normal | 10.0 | liquid | 0.387037 | 0.387037 | +0.00e+00 | 0.387359 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| PRF91 | normal | 10.0 | humid_evap | 0.387037 | 0.387037 | +0.00e+00 | 0.387359 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| PRF91 | hot | 8.0 | liquid | 0.358524 | 0.358524 | +0.00e+00 | 0.358525 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| PRF91 | hot | 8.0 | humid_evap | 0.358524 | 0.358524 | +0.00e+00 | 0.358525 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| PRF97 | normal | 11.0 | liquid | 0.396534 | 0.396534 | +0.00e+00 | 0.396830 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| PRF97 | normal | 11.0 | humid_evap | 0.396534 | 0.396534 | +0.00e+00 | 0.396830 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| PRF97 | hot | 9.0 | liquid | 0.370003 | 0.370003 | +0.00e+00 | 0.370071 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| PRF97 | hot | 9.0 | humid_evap | 0.370003 | 0.370003 | +0.00e+00 | 0.370071 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| E10 | normal | 11.0 | liquid | 0.397765 | 0.397765 | +0.00e+00 | 0.398082 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| E10 | normal | 11.0 | humid_evap | 0.397765 | 0.397765 | +0.00e+00 | 0.398082 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| E10 | hot | 9.0 | liquid | 0.370858 | 0.370858 | +0.00e+00 | 0.370987 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| E10 | hot | 9.0 | humid_evap | 0.370858 | 0.370858 | +0.00e+00 | 0.370987 | - | - | True | new DEI scan here (dryevap CR grid, LW, rule = best eligible eta) |
+| E85 | normal | 13.5 | liquid | 0.417974 | 0.417974 | +3.51e-14 | 0.418264 | 0.418264 | -1.32e-08 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| E85 | normal | 13.5 | humid_evap | 0.417974 | 0.417974 | +3.51e-14 | 0.418264 | 0.418264 | -1.32e-08 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| E85 | hot | 12.5 | liquid | 0.413455 | 0.413455 | +1.00e-14 | 0.413829 | 0.413829 | +5.81e-10 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| E85 | hot | 12.5 | humid_evap | 0.413455 | 0.413455 | +1.00e-14 | 0.413829 | 0.413829 | +5.81e-10 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| CH3OH | normal | 22.0 | liquid | 0.449035 | 0.449035 | +1.43e-13 | 0.448941 | 0.448941 | -1.21e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| CH3OH | normal | 22.0 | humid_evap | 0.449035 | 0.449035 | +1.43e-13 | 0.448941 | 0.448941 | -1.21e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| CH3OH | hot | 21.0 | liquid | 0.458702 | 0.458702 | +1.06e-13 | 0.458679 | 0.458679 | -2.55e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| CH3OH | hot | 21.0 | humid_evap | 0.458702 | 0.458702 | +1.06e-13 | 0.458679 | 0.458679 | -2.55e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| C2H5OH | normal | 24.0 | liquid | 0.455818 | 0.455818 | -4.23e-13 | 0.455547 | 0.455547 | +2.36e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| C2H5OH | normal | 24.0 | humid_evap | 0.455818 | 0.455818 | -4.23e-13 | 0.455547 | 0.455547 | +2.36e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| C2H5OH | hot | 24.0 | liquid | 0.465708 | 0.465708 | -2.25e-13 | 0.465458 | 0.465458 | +8.55e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+| C2H5OH | hot | 24.0 | humid_evap | 0.465708 | 0.465708 | -2.25e-13 | 0.465458 | 0.465458 | +8.55e-09 | True | results/dryevap/baselines.csv (DEI, rule, LW) |
+
+Max |diff| vs baselines.csv: M03 4.23e-13, CRN 1.32e-08.

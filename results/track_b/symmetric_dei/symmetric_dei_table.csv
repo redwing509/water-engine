@@ -1,0 +1,29 @@
+track,fuel,regime,mode,CR,T_intake_K,wall_K,steps,stop_w,stop_reason,d_eta_pp_m03,d_eta_pp_crn,power_pct_m03,power_pct_crn,fuel_per_work_pct_m03,cost_kwh_pct_m03,cost_mile_pct_m03,cost_mile_pct_crn,cost_mile_free_pct_m03,cost_mile_free_pct_crn,verdict,cost_min_w,cost_min_pct_m03,cost_min_verdict,endgas_knock,both_knock_engines_pass
+B,PRF87,normal,liquid,9.0,320.0,450.0,151,0.15,M03 gain 3.28e-05 <= noise threshold 3.3e-05,0.633,0.622,5.0,4.967,-1.647,-1.367,-1.367,-1.336,-1.647,-1.616,COST GAIN,0.151,-1.373,COST GAIN,False,True
+B,PRF87,normal,humid_evap,9.0,320.0,450.0,150,0.149,M03 gain 3.29e-05 <= noise threshold 3.3e-05,0.631,0.62,5.168,5.137,-1.639,-1.362,-1.362,-1.333,-1.639,-1.61,COST GAIN,0.15,-1.368,COST GAIN,False,True
+B,PRF87,hot,liquid,7.0,400.0,520.0,1,0.0,M03 gain 2.35e-05 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.001,-0.005,no cost gain,False,True
+B,PRF87,hot,humid_evap,7.0,400.0,520.0,1,0.0,M03 gain 2.35e-05 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.001,-0.005,no cost gain,False,True
+B,PRF91,normal,liquid,10.0,320.0,450.0,188,0.187,M03 gain 3.27e-05 <= noise threshold 3.3e-05,0.904,0.888,5.88,5.834,-2.282,-1.92,-1.92,-1.877,-2.282,-2.24,COST GAIN,0.188,-1.925,COST GAIN,False,True
+B,PRF91,normal,humid_evap,10.0,320.0,450.0,188,0.187,M03 gain 3.27e-05 <= noise threshold 3.3e-05,0.904,0.888,5.88,5.834,-2.282,-1.92,-1.92,-1.877,-2.282,-2.24,COST GAIN,0.188,-1.925,COST GAIN,False,True
+B,PRF91,hot,liquid,8.0,400.0,520.0,126,0.125,M03 gain 3.29e-05 <= noise threshold 3.3e-05,0.47,0.465,3.381,3.365,-1.295,-1.068,-1.068,-1.052,-1.295,-1.279,COST GAIN,0.126,-1.074,COST GAIN,False,True
+B,PRF91,hot,humid_evap,8.0,400.0,520.0,27,0.026,M03 gain 3.30e-05 <= noise threshold 3.3e-05,0.088,0.089,1.001,1.004,-0.246,-0.203,-0.203,-0.206,-0.246,-0.249,COST GAIN,0.027,-0.21,COST GAIN,True,False
+B,PRF97,normal,liquid,11.0,320.0,450.0,186,0.185,M03 gain 3.26e-05 <= noise threshold 3.3e-05,0.865,0.85,5.752,5.71,-2.135,-1.839,-1.839,-1.801,-2.135,-2.097,COST GAIN,0.186,-1.845,COST GAIN,False,True
+B,PRF97,normal,humid_evap,11.0,320.0,450.0,186,0.185,M03 gain 3.26e-05 <= noise threshold 3.3e-05,0.865,0.85,5.752,5.71,-2.135,-1.839,-1.839,-1.801,-2.135,-2.097,COST GAIN,0.186,-1.845,COST GAIN,False,True
+B,PRF97,hot,liquid,9.0,400.0,520.0,183,0.182,M03 gain 3.26e-05 <= noise threshold 3.3e-05,0.732,0.726,5.262,5.243,-1.941,-1.65,-1.65,-1.633,-1.941,-1.924,COST GAIN,0.183,-1.657,COST GAIN,False,True
+B,PRF97,hot,humid_evap,9.0,400.0,520.0,3,0.002,M03 gain 3.28e-05 <= noise threshold 3.3e-05,0.007,0.007,0.076,0.076,-0.02,-0.017,-0.017,-0.017,-0.02,-0.02,COST GAIN,0.003,-0.025,COST GAIN,True,False
+B,E10,normal,liquid,11.0,320.0,450.0,175,0.174,M03 gain 3.24e-05 <= noise threshold 3.3e-05,0.859,0.842,4.905,4.86,-2.114,-1.777,-1.777,-1.734,-2.114,-2.072,COST GAIN,0.175,-1.782,COST GAIN,False,True
+B,E10,normal,humid_evap,11.0,320.0,450.0,175,0.174,M03 gain 3.24e-05 <= noise threshold 3.3e-05,0.859,0.842,4.905,4.86,-2.114,-1.777,-1.777,-1.734,-2.114,-2.072,COST GAIN,0.175,-1.782,COST GAIN,False,True
+B,E10,hot,liquid,9.0,400.0,520.0,191,0.19,M03 gain 3.26e-05 <= noise threshold 3.3e-05,0.812,0.803,5.886,5.861,-2.142,-1.766,-1.766,-1.743,-2.142,-2.118,COST GAIN,0.191,-1.772,COST GAIN,False,True
+B,E10,hot,humid_evap,9.0,400.0,520.0,300,0.3,running,1.272,1.274,18.712,18.719,-3.315,-2.637,-2.637,-2.643,-3.315,-3.321,COST GAIN,0.3,-2.637,COST GAIN,False,True
+B,E85,normal,liquid,13.5,320.0,450.0,1,0.0,M03 gain 2.99e-05 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.001,-0.005,no cost gain,False,True
+B,E85,normal,humid_evap,13.5,320.0,450.0,1,0.0,M03 gain -2.31e-05 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.0,0.0,no cost gain,False,True
+B,E85,hot,liquid,12.5,400.0,520.0,187,0.186,M03 gain 3.01e-05 <= noise threshold 3.3e-05,1.221,1.196,9.223,9.157,-2.868,-2.355,-2.355,-2.297,-2.868,-2.81,COST GAIN,0.187,-2.359,COST GAIN,False,True
+B,E85,hot,humid_evap,12.5,400.0,520.0,183,0.182,M03 gain 3.29e-05 <= noise threshold 3.3e-05,1.208,1.185,9.2,9.137,-2.84,-2.34,-2.34,-2.284,-2.84,-2.784,COST GAIN,0.183,-2.345,COST GAIN,False,True
+B,CH3OH,normal,liquid,22.0,320.0,450.0,31,0.03,M03 gain 3.21e-05 <= noise threshold 3.3e-05,0.135,0.131,-0.0,-0.008,-0.299,-0.243,-0.243,-0.234,-0.299,-0.291,COST GAIN,0.03,-0.243,COST GAIN,False,True
+B,CH3OH,normal,humid_evap,22.0,320.0,450.0,1,0.0,M03 gain -2.96e-05 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.0,0.0,no cost gain,False,True
+B,CH3OH,hot,liquid,21.0,400.0,520.0,63,0.062,M03 gain 3.27e-05 <= noise threshold 3.3e-05,0.354,0.345,0.13,0.111,-0.766,-0.646,-0.646,-0.627,-0.766,-0.747,COST GAIN,0.063,-0.651,COST GAIN,False,True
+B,CH3OH,hot,humid_evap,21.0,400.0,520.0,1,0.0,M03 gain -1.96e-05 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.0,0.0,no cost gain,False,True
+B,C2H5OH,normal,liquid,24.0,320.0,450.0,1,0.0,M03 gain -4.69e-06 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.0,0.0,no cost gain,True,False
+B,C2H5OH,normal,humid_evap,24.0,320.0,450.0,1,0.0,M03 gain -3.40e-05 <= noise threshold 3.3e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no cost gain,0.0,0.0,no cost gain,True,False
+B,C2H5OH,hot,liquid,24.0,400.0,520.0,86,0.085,M03 gain 2.32e-06 <= noise threshold 3.3e-05,0.335,0.332,3.458,3.453,-0.714,-0.34,-0.34,-0.335,-0.714,-0.709,COST GAIN,0.085,-0.34,COST GAIN,False,True
+B,C2H5OH,hot,humid_evap,24.0,400.0,520.0,45,0.044,M03 gain 4.19e-06 <= noise threshold 3.3e-05,0.218,0.216,3.174,3.169,-0.465,-0.28,-0.28,-0.275,-0.465,-0.461,COST GAIN,0.044,-0.28,COST GAIN,True,False
