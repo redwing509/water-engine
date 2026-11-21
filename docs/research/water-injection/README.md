@@ -18,6 +18,8 @@ James designated three measured datasets as Water Engine calibration references 
 
 The follow-up work queue is [`replication-baseline-queue-20261111.md`](replication-baseline-queue-20261111.md): new baselines and the tests to run next, with Water Engine and diesel-emulsion tracks kept separate.
 
+**Follow-up (14 Nov 2026):** [`ghent-meoh-water-transfer-20261114.md`](ghent-meoh-water-transfer-20261114.md) asks whether anything in the Ghent methanol–water model (Dierickx et al., *Fuel* 333 (2023) 126349; measured 45.9% BTE) can raise efficiency on the project's other fuel mixes. Model-only follow-ups, all at *w* ≤ 0.30: a Hoppe 2016 / Sileghem 2014 dry recalibration cuts previously quoted gasoline/E10 wet ITE deltas by 0.18–0.20 pp (alcohol deltas unchanged); a gasoline/E10/PRF CA50+CR+*w* sweep gives about **+1.0 pp ITE** at the same compression ratio (or +2.4 to +3.0 pp if CR is raised); a methanol/ethanol CA50 retune finds **no extra** efficiency beyond the existing spark optimiser; a new hydrogen+water SI track shows **+0.16 pp** ITE at the lean peak and a **power** gain at CA50 = 5°. These are model-only and not experimentally validated. Existing stored Track B numbers, including the CH3OH hot result at *w* = 0.325, are not rewritten. Water is never a fuel.
+
 None of these is a production-vehicle fuel-economy certification. The Water Engine model result they are checked against is model-only.
 
 ## How to read this folder
@@ -34,6 +36,7 @@ None of these is a production-vehicle fuel-economy certification. The Water Engi
 | [calibration-references-20261111.md](calibration-references-20261111.md) | Designated 11 Nov 2026 | Three calibration references: RWTH/FEV gasoline direct WI (HIGH-TRUST); Ayhan and Ece 2019 diesel direct WI; Attia and Kulchitskiy 2014 water-in-fuel emulsion |
 | [egypt-efficiency-improvement-20261111.md](egypt-efficiency-improvement-20261111.md) | Checked 11 Nov 2026 | How to beat Attia 2014's +20% water-in-fuel efficiency: what the paper actually shows, later verified emulsion data, ranked improvement paths, and what applies to Water Engine |
 | [replication-baseline-queue-20261111.md](replication-baseline-queue-20261111.md) | Queued 11 Nov 2026 | Tests worth replicating from the Egypt study, and new baselines to work from: Water Engine gasoline (B-WE-01 model −9.728% cost/mi, RWTH, Tornatore) and a diesel-emulsion side project (Attia equal-power first) |
+| [ghent-meoh-water-transfer-20261114.md](ghent-meoh-water-transfer-20261114.md) | Findings 14 Nov 2026 | Ghent methanol–water model → other fuel mixes: which efficiency mechanisms transfer, plus model-only follow-ups (Hoppe/Sileghem dry recalibration, gasoline CA50+CR+*w* sweep, alcohol CA50 retune, new H2+water track) |
 | [bmw-m4-gts-bosch-waterboost-20261111.md](bmw-m4-gts-bosch-waterboost-20261111.md) | Checked 11 Nov 2026 | BMW M4 GTS / Bosch WaterBoost hardware, official ratings, and what is (and is not) usable for Water Engine calibration |
 | [country-survey/COUNTRY_LIST.md](country-survey/COUNTRY_LIST.md) | Plan | Ordered country list for the worldwide historical survey |
 | [country-survey/01-germany.md](country-survey/01-germany.md) | Checked 11 Nov 2026 | Germany: makers, universities, measured data, source checks, and corrections |
