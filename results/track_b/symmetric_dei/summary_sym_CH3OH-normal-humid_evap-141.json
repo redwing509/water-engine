@@ -1,0 +1,17 @@
+[
+ {
+  "fuel": "CH3OH",
+  "regime": "normal",
+  "mode": "humid_evap",
+  "start": 141,
+  "CR": 22.0,
+  "best_w": 0.215,
+  "steps": 216,
+  "stop_reason": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+  "dry_eta": 0.44903537100980223,
+  "best_eta": 0.45702870218050623,
+  "dry_crn": 0.4489407018571752,
+  "best_crn": 0.45673881237419633,
+  "file": "steps_CH3OH_normal_humid_evap__sym_from141.jsonl"
+ }
+]

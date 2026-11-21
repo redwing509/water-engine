@@ -1,0 +1,98 @@
+[
+ {
+  "fuel": "C2H5OH",
+  "regime": "normal",
+  "water_mode": "liquid",
+  "best_w": 0.237,
+  "steps_taken": 237,
+  "stop_reason": "M03 gain 3.30e-05 <= noise threshold 3.3e-05",
+  "best_eta": 0.45570220070571715,
+  "best_crn": 0.4553371937862821,
+  "dry_eta": 0.44576439642567883,
+  "dry_crn": 0.44556156835198574,
+  "consistency": {
+   "chain": "steps_C2H5OH_normal__noise.jsonl",
+   "archived_failed_steps": [
+    174
+   ],
+   "last_ok_step": 173,
+   "stored_crn": 0.45309745650806665,
+   "recomputed_crn": 0.45309745650806665,
+   "diff": 0.0
+  },
+  "cap": 400,
+  "seconds": 934.1929550170898
+ },
+ {
+  "fuel": "CH3OH",
+  "regime": "normal",
+  "water_mode": "liquid",
+  "best_w": 0.227,
+  "steps_taken": 227,
+  "stop_reason": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+  "best_eta": 0.43831484374743046,
+  "best_crn": 0.438089965081232,
+  "dry_eta": 0.4237878830202571,
+  "dry_crn": 0.42379590072397694,
+  "consistency": {
+   "chain": "steps_CH3OH_normal__noise.jsonl",
+   "archived_failed_steps": [
+    133
+   ],
+   "last_ok_step": 132,
+   "stored_crn": 0.43429204047638525,
+   "recomputed_crn": 0.43429204047638525,
+   "diff": 0.0
+  },
+  "cap": 400,
+  "seconds": 1390.0521099567413
+ },
+ {
+  "fuel": "CH3OH",
+  "regime": "normal",
+  "water_mode": "humid_evap",
+  "best_w": 0.227,
+  "steps_taken": 227,
+  "stop_reason": "M03 gain 3.29e-05 <= noise threshold 3.3e-05",
+  "best_eta": 0.43831484374735064,
+  "best_crn": 0.4380899655925316,
+  "dry_eta": 0.4237878830202571,
+  "dry_crn": 0.42379590072397694,
+  "consistency": {
+   "chain": "steps_CH3OH_normal_humid_evap__noise.jsonl",
+   "archived_failed_steps": [
+    81
+   ],
+   "last_ok_step": 80,
+   "stored_crn": 0.43239867848264585,
+   "recomputed_crn": 0.43239867838792784,
+   "diff": -9.471801121208046e-11
+  },
+  "cap": 400,
+  "seconds": 3177.019884109497
+ },
+ {
+  "fuel": "CH3OH",
+  "regime": "hot",
+  "water_mode": "humid_evap",
+  "best_w": 0.325,
+  "steps_taken": 325,
+  "stop_reason": "M03 gain 3.28e-05 <= noise threshold 3.3e-05",
+  "best_eta": 0.3695847403979491,
+  "best_crn": 0.36959183335310297,
+  "dry_eta": 0.35017838014147257,
+  "dry_crn": 0.35032160564140613,
+  "consistency": {
+   "chain": "steps_CH3OH_hot_humid_evap__noise.jsonl",
+   "archived_failed_steps": [
+    236
+   ],
+   "last_ok_step": 235,
+   "stored_crn": 0.3664369537929091,
+   "recomputed_crn": 0.3664369517518115,
+   "diff": -2.0410975687390476e-09
+  },
+  "cap": 400,
+  "seconds": 2382.943533182144
+ }
+]
