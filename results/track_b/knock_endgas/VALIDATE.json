@@ -1,0 +1,17 @@
+{
+ "PRF91": {
+  "klCR_M03": 10.0,
+  "klCR_endgas": 12.0,
+  "diff": 2.0,
+  "non_monotone": false
+ },
+ "PRF97": {
+  "klCR_M03": 11.0,
+  "klCR_endgas": 13.5,
+  "diff": 2.5,
+  "non_monotone": false
+ },
+ "ranking_PRF97_gt_PRF91": true,
+ "within_1p5_CR": false,
+ "PASS": false
+}
